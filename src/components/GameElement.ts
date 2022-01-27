@@ -1,5 +1,5 @@
 import { GameScreen } from "./GameScreen";
-import ICoords from "../interfaces/Coords";
+import { ICoord } from "../interfaces/Coords";
 
 export interface IGameElement {
     gameArea: GameScreen;
@@ -23,7 +23,7 @@ export class GameElement {
         this.sprite.src = this.spriteSrc;
     }
     
-    spawn({x, y}: ICoords) {
+    spawn({x, y}: ICoord) {
         this.x = x;
         this.y = y;
         this.x2 = this.x + this.width;

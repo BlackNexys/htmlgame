@@ -8,7 +8,8 @@ interface ICharacter {
 export class Character extends Actor {
 
     constructor({...gameElementProps} : ICharacter) {
-        super({spriteSrc: "./assets/ghostman idel/pixil-frame-0.png", ...gameElementProps});
+        super({spriteSrc: "./assets/char-sprite.png", ...gameElementProps});
+        this.width = 48;
     }
 
     init() {
@@ -32,11 +33,11 @@ export class Character extends Actor {
                 break;
             case "KeyA":
             case "ArrowLeft":
-                this.moveX(true);
+                this.moveLeft();
                 break;
             case "KeyD":
             case "ArrowRight":
-                this.moveX(false);
+                this.moveRight();
                 break;
         }
     }
