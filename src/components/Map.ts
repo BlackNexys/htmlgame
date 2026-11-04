@@ -11,6 +11,8 @@ export class Map {
     constructor({ map, gameArea }: { map: any[], gameArea: GameScreen}) {
         this.map = map;
         this.gameArea = gameArea;
+        this.gameArea.width = Math.max(...map.map(row => row.length)) * 48;
+        this.gameArea.height = map.length * 48;
     }
 
     place(hero: Character) {

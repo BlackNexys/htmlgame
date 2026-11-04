@@ -3,8 +3,11 @@
       "outDir": "./dist/",
       "noImplicitAny": true,
       "module": "es6",
-      "target": "es6",
-      "allowJs": true,
-      "moduleResolution": "node"
-    }
+      "target": "es2019",
+      "allowJs": false,
+      "moduleResolution": "node",
+      "types": [],
+      "strict": true
+    },
+    "include": ["src/app.ts", "src/game/**/*.ts", "src/maps/actionLevel.ts"]
   }

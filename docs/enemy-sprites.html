@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cyberundead enemy sprite preview</title>
+<style>
+:root{color-scheme:dark;font:15px 'Segoe UI',sans-serif;color:#d8e1d5;background:#10191b}*{box-sizing:border-box}body{margin:0}main{max-width:1120px;margin:32px auto;padding:0 24px}a{color:#8ed9dc}h1{font-size:36px;font-weight:500;letter-spacing:-1px;margin-bottom:12px}p{color:#9db4aa;line-height:1.7}.eyebrow{font-size:10px;letter-spacing:2px;color:#79cbd3}.references{display:flex;gap:24px;align-items:center;margin:24px 0}.references img{width:80px;height:80px;image-rendering:pixelated}.references p{font-size:12px;max-width:570px}.controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;padding:18px 0;border-top:1px solid #39504c;border-bottom:1px solid #39504c}select,button{font:inherit;padding:9px 14px;border:1px solid #52716d;background:#223a3d;color:#def1e0;cursor:pointer}button:hover{background:#2a494b}label{color:#a2b9ad;font-size:13px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:24px 0}article{border:1px solid #3b5150;background:#192a2e;padding:16px}article h2{font-size:20px;margin:0 0 6px;font-weight:500}article p{font-size:12px;min-height:40px;margin:4px 0 12px}.large{width:100%;height:auto;display:block;background:linear-gradient(#11212b,#20383b)}canvas{image-rendering:pixelated}.scale{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#9db4aa;font-size:11px;min-height:98px}.small{width:120px;height:90px;flex-shrink:0}article nav{display:flex;gap:16px;font-size:12px;padding-top:12px;border-top:1px solid #39504c}.lineup{width:100%;height:auto;background:#172a30;display:block;border:1px solid #3b5150}#error{color:#ffa1ba}footer{padding:12px 0 25px;font-size:12px;color:#9db4aa}@media(max-width:750px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.scale{flex-wrap:wrap}}@media(max-width:460px){.grid{grid-template-columns:1fr}.references{gap:10px}.references p{font-size:11px}h1{font-size:29px}}
+</style>
+<main>
+<p><a href="../">← Game</a> · <a href="character-animations.html">Main character animations</a></p>
+<div class="eyebrow">CYBERUNDEAD / FIRST ENEMY ART PASS</div>
+<h1>The restless locals</h1>
+<p>Six familiar undead forms, rebuilt with worn technology. Four frames each for idle, movement, attack, and defeat. All six are playable in the game; this preview lets us review their art independently of combat timing.</p>
+<div class="references"><img src="../assets/character.png" alt="Original magenta-flame protagonist"><img src="../assets/char-sprite.png" alt="Original cyan-handed skeleton"><p><strong>Your original references</strong><br>Angular bodies, compact gray shading, and focused energy color. Magenta stays with the protagonist; cyan ties this first enemy art pass together.</p></div>
+<div class="controls"><label for="sequence">Animation</label><select id="sequence"><option value="0">Idle</option><option value="1">Movement</option><option value="2">Attack</option><option value="3">Defeat</option></select><button id="pause" type="button">Pause</button><button id="mirror" type="button" aria-pressed="false">Face left</button><button id="replay" type="button">Replay sequence</button></div>
+<p id="error" role="status">Loading sprites…</p>
+<div class="grid" id="grid"></div>
+<h2>At the game scale</h2><p>Original protagonist on the left. Enemies use an 80 pixel padded cell, close to the current game's display scale. Relative sizes are provisional.</p>
+<canvas class="lineup" id="lineup" width="1008" height="160" aria-label="Original protagonist and all six enemies at gameplay scale"></canvas>
+<footer>Generated with the built-in image generator from the original PNG references. Transparent source sheets, prompts, and frame metadata are saved in <a href="../assets/enemies/README.md">assets/enemies</a>. No original artwork was replaced.</footer>
+</main>
+<script>
+(async()=>{
+ const status=document.querySelector('#error');
+ try {
+  const response=await fetch('../assets/enemies/manifest.json');if(!response.ok)throw new Error('Could not load enemy metadata');
+  const pack=await response.json();
+  const load=src=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error('Could not load '+src));image.src=src;});
+  const original=await load('../assets/character.png');
+  const entries=await Promise.all(pack.enemies.map(async enemy=>({...enemy,image:await load('../assets/enemies/'+enemy.file)})));
+  for(const entry of entries){
+   const article=document.createElement('article');const title=document.createElement('h2');title.textContent=entry.name;const note=document.createElement('p');note.textContent=entry.note;
+   const large=document.createElement('canvas');large.className='large';large.width=300;large.height=240;large.setAttribute('aria-label',entry.name+' enlarged animation');
+   const scale=document.createElement('div');scale.className='scale';const label=document.createElement('span');label.textContent='At gameplay size';const small=document.createElement('canvas');small.className='small';small.width=120;small.height=90;scale.append(label,small);
+   const nav=document.createElement('nav');for(const [text,file]of [['Sprite sheet',entry.file],['Prompt',entry.prompt]]){const a=document.createElement('a');a.textContent=text;a.href='../assets/enemies/'+file;nav.append(a);}
+   article.append(title,note,large,scale,nav);document.querySelector('#grid').append(article);entry.large=large;entry.small=small;
+  }
+  status.textContent='';let paused=false,mirrored=false,elapsed=0,last=0,row=0;
+  const pause=document.querySelector('#pause');pause.onclick=()=>{paused=!paused;pause.textContent=paused?'Resume':'Pause';};
+  document.querySelector('#sequence').onchange=event=>{row=Number(event.target.value);elapsed=0;};
+  const mirror=document.querySelector('#mirror');mirror.onclick=()=>{mirrored=!mirrored;mirror.textContent=mirrored?'Face right':'Face left';mirror.setAttribute('aria-pressed',String(mirrored));};
+  document.querySelector('#replay').onclick=()=>{elapsed=0;};
+  function draw(ctx,entry,x,y,size,column){
+   const image=entry.image;const sx=Math.round(column*image.width/4),sy=Math.round(row*image.height/4);const sw=Math.round((column+1)*image.width/4)-sx,sh=Math.round((row+1)*image.height/4)-sy;
+   ctx.save();ctx.translate(x,y);ctx.scale(mirrored?-1:1,1);ctx.imageSmoothingEnabled=false;ctx.drawImage(image,sx,sy,sw,sh,-size*pack.anchor.x,-size*pack.anchor.y,size,size);ctx.restore();
+  }
+  const lineup=document.querySelector('#lineup');const line=lineup.getContext('2d');
+  requestAnimationFrame(function frame(time){
+   if(last&&!paused)elapsed+=Math.min(.05,(time-last)/1000);last=time;
+   const animation=pack.animations[row];const tick=Math.floor(elapsed*animation.fps);const column=animation.loop?tick%4:Math.min(3,tick);
+   for(const entry of entries){
+    for(const [canvas,size,y]of [[entry.large,225,216],[entry.small,80,77]]){
+     const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);ctx.strokeStyle='#425d56';ctx.beginPath();ctx.moveTo(12,y+.5);ctx.lineTo(canvas.width-12,y+.5);ctx.stroke();draw(ctx,entry,canvas.width/2,y,size,column);
+     if(canvas===entry.large){ctx.font='10px monospace';ctx.fillStyle='#9bb4aa';ctx.fillText(animation.label.toUpperCase()+' · '+(column+1)+' / 4',12,233);}
+    }
+   }
+   line.clearRect(0,0,1008,160);line.strokeStyle='#425d56';line.beginPath();line.moveTo(20,126.5);line.lineTo(988,126.5);line.stroke();line.imageSmoothingEnabled=false;line.drawImage(original,46,62,64,64);
+   line.font='11px monospace';line.textAlign='center';line.fillStyle='#9bb4aa';line.fillText('Original hero',78,148);
+   entries.forEach((entry,index)=>{const x=220+index*145;draw(line,entry,x,126,80,column);line.fillText(entry.name,x,148);});
+   requestAnimationFrame(frame);
+  });
+ }catch(error){status.textContent=error.message;}
+})();
+</script>
+</html>

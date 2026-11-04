@@ -1,0 +1,13 @@
+Use case: stylized-concept
+Asset type: transparent production sprite animation atlas for a browser pixel-art side-scrolling platform game.
+Input image 1 is the canonical character design reference, not a background. Generate additional poses of THIS SAME character. Preserve the original black/charcoal small undead humanoid body, gray highlights, unmistakable vivid hot-magenta flame sweeping up and back from the skull, magenta face/hand accents, thin legs and chunky shoes. Do not substitute the cyan skeleton from other assets. Match the reference's low resolution pixel-art design, no painted rendering.
+Output ONE square PNG sprite sheet, ideally 1536 by 1536, with actual transparent alpha background. EXACTLY 6 equal columns and 6 equal rows, exactly 36 evenly spaced sprites; no extra sprites, headings, text, borders, dividers, checkerboard artwork, shadows or ground.
+Every cell is an identical square. Character at same scale and body root anchor in each cell, centered horizontally at cell 50%, standing feet baseline at cell 84%. Keep entire figure and flames within middle 76% of cell width and middle 80% height, with generous transparent padding. All characters face screen RIGHT, side-on three-quarter profile consistent with reference. Left-facing will be mirrored in engine. Keep normal silhouette about 65% of cell height; maintain black outfit and pink flame identity in every frame.
+Rows top to bottom, frames left to right:
+Row 1: six-frame looping idle, relaxed stance, subtle body breathing and lively flame flicker, identical foot anchor.
+Row 2: six-frame RUN cycle with real alternating legs and arms, forward lean, contact/down/passing/flight/opposite contact/passing, flame trailing backwards. Full body remains visible, no translation across cells.
+Row 3: six AIRBORNE poses: takeoff, ascending with tucked legs, high ascent, apex, descending, landing crouch. Keep character root centered so engine supplies physical movement; only limbs and flame change.
+Row 4: six ATTACK poses: hand raises, arm extends to right, magenta palm flare, recoil, follow-through, recovery. Small palm flare only, no detached projectiles or weapons, no added props.
+Row 5: six HURT reaction poses: impact flinch, lean backward, recoil, recover, settle, return to neutral. No costume changes or dismemberment.
+Row 6: six DEFEAT poses: stagger, knees bend, kneel, fall, low collapsed body, settled collapsed body with small fading pink flame. Keep collapsed poses on same baseline.
+Style: crisp pixel clusters, limited reference palette, dark gray enough to distinguish limbs, saturated magenta flame highlights, clean alpha silhouettes, consistent character proportions in all 36 frames. This is an animation asset, not a concept board.

@@ -1,46 +1,42 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style type="text/css">
-        body {
-            background-color: #1E2A2D;
-            color: #C0D1CE;
-            padding: 0 1rem;
-        }
-        .site-header {
-            font-size: 4rem;
-            margin: 1rem 0 .5rem;
-        }
-        .container {
-            padding: 0 1rem;
-            max-width: 1080px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 0 auto;
-        }
-        p {
-            margin: 1rem 0 .5rem;
-        }
-        .site-game {
-            border: 2px dashed #C0D1CE;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Underworld · Action prototype</title>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <main class="container">
-        <h1 class="site-header">The Game</h1>
-        <p>Do you want to play it?</p>
-
-        <article id="game" class="site-game">
-
-        </article>
-
-    </main>
-    <script src="./dist/bundle.js"></script>
+  <main class="shell">
+    <header class="masthead">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">✦</span> FROM THE OTHER SIDE</div>
+      <span class="version"><span class="dot"></span> PLAYABLE EXPERIMENT / 01</span>
+    </header>
+    <section class="intro">
+      <div><p class="eyebrow">A RESTLESS LITTLE PLATFORMER</p><h1>Love takes you<br><em>strange places.</em></h1></div>
+      <p class="intro-copy">Somewhere below the living,<br>there is still someone worth finding.<br><span>First, get through the locals.</span></p>
+    </section>
+    <section class="game-frame" aria-label="Underworld action game">
+      <div class="game-toolbar">
+        <div class="readouts"><span class="health-label">VITALITY <strong id="health">—</strong></span><span>DEFEATED <strong id="count">—</strong></span></div>
+        <div class="toolbar-actions"><button id="pause" disabled>Pause</button><button id="restart" disabled>Restart</button><button id="mute" aria-pressed="false" disabled>Sound on</button></div>
+      </div>
+      <div class="viewport">
+        <canvas id="game" width="960" height="576" tabindex="0" aria-label="Game. A and D to move, Space to jump, J to shoot. P to pause, R to restart." aria-describedby="controls"></canvas>
+        <div class="overlay" id="overlay">
+          <div class="panel"><p class="eyebrow">THE LOWER PASSAGE</p><h2 id="panel-title">Opening the passage</h2><p id="panel-message">Gathering a few restless souls…</p><button class="primary" id="primary" disabled>Loading</button><p class="panel-note">A short combat prototype · Keyboard required</p></div>
+        </div>
+      </div>
+      <div class="journey"><div id="progress"></div></div>
+      <div class="game-caption"><span>01 / THE LOWER PASSAGE</span><span>FIND YOUR WAY EAST →</span></div>
+      <p class="encounter" id="encounter">Watch each enemy before committing to an attack.</p>
+    </section>
+    <section class="controls" id="controls" aria-label="Controls">
+      <div><kbd>A</kbd><kbd>D</kbd><span>Move</span></div><div><kbd>SPACE</kbd><span>Jump</span></div><div><kbd>J</kbd><span>Attack · hold to fire</span></div><div><kbd>P</kbd><span>Pause</span></div><div><kbd>R</kbd><span>Restart</span></div>
+    </section>
+    <footer><p>Built from bones, TypeScript, and unfinished business.</p><p>Temporary combat settings. More to come.</p></footer>
+    <p id="status" class="sr-only" role="status" aria-live="polite">Loading</p>
+  </main>
+  <script src="./dist/bundle.js"></script>
 </body>
 </html>

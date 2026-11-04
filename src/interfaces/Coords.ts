@@ -34,17 +34,15 @@ export class Coords {
 }
 
 export class Collisions {
-    top: boolean;
-    bottom: boolean;
-    left: boolean;
-    right: boolean;
-    collisions?: Coords[];
+    top: Coords;
+    bottom: Coords;
+    left: Coords;
+    right: Coords;
 
-    constructor({top, bottom, left, right, collisions}: {top: boolean, bottom: boolean, left: boolean, right: boolean, collisions?: Coords[]}) {
+    constructor({top, bottom, left, right}: {top: Coords, bottom: Coords, left: Coords, right: Coords, collisions?: Coords[]}) {
         this.top = top;
         this.bottom = bottom;
         this.left = left;
         this.right = right;
-        this.collisions = collisions;
     }
 }

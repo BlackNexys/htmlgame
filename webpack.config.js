@@ -1,7 +1,8 @@
-const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
+    mode: 'production',
+    devtool: 'source-map',
     entry: path.resolve(__dirname, 'src/app.ts'),
     module: {
         rules: [

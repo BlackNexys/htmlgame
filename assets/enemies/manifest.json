@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "sourceSize": {
+    "width": 1254,
+    "height": 1254
+  },
+  "grid": {
+    "columns": 4,
+    "rows": 4
+  },
+  "facing": "right",
+  "anchor": {
+    "x": 0.5,
+    "y": 0.94
+  },
+  "animations": [
+    {
+      "id": "idle",
+      "label": "Idle",
+      "row": 0,
+      "fps": 6,
+      "loop": true
+    },
+    {
+      "id": "move",
+      "label": "Movement",
+      "row": 1,
+      "fps": 8,
+      "loop": true
+    },
+    {
+      "id": "attack",
+      "label": "Attack",
+      "row": 2,
+      "fps": 7,
+      "loop": true
+    },
+    {
+      "id": "defeat",
+      "label": "Defeat",
+      "row": 3,
+      "fps": 6,
+      "loop": false
+    }
+  ],
+  "enemies": [
+    {
+      "id": "zombie",
+      "name": "Zombie",
+      "file": "zombie-v1.png",
+      "prompt": "zombie-v1.prompt.txt",
+      "note": "Exposed spinal motor and an uneven shuffle."
+    },
+    {
+      "id": "skeleton",
+      "name": "Skeleton",
+      "file": "skeleton-v1.png",
+      "prompt": "skeleton-v1.prompt.txt",
+      "note": "Powered joints and an emitter forearm."
+    },
+    {
+      "id": "ghoul",
+      "name": "Ghoul",
+      "file": "ghoul-v1.png",
+      "prompt": "ghoul-v1.prompt.txt",
+      "note": "Long replacement limbs and a reinforced jaw."
+    },
+    {
+      "id": "ghost",
+      "name": "Ghost",
+      "file": "ghost-v1.png",
+      "prompt": "ghost-v1.prompt.txt",
+      "note": "A fragmented spirit in a broken projection harness."
+    },
+    {
+      "id": "wight",
+      "name": "Wight",
+      "file": "wight-v1.png",
+      "prompt": "wight-v1.prompt.txt",
+      "note": "A skeletal security officer behind a battered shield."
+    },
+    {
+      "id": "necromancer",
+      "name": "Necromancer",
+      "file": "necromancer-v1.png",
+      "prompt": "necromancer-v1.prompt.txt",
+      "note": "A corpse technician with a wired control rig."
+    }
+  ]
+}
