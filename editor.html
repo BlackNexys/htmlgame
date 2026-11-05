@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" data-game-theme="cyberundead">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Underworld · Level workshop</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./src/editor/editor.css">
+</head>
+<body class="editor-app">
+  <header class="editor-header">
+    <div><p class="eyebrow">FROM THE OTHER SIDE / AUTHORING</p><h1>Level workshop</h1><p>Shape a passage. Test it. Share the same level file.</p></div>
+    <nav aria-label="Workshop actions">
+      <a href="./index.html" target="_blank" rel="noopener">Open game ↗</a>
+      <bl-button id="new-level">New level</bl-button>
+      <bl-button id="open-level">Open JSON</bl-button>
+      <bl-button id="export-level">Export JSON</bl-button>
+      <bl-button id="playtest" variant="primary">Playtest</bl-button>
+    </nav>
+  </header>
+  <main class="editor-layout">
+    <aside class="editor-sidebar" aria-label="Level and objects">
+      <section class="editor-section">
+        <h2>Level</h2>
+        <form id="level-properties">
+          <label>Level ID<input name="id" required pattern="[a-z][a-z0-9-]{0,79}" maxlength="80"></label>
+          <label>Name<input name="name" required maxlength="120"></label>
+          <div class="editor-field-row"><label>Width<input name="width" type="number" min="960" max="32736" step="48" required></label><label>Height<input name="height" type="number" min="576" max="16368" step="48" required></label></div>
+          <bl-button type="submit">Apply level properties</bl-button>
+        </form>
+        <bl-button id="reset-properties" variant="quiet">Reset property edits</bl-button>
+        <p class="editor-help">World pixels · 48 px grid. The draft is saved in this browser. Export a JSON file to share or commit it.</p>
+        <bl-button id="load-example" variant="quiet">Load example</bl-button>
+      </section>
+      <section class="editor-section">
+        <h2>Objects</h2>
+        <label class="editor-sr" for="object-list">Level objects</label>
+        <select id="object-list" size="9"></select>
+        <bl-button id="delete-object" variant="danger" disabled>Delete selected</bl-button>
+      </section>
+    </aside>
+    <section class="editor-workspace" aria-label="Map workspace">
+      <div class="editor-tools" role="group" aria-label="Map tools">
+        <bl-button data-tool="select" aria-pressed="true">Select / move</bl-button>
+        <bl-button data-tool="terrain" aria-pressed="false">Terrain</bl-button>
+        <bl-button data-tool="decorations" aria-pressed="false">Decoration</bl-button>
+        <bl-button data-tool="spawn" aria-pressed="false">Player</bl-button>
+        <bl-button data-tool="exit" aria-pressed="false">Exit</bl-button>
+        <bl-button data-tool="enemy" aria-pressed="false">Enemy</bl-button>
+        <bl-button data-tool="sign" aria-pressed="false">Sign</bl-button>
+        <label>Enemy type<select id="enemy-kind"><option>zombie</option><option>skeleton</option><option>ghoul</option><option>ghost</option><option>wight</option><option>necromancer</option></select></label>
+      </div>
+      <div class="editor-view-tools">
+        <div><bl-button id="undo" disabled>Undo</bl-button><bl-button id="redo" disabled>Redo</bl-button></div>
+        <div><label>Zoom<select id="zoom"><option value=".25">25%</option><option value=".5" selected>50%</option><option value="1">100%</option><option value="2">200%</option></select></label><bl-button id="fit-map">Fit map</bl-button></div>
+      </div>
+      <p id="tool-help" class="editor-help">Click an object to select it. Drag to move in 48-pixel steps; use the inspector for exact positions.</p>
+      <div class="editor-stage"><canvas id="level-canvas" tabindex="0" aria-label="Level editing canvas. Use the object list and inspector to edit with a keyboard." aria-describedby="tool-help"></canvas></div>
+      <div class="editor-legend"><span class="legend-player">◆ Player / exit</span><span class="legend-enemy">◆ Enemies / patrols</span><span>■ Solid terrain</span><span id="revision">Loading</span></div>
+      <p id="editor-status" role="status" aria-live="polite">Opening the workshop…</p>
+      <details class="editor-json" open>
+        <summary>Level JSON</summary>
+        <p id="json-status" class="editor-help">Loading the level document</p>
+        <label class="editor-sr" for="level-json">Level JSON document</label>
+        <textarea id="level-json" spellcheck="false" autocapitalize="off"></textarea>
+        <div><bl-button id="apply-json" variant="primary">Validate and apply JSON</bl-button><bl-button id="reset-json">Reset JSON draft</bl-button><bl-button id="export-draft">Download JSON draft</bl-button></div>
+        <p class="editor-help">Applying is atomic. Validation errors leave the level unchanged. A revision conflict preserves your text so you can export or merge it.</p>
+      </details>
+    </section>
+    <aside class="editor-inspector" aria-label="Object inspector">
+      <section class="editor-section"><h2>Inspector</h2><form id="object-properties"><p>Select an object to edit its properties.</p></form></section>
+    </aside>
+  </main>
+  <input id="level-file" type="file" accept=".json,application/json" hidden>
+  <dialog id="playtest-dialog" aria-labelledby="playtest-title">
+    <div class="editor-preview-header"><h2 id="playtest-title">Playtest snapshot</h2><bl-button id="close-playtest">Close playtest</bl-button></div>
+    <iframe id="playtest-frame" title="Independent level playtest" src="about:blank"></iframe>
+  </dialog>
+  <script type="module" src="./src/editor/app.ts"></script>
+</body>
+</html>

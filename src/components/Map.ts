@@ -7,6 +7,7 @@ export class Map implements Level {
     width: number;
     height: number;
     solids: Wall[];
+    decorations: Wall[];
     spawn: {x: number; y: number};
     enemies: EnemySpawn[];
     exit: Exit;
@@ -16,6 +17,7 @@ export class Map implements Level {
         this.width = level.width;
         this.height = level.height;
         this.solids = level.solids.map(bounds => new Wall(bounds));
+        this.decorations = (level.decorations || []).map(bounds => new Wall(bounds));
         this.spawn = {...level.spawn};
         this.enemies = level.enemies.map(spawn => ({...spawn}));
         this.exit = new Exit(level.exit);

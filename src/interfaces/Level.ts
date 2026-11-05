@@ -7,6 +7,7 @@ export interface Level {
     width: number;
     height: number;
     solids: Rect[];
+    decorations?: Rect[];
     spawn: {x: number; y: number};
     enemies: EnemySpawn[];
     exit: Rect;

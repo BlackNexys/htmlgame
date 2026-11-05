@@ -1,4 +1,3 @@
-import { createActionLevel } from '../maps/actionLevel';
 import type { Level } from '../interfaces/Level';
 import type { Controls, GameEvent, PlayState } from '../interfaces/Game';
 import { Enemy } from '../components/Enemy';
@@ -26,7 +25,7 @@ export class World {
     state: PlayState = 'playing';
     elapsed = 0;
 
-    constructor(level: Level = createActionLevel()) {
+    constructor(level: Level) {
         this.level = new Map(level);
         this.collisions = new CollisionSystem(this.level);
         this.graveyard = new Graveyard(this);

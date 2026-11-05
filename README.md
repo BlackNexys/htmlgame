@@ -26,6 +26,14 @@ The build checks TypeScript before bundling. Deploy the contents of `dist/` to a
 
 Menus and toolbar controls use Blacklight Lit components with a game-owned Cyberundead theme: charcoal surfaces, bone text, magenta player actions, cyan details, and crisp edges. See [UI theme tokens](docs/ui-theme.md) to adjust the palette and [vendor notes](vendor/README.md) to update the local library snapshot.
 
+## Create levels
+
+Open the separate [Level workshop](http://127.0.0.1:3000/editor.html) to place terrain, decoration, enemies, signs, the player, and the exit. It has an object inspector, undo/redo, direct JSON editing, import/export, local draft recovery, and independent snapshot playtests.
+
+Levels are versioned JSON files under `public/levels`. Export a level there and open `/?level=<id>` to play it. The game loads the requested file when needed; restarting keeps the chosen level. The editor has its own application entry point and does not edit a live game.
+
+Humans and agents share the same schema, stable object IDs, and revision checks. Agents can edit files, use `npm run level -- validate <file>` and `npm run level -- patch <file> <changes.json>`, or apply structured changes through the editor's browser API. See [level authoring and collaboration](docs/level-authoring.md) for the format and workflow.
+
 ## Controls
 
 | Action | Keys |
@@ -58,7 +66,7 @@ The [enemy art pack](public/assets/enemies/README.md) provides the six sheets us
 
 `src/app.ts` creates and starts `Game`. The `Game` controller owns the session, `GameLoop` owns animation-frame scheduling, and `FixedClock` owns simulation timing. `Hud` and `GameMenu` own DOM presentation. `World` coordinates simulation updates while focused classes own collision queries, combat, corpses, and effects.
 
-`src/maps/actionLevel.ts` defines terrain, spawn points, patrol ranges, and the exit. `src/game/config.ts` holds temporary movement and combat settings. Physics uses world coordinates; the renderer applies the camera and scales the canvas through CSS.
+`public/levels/lower-passage.json` defines terrain, spawn points, patrol ranges, and the exit. `src/levels` validates, loads, and compiles level documents. `src/maps/actionLevel.ts` is a synchronous wrapper for simulation tests. `src/editor` owns the separate workshop application. `src/game/config.ts` holds temporary movement and combat settings. Physics uses world coordinates; the renderer applies the camera and scales the canvas through CSS.
 
 The active entities follow the original class structure in `src/components`:
 
@@ -90,7 +98,7 @@ Each class has its own file. `GameElement` owns bounds and placement, `Actor` su
 
 Corpse reactivation retains the concrete enemy instance and its methods. Only original enemy defeats contribute to the HUD count; reactivated enemies do not award duplicate credit.
 
-`src/interfaces` contains shared geometry, level, input, event, asset, and scheduling contracts. The obsolete coordinate classes have been replaced by these shared interfaces. The original `src/maps/level0.ts` remains as a level reference. Type checking covers every TypeScript file under `src`. Vite uses `index.html` and `src/app.ts` as the application entry points and builds into `dist`. Static artwork and the two HTML preview pages live in `public` and are copied into each build without changing their public URLs.
+`src/interfaces` contains shared geometry, runtime level, input, event, asset, and scheduling contracts. The obsolete coordinate classes have been replaced by these shared interfaces. The original `src/maps/level0.ts` remains as a level reference. Type checking covers every TypeScript file under `src`. Vite builds the game (`index.html`) and workshop (`editor.html`) as separate entry points into `dist`. Static artwork, JSON levels, the schema, and the two HTML preview pages live in `public` and are copied into each build without changing their public URLs.
 
 See [the architecture guide](docs/architecture.md) for responsibility boundaries and where to add a new feature.
 
@@ -102,7 +110,7 @@ npx playwright install chromium firefox
 npm run test:browser
 ```
 
-`npm run check` runs the simulation tests, full-source type checking, and production build. Simulation tests use Node's test runner with `tsx` to load TypeScript. Browser tests build and serve the production output automatically, exercise both Chromium and Firefox through movement, fighting, pause and focus loss, resizing, defeat, completion, replay, and asset loading failure, and save ignored screenshots under `artifacts`. Stop any development or preview server using port 3000 before running them.
+`npm run check` runs the simulation tests, full-source type checking, and production build. Simulation tests use Node's test runner with `tsx` to load TypeScript. Browser tests build and serve the production output automatically, exercise both Chromium and Firefox through gameplay and authoring, and save ignored screenshots under `artifacts`. Stop any development or preview server using port 3000 before running them, or set `PLAYWRIGHT_PORT` to an unused port.
 
 Simulation tests cover frame-rate independence, bounded catch-up, fast collisions, jumping, attacks in both directions, wall occlusion, damage timing, cleanup, reset, camera bounds, and completing the real level.
 

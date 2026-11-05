@@ -7,9 +7,13 @@ import { Sound } from './Sound';
 import { Hud } from '../ui/Hud';
 import { GameMenu } from '../ui/GameMenu';
 import type { GameMode } from '../interfaces/Game';
+import type { Level } from '../interfaces/Level';
+import { LevelLoader } from '../levels/LevelLoader';
 
 export class Game {
-    private world = new World();
+    private world!: World;
+    private loadedLevel!: Level;
+    private readonly loading = new AbortController();
     private readonly hud = new Hud();
     private readonly menu = new GameMenu();
     private readonly sound = new Sound();
@@ -20,7 +24,8 @@ export class Game {
     private disposed = false;
     private starting = false;
 
-    constructor(private readonly canvas: HTMLCanvasElement) {
+    constructor(private readonly canvas: HTMLCanvasElement,
+        private readonly loadLevel: (signal: AbortSignal) => Promise<Level> = signal => new LevelLoader().load('lower-passage', signal)) {
         this.input = new Input(canvas, key => this.handleKey(key));
         this.loop = new GameLoop(dt => this.update(dt), (elapsed, simulated) => this.draw(elapsed, simulated));
         canvas.addEventListener('blur', this.pause);
@@ -32,8 +37,10 @@ export class Game {
         if (this.mode !== 'loading' || this.starting || this.disposed) return;
         this.starting = true;
         try {
-            const assets = await new AssetLoader().load();
+            const [assets, level] = await Promise.all([new AssetLoader().load(), this.loadLevel(this.loading.signal)]);
             if (this.disposed) return;
+            this.loadedLevel = level;
+            this.world = new World(level);
             this.screen = new GameScreen(this.canvas, assets);
             this.hud.update(this.world);
             this.screen.draw(this.world);
@@ -49,6 +56,7 @@ export class Game {
 
     dispose() {
         this.disposed = true;
+        this.loading.abort();
         this.loop.stop(); this.input.dispose(); this.menu.dispose(); this.sound.dispose();
         this.canvas.removeEventListener('blur', this.pause);
         window.removeEventListener('blur', this.pause);
@@ -61,7 +69,7 @@ export class Game {
     }
 
     private restart() {
-        this.world = new World(); this.screen!.resetAnimation(); this.hud.update(this.world); this.resume();
+        this.world = new World(this.loadedLevel); this.screen!.resetAnimation(); this.hud.update(this.world); this.resume();
     }
 
     private readonly pause = () => {

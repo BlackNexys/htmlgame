@@ -11,7 +11,10 @@ The project uses a class for each entity or system with a distinct responsibilit
 | `src/renderers` | Canvas drawing for each entity or scene layer |
 | `src/ui` | DOM menu, toolbar, status, counters, progress, and encounter hints |
 | `src/interfaces` | Shared contracts with no runtime behavior |
-| `src/maps` | Level definitions, including terrain, spawns, signs, and exit placement |
+| `src/maps` | Synchronous level fixture for tests and the original map reference |
+| `src/levels` | Shared JSON authoring contract, validation, compilation, loading, and revision-checked changes |
+| `src/editor` | Independent authoring application, canvas, inspector, history, file handling, and snapshot preview |
+| `public/levels` | Individual level JSON files and the published JSON Schema |
 
 Each runtime class has its own file. Small stateless geometry operations remain shared functions in `physics.ts`; level definitions and tuning remain data.
 
@@ -30,6 +33,10 @@ Each runtime class has its own file. Small stateless geometry operations remain 
 `Projectile` owns flight and expiry. `PlayerProjectile` and `EnemyProjectile` select their valid targets and appearance. This keeps projectile teams and colors out of the world update and drawing code. `Particle` owns its short-lived movement. `Corpse` owns elapsed death-animation time, eligibility, and claim state while retaining the concrete defeated enemy instance.
 
 `Map` creates `Wall`, `Sign`, and `Exit` instances from level definitions. `Exit` tests whether the player has reached it. `Camera` follows an actor and clamps its view to the map.
+
+The runtime takes an explicit `Level`; it does not choose or author one. `LevelLoader` fetches a selected JSON document, validates it, and compiles it before `Game` constructs `World`. Restarting reuses the loaded definition with fresh entities. `LevelCompiler` converts bottom-center actor anchors and compact terrain rectangles into the runtime's existing coordinates and tiles. Decoration is drawn separately and never enters the collision set.
+
+`editor.html` and `src/editor/app.ts` form a separate application entry point. Editor history and gestures operate on JSON documents, not `World` instances. A playtest launches the normal game in a separate browsing context from a frozen JSON Blob URL. Only the shared level contract and validation cross that boundary. See [level authoring](level-authoring.md) for human and agent workflows.
 
 ## Simulation systems
 

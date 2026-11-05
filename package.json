@@ -15,6 +15,7 @@
     "preview": "vite preview",
     "test:browser": "npm run build && playwright test",
     "check": "npm test && npm run build",
+    "level": "node scripts/levels.cjs",
     "typecheck": "tsc --noEmit"
   },
   "author": "",

@@ -1,4 +1,5 @@
 require('./register.cjs');
+const {createActionLevel} = require('../src/maps/actionLevel.ts');
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const {World} = require('../src/game/World.ts');
@@ -83,7 +84,7 @@ test('contact damage has a grace period, death stops simulation, and a fresh wor
 });
 
 test('camera is bounded and completion is reachable through the real action level', () => {
-    const world = new World();
+    const world = new World(createActionLevel());
     let jumping = false;
     for (let i = 0; i < 120 * 25 && world.state === 'playing'; i++) {
         const p = world.player;

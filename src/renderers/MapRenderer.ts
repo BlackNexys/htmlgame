@@ -14,6 +14,10 @@ export class MapRenderer {
         this.exit = new ExitRenderer(ctx);
     }
     draw(map: Map, camera: Camera) {
+        for (const decoration of map.decorations) {
+            if (decoration.x2 < camera.x || decoration.x > camera.x2) continue;
+            this.walls.decoration(decoration);
+        }
         for (const wall of map.solids) {
             if (wall.x2 < camera.x || wall.x > camera.x2) continue;
             this.walls.draw(wall, map);

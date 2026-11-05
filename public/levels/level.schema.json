@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Underworld level document v1",
+  "description": "World pixels; player and enemy positions mark bottom center. Runtime validation also checks bounds, overlaps, unique IDs, patrol ranges and tile budgets.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "name", "revision", "tileSize", "width", "height", "spawn", "exit", "terrain", "decorations", "enemies", "signs"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "id": {"$ref": "#/$defs/id"},
+    "name": {"type": "string", "minLength": 1, "maxLength": 120, "pattern": "\\S"},
+    "revision": {"type": "integer", "minimum": 0, "maximum": 9007199254740990},
+    "tileSize": {"const": 48},
+    "width": {"type": "integer", "minimum": 960, "maximum": 32736, "multipleOf": 48},
+    "height": {"type": "integer", "minimum": 576, "maximum": 16368, "multipleOf": 48},
+    "spawn": {"$ref": "#/$defs/point"},
+    "exit": {"$ref": "#/$defs/rect"},
+    "terrain": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/terrain"}},
+    "decorations": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/terrain"}},
+    "enemies": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/enemy"}},
+    "signs": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/sign"}}
+  },
+  "$defs": {
+    "id": {"type": "string", "maxLength": 80, "pattern": "^[a-z][a-z0-9-]{0,79}$"},
+    "coordinate": {"type": "integer", "minimum": 0},
+    "point": {
+      "type": "object", "additionalProperties": false, "required": ["x", "y"],
+      "properties": {"x": {"$ref": "#/$defs/coordinate"}, "y": {"$ref": "#/$defs/coordinate"}}
+    },
+    "rect": {
+      "type": "object", "additionalProperties": false, "required": ["x", "y", "width", "height"],
+      "properties": {"x": {"$ref": "#/$defs/coordinate"}, "y": {"$ref": "#/$defs/coordinate"}, "width": {"type": "integer", "minimum": 1}, "height": {"type": "integer", "minimum": 1}}
+    },
+    "terrain": {
+      "type": "object", "additionalProperties": false, "required": ["id", "x", "y", "width", "height"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "x": {"type": "integer", "minimum": 0, "multipleOf": 48}, "y": {"type": "integer", "minimum": 0, "multipleOf": 48}, "width": {"type": "integer", "minimum": 48, "multipleOf": 48}, "height": {"type": "integer", "minimum": 48, "multipleOf": 48}}
+    },
+    "enemy": {
+      "type": "object", "additionalProperties": false, "required": ["id", "kind", "x", "y", "patrol"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "kind": {"enum": ["zombie", "skeleton", "ghoul", "ghost", "wight", "necromancer"]},
+        "x": {"$ref": "#/$defs/coordinate"}, "y": {"$ref": "#/$defs/coordinate"},
+        "patrol": {"type": "object", "additionalProperties": false, "required": ["left", "right"], "properties": {"left": {"$ref": "#/$defs/coordinate"}, "right": {"$ref": "#/$defs/coordinate"}}}
+      }
+    },
+    "sign": {
+      "type": "object", "additionalProperties": false, "required": ["id", "x", "y", "title", "text"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "x": {"$ref": "#/$defs/coordinate"}, "y": {"$ref": "#/$defs/coordinate"}, "title": {"type": "string", "minLength": 1, "maxLength": 120, "pattern": "\\S"}, "text": {"type": "string", "minLength": 1, "maxLength": 300, "pattern": "\\S"}}
+    }
+  }
+}

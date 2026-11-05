@@ -4,6 +4,12 @@ import { tuning } from '../game/config';
 
 export class WallRenderer {
     constructor(private readonly ctx: CanvasRenderingContext2D, private readonly image: HTMLImageElement) {}
+    decoration(wall: Wall) {
+        this.ctx.save();
+        this.ctx.globalAlpha = .35;
+        this.ctx.drawImage(this.image, wall.x, wall.y, wall.width, wall.height);
+        this.ctx.restore();
+    }
     draw(wall: Wall, map: Map) {
         const c = this.ctx;
         c.drawImage(this.image, wall.x, wall.y, wall.width, wall.height);
