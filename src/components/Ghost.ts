@@ -1,4 +1,4 @@
-import { Enemy, EnemyProps } from './Enemy';
+import { Enemy, type EnemyProps } from './Enemy';
 import { tuning as T } from '../game/config';
 import { clamp, overlaps } from '../game/physics';
 

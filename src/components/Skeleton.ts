@@ -1,5 +1,5 @@
 import { GroundEnemy } from './GroundEnemy';
-import { EnemyProps } from './Enemy';
+import type { EnemyProps } from './Enemy';
 
 export class Skeleton extends GroundEnemy {
     readonly displayName = 'Skeleton';

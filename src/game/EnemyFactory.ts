@@ -1,4 +1,4 @@
-import { Enemy, EnemyProps } from '../components/Enemy';
+import { Enemy, type EnemyProps } from '../components/Enemy';
 import { Zombie } from '../components/Zombie';
 import { Skeleton } from '../components/Skeleton';
 import { Ghoul } from '../components/Ghoul';

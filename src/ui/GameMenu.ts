@@ -1,3 +1,4 @@
+import type { BlButton } from '@blacklight/signal-soul/atoms';
 import type { PlayState } from '../interfaces/Game';
 
 export interface MenuActions { primary: () => void; pause: () => void; restart: () => void; mute: () => void; }
@@ -6,10 +7,10 @@ export class GameMenu {
     private readonly panel = document.querySelector<HTMLElement>('#overlay')!;
     private readonly title = document.querySelector<HTMLElement>('#panel-title')!;
     private readonly message = document.querySelector<HTMLElement>('#panel-message')!;
-    private readonly primary = document.querySelector<HTMLButtonElement>('#primary')!;
-    private readonly pause = document.querySelector<HTMLButtonElement>('#pause')!;
-    private readonly restart = document.querySelector<HTMLButtonElement>('#restart')!;
-    private readonly mute = document.querySelector<HTMLButtonElement>('#mute')!;
+    private readonly primary = document.querySelector<BlButton>('#primary')!;
+    private readonly pause = document.querySelector<BlButton>('#pause')!;
+    private readonly restart = document.querySelector<BlButton>('#restart')!;
+    private readonly mute = document.querySelector<BlButton>('#mute')!;
     private readonly status = document.querySelector<HTMLElement>('#status')!;
 
     bind(actions: MenuActions) {

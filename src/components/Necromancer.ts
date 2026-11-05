@@ -1,5 +1,5 @@
 import { GroundEnemy } from './GroundEnemy';
-import { EnemyProps } from './Enemy';
+import type { EnemyProps } from './Enemy';
 import { tuning as T } from '../game/config';
 
 export class Necromancer extends GroundEnemy {

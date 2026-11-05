@@ -1,26 +1,32 @@
 {
   "name": "htmlgame",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A browser platformer built with TypeScript and Canvas",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "test": "node --test tests/*.test.cjs",
-    "build": "webpack --config webpack.config.js",
-    "watch": "webpack --config webpack.config.js --watch --progress",
-    "test:browser": "playwright test",
-    "start": "node scripts/serve.cjs",
+    "dev": "vite",
+    "start": "vite",
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview",
+    "test:browser": "npm run build && playwright test",
+    "check": "npm test && npm run build",
     "typecheck": "tsc --noEmit"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "path": "^0.12.7"
-  },
   "devDependencies": {
     "@playwright/test": "^1.64.1",
-    "ts-loader": "^9.2.6",
-    "typescript": "^4.5.4",
-    "webpack": "^5.65.0",
-    "webpack-cli": "^4.9.1"
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.6"
+  },
+  "dependencies": {
+    "@blacklight/signal-soul": "file:vendor/blacklight-signal-soul-2.0.0-beta.1.tgz",
+    "lit": "^3.3.3"
   }
 }

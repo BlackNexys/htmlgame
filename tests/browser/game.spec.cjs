@@ -89,3 +89,38 @@ test('asset failure is explained and offers reload', async ({page}) => {
     await expect(page.getByRole('button', {name: 'Reload', exact: true})).toBeEnabled();
 });
 
+test('Blacklight controls preserve gameplay focus and native keyboard interaction', async ({page}) => {
+    await start(page);
+    await page.getByRole('button', {name: 'Sound on', exact: true}).click();
+    await expect(page.locator('#game')).toBeFocused();
+    await expect(page.getByRole('button', {name: 'Sound off', exact: true})).toHaveAttribute('aria-pressed', 'true');
+    await page.keyboard.press('KeyM');
+    await expect(page.getByRole('button', {name: 'Sound on', exact: true})).toHaveAttribute('aria-pressed', 'false');
+
+    await page.keyboard.press('KeyP');
+    await expect(page.locator('#overlay')).toBeVisible();
+    const resume = page.locator('#primary').getByRole('button', {name: 'Resume', exact: true});
+    await resume.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#overlay')).toBeHidden();
+    await expect(page.locator('#game')).toBeFocused();
+    await page.keyboard.press('KeyP');
+    await expect(page.locator('#panel-title')).toHaveText('Take a breather');
+});
+
+for (const preview of ['character-animations', 'enemy-sprites']) {
+    test(`${preview} preview and its artwork are included in the production build`, async ({page}) => {
+        const errors = [];
+        page.on('pageerror', error => errors.push(error.message));
+        const response = await page.goto(`/docs/${preview}.html`);
+        expect(response.ok()).toBe(true);
+        await expect(page.locator('article')).toHaveCount(6);
+        await expect(page.locator('#error')).toBeEmpty();
+        await expect.poll(() => page.locator('canvas').first().evaluate(canvas =>
+            canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data.some(value => value !== 0)
+        )).toBe(true);
+        await expect.poll(() => page.locator('img').evaluateAll(images => images.every(image => image.complete && image.naturalWidth > 0))).toBe(true);
+        expect(errors).toEqual([]);
+    });
+}
+

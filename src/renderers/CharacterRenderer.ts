@@ -1,6 +1,6 @@
 import type { Character } from '../components/Character';
 import type { GameEvent } from '../interfaces/Game';
-import { CharacterAnimation, CharacterFrame } from '../game/CharacterAnimation';
+import { CharacterAnimation, type CharacterFrame } from '../game/CharacterAnimation';
 
 export class CharacterRenderer {
     private animation = new CharacterAnimation();

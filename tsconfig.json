@@ -1,11 +1,13 @@
 {
     "compilerOptions": {
-      "outDir": "./dist/",
-      "noImplicitAny": true,
-      "module": "es6",
-      "target": "es2019",
-      "allowJs": false,
-      "moduleResolution": "node",
+      "module": "ESNext",
+      "target": "ES2022",
+      "lib": ["ES2022", "DOM", "DOM.Iterable"],
+      "moduleResolution": "bundler",
+      "noEmit": true,
+      "isolatedModules": true,
+      "verbatimModuleSyntax": true,
+      "forceConsistentCasingInFileNames": true,
       "types": [],
       "strict": true
     },

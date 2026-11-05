@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-game-theme="cyberundead">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,12 +19,12 @@
     <section class="game-frame" aria-label="Underworld action game">
       <div class="game-toolbar">
         <div class="readouts"><span class="health-label">VITALITY <strong id="health">—</strong></span><span>DEFEATED <strong id="count">—</strong></span></div>
-        <div class="toolbar-actions"><button id="pause" disabled>Pause</button><button id="restart" disabled>Restart</button><button id="mute" aria-pressed="false" disabled>Sound on</button></div>
+        <div class="toolbar-actions"><bl-button id="pause" variant="quiet" disabled>Pause</bl-button><bl-button id="restart" variant="quiet" disabled>Restart</bl-button><bl-button id="mute" variant="quiet" aria-pressed="false" disabled>Sound on</bl-button></div>
       </div>
       <div class="viewport">
         <canvas id="game" width="960" height="576" tabindex="0" aria-label="Game. A and D to move, Space to jump, J to shoot. P to pause, R to restart." aria-describedby="controls"></canvas>
         <div class="overlay" id="overlay">
-          <div class="panel"><p class="eyebrow">THE LOWER PASSAGE</p><h2 id="panel-title">Opening the passage</h2><p id="panel-message">Gathering a few restless souls…</p><button class="primary" id="primary" disabled>Loading</button><p class="panel-note">A short combat prototype · Keyboard required</p></div>
+          <div class="panel"><p class="eyebrow">THE LOWER PASSAGE</p><h2 id="panel-title">Opening the passage</h2><p id="panel-message">Gathering a few restless souls…</p><bl-button class="primary" id="primary" variant="primary" disabled>Loading</bl-button><p class="panel-note">A short combat prototype · Keyboard required</p></div>
         </div>
       </div>
       <div class="journey"><div id="progress"></div></div>
@@ -37,6 +37,6 @@
     <footer><p>Built from bones, TypeScript, and unfinished business.</p><p>Temporary combat settings. More to come.</p></footer>
     <p id="status" class="sr-only" role="status" aria-live="polite">Loading</p>
   </main>
-  <script src="./dist/bundle.js"></script>
+  <script type="module" src="./src/app.ts"></script>
 </body>
 </html>

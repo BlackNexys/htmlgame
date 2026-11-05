@@ -1,0 +1,91 @@
+/* Game palette and material rules derived from public/assets/STYLE.md.
+   These game-owned tokens map onto Blacklight's public semantic tokens. */
+:root[data-game-theme="cyberundead"] {
+    color-scheme: dark;
+
+    --game-void: #090c10;
+    --game-charcoal: #11171d;
+    --game-slate: #1a232b;
+    --game-steel: #27343e;
+    --game-stone: #54636e;
+    --game-bone: #e0e6df;
+    --game-ash: #b1bebf;
+    --game-dust: #929fa7;
+
+    --game-magenta: #ff52ab;
+    --game-magenta-core: #ffb5da;
+    --game-magenta-edge: #8c285c;
+    --game-magenta-hover: #ff83c2;
+    --game-cyan: #63dfeb;
+    --game-cyan-core: #b9f5fa;
+    --game-amber: #edc383;
+    --game-danger: #ff9591;
+    --game-success: #a8d6ab;
+    --game-on-energy: #160b15;
+
+    --game-edge-width: 2px;
+    --game-frame-shadow: 4px 4px 0 #040608;
+    --game-key-shadow: 0 2px 0 #040608;
+    --game-overlay: #090c10ed;
+    --game-overlay-edge: #11171de0;
+
+    --bl-bg-canvas: var(--game-void);
+    --bl-bg-surface: var(--game-charcoal);
+    --bl-bg-panel: var(--game-slate);
+    --bl-bg-elevated: var(--game-steel);
+    --bl-bg-control: var(--game-charcoal);
+    --bl-text-primary: var(--game-bone);
+    --bl-text-secondary: var(--game-ash);
+    --bl-text-tertiary: var(--game-dust);
+    --bl-text-inverted: var(--game-void);
+    --bl-text-link: var(--game-cyan);
+    --bl-text-onImage: var(--game-bone);
+    --bl-border-default: var(--game-steel);
+    --bl-border-control: var(--game-stone);
+    --bl-border-strong: var(--game-ash);
+
+    --bl-action-brand: var(--game-magenta);
+    --bl-action-onBrand: var(--game-on-energy);
+    --bl-action-brandBorder: var(--game-magenta-core);
+    --bl-action-hover: var(--game-magenta-hover);
+    --bl-action-brandHoverBorder: var(--game-magenta-core);
+    --bl-action-focus: var(--game-cyan-core);
+    --bl-action-human: var(--game-bone);
+    --bl-action-onHuman: var(--game-void);
+    --bl-action-humanBorder: var(--game-ash);
+    --bl-action-humanHover: #f2f6ef;
+    --bl-action-danger: #862d3a;
+    --bl-action-onDanger: var(--game-bone);
+    --bl-action-dangerBorder: var(--game-danger);
+    --bl-action-dangerHover: #9c3545;
+
+    --bl-accent-signal: var(--game-magenta);
+    --bl-accent-human: var(--game-bone);
+    --bl-accent-data: var(--game-cyan);
+    --bl-accent-annotation: var(--game-ash);
+    --bl-selection-edge: var(--game-magenta);
+    --bl-status-success: var(--game-success);
+    --bl-status-warning: var(--game-amber);
+    --bl-status-danger: var(--game-danger);
+    --bl-status-info: var(--game-cyan);
+
+    --bl-radius-xs: 0px;
+    --bl-radius-sm: 0px;
+    --bl-radius-md: 0px;
+    --bl-radius-lg: 0px;
+    --bl-radius-xl: 0px;
+    --bl-motion-feedback: 50ms;
+    --bl-motion-fast: 80ms;
+    --bl-motion-normal: 140ms;
+    --bl-motion-slow: 220ms;
+    --bl-motion-enter: 140ms;
+    --bl-motion-exit: 80ms;
+    --bl-motion-easeStandard: steps(2, end);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root[data-game-theme="cyberundead"] {
+        --bl-motion-scale: 0;
+        --bl-motion-repeat: 1;
+    }
+}

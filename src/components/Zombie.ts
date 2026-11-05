@@ -1,5 +1,5 @@
 import { GroundEnemy } from './GroundEnemy';
-import { EnemyProps } from './Enemy';
+import type { EnemyProps } from './Enemy';
 
 export class Zombie extends GroundEnemy {
     readonly displayName = 'Zombie';
