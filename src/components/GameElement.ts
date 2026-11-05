@@ -1,39 +1,21 @@
-import { GameScreen } from "./GameScreen";
-import { ICoord } from "../interfaces/Coords";
+import type { Rect } from '../interfaces/Geometry';
 
-export interface IGameElement {
-    gameArea: GameScreen;
-    spriteSrc: string;
-}
+export class GameElement implements Rect {
+    x = 0;
+    y = 0;
+    width: number;
+    height: number;
 
-export class GameElement {
-    gameArea: GameScreen;
-    width: number = 64;
-    height: number = 64;
-    x: number;
-    y: number;
-    x2: number;
-    y2: number;
-    sprite: HTMLImageElement = new Image();
-    spriteSrc: string;
-
-    constructor({gameArea, spriteSrc = "./assets/null.png"} : IGameElement) {
-        this.spriteSrc = spriteSrc;
-        this.gameArea = gameArea;
-        this.sprite.src = this.spriteSrc;
+    constructor({width = 64, height = 64}: {width?: number; height?: number} = {}) {
+        this.width = width;
+        this.height = height;
     }
-    
-    spawn({x, y}: ICoord) {
+
+    get x2() { return this.x + this.width; }
+    get y2() { return this.y + this.height; }
+
+    spawn({x, y}: {x: number; y: number}) {
         this.x = x;
         this.y = y;
-        this.x2 = this.x + this.width;
-        this.y2 = this.y + this.height;
-    }
-
-    render() {
-        this.x2 = this.x + this.width;
-        this.y2 = this.y + this.height;
-
-        this.gameArea.context.drawImage(this.sprite, this.x, this.y, this.width, this.height);
     }
 }

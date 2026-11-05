@@ -1,5 +1,4 @@
-export interface Rect { x: number; y: number; width: number; height: number; }
-export interface Body extends Rect { vx: number; vy: number; grounded: boolean; }
+import type { Rect, Body } from '../interfaces/Geometry';
 export const overlaps = (a: Rect, b: Rect) => a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
 export const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
 
@@ -42,17 +41,4 @@ export function moveBody(body: Body, solids: Rect[], dt: number) {
     }
     if (body.grounded || y !== oldY + body.vy * dt) body.vy = 0;
     body.y = y;
-}
-
-export class FixedClock {
-    private accumulated = 0;
-    reset() { this.accumulated = 0; }
-    advance(elapsed: number, update: (dt: number) => void, step = 1 / 120, maxSteps = 8) {
-        this.accumulated = Math.min(this.accumulated + Math.max(0, elapsed), step * maxSteps);
-        let count = 0;
-        while (this.accumulated + 1e-10 >= step && count < maxSteps) {
-            update(step); this.accumulated -= step; count++;
-        }
-        return count;
-    }
 }

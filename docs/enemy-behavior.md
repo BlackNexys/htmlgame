@@ -37,6 +37,10 @@ Restarting reconstructs the world, restoring budgets and clearing corpses, claim
 
 ## Implementation and checks
 
-`src/game/Enemy.ts` contains state machines, `EnemyVisual.ts` maps their states to poses, and `World.ts` owns damage, shots, corpses, and reactivation. The existing PNG sheets are used without changing the source images.
+Each concrete enemy has its own class under `src/components`: `Zombie.ts`, `Skeleton.ts`, `Ghoul.ts`, `Ghost.ts`, `Wight.ts`, and `Necromancer.ts`. They inherit shared lifecycle and damage handling from `Enemy`, physical movement from `Actor`, and spatial bounds from `GameElement`. Ground enemies share attack timing and ledge safety through `GroundEnemy`. Each concrete class owns its decisions and special rules: leaps, horizontal shots, phasing, shielding, or corpse channels.
+
+`EnemyFactory.ts` only maps level identifiers to constructors. `World` coordinates updates, while `CollisionSystem` resolves visibility and projectile impacts, `Combat` handles damage bookkeeping, and `Graveyard` manages corpses and membership during reactivation. Defenses and damage reactions remain on the entity. Necromancer interruption and budgets stay inside `Necromancer.ts`. Reactivation retains the concrete instance so its behavior survives death and revival.
+
+`GameScreen` composes the drawing passes. `EnemyRenderer` draws living opponents, `CorpseRenderer` draws their remains, and `EnemyAnimation` maps common states to sprite poses. The existing PNG sheets are used without changing the source images.
 
 Run `npm test` for behavior and physics checks and `npm run test:browser` for the two-browser traversal and restart checks. For a hands-on review, try baiting a zombie without shooting, crossing a skeleton's aim during its charge, dodging a ghoul, waiting out a ghost's phase, shooting both sides of a wight, and interrupting a necromancer before its link completes.

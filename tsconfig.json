@@ -9,5 +9,5 @@
       "types": [],
       "strict": true
     },
-    "include": ["src/app.ts", "src/game/**/*.ts", "src/maps/actionLevel.ts"]
+    "include": ["src/**/*.ts"]
   }

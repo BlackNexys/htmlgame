@@ -1,15 +1,9 @@
-import { GameElement, IGameElement } from "./GameElement";
-import { GameScreen } from "./GameScreen"; 
-
-interface IWall {
-    gameArea: GameScreen;
-}
+import { GameElement } from './GameElement';
+import type { Rect } from '../interfaces/Geometry';
 
 export class Wall extends GameElement {
-
-    constructor({...gameElementProps} : IWall) {
-        super({spriteSrc: "./assets/wall.png", ...gameElementProps});
-        this.height = 48;
-        this.width = 48;
+    constructor(bounds: Rect) {
+        super(bounds);
+        this.spawn(bounds);
     }
 }

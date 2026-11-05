@@ -1,4 +1,4 @@
-import { GameEvent } from './World';
+import type { GameEvent } from '../interfaces/Game';
 export class Sound {
     muted = false;
     private context?: AudioContext;
@@ -7,6 +7,10 @@ export class Sound {
             this.context = this.context || new AudioContext();
             void this.context.resume().catch(() => {});
         } catch { /* Audio is optional. */ }
+    }
+    dispose() {
+        if (this.context) void this.context.close().catch(() => {});
+        this.context = undefined;
     }
     play(event: GameEvent) {
         if (this.muted || !this.context || this.context.state !== 'running') return;

@@ -2,7 +2,9 @@ require('./register.cjs');
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const {World} = require('../src/game/World.ts');
-const {FixedClock, moveBody, overlaps} = require('../src/game/physics.ts');
+const {moveBody, overlaps} = require('../src/game/physics.ts');
+const {FixedClock} = require('../src/game/FixedClock.ts');
+const {PlayerProjectile} = require('../src/components/PlayerProjectile.ts');
 const {tuning: T} = require('../src/game/config.ts');
 const idle = {left: false, right: false, jump: false, fire: false};
 const run = (world, seconds, input = idle) => { for(let i = 0; i < Math.round(seconds / T.step); i++) world.update(T.step, input); };
@@ -53,7 +55,7 @@ test('terrain blocks a projectile before a target even at high travel distance',
     const level = fixture({enemies: [{x: 300, y: 528, left: 300, right: 300}]});
     level.solids.push({x: 240, y: 480, width: 4, height: 96});
     const world = new World(level);
-    world.projectiles.push({x: 150, y: 546, width: 16, height: 9, vx: 100000, life: 1});
+    world.projectiles.push(new PlayerProjectile({x: 150, y: 546, width: 16, height: 9, vx: 100000, life: 1}));
     world.update(T.step, idle);
     assert.equal(world.enemies[0].health, T.enemyHealth); assert.equal(world.projectiles.length, 0);
 });
@@ -72,7 +74,7 @@ test('contact damage has a grace period, death stops simulation, and a fresh wor
     // Exercise the damage contract independently of a zombie's new committed
     // lunge, which now carries it past a stationary player.
     world.enemies = [];
-    for (let i = 0; i < T.playerHealth; i++) { run(world, 1.05); world.hurtPlayer(); }
+    for (let i = 0; i < T.playerHealth; i++) { run(world, 1.05); world.combat.hurtPlayer(); }
     world.update(T.step, idle); assert.equal(world.state, 'dead'); const elapsed = world.elapsed;
     run(world, 1, {...idle, fire: true}); assert.equal(world.elapsed, elapsed);
     const fresh = new World(level);

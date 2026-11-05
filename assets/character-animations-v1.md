@@ -15,7 +15,7 @@ The result is a 1254 by 1254 RGBA PNG containing six columns and six rows. Each 
 | 5 | Hurt | 6 |
 | 6 | Defeat | 6 |
 
-All frames face right; the renderer mirrors them when facing left. `src/game/HeroAnimation.ts` specifies frame selection and per-frame anchors. The renderer displays an 80 pixel cell with its body rooted at the player's collision box; the visible silhouette is smaller than the padded cell. The flame extends above the collision box and is decorative.
+All frames face right; the renderer mirrors them when facing left. `src/game/CharacterAnimation.ts` specifies frame selection and per-frame anchors, and `src/renderers/CharacterRenderer.ts` draws the character. It displays an 80 pixel cell with its body rooted at the player's collision box; the visible silhouette is smaller than the padded cell. The flame extends above the collision box and is decorative.
 
 Jump poses follow vertical velocity rather than a looping timer. Landing briefly shows a crouch. Attack overlays preserve moving legs. Hurt temporarily overrides other animations, and defeat finishes after simulation stops and holds its final frame. Pause freezes the presentation, and restart creates fresh animation state.
 

@@ -1,42 +1,24 @@
-import { GameElement } from "./GameElement";
-import { GameScreen } from "./GameScreen";
-import { Wall } from "./Wall";
-import { Character } from "./Character";
+import { Wall } from './Wall';
+import { Exit } from './Exit';
+import { Sign } from './Sign';
+import type { EnemySpawn, Level } from '../interfaces/Level';
 
-export class Map {
-    map: any[];
-    entities: GameElement[] = [];
-    gameArea: GameScreen;
+export class Map implements Level {
+    width: number;
+    height: number;
+    solids: Wall[];
+    spawn: {x: number; y: number};
+    enemies: EnemySpawn[];
+    exit: Exit;
+    signs: Sign[];
 
-    constructor({ map, gameArea }: { map: any[], gameArea: GameScreen}) {
-        this.map = map;
-        this.gameArea = gameArea;
-        this.gameArea.width = Math.max(...map.map(row => row.length)) * 48;
-        this.gameArea.height = map.length * 48;
-    }
-
-    place(hero: Character) {
-        for (let y = 0; y < this.map.length; y++) {
-            for (let x = 0; x < this.map[y].length; x++) {
-                switch (this.map[y][x]) {
-                    case 1:
-                        const wall = new Wall({gameArea: this.gameArea});
-                        wall.spawn({x: x * wall.width, y: y * wall.height});
-                        this.entities.push(wall);
-                        break;
-                    case 2:
-                        hero.spawn({x: x * hero.width, y: y * hero.height});
-                        this.entities.push(hero);
-                        break;
-                
-                    default:
-                        break;
-                }
-            }
-        }
-    }
-
-    placeEntities({type, x, y}: {type: number, x: number, y: number}) {
-        
+    constructor(level: Level) {
+        this.width = level.width;
+        this.height = level.height;
+        this.solids = level.solids.map(bounds => new Wall(bounds));
+        this.spawn = {...level.spawn};
+        this.enemies = level.enemies.map(spawn => ({...spawn}));
+        this.exit = new Exit(level.exit);
+        this.signs = (level.signs || []).map(definition => new Sign(definition));
     }
 }

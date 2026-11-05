@@ -55,12 +55,14 @@ test('play through the scrolling level and replay after completion', async ({pag
     await start(page);
     const level = createActionLevel();
     await page.keyboard.down('KeyD'); await page.keyboard.down('KeyJ');
-    for (let i = 0; i < 250 && await page.locator('#overlay').isHidden(); i++) {
+    for (let i = 0; i < 500 && await page.locator('#overlay').isHidden(); i++) {
         const x = await page.locator('#progress').evaluate(node => parseFloat(node.style.width) / 100) * level.exit.x;
-        const obstacle = level.solids.some(r => r.y < 576 && r.x >= x + 32 && r.x < x + 32 + 65);
+        // Jump over the ground route's steps, rather than jumping into the
+        // optional overhead platforms and landing in a skeleton's firing lane.
+        const obstacle = level.solids.some(r => r.y < 576 && r.y + r.height > level.spawn.y && r.x >= x + 32 && r.x < x + 32 + 65);
         if (obstacle) await page.keyboard.press('Space');
-        await advance(page, 100);
-        if (i === 30) await page.screenshot({path: `artifacts/${testInfo.project.name}-combat.png`, fullPage: true});
+        await advance(page, 50);
+        if (i === 60) await page.screenshot({path: `artifacts/${testInfo.project.name}-combat.png`, fullPage: true});
     }
     await page.keyboard.up('KeyD'); await page.keyboard.up('KeyJ');
     await expect(page.locator('#panel-title')).toHaveText('The passage is open');

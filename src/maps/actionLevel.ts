@@ -1,9 +1,7 @@
 import { tuning } from '../game/config';
-import { Rect } from '../game/physics';
-import type { EnemyKind } from '../game/Enemy';
-
-export interface EnemySpawn { x: number; y: number; left: number; right: number; kind?: EnemyKind; }
-export interface Level { width: number; height: number; solids: Rect[]; spawn: {x: number; y: number}; enemies: EnemySpawn[]; exit: Rect; }
+import type { Rect } from '../interfaces/Geometry';
+import type { EnemyKind } from '../interfaces/Enemy';
+import type { Level } from '../interfaces/Level';
 
 export function createActionLevel(): Level {
     const t = tuning.tile;
@@ -30,5 +28,13 @@ export function createActionLevel(): Level {
             left: (column - 3) * t, right: (column + 3) * t,
         })),
         exit: {x: 108 * t, y: 12 * t - 108, width: 64, height: 108},
+        signs: [
+            {x: 150, y: 470, title: 'THE LOWER PASSAGE', text: 'KEEP GOING EAST'},
+            {x: 850, y: 336, title: 'WATCH THE EMITTER', text: 'JUMP THE FIRING LANE'},
+            {x: 1620, y: 430, title: 'KEEP YOUR FEET MOVING', text: 'THE GHOUL COMMITS TO ITS LEAP'},
+            {x: 2450, y: 330, title: 'A FAULT IN THE SIGNAL', text: 'STRIKE WHEN IT BECOMES SOLID'},
+            {x: 3040, y: 350, title: 'OBSOLETE SECURITY', text: 'THE SHIELD OPENS BEFORE A BASH'},
+            {x: 3720, y: 350, title: 'UNFINISHED BUSINESS', text: 'BREAK THE REACTIVATION LINK'},
+        ],
     };
 }

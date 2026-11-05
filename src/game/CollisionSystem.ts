@@ -1,0 +1,28 @@
+import type { Map } from '../components/Map';
+import type { Rect } from '../interfaces/Geometry';
+import type { CollisionTarget, Impact } from '../interfaces/Projectile';
+import { impactTime } from './physics';
+
+export class CollisionSystem {
+    constructor(private readonly level: Map) {}
+
+    canSee(a: Rect, b: Rect) {
+        const origin = {x: a.x + a.width / 2, y: a.y + a.height / 2, width: .1, height: .1};
+        return !this.level.solids.some(wall => impactTime(origin,
+            b.x + b.width / 2 - origin.x, b.y + b.height / 2 - origin.y, wall) !== undefined);
+    }
+
+    firstImpact(moving: Rect, dx: number, dy: number, targets: CollisionTarget[]): Impact | undefined {
+        let closest: Impact | undefined;
+        // Solids win equal-time impacts, preserving wall occlusion.
+        for (const wall of this.level.solids) {
+            const time = impactTime(moving, dx, dy, wall);
+            if (time !== undefined && (!closest || time < closest.time)) closest = {time};
+        }
+        for (const target of targets) {
+            const time = impactTime(moving, dx, dy, target.bounds);
+            if (time !== undefined && (!closest || time < closest.time)) closest = {time, target};
+        }
+        return closest;
+    }
+}
