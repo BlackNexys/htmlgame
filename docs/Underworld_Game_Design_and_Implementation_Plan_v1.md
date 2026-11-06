@@ -3,6 +3,10 @@
 
 **Status:** Working design baseline, November 2026  
 **Movement revision (November 2026):** Dash was removed by design decision. Traversal uses running, sprinting, variable jumps, and wall movement.
+
+**Starting weapon revision:** [Flicker v1.1](Underworld_Flicker_Weapon_Spec_v1_1.md) is the authoritative design for the free starting attack, including its visuals, sound, tuning, and candidate modifiers. The earlier starting-weapon name and modifier brief are superseded.
+
+**Menu art revision:** The [Main Menu Art & Animation Plan](Underworld_Main_Menu_Art_and_Animation_Plan_v1.md) defines a replacement menu scene built from purpose-made pixel-art assets. The existing menu artwork is concept reference; production begins with a hero, lantern and platform corner.
 **Project:** [BlackNexys/htmlgame](https://github.com/BlackNexys/htmlgame)  
 **Genre:** Level-based, fast-paced cyberundead action-platformer  
 **Primary references:** *Jazz Jackrabbit* (structure and arcade combat), *Metroid* (distinctive weapon behaviors and boss rewards), *Celeste* (responsive movement and wall-jump feel)
@@ -63,7 +67,7 @@ The player should be able to play cautiously; aggressive play is **rewarded**, n
 6. Between stages, optionally configure discovered modifiers in a simple **Arsenal** screen; continue directly if no changes are wanted.
 7. Replay earlier stages for secrets, mastery, or enjoyment.
 
-**Design constraint:** A standard stage should be beatable with baseline movement and Soul Spark, unless a future stage deliberately communicates a different explicit requirement.
+**Design constraint:** A standard stage should be beatable with baseline movement and Flicker, unless a future stage deliberately communicates a different explicit requirement.
 
 ---
 
@@ -138,7 +142,7 @@ Add forward look-ahead during fast horizontal travel, controlled vertical follow
 
 ## 5. Ectoplasm economy — agreed rules, provisional balance
 
-Ectoplasm is **shared ammunition**, not a permanent skill currency. It is not consumed by normal run, jump, sprint, or wall jump. Each weapon fires at its own cost; **Soul Spark is always free**.
+Ectoplasm is **shared ammunition**, not a permanent skill currency. It is not consumed by normal run, jump, sprint, or wall jump. Each weapon fires at its own cost; **Flicker is always free**.
 
 ### Starting experiment
 
@@ -171,11 +175,11 @@ Ectoplasm is **shared ammunition**, not a permanent skill currency. It is not co
 
 ## 6. Soul Arsenal — six baseline weapons
 
-All six are **agreed as a revisable baseline**, not committed numerical balance. Boss defeats unlock new weapons permanently; Soul Spark is available from the beginning. Weapons are instantly switchable within stages.
+All six are **agreed as a revisable baseline**, not committed numerical balance. Boss defeats unlock new weapons permanently; Flicker is available from the beginning. Weapons are instantly switchable within stages.
 
 | Weapon | Cost (test) | Defining attack pattern | Intended advantage | Principal weakness |
 |---|---:|---|---|---|
-| **Soul Spark** | **0** | Straight, rapid projectile | Reliable fallback, finishing, baseline play | Modest damage; limited geometry |
+| **Flicker** | **0** | Straight, rapid projectile | Reliable fallback, finishing, baseline play | Modest damage; limited geometry |
 | **Gravehopper** | 1 | Projectile ricochets from terrain | Angled attacks and corridors | Harder to predict in open areas |
 | **Graveburst** | 2 | Short-range spread/cone of fragments | Close-range crowd control | Weak at distance |
 | **Wraith Needle** | 2 | Thin piercing shot, with specially defined pass-through interactions | Lined-up targets and specific barriers | Narrow hitbox; deliberate aim |
@@ -217,7 +221,7 @@ The first defeat of a **major boss** grants a persistent weapon unlock. Repeat v
 
 | Weapon | Candidate modifier | Tactical change | Readable visual difference |
 |---|---|---|---|
-| Soul Spark | Pulse Core | Slower, broader pulse with more impact | Larger, brighter shot |
+| Flicker | See [Flicker v1.1](Underworld_Flicker_Weapon_Spec_v1_1.md#8-weapon-specific-modifier-directions-not-yet-locked) | Candidate directions only; not equipped in this slice | Defined in the weapon spec |
 | Gravehopper | Echo Chamber | More ricochets at reduced speed | Bright circular bounce rings |
 | Gravehopper | Haunting | Steers toward a target after first bounce | Curved spectral tail |
 | Graveburst | Focused Rupture | Narrower, longer-reaching spread | Tighter bundle of shards |
@@ -323,7 +327,7 @@ This plan extends the existing **TypeScript + Canvas + Vite** project. Prefer in
 | `src/components/Actor.ts`, `src/game/physics.ts` | Preserve shared motion and collision; expose robust wall-contact/landing information for player movement. |
 | `src/components/Character.ts` | Compose player movement with ectoplasm and weapon selection. Keep logic from becoming one giant method. |
 | `src/game/Input.ts`, `src/interfaces/Game.ts` | Expand action map; expose held/pressed/released commands and directional vectors; preserve focus handling. |
-| `src/components/Projectile.ts`, `PlayerProjectile.ts` | Keep or extract common projectile ownership and lifetime; add behavior-driven ricochet, spread, pierce, and later seeking/sticky attacks. |
+| `src/components/Projectile.ts`, `FlickerProjectile.ts`, `src/weapons/Flicker.ts` | Keep common projectile ownership and lifetime and the concrete Flicker weapon; later add explicit ricochet, spread, pierce, and seeking/sticky weapons. |
 | `src/game/CollisionSystem.ts` | Return enough impact context (normal/solid/target) for ricochet and penetration; preserve earliest-hit behavior. |
 | `src/game/Combat.ts` | Award per-enemy ectoplasm on original defeat; maintain damage and defeat-credit invariants. |
 | `src/components/Corpse.ts`, `src/game/Graveyard.ts` | Add harvest eligibility, single-use harvest, necromancer claim resolution, and reactivation prevention. |
@@ -399,7 +403,7 @@ Implement in vertical slices, preserving a playable main branch. Each phase ends
 
 ### Phase 2 — Combat economy + first two weapons
 
-**Work:** Soul Spark as the free weapon, Gravehopper ricochets, ectoplasm reserve/HUD, instant switching, defeat recovery, corpse harvest, one graveyard cache.
+**Work:** Flicker as the free weapon, Gravehopper ricochets, ectoplasm reserve/HUD, instant switching, defeat recovery, corpse harvest, one graveyard cache.
 
 **Done when:** Ectoplasm never goes negative, spending is atomic, harvested corpses cannot revive, resurrection cannot duplicate rewards, and the player can switch attacks fluidly in a mixed encounter.
 
@@ -439,7 +443,7 @@ Implement in vertical slices, preserving a playable main branch. Each phase ends
 - Coyote time, jump buffering, variable jump heights, wall contact, and wall-jump push-off.
 - Movement collision against floors, thin walls, corners, and ceilings; no embedded player.
 - Focus loss, pause, restart, cutscene transitions, and held-key clearing.
-- Ectoplasm boundary cases: exact cost, insufficient ammo, cap overflow, free Soul Spark.
+- Ectoplasm boundary cases: exact cost, insufficient ammo, cap overflow, free Flicker.
 - Original-defeat-only reward, single-use harvest, corpse-claim conflicts, and reactivation eligibility.
 - Projectile collision: earliest impact, terrain occlusion, bounce normal, multi-hit protection, and lifetime termination.
 - Modifier selection remains fixed within a run; invalid modifier/weapon pairs cannot load.
@@ -488,7 +492,7 @@ Record observations separately from hypotheses, then revise values. A passing te
 
 ## 15. Definition of the first successful vertical slice
 
-A player can start a short *Underworld* stage, move fluidly using sprint, variable jumps, and wall jumps, fire a free Soul Spark or spend ectoplasm on Gravehopper, defeat enemies, collect ectoplasm from kills and corpses, choose a discovered Gravehopper modifier **between attempts**, watch/skip a brief character exchange, and reach the exit without an RPG menu interrupting the action.
+A player can start a short *Underworld* stage, move fluidly using sprint, variable jumps, and wall jumps, fire a free Flicker or spend ectoplasm on Gravehopper, defeat enemies, collect ectoplasm from kills and corpses, choose a discovered Gravehopper modifier **between attempts**, watch/skip a brief character exchange, and reach the exit without an RPG menu interrupting the action.
 
 The implementation remains compatible with the existing TypeScript/Canvas architecture, passes simulation and browser checks, and exposes enough tuning for a productive playtest.
 

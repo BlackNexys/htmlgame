@@ -11,8 +11,7 @@ export const tuning = {
     cameraLookAheadTime: .28, cameraMaxLookAhead: 160,
     cameraFollowRate: 8, cameraVerticalRate: 6, cameraLookRate: 6,
     playerHealth: 5, enemyHealth: 3, enemySpeed: 65,
-    invulnerability: 1, attackInterval: 0.2, projectileSpeed: 800, playerShotOffsetY: 9,
-    projectileLifetime: 0.9,
+    invulnerability: 1,
     enemyProjectileSpeed: 340, enemyProjectileLifetime: 2.2,
     ghostPhase: 1.15, reviveRange: 440, reviveBudget: 2,
 };

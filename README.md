@@ -15,9 +15,15 @@ Open http://127.0.0.1:3000 and select **Play** from the title menu. The server l
 
 The game fills the browser window while preserving its 960×576 (5:3) view. Wider or taller windows use letterboxing; the picture is never stretched or cropped. The HUD sits over the play area, and the game page has no document scrolling. The title menu provides Play, Options, Controls, Movement course, and the separate Level workshop. Arrow keys or Tab navigate menus; Enter activates an item.
 
-The title screen uses the supplied GIFs under `public/assets/mainmenu`: an ambient station background, a clean foreground platform, three interchangeable hero poses, and wandering souls. The logo and menu controls sit above these layers. One scene is selected per menu visit—standing, sitting, leaning, or an empty platform—and remains fixed until leaving. Normal selection avoids the immediately previous scene, including across reloads in the same browser tab.
+The title screen uses the supplied artwork under `public/assets/mainmenu/stills`: a station background, a clean foreground platform, three interchangeable hero poses, and wandering souls. The logo and menu controls sit above these layers. One scene is selected per menu visit—standing, sitting, leaning, or an empty platform—and remains fixed until leaving. Normal selection avoids the immediately previous scene, including across reloads in the same browser tab. The original GIFs remain preserved as source assets.
 
-Mist drifts slowly and individual souls pass on independent schedules. The character, platform, and foreground details share one responsive coordinate space. Animated GIFs play directly in the browser; static first-frame PNGs under `mainmenu/stills` are used when motion is off, the tab is hidden, gameplay is active, or a GIF fails. **Options → Menu animation** offers Automatic (the device's reduced-motion preference), On, and Off, remembered on this browser.
+**Menu production direction:** The current artwork and motion are prototypes. The [Main Menu Art & Animation Plan](docs/Underworld_Main_Menu_Art_and_Animation_Plan_v1.md) treats these images as concept references and defines a replacement scene built from purpose-made pixel-art assets and authored animation, starting with the hero, lantern and a platform corner.
+
+The [first animated corner](http://127.0.0.1:3000/menu-pilot.html) is now available as a separate art preview. It uses new body, flame, cape, lantern, hanger and platform assets on a shared 32-colour palette. Inspect native/2× scale, step authored frames, and toggle lighting or attachment markers there. [Source art, exact prompts and export instructions](public/assets/mainmenu/v2/README.md) are saved with the assets. The full station and replacement title-menu integration remain later work.
+
+`TitleMotion` animates local cutouts continuously instead of stepping whole GIF frames. Flame tips flutter with small embers; cape edges and hanging vines catch a slow breeze; the lantern sways gently with changing light; a fine clock hand sweeps; and the cat's sleep marks rise and fade. Anatomy, feet, masonry, and menu text stay anchored. Mist and individual souls have independent CSS schedules. The character, platform, and foreground details share one responsive coordinate space.
+
+**Options → Menu animation** offers Automatic (the device's reduced-motion preference), On, and Off, remembered on this browser. When Windows/system reduced motion pauses Automatic, a visible **Enable animation** button selects On explicitly. On overrides the system setting. Off, hidden tabs, and gameplay stop the decorative frame loop and use the native stills. If decorative canvas rendering is unavailable, the artwork and menu remain usable.
 
 For repeatable scene previews, use `/?menuScene=watcher`, `/?menuScene=patient-traveller`, `/?menuScene=restless-flame`, or `/?menuScene=absent-traveller`. Scene assets, character anchors, and positions live in `src/ui/MenuScene.ts`.
 
@@ -74,7 +80,9 @@ The game receives keyboard input while its canvas has focus. Switching tabs, lea
 - Hit effects, animated character artwork, simple generated sound, and mute.
 - Start, pause, defeat, completion, and fresh restart flows.
 
-This implements the movement foundation in Phase 1 of the [design and implementation plan](docs/Underworld_Game_Design_and_Implementation_Plan_v1.md). Ectoplasm, Soul Spark, Grave Hopper, progression, and bosses remain for later phases. The existing test attack remains available during movement and does not consume a resource. See [Phase 1 implementation notes](docs/phase-1-movement.md) for provisional rules, tuning, and playtest priorities.
+The movement foundation and the first weapon slice are playable. [Flicker v1.1](docs/Underworld_Flicker_Weapon_Spec_v1_1.md) defines the free standard attack: five shots per second, eight-direction aim, 800 px/s, a maximum 0.9 s flight, and one damage to the first valid target. It works at zero ectoplasm and never interrupts movement. A small animated magenta flame replaces the old test bolt, with separate ignition, enemy, terrain, and shield effects and five short firing sound variations. Ectoplasm starts at 6/12 and recovers +1 on each original enemy's first defeat; revived enemies cannot repeat that reward. Harvesting, caches, other weapons, switching, modifiers, progression, and bosses remain later work. See [the implementation plan](docs/Underworld_Game_Design_and_Implementation_Plan_v1.md) and [movement notes](docs/phase-1-movement.md).
+
+The [Flicker preview](http://127.0.0.1:3000/docs/flicker.html) shows all eight flight directions and the effect sequences, with sound samples. [Atlas metadata](public/assets/weapons/flicker/flicker_atlas.json) describes the 32×32 cells and timing. Missing Flicker artwork falls back to a small procedural flame; unavailable audio remains silent without affecting combat. The original generated source and exact prompt are preserved in the asset folder. Rebuild the packed atlas with `node scripts/pack-flicker.mjs` and audition exports with `node scripts/export-flicker-audio.mjs`.
 
 The playable hero uses `character-animations-v2.png`, adapted from the established menu design: a lean skeleton, visible skull and ribs, magenta soul-flame, burgundy scarf, dark clothing, and strapped boots. Its 36 frames cover idle, running, airborne movement, palm-fire, hurt, and defeat. The original artwork and v1 sheet remain available. See the [live animation preview](http://127.0.0.1:3000/docs/character-animations.html) and [v2 asset notes](public/assets/character-animations-v2.md) for the layout, anchors, and generation prompt.
 
@@ -92,7 +100,7 @@ The active entities follow the original class structure in `src/components`:
 GameElement
 ├── Wall, Exit, Sign, Camera, Particle
 ├── Projectile
-│   ├── PlayerProjectile
+│   ├── FlickerProjectile
 │   └── EnemyProjectile
 └── Actor
     ├── Character
@@ -106,7 +114,7 @@ GameElement
             └── Necromancer
 ```
 
-Each class has its own file. `GameElement` owns bounds and placement, `Actor` supplies shared physical movement, and `Character` composes `PlayerMovement` with firing and damage state. `PlayerMovement` owns fixed-step locomotion, contact state, and jump buffers. `Enemy` supplies shared lifecycle and damage hooks. `GroundEnemy` shares the grounded attack cycle and ledge safety. Each concrete enemy owns its special behavior, defenses, tells, and encounter hint. Only `Necromancer` owns a revive budget and corpse-channel state.
+Each class has its own file. `GameElement` owns bounds and placement, `Actor` supplies shared physical movement, and `Character` composes `PlayerMovement`, `WeaponController`, and damage state. `PlayerMovement` owns fixed-step locomotion, contact state, and jump buffers. `src/weapons/Flicker.ts` owns the starting weapon's definition and manifestation. `Enemy` supplies shared lifecycle and damage hooks. `GroundEnemy` shares the grounded attack cycle and ledge safety. Each concrete enemy owns its special behavior, defenses, tells, and encounter hint. Only `Necromancer` owns a revive budget and corpse-channel state.
 
 `Map` builds terrain, signs, and the exit from level data. `Camera` follows the character and clamps its own view. Projectiles own their movement, lifetime, appearance, and valid targets. `CollisionSystem` resolves their nearest impact; `Combat` applies damage and defeat bookkeeping; `Graveyard` manages `Corpse` instances and reactivation; `ParticleSystem` manages `Particle` lifetimes.
 
@@ -116,7 +124,7 @@ Each class has its own file. `GameElement` owns bounds and placement, `Actor` su
 
 Corpse reactivation retains the concrete enemy instance and its methods. Only original enemy defeats contribute to the HUD count; reactivated enemies do not award duplicate credit.
 
-`src/interfaces` contains shared geometry, runtime level, input, event, asset, and scheduling contracts. The obsolete coordinate classes have been replaced by these shared interfaces. The original `src/maps/level0.ts` remains as a level reference. Type checking covers every TypeScript file under `src`. Vite builds the game (`index.html`) and workshop (`editor.html`) as separate entry points into `dist`. Static artwork, JSON levels, the schema, and the two HTML preview pages live in `public` and are copied into each build without changing their public URLs.
+`src/interfaces` contains shared geometry, runtime level, input, event, asset, weapon, and scheduling contracts. The obsolete coordinate classes have been replaced by these shared interfaces. The original `src/maps/level0.ts` remains as a level reference. Type checking covers every TypeScript file under `src`. Vite builds the game (`index.html`) and workshop (`editor.html`) as separate entry points into `dist`. Static artwork, JSON levels, the schema, and the HTML preview pages live in `public` and are copied into each build without changing their public URLs.
 
 See [the architecture guide](docs/architecture.md) for responsibility boundaries and where to add a new feature.
 

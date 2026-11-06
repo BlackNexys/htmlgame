@@ -12,4 +12,4 @@ export interface InputSnapshot extends Controls {
 }
 export type PlayState = 'playing' | 'dead' | 'won';
 export type GameMode = 'loading' | 'ready' | 'menu' | PlayState | 'paused' | 'error';
-export type GameEvent = 'fire' | 'hit' | 'hurt' | 'defeat' | 'jump' | 'win' | 'enemyFire' | 'charge' | 'block' | 'revive';
+export type GameEvent = 'fire' | 'hit' | 'terrainHit' | 'ectoplasm' | 'hurt' | 'defeat' | 'jump' | 'win' | 'enemyFire' | 'charge' | 'block' | 'revive';

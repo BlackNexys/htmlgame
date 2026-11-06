@@ -28,6 +28,7 @@ export abstract class Enemy extends Actor {
     revives = 0;
     counted = false;
     grace = 0;
+    private defeatedThisLife = false;
     protected targetX: number;
     protected targetY: number;
     protected readonly gameArea: World;
@@ -66,22 +67,26 @@ export abstract class Enemy extends Actor {
         this.updateBehavior(dt);
     }
 
-    receiveHit(shotVX: number): EnemyHit {
+    receiveHit(shotVX: number, damage = 1): EnemyHit {
         if (!this.vulnerable || this.health <= 0) return 'ignored';
         if (this.blocksShot(shotVX)) { this.blockFlash = .16; return 'blocked'; }
-        this.health--;
+        this.health -= damage;
         this.flash = .12;
         this.onDamaged();
         return 'damaged';
     }
 
     defeat() {
+        if (this.defeatedThisLife) return false;
+        this.defeatedThisLife = true;
         this.health = 0;
         this.vx = this.vy = 0;
         this.onDefeated();
+        return true;
     }
 
     reactivate() {
+        this.defeatedThisLife = false;
         this.health = Math.ceil(this.maxHealth * .6);
         this.revives++;
         this.grace = .9;

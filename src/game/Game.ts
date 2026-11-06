@@ -130,6 +130,8 @@ export class Game {
     }
 
     private draw(elapsed: number, simulated: boolean) {
+        // The full-screen title owns presentation while it covers the game.
+        if (this.mode === 'loading' || this.mode === 'ready' || this.mode === 'menu' || this.mode === 'error') return;
         if (simulated) this.hud.update(this.world);
         else if (this.mode === 'dead') this.screen!.update(this.world, Math.min(elapsed, .05));
         this.screen!.draw(this.world);

@@ -1,11 +1,12 @@
 import { GameElement } from './GameElement';
 import type { World } from '../game/World';
-import type { CollisionTarget, ProjectileProps } from '../interfaces/Projectile';
+import type { CollisionTarget, ProjectileProps, Impact } from '../interfaces/Projectile';
 
 export abstract class Projectile extends GameElement {
     vx: number;
     vy: number;
     life: number;
+    age = 0;
     abstract readonly owner: 'player' | 'enemy';
     abstract readonly color: string;
     abstract readonly glowColor: string;
@@ -19,15 +20,26 @@ export abstract class Projectile extends GameElement {
     }
 
     update(world: World, dt: number) {
-        const dx = this.vx * dt, dy = this.vy * dt;
+        const travel = Math.min(dt, this.life);
+        if (travel <= 0) return false;
+        this.age += travel; this.life -= travel;
+        if (!this.advance(world, this.vx * travel, this.vy * travel)) return false;
+        return this.life > 1e-9 && this.x > -this.width && this.x < world.level.width && this.y > -this.height && this.y < world.level.height;
+    }
+
+    protected advance(world: World, dx: number, dy: number) {
         const impact = world.collisions.firstImpact(this, dx, dy, this.targets(world));
         if (impact) {
-            world.effects.burst(this.x + dx * impact.time, this.y + dy * impact.time, this.impactColor, 5);
-            impact.target?.hit();
+            this.x += dx * impact.time; this.y += dy * impact.time;
+            this.onImpact(world, impact);
             return false;
         }
-        this.x += dx; this.y += dy; this.life -= dt;
-        return this.life > 0 && this.x > -this.width && this.x < world.level.width && this.y > -this.height && this.y < world.level.height;
+        this.x += dx; this.y += dy; return true;
+    }
+
+    protected onImpact(world: World, impact: Impact) {
+        world.effects.burst(this.x + this.width / 2, this.y + this.height / 2, this.impactColor, 5);
+        impact.target?.hit();
     }
 
     protected abstract targets(world: World): CollisionTarget[];

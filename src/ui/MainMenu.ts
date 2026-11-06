@@ -16,6 +16,7 @@ export class MainMenu {
     private readonly sound = document.querySelector<HTMLInputElement>('#option-sound')!;
     private readonly hints = document.querySelector<HTMLInputElement>('#option-hints')!;
     private readonly motion = document.querySelector<HTMLSelectElement>('#option-menu-motion')!;
+    private readonly enableMotion = document.querySelector<HTMLButtonElement>('#title-enable-motion')!;
     private readonly navigation = new MenuNavigation(this.root);
     private readonly events = new AbortController();
 
@@ -34,6 +35,10 @@ export class MainMenu {
         this.play.onclick = actions.play; this.continue.onclick = actions.continue;
         this.sound.onchange = actions.mute; this.hints.onchange = actions.hints;
         this.motion.onchange = () => actions.motion(this.motion.value as MenuMotion);
+        this.enableMotion.onclick = () => {
+            actions.motion('animated');
+            if (!this.play.disabled) this.play.focus({preventScroll: true});
+        };
     }
     ready() {
         this.play.disabled = false;
@@ -62,6 +67,7 @@ export class MainMenu {
         this.play.onclick = this.continue.onclick = null;
         this.sound.onchange = this.hints.onchange = null;
         this.motion.onchange = null;
+        this.enableMotion.onclick = null;
         this.options.close(); this.controls.close();
     }
 }

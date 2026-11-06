@@ -28,26 +28,46 @@ body.game-app { height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; 
 .title-art img { image-rendering: pixelated; }
 .title-background { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .menu-scene { position: absolute; right: 0; bottom: 0; width: min(100%, calc(100dvh * 1003 / 565)); aspect-ratio: 1003 / 565; isolation: isolate; }
-.menu-platform, .menu-details { position: absolute; inset: 0; width: 100%; height: 100%; }
+.menu-platform, .menu-details, .menu-platform-motion, .menu-details-motion, .menu-moving-details, .menu-live-effects { position: absolute; inset: 0; width: 100%; height: 100%; }
 .menu-platform { z-index: 1; }
+.menu-platform-motion { z-index: 1; }
 .menu-hero-shadow { position: absolute; z-index: 2; transform: translate(-50%, -50%); mix-blend-mode: multiply; pointer-events: none; }
 .menu-shadow-contact { position: absolute; inset: 0; background: radial-gradient(ellipse, rgb(7 12 22 / var(--shadow-opacity)) 0%, rgb(7 12 22 / 0) 72%); }
 .menu-shadow-cast { position: absolute; left: calc(50% + var(--shadow-cast-x)); top: calc(50% + var(--shadow-cast-y)); width: 170%; height: 180%; transform: translate(-50%, -50%) rotate(var(--shadow-angle)); background: radial-gradient(ellipse, rgb(10 17 28 / var(--shadow-cast-opacity)) 0%, rgb(10 17 28 / 0) 72%); }
-.menu-character { position: absolute; z-index: 3; height: auto; }
+.menu-character, .menu-character-motion { position: absolute; z-index: 3; height: auto; }
 .menu-details { z-index: 4; clip-path: url(#station-front-details); }
+.menu-details-motion { z-index: 4; clip-path: url(#station-front-details); }
+.menu-live-effects { z-index: 5; }
+.menu-moving-details { z-index: 5; }
+.menu-live-effects, .menu-moving-details { display: none; }
+.menu-live-effects canvas, .menu-moving-details canvas { position: absolute; }
+.title-art canvas { display: none; }
+.title-art[data-motion='animated'][data-foreground-motion='true'] .menu-platform-motion,
+.title-art[data-motion='animated'][data-foreground-motion='true'] .menu-details-motion,
+.title-art[data-motion='animated'][data-foreground-motion='true'] .menu-live-effects,
+.title-art[data-motion='animated'][data-foreground-motion='true'] .menu-moving-details,
+.title-art[data-motion='animated'][data-foreground-motion='true'] .menu-live-effects canvas,
+.title-art[data-motion='animated'][data-foreground-motion='true'] .menu-moving-details canvas,
+.title-art[data-motion='animated'][data-hero-motion='true'] .menu-character-motion:not([hidden]) { display: block; }
+.title-art[data-motion='animated'][data-foreground-motion='true'] .menu-platform,
+.title-art[data-motion='animated'][data-foreground-motion='true'] .menu-details,
+.title-art[data-motion='animated'][data-hero-motion='true'] .menu-character { visibility: hidden; }
+.menu-scene canvas { image-rendering: pixelated; }
 .menu-masks { position: absolute; }
 .menu-atmosphere { position: absolute; inset: 0; z-index: 0; }
 .menu-mist { position: absolute; left: 35%; right: -10%; bottom: 3%; height: 24%; opacity: .12; background: radial-gradient(ellipse at 65% 75%, #b0eced44, transparent 70%); }
 .menu-soul { position: absolute; overflow: hidden; opacity: 0; }
 .menu-soul img { position: absolute; max-width: none; }
-.soul-distant { left: 54%; top: 43%; width: 3%; aspect-ratio: 100 / 105; --pass-duration: 31s; --pass-delay: 7s; }
+.soul-distant { left: 54%; top: 43%; width: 3%; aspect-ratio: 100 / 105; --pass-duration: 31s; --pass-delay: -11s; }
 .soul-distant img { width: 836%; height: 448.5714%; left: -190%; top: -80.9524%; }
-.soul-platform { left: 67%; top: 54%; width: 4%; aspect-ratio: 118 / 154; --pass-duration: 43s; --pass-delay: 19s; }
+.soul-platform { left: 67%; top: 54%; width: 4%; aspect-ratio: 118 / 154; --pass-duration: 43s; --pass-delay: -23s; }
 .soul-platform img { width: 708.4746%; height: 305.8442%; left: -289.8305%; top: -100.6494%; }
-.soul-near { left: 82%; top: 76%; width: 3.5%; aspect-ratio: 90 / 69; --pass-duration: 37s; --pass-delay: 29s; }
+.soul-near { left: 82%; top: 76%; width: 3.5%; aspect-ratio: 90 / 69; --pass-duration: 37s; --pass-delay: -31s; }
 .soul-near img { width: 928.8889%; height: 682.6087%; left: -557.7778%; top: -197.1014%; }
-.title-art[data-motion='animated'][data-playing='true'] .menu-mist { animation: station-mist 34s ease-in-out infinite alternate; }
+.title-art[data-motion='animated'][data-playing='true'] .menu-mist { animation: station-mist 24s ease-in-out infinite alternate; }
 .title-art[data-motion='animated'][data-playing='true'][data-souls='true'] .menu-soul { animation: soul-pass var(--pass-duration) linear var(--pass-delay) infinite; }
+.title-art[data-motion='animated'][data-playing='true'] .menu-soul img { animation: soul-drift 6s ease-in-out infinite alternate; }
+@keyframes soul-drift { from { transform: translateY(0); } to { transform: translateY(1.2%); } }
 @keyframes station-mist { from { transform: translateX(-4%); } to { transform: translateX(6%); } }
 @keyframes soul-pass {
     0%, 8% { opacity: 0; transform: translate(0, 0); }
@@ -71,6 +91,8 @@ body.game-app { height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; 
 .title-actions .title-tool:first-of-type { margin-top: 16px; }
 .title-status { color: #a4b8c6; font-size: 12px; margin: 20px 0 0 38px; text-shadow: 0 1px 3px #040608; }
 .title-footer { position: absolute; left: clamp(20px, 2.8vw, 60px); right: 24px; bottom: 16px; display: flex; justify-content: space-between; gap: 16px; color: #b2cad2; font: 9px var(--bl-font-mono); letter-spacing: 1px; text-shadow: 0 1px 3px #040608; }
+.title-footer button { padding: 0; border: 0; color: #f6b7df; background: transparent; font: inherit; letter-spacing: inherit; text-decoration: underline; cursor: pointer; }
+.title-footer button:focus-visible { outline: 2px solid var(--game-magenta); outline-offset: 5px; }
 
 .session-panel { width: min(440px, 100%); padding: clamp(20px, 4vw, 36px); border: 2px solid var(--bl-border-control); border-top-color: var(--game-magenta-edge); background: var(--bl-bg-surface); box-shadow: var(--game-frame-shadow); }
 .session-panel h2 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; letter-spacing: 0; margin: 0 0 16px; }

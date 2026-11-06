@@ -1,16 +1,19 @@
 import { selectMenuScene, type MenuAsset, type MenuScene } from './MenuScene';
 import type { MenuMotion } from './GamePreferences';
+import { TitleMotion } from './TitleMotion';
 
 const previousKey = 'underworld-menu-scene:v1';
 
-/** Native GIF layers; menu state selects the scene and controls motion, never the simulation. */
+/** Still art plus continuous local motion; menu presentation never advances the game. */
 export class TitleScene {
     private readonly layers: HTMLImageElement[];
     private readonly character: HTMLImageElement;
+    private readonly characterMotion: HTMLCanvasElement;
     private readonly shadow: HTMLElement;
     private readonly reduced = matchMedia('(prefers-reduced-motion: reduce)');
     private readonly events = new AbortController();
-    private readonly failed = new Set<string>();
+    private readonly renderer: TitleMotion;
+    private readonly motionPrompt = document.querySelector<HTMLButtonElement>('#title-enable-motion')!;
     private scene?: MenuScene;
     private previous?: string;
     private active = false;
@@ -20,12 +23,14 @@ export class TitleScene {
     constructor(private readonly root: HTMLElement) {
         this.layers = [...root.querySelectorAll<HTMLImageElement>('[data-menu-layer]')];
         this.character = root.querySelector<HTMLImageElement>('.menu-character')!;
+        this.characterMotion = root.querySelector<HTMLCanvasElement>('.menu-character-motion')!;
         this.shadow = root.querySelector<HTMLElement>('.menu-hero-shadow')!;
+        this.renderer = new TitleMotion(root);
         try { this.previous = sessionStorage.getItem(previousKey) || undefined; } catch { /* Session selection still works. */ }
         const options = {signal: this.events.signal};
         this.reduced.addEventListener('change', this.sync, options);
         document.addEventListener('visibilitychange', this.sync, options);
-        for (const image of this.layers) image.addEventListener('error', () => this.fallback(image), options);
+        for (const image of this.layers) image.addEventListener('load', this.refresh, options);
     }
 
     show() {
@@ -35,7 +40,7 @@ export class TitleScene {
     }
     hide() { this.active = false; this.sync(); }
     preferences(motion: MenuMotion) { this.motion = motion; this.sync(); }
-    dispose() { this.hide(); this.disposed = true; this.events.abort(); }
+    dispose() { this.hide(); this.renderer.dispose(); this.disposed = true; this.events.abort(); }
 
     private select() {
         this.scene = selectMenuScene(this.previous, Math.random, new URLSearchParams(location.search).get('menuScene'));
@@ -44,14 +49,17 @@ export class TitleScene {
         this.root.dataset.scene = this.scene.id;
         this.root.dataset.ambient = this.scene.ambientPreset;
         this.root.dataset.souls = String(this.scene.rareEvents.includes('wandering-soul'));
+        this.renderer.select(this.scene);
         const character = this.scene.character;
         this.character.hidden = !character;
+        this.characterMotion.hidden = !character;
         this.shadow.hidden = !character;
         if (character) {
             this.character.style.left = `${character.position.x*100}%`;
             this.character.style.top = `${character.position.y*100}%`;
             this.character.style.width = `${character.width*100}%`;
             this.character.style.transform = `translate(${-character.anchor.x*100}%,${-character.anchor.y*100}%)`;
+            this.characterMotion.style.cssText = this.character.style.cssText;
             this.placeShadow(character,this.scene.keyLight);
         } else this.character.removeAttribute('src');
     }
@@ -91,13 +99,14 @@ export class TitleScene {
         for (const image of this.layers) {
             const asset = this.asset(image);
             if (!asset) continue;
-            const source = animate && !this.failed.has(asset.animation) ? asset.animation : asset.still;
-            if (image.getAttribute('src') !== source) image.src = source;
+            if (image.getAttribute('src') !== asset.still) image.src = asset.still;
         }
+        this.motionPrompt.hidden = !(playing && this.motion === 'system' && this.reduced.matches);
+        this.refresh(); this.renderer.play(animate);
     };
-    private fallback(image: HTMLImageElement) {
-        const asset = this.asset(image);
-        if (!asset || image.getAttribute('src') !== asset.animation) return;
-        this.failed.add(asset.animation); image.src = asset.still;
-    }
+    private readonly refresh = () => {
+        if (this.disposed || !this.scene) return;
+        const foreground = this.root.querySelector<HTMLImageElement>('.menu-platform')!;
+        this.renderer.refresh(foreground,this.character);
+    };
 }

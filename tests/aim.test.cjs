@@ -7,6 +7,7 @@ const {overlaps} = require('../src/game/physics.ts');
 const {EnemyProjectile} = require('../src/components/EnemyProjectile.ts');
 const {CharacterAnimation} = require('../src/game/CharacterAnimation.ts');
 const {tuning: T} = require('../src/game/config.ts');
+const {flicker} = require('../src/weapons/Flicker.ts');
 const idle = {left:false, right:false, up:false, down:false, jump:false, jumpHeld:false, fire:false};
 const floor = {x:0, y:600, width:3000, height:100};
 const level = (extra={}) => ({width:3000, height:1000, solids:[floor], spawn:{x:300,y:548}, enemies:[], exit:{x:2800,y:492,width:64,height:108}, ...extra});
@@ -52,7 +53,7 @@ test('eight aim directions normalize speed, preserve vertical facing, and cancel
         step(world,{left:x<0,right:x>0,up:y<0,down:y>0,fire:true});
         const shot=world.projectiles[0]; assert.ok(shot);
         assert.equal(Math.sign(shot.vx),x); assert.equal(Math.sign(shot.vy),y);
-        assert.ok(Math.abs(Math.hypot(shot.vx,shot.vy)-T.projectileSpeed)<1e-8);
+        assert.ok(Math.abs(Math.hypot(shot.vx,shot.vy)-flicker.projectile.speed)<1e-8);
         if(!x)assert.equal(world.player.facing,-1);
     }
     assert.deepEqual(resolveAim({...idle,left:true,right:true},false,-1),{x:-1,y:0});

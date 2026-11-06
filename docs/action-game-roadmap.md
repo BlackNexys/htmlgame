@@ -1,5 +1,7 @@
 # Roadmap to a playable action platformer
 
+**Historical foundation roadmap.** The current movement and arsenal direction lives in the [design plan](Underworld_Game_Design_and_Implementation_Plan_v1.md). The free standard attack is now defined exclusively by [Flicker v1.1](Underworld_Flicker_Weapon_Spec_v1_1.md); its earlier temporary attack brief is superseded.
+
 We want to take the current TypeScript experiment far enough that we can run, jump, fight undead enemies, and replay a short level in the browser. That gives us something concrete to play before we discuss the detailed game mechanics.
 
 The direction is a platformer inspired by Jazz Jackrabbit, set in the underworld. The player is undead and is trying to find their soulmate, while everyone else seems determined to ruin their happiness. Undead powers, bosses, and a shared, recoverable ectoplasm resource with a maximum cap belong to the wider concept.
@@ -72,13 +74,13 @@ The player needs a clear, dependable response to input before attacks are added.
 
 ## Stage 4 Add the first combat interaction
 
-Use one temporary attack to prove the full path from player input to an enemy being hit. A simple projectile is sufficient for this test; it does not define a final undead power.
+Prove the full path from player input to an enemy being hit. The concrete starting attack, tuning, visuals and sound are now defined by Flicker v1.1.
 
 - Add an attack action that can be used while moving or jumping.
-- Spawn the test attack from the player in the facing direction, with its own collision bounds and a bounded lifetime.
+- Spawn Flicker from the player using the current directional-aim convention, with collision bounds and lifetime independent of its visual flame.
 - Handle attack interactions with terrain and valid targets separately from movement collisions.
 - Give a stationary test enemy health, damage reception, and a defeated state. Remove defeated targets safely.
-- Make attack rate, travel speed, and damage easy to change as test settings.
+- Keep weapon tuning in its concrete definition and use the Flicker spec as its design authority.
 - Ensure each attack applies damage only as intended and cannot hit its owner.
 
 **Complete when:** the player can attack in both directions while moving and jumping, hits affect the intended target, terrain blocks the test projectile, and expired attacks leave no active objects behind.

@@ -15,7 +15,7 @@ test('menu scene selection avoids adjacent repeats, and explicit scene IDs are d
 
 test('every character pose has its own asset and the absent traveller uses the same clean environment',()=>{
     const absent=menuScenes.find(scene=>scene.id==='absent-traveller');assert.equal(absent.character,undefined);
-    const characters=menuScenes.filter(scene=>scene.character);assert.equal(new Set(characters.map(scene=>scene.character.asset.animation)).size,3);
+    const characters=menuScenes.filter(scene=>scene.character);assert.equal(new Set(characters.map(scene=>scene.character.asset.still)).size,3);
     for(const scene of menuScenes){assert.equal(scene.background,absent.background);assert.equal(scene.foreground,absent.foreground);}
     for(const scene of characters){
         assert.ok(scene.character.width>0&&scene.character.width<.3);

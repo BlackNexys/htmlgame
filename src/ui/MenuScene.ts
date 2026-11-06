@@ -1,5 +1,5 @@
 export type MenuSceneId = 'watcher' | 'patient-traveller' | 'restless-flame' | 'absent-traveller';
-export interface MenuAsset { readonly animation: string; readonly still: string; }
+export interface MenuAsset { readonly still: string; }
 export interface MenuScene {
     readonly id: MenuSceneId;
     readonly background: MenuAsset;
@@ -26,7 +26,7 @@ export interface MenuScene {
 }
 
 const asset = (name: string): MenuAsset => ({
-    animation: `./assets/mainmenu/${name}.gif`, still: `./assets/mainmenu/stills/${name}.png`,
+    still: `./assets/mainmenu/stills/${name}.png`,
 });
 const station = {
     background: asset('station_background_ambient'), foreground: asset('station_foreground'), souls: asset('wandering_souls'),

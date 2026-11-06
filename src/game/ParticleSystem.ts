@@ -1,7 +1,14 @@
 import { Particle } from '../components/Particle';
+import type { FlickerEvent, FlickerEffect } from '../interfaces/Weapon';
+import { flickerVisuals } from './FlickerVisuals';
 
 export class ParticleSystem {
     particles: Particle[] = [];
+    flicker: FlickerEffect[] = [];
+
+    consume(events: readonly FlickerEvent[]) {
+        for (const event of events) this.flicker.push({...event, age: 0});
+    }
 
     burst(x: number, y: number, color: string, count = 10) {
         for (let i = 0; i < count; i++) {
@@ -11,5 +18,10 @@ export class ParticleSystem {
         }
     }
 
-    update(dt: number) { this.particles = this.particles.filter(particle => particle.update(dt)); }
+    update(dt: number) {
+        this.particles = this.particles.filter(particle => particle.update(dt));
+        this.flicker = this.flicker.filter(effect => {
+            effect.age += dt; return effect.age < flickerVisuals.effects[effect.kind].duration;
+        });
+    }
 }

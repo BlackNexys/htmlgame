@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flicker · The unyielding flame</title>
+<style>
+body{margin:0;background:#10121c;color:#f4ddea;font:15px system-ui,sans-serif}main{max-width:1080px;margin:40px auto;padding:0 24px}h1{font-size:30px;letter-spacing:1px}p{color:#a8b6c9;line-height:1.6}a{color:#ffabdc}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin:24px 0}article{border:1px solid #34374f;background:#191c2c;padding:12px}h2{font-size:14px;font-weight:500;margin:0 0 10px}canvas{display:block;width:100%;image-rendering:pixelated;background:#141824}button{background:#292439;color:#fff0f8;border:1px solid #67465f;padding:10px 14px;font:inherit;cursor:pointer;margin:0 6px 8px 0}button:focus-visible{outline:2px solid #ff4eae;outline-offset:3px}#status{min-height:24px}.note{font-size:13px}
+</style>
+<main>
+<p><a href="../">← Back to Underworld</a></p>
+<h1>FLICKER / THE UNYIELDING FLAME</h1>
+<p>A tiny flame that refuses to go out. Eight directions, one steady core.<br>Each card shows the sprite enlarged, with its actual game size on the right.</p>
+<button id="motion" type="button">Pause animations</button>
+<button data-sound="fire" type="button">Hear Flicker · five variations</button>
+<button data-sound="hit" type="button">Enemy hit</button>
+<button data-sound="terrainHit" type="button">Stone sputter</button>
+<button data-sound="block" type="button">Shield tick</button>
+<button data-sound="ectoplasm" type="button">Ectoplasm recovered</button>
+<p id="status" role="status">Loading sprites…</p>
+<div class="grid" id="grid"></div>
+<p class="note">Hold J / X to fire in the game. Flicker is free, including at zero ectoplasm. Its appearance changes; its speed and damage remain steady. Recovering ectoplasm has its own cue.</p>
+<p><a href="../assets/weapons/flicker/flicker-v1.png">Transparent atlas</a> · <a href="../assets/weapons/flicker/flicker_atlas.json">Frame metadata</a> · <a href="../assets/weapons/flicker/flicker-v1.prompt.txt">Generation prompt</a></p>
+</main>
+<script>
+const root='../assets/weapons/flicker/',status=document.querySelector('#status'),button=document.querySelector('#motion');
+let paused=matchMedia('(prefers-reduced-motion: reduce)').matches,elapsed=0,last=0,variation=0;
+button.textContent=paused?'Play animations':'Pause animations';
+button.addEventListener('click',()=>{paused=!paused;button.textContent=paused?'Play animations':'Pause animations';});
+let activeAudio;
+document.querySelectorAll('[data-sound]').forEach(button=>button.addEventListener('click',async()=>{
+ activeAudio?.pause(); const kind=button.dataset.sound;
+ const filename=kind==='fire'?`fire-${variation++%5+1}`:kind;
+ activeAudio=new Audio(`${root}audio/${filename}.wav`);activeAudio.volume=.8;
+ try{await activeAudio.play();status.textContent=`Playing ${kind==='fire'?`Flicker variation ${(variation-1)%5+1}`:button.textContent}.`;}
+ catch{status.textContent='This sound could not play. The game can still fire without audio.';}
+}));
+(async()=>{
+ try{
+ const response=await fetch(`${root}flicker_atlas.json`);if(!response.ok)throw Error('metadata');const atlas=await response.json();
+ const image=new Image();image.src=root+atlas.image;await image.decode();
+ const clips=atlas.flight.rows.map((name,row)=>({name:`Flight · ${name}`,row,frameTime:atlas.flight.frameDuration,loop:true}));
+ for(const [name,clip] of Object.entries(atlas.effects))clips.push({name,row:clip.row,frameTime:clip.frameDuration,loop:false});
+ const contexts=clips.map(clip=>{const article=document.createElement('article'),h=document.createElement('h2'),canvas=document.createElement('canvas');h.textContent=clip.name;canvas.width=240;canvas.height=128;canvas.setAttribute('aria-label',clip.name);article.append(h,canvas);document.querySelector('#grid').append(article);const c=canvas.getContext('2d');c.imageSmoothingEnabled=false;return c;});
+ status.textContent='Sprites ready · sounds play only when selected.';
+ function draw(time){if(last&&!paused&&!document.hidden)elapsed+=Math.min(.05,(time-last)/1000);last=time;
+ contexts.forEach((c,i)=>{const clip=clips[i],duration=clip.frameTime*6;const local=clip.loop?elapsed%duration:elapsed%(duration+.4);const frame=Math.min(5,Math.floor(local/clip.frameTime));c.clearRect(0,0,240,128);c.fillStyle='#8a91a7';c.font='10px monospace';c.fillText('4×',12,118);c.fillText('1×',184,118);if(clip.loop||local<duration){c.drawImage(image,frame*32,clip.row*32,32,32,0,0,128,128);c.drawImage(image,frame*32,clip.row*32,32,32,180,48,32,32);}});
+ requestAnimationFrame(draw);}
+ requestAnimationFrame(draw);
+ }catch{status.textContent='Sprite preview could not load. In-game firing has a procedural fallback.';}
+})();
+</script>
+</html>

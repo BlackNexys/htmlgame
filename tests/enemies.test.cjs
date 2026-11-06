@@ -4,7 +4,7 @@ const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const {World} = require('../src/game/World.ts');
 const {EnemyAnimation} = require('../src/game/EnemyAnimation.ts');
-const {PlayerProjectile} = require('../src/components/PlayerProjectile.ts');
+const {FlickerProjectile} = require('../src/components/FlickerProjectile.ts');
 const {EnemyProjectile} = require('../src/components/EnemyProjectile.ts');
 const {tuning: T} = require('../src/game/config.ts');
 const {impactTime} = require('../src/game/physics.ts');
@@ -64,7 +64,7 @@ test('ghost phases harmlessly, becomes vulnerable for its attack and recovery, t
 
 test('phased ghost lets a player projectile pass through without consuming it',()=>{
     const w=worldFor([spawn('ghost')]),e=w.enemies[0];
-    w.projectiles.push(new PlayerProjectile({x:e.x-25,y:e.y+20,width:16,height:9,vx:10000,life:1}));
+    w.projectiles.push(new FlickerProjectile({x:e.x-25,y:e.y+20,width:16,height:9,vx:10000,life:1}));
     w.update(T.step,idle);assert.equal(e.health,e.maxHealth);assert.equal(w.projectiles.length,1);
 });
 

@@ -6,7 +6,7 @@ This is the first implementation slice of [Underworld's design plan](Underworld_
 
 Space jumps and Shift sprints. A/D or left/right supply horizontal direction. Holding Space gives a higher jump than tapping. Pushing toward a wall while falling slows the slide; Space jumps away, with a brief horizontal commitment before steering returns. Holding jump never repeatedly triggers that action.
 
-Movement uses no resource and grants no damage immunity. The test palm attack remains usable during sprint, jump, and wall movement. W/Up aims up; horizontal combinations aim diagonally. S/Down crouches on the ground, lowers the collision body and firing origin, and allows a slow creep. In the air it aims downward. Release Down or press Jump to stand when there is sufficient headroom. Opposing keys cancel on each axis; without directional input, fire follows facing.
+Movement uses no resource and grants no damage immunity. [Flicker](Underworld_Flicker_Weapon_Spec_v1_1.md) remains usable during sprint, jump, and wall movement. W/Up aims up; horizontal combinations aim diagonally. S/Down crouches on the ground, lowers the collision body and firing origin, and allows a slow creep. In the air it aims downward. Release Down or press Jump to stand when there is sufficient headroom. Opposing keys cancel on each axis; without directional input, fire follows facing.
 
 The HUD displays health, defeated enemies, and level progress. F2 shows position, velocity, movement state, aim direction, and wall side. A companion sprite atlas supplies crouch and directional firing poses.
 
@@ -43,4 +43,4 @@ Compare tap and held jumps beneath the ceiling; sprint and fire through the open
 
 Automated checks cover fixed simulation at 30/60/144 render FPS, jump windows and expiry, wall commitment, thin and diagonal terrain impacts, body contact and projectile damage, pause cancellation, firing cadence, camera bounds, input edges and aliases, and complete movement course and Lower Passage runs. Browser checks exercise the movement course, sprint, pause/resume, and restart alongside the existing game and workshop flows.
 
-Phase 2 remains Soul Spark, Grave Hopper, ectoplasm, and harvesting. Modifiers, progression, authored stages, bosses, and narrative are also outside this slice.
+Flicker and the first-defeat ectoplasm reward are now playable. The remaining Phase 2 work is Gravehopper, switching, corpse harvesting, and caches. Modifiers, progression, authored stages, bosses, and narrative are also outside this slice. Weapon-specific rules and tuning live in the Flicker spec rather than this movement document.

@@ -15,7 +15,7 @@
       <canvas id="game" width="960" height="576" tabindex="0" aria-label="Game. A and D to move, Space to jump, Shift to sprint, J to shoot. P to pause, R to restart." aria-describedby="controls-summary"></canvas>
       <div id="game-hud" class="game-hud" hidden>
         <div class="game-toolbar">
-          <div class="readouts"><span class="health-label">VITALITY <strong id="health">—</strong></span><span>DEFEATED <strong id="count">—</strong></span></div>
+          <div class="readouts"><span class="health-label">VITALITY <strong id="health">—</strong></span><span>DEFEATED <strong id="count">—</strong></span><span>ECTO <strong id="ectoplasm">—</strong></span><span id="weapon-label">FLICKER · FREE</span></div>
           <div class="toolbar-actions"><bl-button id="pause" variant="quiet" disabled>Pause</bl-button><bl-button id="restart" variant="quiet" disabled>Restart</bl-button><bl-button id="mute" variant="quiet" aria-pressed="false" disabled>Sound on</bl-button></div>
         </div>
         <div class="game-bottom">
@@ -39,8 +39,10 @@
             <div class="menu-soul soul-near"><img data-menu-layer="souls" src="./assets/mainmenu/stills/wandering_souls.png" width="836" height="471" alt=""></div>
           </div>
           <img class="menu-platform" data-menu-layer="foreground" src="./assets/mainmenu/stills/station_foreground.png" width="1003" height="565" alt="">
+          <canvas class="menu-platform-motion" width="1003" height="565"></canvas>
           <div class="menu-hero-shadow" hidden><span class="menu-shadow-cast"></span><span class="menu-shadow-contact"></span></div>
           <img class="menu-character" data-menu-layer="character" width="520" height="620" alt="" hidden>
+          <canvas class="menu-character-motion" width="520" height="620" hidden></canvas>
           <svg width="0" height="0" class="menu-masks" focusable="false"><defs>
             <clipPath id="station-front-details" clipPathUnits="objectBoundingBox">
               <rect x=".73" y="0" width=".27" height=".59"></rect>
@@ -49,6 +51,13 @@
             </clipPath>
           </defs></svg>
           <img class="menu-details" data-menu-layer="foreground" src="./assets/mainmenu/stills/station_foreground.png" width="1003" height="565" alt="">
+          <canvas class="menu-details-motion" width="1003" height="565"></canvas>
+          <div class="menu-moving-details"></div>
+          <div class="menu-live-effects">
+            <canvas class="menu-lantern-light" width="86" height="86"></canvas>
+            <canvas class="menu-clock-hand" width="80" height="96"></canvas>
+            <canvas class="menu-cat-sleep" width="60" height="60"></canvas>
+          </div>
         </div>
       </div>
       <div class="title-content">
@@ -63,7 +72,7 @@
         </nav>
         <p id="title-status" class="title-status" role="status">Opening the passage…</p>
       </div>
-      <div class="title-footer"><span>↑ ↓ CHOOSE · ENTER SELECT</span><span>KEYBOARD REQUIRED</span></div>
+      <div class="title-footer"><span>↑ ↓ CHOOSE · ENTER SELECT</span><button id="title-enable-motion" type="button" hidden>Reduced motion · Enable animation</button><span>KEYBOARD REQUIRED</span></div>
     </section>
     <section class="session-panel" id="session-menu" hidden>
       <p class="eyebrow">FROM THE OTHER SIDE</p>
@@ -84,7 +93,7 @@
     <label class="option-row"><span>Music and sound</span><input id="option-sound" type="checkbox" checked></label>
     <label class="option-row"><span>Encounter hints</span><input id="option-hints" type="checkbox" checked></label>
     <label class="option-row"><span>Menu animation</span><select id="option-menu-motion" aria-describedby="menu-motion-note"><option value="system">Automatic</option><option value="animated">On</option><option value="still">Off</option></select></label>
-    <p id="menu-motion-note" class="menu-note">Automatic follows your device's reduced-motion setting.</p>
+    <p id="menu-motion-note" class="menu-note">Automatic follows your device's reduced-motion setting. On enables the menu animation even when system animations are disabled.</p>
     <p class="menu-note">Your preferences are remembered on this browser. The picture always fits the window and keeps its original proportions.</p>
     <bl-button data-close-dialog="options-dialog" full>Back</bl-button>
   </dialog>
@@ -96,7 +105,7 @@
       <div><dt>Sprint</dt><dd>Hold <kbd>SHIFT</kbd></dd></div>
       <div><dt>Aim up · combine to aim diagonally</dt><dd><kbd>W</kbd> / <kbd>↑</kbd></dd></div>
       <div><dt>Crouch · aim down in the air</dt><dd><kbd>S</kbd> / <kbd>↓</kbd></dd></div>
-      <div><dt>Attack</dt><dd>Hold <kbd>J</kbd> / <kbd>X</kbd></dd></div>
+      <div><dt>Flicker · free flame</dt><dd>Hold <kbd>J</kbd> / <kbd>X</kbd></dd></div>
       <div><dt>Pause / resume</dt><dd><kbd>P</kbd> / <kbd>ESC</kbd></dd></div>
       <div><dt>Restart</dt><dd><kbd>R</kbd></dd></div>
       <div><dt>Toggle sound</dt><dd><kbd>M</kbd></dd></div>

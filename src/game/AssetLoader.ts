@@ -6,7 +6,11 @@ import { characterAimAtlas } from './CharacterAimAtlas';
 
 export class AssetLoader {
     async load(): Promise<GameAssets> {
-        const [wall, hero, heroAim] = await Promise.all([this.image('./assets/wall.png'), this.image(`./assets/${characterAtlas.image}`), this.image(`./assets/${characterAimAtlas.image}`)]);
+        const [wall, hero, heroAim, flicker] = await Promise.all([this.image('./assets/wall.png'), this.image(`./assets/${characterAtlas.image}`), this.image(`./assets/${characterAimAtlas.image}`),
+            this.image('./assets/weapons/flicker/flicker-v1.png').then(image => {
+                if (image.naturalWidth !== 192 || image.naturalHeight !== 416) return undefined;
+                return image;
+            }).catch(() => undefined)]);
         if (hero.naturalWidth !== characterAtlas.width || hero.naturalHeight !== characterAtlas.height) throw new Error('Unexpected character atlas dimensions');
         if (heroAim.naturalWidth !== characterAimAtlas.width || heroAim.naturalHeight !== characterAimAtlas.height) throw new Error('Unexpected character aiming atlas dimensions');
         const kinds = Object.keys(enemyTuning) as EnemyKind[];
@@ -16,7 +20,7 @@ export class AssetLoader {
             if (sheet.naturalWidth !== 1254 || sheet.naturalHeight !== 1254) throw new Error(`Unexpected ${kinds[index]} atlas dimensions`);
             enemies[kinds[index]] = sheet;
         });
-        return {wall, hero, heroAim, enemies};
+        return {wall, hero, heroAim, flicker, enemies};
     }
 
     private image(src: string) {

@@ -13,7 +13,7 @@ The current design references are the supplied [standing](mainmenu/stills/hero_s
 | 5 | Hurt and recovery | 6 |
 | 6 | Defeat and collapsed hold | 6 |
 
-Each source cell is 209×209 pixels, displayed in the same 80-pixel cell as before. The player's 32×52 collision bounds and movement tuning are unchanged. Flame and cloth extend outside the collision box as decoration. `playerShotOffsetY` places the projectile's top 9 pixels below the player bounds' top so the shot lines up with the new raised palm; shot speed, damage, and cadence are unchanged.
+Each source cell is 209×209 pixels, displayed in an 80-pixel cell. Flame and cloth extend outside the collision box as decoration. The current Flicker weapon owns its manifestation origin and shot tuning; see the [weapon spec](../../docs/Underworld_Flicker_Weapon_Spec_v1_1.md). Standing collision height is 52 px, with the later crouch companion lowering it to 32 px.
 
 `src/game/CharacterAtlas.ts` records the source dimensions, render size, torso split, direction correction, and tuned per-frame anchors. Grounded poses use foot baselines; airborne poses retain a body root while the legs tuck. The generated idle row faces left, so the renderer mirrors it locally to normalize every clip to right-facing before applying the player's facing. Running and sprinting share a cycle at different rates. Wall slide/jump reuse falling/ascent poses.
 
@@ -21,4 +21,4 @@ Moving attacks retain the locomotion legs and overlay the palm-fire torso at the
 
 The [animation preview](../docs/character-animations.html) shows all six clips beside the current menu reference. This is a first gameplay pass of the settled design; further polish should preserve the silhouette and foot/body anchors, and be judged at actual gameplay size.
 
-The later [crouch and aiming companion](character-aim-v1.md) adds a 32 px crouching collision height, low palm fire, and directional poses while preserving this base atlas. Its input and projectile rules supersede the original horizontal-only firing description above.
+The [crouch and aiming companion](character-aim-v1.md) adds a 32 px crouching collision height, low palm fire, and directional poses while preserving this base atlas. The current [Flicker spec](../../docs/Underworld_Flicker_Weapon_Spec_v1_1.md) defines the standard attack's behavior, effects and audio.

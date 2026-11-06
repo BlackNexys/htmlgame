@@ -1,0 +1,688 @@
+{
+  "version": 1,
+  "status": "First production corner · art and animation review",
+  "scene": {
+    "width": 640,
+    "height": 360,
+    "background": "#090d16",
+    "hero": {
+      "x": 432,
+      "y": 284
+    },
+    "platform": {
+      "x": 320,
+      "y": 256
+    },
+    "post": {
+      "x": 560,
+      "y": 282
+    },
+    "lamp": {
+      "x": 501,
+      "y": 152
+    }
+  },
+  "hero": {
+    "head": {
+      "x": 56,
+      "y": 76
+    },
+    "cape": {
+      "x": 64,
+      "y": 90
+    }
+  },
+  "assets": {
+    "platform": {
+      "id": "platform",
+      "name": "Violet stone",
+      "image": "platform-v1.png",
+      "width": 320,
+      "height": 128,
+      "cell": {
+        "width": 320,
+        "height": 128
+      },
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            320,
+            128
+          ],
+          "durationMs": 1000
+        }
+      ]
+    },
+    "post": {
+      "id": "post",
+      "name": "Station hanger",
+      "image": "post-v1.png",
+      "width": 112,
+      "height": 192,
+      "cell": {
+        "width": 112,
+        "height": 192
+      },
+      "anchor": {
+        "x": 79,
+        "y": 178
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            112,
+            192
+          ],
+          "durationMs": 1000
+        }
+      ]
+    },
+    "lamp": {
+      "id": "lamp",
+      "name": "Cyan lantern",
+      "image": "lamp-v1.png",
+      "width": 32,
+      "height": 56,
+      "cell": {
+        "width": 32,
+        "height": 56
+      },
+      "anchor": {
+        "x": 16,
+        "y": 7
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            32,
+            56
+          ],
+          "durationMs": 1000
+        }
+      ]
+    },
+    "body": {
+      "id": "body",
+      "name": "Planted body idle",
+      "image": "body-v1.png",
+      "width": 768,
+      "height": 160,
+      "cell": {
+        "width": 128,
+        "height": 160
+      },
+      "anchor": {
+        "x": 56,
+        "y": 144
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            128,
+            160
+          ],
+          "durationMs": 2200
+        },
+        {
+          "rect": [
+            128,
+            0,
+            128,
+            160
+          ],
+          "durationMs": 180
+        },
+        {
+          "rect": [
+            256,
+            0,
+            128,
+            160
+          ],
+          "durationMs": 180
+        },
+        {
+          "rect": [
+            384,
+            0,
+            128,
+            160
+          ],
+          "durationMs": 1200
+        },
+        {
+          "rect": [
+            512,
+            0,
+            128,
+            160
+          ],
+          "durationMs": 180
+        },
+        {
+          "rect": [
+            640,
+            0,
+            128,
+            160
+          ],
+          "durationMs": 180
+        }
+      ]
+    },
+    "flame": {
+      "id": "flame",
+      "name": "Soul-flame · 8 drawings",
+      "image": "flame-v1.png",
+      "width": 512,
+      "height": 48,
+      "cell": {
+        "width": 64,
+        "height": 48
+      },
+      "anchor": {
+        "x": 12,
+        "y": 40
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 83
+        },
+        {
+          "rect": [
+            64,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 84
+        },
+        {
+          "rect": [
+            128,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 83
+        },
+        {
+          "rect": [
+            192,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 84
+        },
+        {
+          "rect": [
+            256,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 83
+        },
+        {
+          "rect": [
+            320,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 84
+        },
+        {
+          "rect": [
+            384,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 83
+        },
+        {
+          "rect": [
+            448,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 84
+        }
+      ]
+    },
+    "cape": {
+      "id": "cape",
+      "name": "Burgundy cloth · 8 drawings",
+      "image": "cape-v1.png",
+      "width": 512,
+      "height": 48,
+      "cell": {
+        "width": 64,
+        "height": 48
+      },
+      "anchor": {
+        "x": 6,
+        "y": 8
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 150
+        },
+        {
+          "rect": [
+            64,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 140
+        },
+        {
+          "rect": [
+            128,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 150
+        },
+        {
+          "rect": [
+            192,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 160
+        },
+        {
+          "rect": [
+            256,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 150
+        },
+        {
+          "rect": [
+            320,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 160
+        },
+        {
+          "rect": [
+            384,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 170
+        },
+        {
+          "rect": [
+            448,
+            0,
+            64,
+            48
+          ],
+          "durationMs": 170
+        }
+      ]
+    }
+  },
+  "palette": {
+    "id": "underworld-menu-pilot-v1",
+    "status": "Production study; review in the assembled pilot",
+    "colors": [
+      "#090d16",
+      "#121726",
+      "#1f2438",
+      "#30334a",
+      "#45475e",
+      "#676077",
+      "#8b7186",
+      "#ba919f",
+      "#141f2c",
+      "#27384b",
+      "#416071",
+      "#4b3540",
+      "#80604d",
+      "#b48a61",
+      "#e0b786",
+      "#706577",
+      "#a79ba4",
+      "#d0c6c8",
+      "#f1e6dc",
+      "#341830",
+      "#5d2049",
+      "#8e285d",
+      "#bd427e",
+      "#154858",
+      "#247984",
+      "#48bbca",
+      "#b3f5ed",
+      "#741a65",
+      "#b52492",
+      "#ec3fae",
+      "#ff90d8",
+      "#fff0f8"
+    ]
+  },
+  "preparation": {
+    "platform": {
+      "bounds": {
+        "x": 323,
+        "y": 183,
+        "width": 1526,
+        "height": 465
+      },
+      "scale": 0.19921363040629095
+    },
+    "lantern": {
+      "postBounds": {
+        "x": 401,
+        "y": 46,
+        "width": 420,
+        "height": 795
+      },
+      "postScale": 0.2138364779874214,
+      "postAnchor": {
+        "x": 79,
+        "y": 178
+      },
+      "hook": {
+        "x": 20,
+        "y": 48
+      },
+      "lampBounds": {
+        "x": 1182,
+        "y": 278,
+        "width": 141,
+        "height": 317
+      },
+      "lampScale": 0.138801261829653,
+      "lampAnchor": {
+        "x": 16,
+        "y": 7
+      },
+      "glass": {
+        "x": 16,
+        "y": 35
+      }
+    },
+    "body": {
+      "bounds": [
+        {
+          "x": 184,
+          "y": 65,
+          "width": 165,
+          "height": 419
+        },
+        {
+          "x": 684,
+          "y": 62,
+          "width": 164,
+          "height": 422
+        },
+        {
+          "x": 1183,
+          "y": 56,
+          "width": 164,
+          "height": 428
+        },
+        {
+          "x": 184,
+          "y": 567,
+          "width": 165,
+          "height": 420
+        },
+        {
+          "x": 684,
+          "y": 569,
+          "width": 164,
+          "height": 419
+        },
+        {
+          "x": 1185,
+          "y": 570,
+          "width": 164,
+          "height": 418
+        }
+      ],
+      "roots": [
+        {
+          "x": 266.5,
+          "y": 484
+        },
+        {
+          "x": 766,
+          "y": 484
+        },
+        {
+          "x": 1265,
+          "y": 484
+        },
+        {
+          "x": 266.5,
+          "y": 987
+        },
+        {
+          "x": 766,
+          "y": 988
+        },
+        {
+          "x": 1267,
+          "y": 988
+        }
+      ],
+      "scale": 0.16822429906542055,
+      "heldLegsFromFrame": 0,
+      "heldLegsStartY": 113
+    },
+    "flame": {
+      "bounds": [
+        {
+          "x": 76,
+          "y": 137,
+          "width": 290,
+          "height": 216
+        },
+        {
+          "x": 518,
+          "y": 111,
+          "width": 294,
+          "height": 242
+        },
+        {
+          "x": 962,
+          "y": 74,
+          "width": 326,
+          "height": 279
+        },
+        {
+          "x": 1406,
+          "y": 58,
+          "width": 336,
+          "height": 295
+        },
+        {
+          "x": 76,
+          "y": 498,
+          "width": 340,
+          "height": 297
+        },
+        {
+          "x": 518,
+          "y": 540,
+          "width": 321,
+          "height": 255
+        },
+        {
+          "x": 962,
+          "y": 577,
+          "width": 306,
+          "height": 218
+        },
+        {
+          "x": 1406,
+          "y": 577,
+          "width": 286,
+          "height": 218
+        }
+      ],
+      "roots": [
+        {
+          "x": 104.99633361718233,
+          "y": 321.3229137099063
+        },
+        {
+          "x": 547.433534884811,
+          "y": 319.79479247228664
+        },
+        {
+          "x": 991.0474403887445,
+          "y": 319.3963385693298
+        },
+        {
+          "x": 1436.0684952752329,
+          "y": 318.8529617033533
+        },
+        {
+          "x": 105.17981424007822,
+          "y": 762.6246035264827
+        },
+        {
+          "x": 548.7716989894076,
+          "y": 762.2168793259768
+        },
+        {
+          "x": 992.2689079660448,
+          "y": 763.1327634166228
+        },
+        {
+          "x": 1436.2407145523866,
+          "y": 763.1176250975778
+        }
+      ],
+      "scale": 0.14359964830782296
+    },
+    "cape": {
+      "bounds": [
+        {
+          "x": 80,
+          "y": 128,
+          "width": 317,
+          "height": 257
+        },
+        {
+          "x": 523,
+          "y": 128,
+          "width": 322,
+          "height": 251
+        },
+        {
+          "x": 967,
+          "y": 120,
+          "width": 325,
+          "height": 247
+        },
+        {
+          "x": 1410,
+          "y": 100,
+          "width": 321,
+          "height": 247
+        },
+        {
+          "x": 80,
+          "y": 545,
+          "width": 321,
+          "height": 251
+        },
+        {
+          "x": 523,
+          "y": 570,
+          "width": 322,
+          "height": 242
+        },
+        {
+          "x": 967,
+          "y": 571,
+          "width": 315,
+          "height": 251
+        },
+        {
+          "x": 1410,
+          "y": 571,
+          "width": 317,
+          "height": 260
+        }
+      ],
+      "roots": [
+        {
+          "x": 84,
+          "y": 132
+        },
+        {
+          "x": 527,
+          "y": 132
+        },
+        {
+          "x": 971,
+          "y": 124
+        },
+        {
+          "x": 1414,
+          "y": 104
+        },
+        {
+          "x": 84,
+          "y": 549
+        },
+        {
+          "x": 527,
+          "y": 574
+        },
+        {
+          "x": 971,
+          "y": 575
+        },
+        {
+          "x": 1414,
+          "y": 575
+        }
+      ],
+      "scale": 0.1484375
+    }
+  }
+}

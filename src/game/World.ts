@@ -10,6 +10,8 @@ import { CollisionSystem } from './CollisionSystem';
 import { ParticleSystem } from './ParticleSystem';
 import { Graveyard } from './Graveyard';
 import { Combat } from './Combat';
+import { Ectoplasm } from './Ectoplasm';
+import type { FlickerEvent } from '../interfaces/Weapon';
 
 export class World {
     readonly player: Character;
@@ -19,9 +21,11 @@ export class World {
     readonly collisions: CollisionSystem;
     readonly graveyard: Graveyard;
     readonly combat: Combat;
+    readonly ectoplasm = new Ectoplasm();
     enemies: Enemy[];
     projectiles: Projectile[] = [];
     events: GameEvent[] = [];
+    weaponEvents: FlickerEvent[] = [];
     state: PlayState = 'playing';
     elapsed = 0;
 
@@ -41,6 +45,7 @@ export class World {
 
     update(dt: number, input: Controls) {
         this.events = [];
+        this.weaponEvents = [];
         if (this.state !== 'playing') return;
         this.elapsed += dt;
         this.player.update(dt, input);
@@ -58,6 +63,7 @@ export class World {
         if (this.player.health <= 0 || this.player.y > this.level.height + 100) { this.state = 'dead'; this.player.clearActions(); }
         if (this.state === 'playing' && this.level.exit.reachedBy(this.player)) { this.state = 'won'; this.events.push('win'); }
         this.effects.update(dt);
+        this.effects.consume(this.weaponEvents);
         this.camera.follow(this.player, this.level, dt);
     }
 }
