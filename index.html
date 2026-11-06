@@ -1,42 +1,112 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-game-theme="cyberundead">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Underworld · Action prototype</title>
+  <meta name="theme-color" content="#090c10">
+  <title>Underworld · From the Other Side</title>
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./src/ui/game.css">
 </head>
-<body>
-  <main class="shell">
-    <header class="masthead">
-      <div class="brand"><span class="brand-mark" aria-hidden="true">✦</span> FROM THE OTHER SIDE</div>
-      <span class="version"><span class="dot"></span> PLAYABLE EXPERIMENT / 01</span>
-    </header>
-    <section class="intro">
-      <div><p class="eyebrow">A RESTLESS LITTLE PLATFORMER</p><h1>Love takes you<br><em>strange places.</em></h1></div>
-      <p class="intro-copy">Somewhere below the living,<br>there is still someone worth finding.<br><span>First, get through the locals.</span></p>
-    </section>
-    <section class="game-frame" aria-label="Underworld action game">
-      <div class="game-toolbar">
-        <div class="readouts"><span class="health-label">VITALITY <strong id="health">—</strong></span><span>DEFEATED <strong id="count">—</strong></span></div>
-        <div class="toolbar-actions"><bl-button id="pause" variant="quiet" disabled>Pause</bl-button><bl-button id="restart" variant="quiet" disabled>Restart</bl-button><bl-button id="mute" variant="quiet" aria-pressed="false" disabled>Sound on</bl-button></div>
-      </div>
-      <div class="viewport">
-        <canvas id="game" width="960" height="576" tabindex="0" aria-label="Game. A and D to move, Space to jump, J to shoot. P to pause, R to restart." aria-describedby="controls"></canvas>
-        <div class="overlay" id="overlay">
-          <div class="panel"><p class="eyebrow">THE LOWER PASSAGE</p><h2 id="panel-title">Opening the passage</h2><p id="panel-message">Gathering a few restless souls…</p><bl-button class="primary" id="primary" variant="primary" disabled>Loading</bl-button><p class="panel-note">A short combat prototype · Keyboard required</p></div>
+<body class="game-app">
+  <audio id="menu-music" src="./assets/music/Mechanical%20Heartbeat.mp3" loop preload="none" hidden></audio>
+  <main class="game-shell" aria-label="From the Other Side">
+    <section class="game-stage" aria-label="Underworld action game">
+      <canvas id="game" width="960" height="576" tabindex="0" aria-label="Game. A and D to move, Space to jump, Shift to sprint, J to shoot. P to pause, R to restart." aria-describedby="controls-summary"></canvas>
+      <div id="game-hud" class="game-hud" hidden>
+        <div class="game-toolbar">
+          <div class="readouts"><span class="health-label">VITALITY <strong id="health">—</strong></span><span>DEFEATED <strong id="count">—</strong></span></div>
+          <div class="toolbar-actions"><bl-button id="pause" variant="quiet" disabled>Pause</bl-button><bl-button id="restart" variant="quiet" disabled>Restart</bl-button><bl-button id="mute" variant="quiet" aria-pressed="false" disabled>Sound on</bl-button></div>
+        </div>
+        <div class="game-bottom">
+          <p class="encounter" id="encounter">Watch each enemy before committing to an attack.</p>
+          <div class="game-caption"><span>FIND YOUR WAY EAST →</span><span>P / ESC TO PAUSE</span></div>
+          <div class="journey" aria-label="Journey progress"><div id="progress"></div></div>
         </div>
       </div>
-      <div class="journey"><div id="progress"></div></div>
-      <div class="game-caption"><span>01 / THE LOWER PASSAGE</span><span>FIND YOUR WAY EAST →</span></div>
-      <p class="encounter" id="encounter">Watch each enemy before committing to an attack.</p>
     </section>
-    <section class="controls" id="controls" aria-label="Controls">
-      <div><kbd>A</kbd><kbd>D</kbd><span>Move</span></div><div><kbd>SPACE</kbd><span>Jump</span></div><div><kbd>J</kbd><span>Attack · hold to fire</span></div><div><kbd>P</kbd><span>Pause</span></div><div><kbd>R</kbd><span>Restart</span></div>
-    </section>
-    <footer><p>Built from bones, TypeScript, and unfinished business.</p><p>Temporary combat settings. More to come.</p></footer>
-    <p id="status" class="sr-only" role="status" aria-live="polite">Loading</p>
   </main>
+
+  <dialog class="overlay" id="overlay" data-screen="title" aria-labelledby="title-heading">
+    <section id="main-menu" class="main-menu" aria-label="Main menu">
+      <div class="title-art" aria-hidden="true">
+        <img class="title-background" data-menu-layer="background" src="./assets/mainmenu/stills/station_background_ambient.png" width="836" height="471" alt="" fetchpriority="high">
+        <div class="menu-scene">
+          <div class="menu-atmosphere">
+            <div class="menu-mist"></div>
+            <div class="menu-soul soul-distant"><img data-menu-layer="souls" src="./assets/mainmenu/stills/wandering_souls.png" width="836" height="471" alt=""></div>
+            <div class="menu-soul soul-platform"><img data-menu-layer="souls" src="./assets/mainmenu/stills/wandering_souls.png" width="836" height="471" alt=""></div>
+            <div class="menu-soul soul-near"><img data-menu-layer="souls" src="./assets/mainmenu/stills/wandering_souls.png" width="836" height="471" alt=""></div>
+          </div>
+          <img class="menu-platform" data-menu-layer="foreground" src="./assets/mainmenu/stills/station_foreground.png" width="1003" height="565" alt="">
+          <div class="menu-hero-shadow" hidden><span class="menu-shadow-cast"></span><span class="menu-shadow-contact"></span></div>
+          <img class="menu-character" data-menu-layer="character" width="520" height="620" alt="" hidden>
+          <svg width="0" height="0" class="menu-masks" focusable="false"><defs>
+            <clipPath id="station-front-details" clipPathUnits="objectBoundingBox">
+              <rect x=".73" y="0" width=".27" height=".59"></rect>
+              <rect x=".87" y=".64" width=".065" height=".066"></rect>
+              <rect x="0" y=".84" width="1" height=".16"></rect>
+            </clipPath>
+          </defs></svg>
+          <img class="menu-details" data-menu-layer="foreground" src="./assets/mainmenu/stills/station_foreground.png" width="1003" height="565" alt="">
+        </div>
+      </div>
+      <div class="title-content">
+        <h1 id="title-heading"><img class="title-logo" src="./assets/mainmenu/Logo.png" width="1449" height="1070" alt="Underworld" fetchpriority="high"></h1>
+        <nav class="title-actions" aria-label="Main menu actions">
+          <bl-button id="title-continue" variant="primary" full data-menu-item hidden>Continue</bl-button>
+          <bl-button id="title-play" variant="primary" full data-menu-item disabled>Play</bl-button>
+          <bl-button variant="quiet" full data-menu-item data-open-options>Options</bl-button>
+          <bl-button variant="quiet" full data-menu-item data-open-controls>Controls</bl-button>
+          <a class="title-tool" href="./?level=movement-course" data-menu-item>Movement course <span aria-hidden="true">→</span></a>
+          <a class="title-tool" href="./editor.html" target="_blank" rel="noopener" data-menu-item>Level workshop <span aria-hidden="true">↗</span></a>
+        </nav>
+        <p id="title-status" class="title-status" role="status">Opening the passage…</p>
+      </div>
+      <div class="title-footer"><span>↑ ↓ CHOOSE · ENTER SELECT</span><span>KEYBOARD REQUIRED</span></div>
+    </section>
+    <section class="session-panel" id="session-menu" hidden>
+      <p class="eyebrow">FROM THE OTHER SIDE</p>
+      <h2 id="panel-title">Opening the passage</h2>
+      <p id="panel-message">Gathering a few restless souls…</p>
+      <nav class="session-actions" aria-label="Session actions">
+        <bl-button id="primary" variant="primary" full data-menu-item disabled>Loading</bl-button>
+        <bl-button id="session-restart" full data-menu-item hidden>Restart level</bl-button>
+        <bl-button id="session-options" variant="quiet" full data-menu-item data-open-options>Options</bl-button>
+        <bl-button id="session-controls" variant="quiet" full data-menu-item data-open-controls>Controls</bl-button>
+        <bl-button id="return-main-menu" variant="quiet" full data-menu-item>Main menu</bl-button>
+      </nav>
+    </section>
+  </dialog>
+
+  <dialog id="options-dialog" class="menu-dialog" aria-labelledby="options-heading">
+    <p class="eyebrow">MAKE YOURSELF AT HOME</p><h2 id="options-heading">Options</h2>
+    <label class="option-row"><span>Music and sound</span><input id="option-sound" type="checkbox" checked></label>
+    <label class="option-row"><span>Encounter hints</span><input id="option-hints" type="checkbox" checked></label>
+    <label class="option-row"><span>Menu animation</span><select id="option-menu-motion" aria-describedby="menu-motion-note"><option value="system">Automatic</option><option value="animated">On</option><option value="still">Off</option></select></label>
+    <p id="menu-motion-note" class="menu-note">Automatic follows your device's reduced-motion setting.</p>
+    <p class="menu-note">Your preferences are remembered on this browser. The picture always fits the window and keeps its original proportions.</p>
+    <bl-button data-close-dialog="options-dialog" full>Back</bl-button>
+  </dialog>
+  <dialog id="controls-dialog" class="menu-dialog" aria-labelledby="controls-heading">
+    <p class="eyebrow">KNOW YOUR WAY AROUND</p><h2 id="controls-heading">Controls</h2>
+    <dl class="control-list">
+      <div><dt>Move</dt><dd><kbd>A</kbd> <kbd>D</kbd> / <kbd>←</kbd> <kbd>→</kbd></dd></div>
+      <div><dt>Jump · hold for height</dt><dd><kbd>SPACE</kbd></dd></div>
+      <div><dt>Sprint</dt><dd>Hold <kbd>SHIFT</kbd></dd></div>
+      <div><dt>Aim up · combine to aim diagonally</dt><dd><kbd>W</kbd> / <kbd>↑</kbd></dd></div>
+      <div><dt>Crouch · aim down in the air</dt><dd><kbd>S</kbd> / <kbd>↓</kbd></dd></div>
+      <div><dt>Attack</dt><dd>Hold <kbd>J</kbd> / <kbd>X</kbd></dd></div>
+      <div><dt>Pause / resume</dt><dd><kbd>P</kbd> / <kbd>ESC</kbd></dd></div>
+      <div><dt>Restart</dt><dd><kbd>R</kbd></dd></div>
+      <div><dt>Toggle sound</dt><dd><kbd>M</kbd></dd></div>
+      <div><dt>Debug view</dt><dd><kbd>F2</kbd></dd></div>
+    </dl>
+    <p class="menu-note">Hold toward a wall to slide; press Jump to push away. Hold Down to crouch and fire low; combine directions to aim diagonally. You can aim down while airborne. Leaving the window pauses your run.</p>
+    <bl-button data-close-dialog="controls-dialog" full>Back</bl-button>
+  </dialog>
+  <p id="controls-summary" class="sr-only">Move with A and D or the left and right arrows, hold Shift to sprint, and hold Space for a higher jump. Aim up with W or Up; combine with left or right to aim diagonally. Hold S or Down to crouch on the ground or aim down in the air. Hold toward a wall to slide and press Space to jump away. Attack with J or X and pause with P or Escape.</p>
+  <p id="status" class="sr-only" role="status" aria-live="polite">Loading</p>
   <script type="module" src="./src/app.ts"></script>
 </body>
 </html>

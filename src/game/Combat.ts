@@ -34,6 +34,7 @@ export class Combat {
     }
 
     checkContacts() {
-        if (this.gameArea.enemies.some(enemy => enemy.grace <= 0 && enemy.vulnerable && overlaps(this.gameArea.player, enemy))) this.hurtPlayer();
+        const player = this.gameArea.player;
+        if (this.gameArea.enemies.some(enemy => enemy.grace <= 0 && enemy.vulnerable && overlaps(player, enemy))) this.hurtPlayer();
     }
 }

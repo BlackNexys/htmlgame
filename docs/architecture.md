@@ -20,15 +20,29 @@ Each runtime class has its own file. Small stateless geometry operations remain 
 
 ## Session and timing
 
-`app.ts` only creates and starts `Game`. `Game` coordinates loading, the current `World`, input, sound, screen presentation, and menu transitions. `GameMenu` owns menu text and toolbar handlers; `Hud` owns the readouts and encounter hint.
+`app.ts` chooses the JSON level source and starts `Game`. `Game` coordinates loading, the current `World`, input, sound, screen presentation, and menu transitions. `GameMenu` presents pause/outcome menus and the toolbar; `MainMenu` owns title navigation and options/control dialogs. `MenuNavigation` supplements native keyboard interaction with arrows, Home, and End. `GamePreferences` persists sound and hint preferences. `Hud` owns the readouts and encounter hint.
+
+The game canvas retains its 960×576 simulation view and scales uniformly inside the browser window. HUD placement and letterboxing live in game-only CSS. Native menu dialogs pause input access to the canvas. Returning to the title menu preserves a paused world for Continue; starting a new game or restarting creates a fresh world from the loaded definition. Options and controls do not resume the simulation when closed.
 
 `GameLoop` owns one animation-frame chain and can pause simulation while continuing to draw. `FixedClock` bounds simulation catch-up and advances a fixed step. Resuming clears old accumulated time. Disposing the game stops the loop and removes its input, menu, focus, and audio resources.
 
 `AssetLoader`, `Input`, and `Sound` encapsulate image loading, keyboard state, and audio respectively. They are browser services; entity constructors do not load images, query the DOM, or register listeners.
 
+`MenuMusic` owns the title-screen audio element, loops Mechanical Heartbeat, retries blocked playback after user interaction, and pauses when muted, unfocused, hidden, or outside the title screen. `Game` supplies title visibility and the existing sound preference; music never enters the simulation or blocks asset loading. Disposing releases playback and its browser listeners.
+
+`MainMenu` owns `TitleScene` and its visibility. `MenuScene.ts` separates scene configuration from presentation: background, foreground, optional character asset and normalized anchor/position, ambient preset, and enabled rare events. A visit selects one preset; dialogs and loading completion preserve it. Later visits avoid the immediately previous choice, with session storage preserving that exclusion across reloads. A valid `menuScene` query parameter explicitly selects a preset for repeatable previews.
+
+`TitleScene` plays the supplied GIF layers natively, independently of `GameLoop`. The environment contains no baked-in protagonist. Platform and details are drawn around a separate character layer; a clipped detail pass keeps the clock, cat, and front platform edge in front. Individual souls are cropped from the supplied atlas and follow separate CSS schedules; mist drifts slowly. All these overlays share the foreground's 1003×565 coordinate space.
+
+Automatic motion follows the device's reduced-motion setting; On and Off override it through the saved menu animation preference. Hidden documents and menu exit replace GIF sources with static first-frame posters and stop CSS ambience. GIF failures fall back per layer without blocking gameplay. Disposal removes listeners. There is no decorative canvas, pixel deformation, or additional animation-frame loop.
+
+`Input` produces held, pressed, and released logical actions. Physical aliases share one action edge; browser key repeat cannot queue another jump. `Game` clears input and buffered movement actions when pausing, returning to a menu, or resuming. Restart constructs a fresh world.
+
 ## Entities
 
 `GameElement` owns position and bounds. `Actor` adds velocity, gravity, and physical movement. `Character` and `Enemy` build on it. Ground enemies share their attack cycle and ledge safety through `GroundEnemy`, with a separate class for every concrete enemy. Their special behavior, damage reactions, tell labels, and hints remain in those classes.
+
+`Character` delegates locomotion to `PlayerMovement`, which owns sprint, crouch with safe standing clearance, variable jump, coyote time, jump buffering, and wall slide/jump. Swept collision resolves terrain impacts, including diagonal corner impacts, and lets movement slide along a surface. Enemy movement retains its existing axis collision. `PlayerAim` resolves the eight keyboard directions after movement, treating Down as crouch on the ground and downward aim in the air. `Character` owns firing, sweeps the muzzle path, normalizes shot velocity, and retains health and damage recovery.
 
 `Projectile` owns flight and expiry. `PlayerProjectile` and `EnemyProjectile` select their valid targets and appearance. This keeps projectile teams and colors out of the world update and drawing code. `Particle` owns its short-lived movement. `Corpse` owns elapsed death-animation time, eligibility, and claim state while retaining the concrete defeated enemy instance.
 
@@ -49,6 +63,8 @@ The runtime takes an explicit `Level`; it does not choose or author one. `LevelL
 5. Check defeat or completion, advance effects, and follow the player with the camera.
 
 `CollisionSystem` owns line-of-sight queries and earliest projectile impacts, with terrain winning equal-time impacts. `Combat` owns damage feedback, defeat credit, and handing defeated actors to `Graveyard`. `Graveyard` owns corpse lookup, claim release, and reactivation membership. The necromancer still owns its channel decision and finite budget. `ParticleSystem` spawns and expires particles.
+
+Movement grants no damage immunity; enemy contact and projectile hits use the normal damage and recovery rules. Camera following uses fixed-step exponential damping, horizontal velocity look-ahead, a vertical dead zone, and level bounds. The movement course uses the same JSON contract and runtime as other levels, with no editor dependency.
 
 These systems are fresh for every new world. Reactivation preserves the original concrete enemy instance and its methods, without duplicating its defeat credit or active membership.
 

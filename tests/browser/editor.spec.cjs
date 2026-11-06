@@ -92,8 +92,8 @@ test('playtesting uses an independent game snapshot and restart retains the chos
     const before = await snapshot(page);
     await page.getByRole('button', {name: 'Playtest', exact: true}).click();
     const game = page.frameLocator('#playtest-frame');
-    await expect(game.getByRole('button', {name: 'Enter the underworld', exact: true})).toBeEnabled();
-    await game.getByRole('button', {name: 'Enter the underworld', exact: true}).click();
+    await expect(game.getByRole('button', {name: 'Play', exact: true})).toBeEnabled();
+    await game.getByRole('button', {name: 'Play', exact: true}).click();
     await expect(game.locator('#count')).toHaveText('0 / 0');
     await expect(game.locator('#overlay')).toBeHidden();
     await game.getByRole('button', {name: 'Restart', exact: true}).click();
@@ -110,7 +110,7 @@ test('the runtime fetches only its requested JSON and explains invalid or missin
     const requests = []; page.on('request', request => { if (request.url().includes('/levels/')) requests.push(request.url()); });
     await page.route('**/levels/test-level.json', route => route.fulfill({json: level}));
     await page.goto('/?level=test-level');
-    await expect(page.getByRole('button', {name: 'Enter the underworld', exact: true})).toBeEnabled();
+    await expect(page.getByRole('button', {name: 'Play', exact: true})).toBeEnabled();
     expect(requests).toHaveLength(1); expect(requests[0]).toContain('/levels/test-level.json');
     expect(await page.evaluate(() => window.levelEditor)).toBeUndefined();
     await page.route('**/levels/broken-level.json', route => route.fulfill({json: {...level, id: 'broken-level', schemaVersion: 99}}));

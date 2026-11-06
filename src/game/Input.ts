@@ -1,9 +1,18 @@
-import type { Controls } from '../interfaces/Game';
+import type { InputSnapshot, PlayerAction } from '../interfaces/Game';
+
+const bindings: Record<PlayerAction, readonly string[]> = {
+    left: ['KeyA', 'ArrowLeft'], right: ['KeyD', 'ArrowRight'],
+    up: ['KeyW', 'ArrowUp'], down: ['KeyS', 'ArrowDown'],
+    jump: ['Space'], sprint: ['ShiftLeft', 'ShiftRight'], fire: ['KeyJ', 'KeyX'],
+};
+const commands = new Set(['KeyP', 'Escape', 'KeyR', 'KeyM', 'F2']);
+const actions = Object.keys(bindings) as PlayerAction[];
 
 export class Input {
     private held = new Set<string>();
-    private jump = false;
-    private readonly keys = new Set(['KeyA', 'KeyD', 'KeyW', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space', 'KeyJ', 'KeyX', 'KeyP', 'Escape', 'KeyR', 'KeyM', 'F2']);
+    private pressed = new Set<PlayerAction>();
+    private released = new Set<PlayerAction>();
+    private readonly keys = new Set([...Object.values(bindings).flat(), ...commands]);
 
     constructor(private readonly canvas: HTMLCanvasElement, private readonly action: (key: string) => void,
         private readonly blurTarget: EventTarget = window) {
@@ -13,13 +22,17 @@ export class Input {
         this.blurTarget.addEventListener('blur', this.clear);
     }
 
-    readonly clear = () => { this.held.clear(); this.jump = false; };
+    readonly clear = () => { this.held.clear(); this.pressed.clear(); this.released.clear(); };
 
-    sample(): Controls {
-        const controls = {left: this.held.has('KeyA') || this.held.has('ArrowLeft'),
-            right: this.held.has('KeyD') || this.held.has('ArrowRight'),
-            fire: this.held.has('KeyJ') || this.held.has('KeyX'), jump: this.jump};
-        this.jump = false;
+    sample(): InputSnapshot {
+        const held = actions.filter(action => this.isHeld(action));
+        const controls: InputSnapshot = {
+            left: this.isHeld('left'), right: this.isHeld('right'), up: this.isHeld('up'), down: this.isHeld('down'),
+            fire: this.isHeld('fire'), sprint: this.isHeld('sprint'), jumpHeld: this.isHeld('jump'),
+            jump: this.pressed.has('jump'), jumpReleased: this.released.has('jump'),
+            held, pressed: [...this.pressed], released: [...this.released],
+        };
+        this.pressed.clear(); this.released.clear();
         return controls;
     }
 
@@ -34,15 +47,22 @@ export class Input {
     private readonly keyDown = (event: KeyboardEvent) => {
         if (!this.keys.has(event.code)) return;
         event.preventDefault();
+        if (event.repeat && !this.held.has(event.code)) return;
         if (!this.held.has(event.code) && !event.repeat) {
-            if (['KeyW', 'ArrowUp', 'Space'].includes(event.code)) this.jump = true;
-            if (['KeyP', 'Escape', 'KeyR', 'KeyM', 'F2'].includes(event.code)) this.action(event.code);
+            for (const action of actions) if (bindings[action].includes(event.code) && !this.isHeld(action)) this.pressed.add(action);
+            if (commands.has(event.code)) {
+                // Register before invoking a command: pause/restart may clear input.
+                this.held.add(event.code); this.action(event.code); return;
+            }
         }
         this.held.add(event.code);
     };
 
     private readonly keyUp = (event: KeyboardEvent) => {
         if (this.keys.has(event.code)) event.preventDefault();
+        const before = actions.filter(action => this.isHeld(action));
         this.held.delete(event.code);
+        for (const action of before) if (!this.isHeld(action)) this.released.add(action);
     };
+    private isHeld(action: PlayerAction) { return bindings[action].some(code => this.held.has(code)); }
 }

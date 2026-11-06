@@ -30,7 +30,7 @@ export class GameScreen {
         this.ctx = ctx; ctx.imageSmoothingEnabled = false;
         this.background = new BackgroundRenderer(ctx);
         this.map = new MapRenderer(ctx, assets.wall);
-        this.character = new CharacterRenderer(ctx, assets.hero);
+        this.character = new CharacterRenderer(ctx, assets.hero, assets.heroAim);
         this.enemies = new EnemyRenderer(ctx, assets);
         this.corpses = new CorpseRenderer(ctx, this.enemies);
         this.projectiles = new ProjectileRenderer(ctx);

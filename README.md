@@ -11,7 +11,19 @@ npm ci
 npm run dev
 ```
 
-Open http://127.0.0.1:3000 and select **Enter the underworld**. The server listens only on this computer. If port 3000 is occupied, use `npm run dev -- --port 3001`. `npm start` is an alias for the development server.
+Open http://127.0.0.1:3000 and select **Play** from the title menu. The server listens only on this computer. If port 3000 is occupied, use `npm run dev -- --port 3001`. `npm start` is an alias for the development server.
+
+The game fills the browser window while preserving its 960×576 (5:3) view. Wider or taller windows use letterboxing; the picture is never stretched or cropped. The HUD sits over the play area, and the game page has no document scrolling. The title menu provides Play, Options, Controls, Movement course, and the separate Level workshop. Arrow keys or Tab navigate menus; Enter activates an item.
+
+The title screen uses the supplied GIFs under `public/assets/mainmenu`: an ambient station background, a clean foreground platform, three interchangeable hero poses, and wandering souls. The logo and menu controls sit above these layers. One scene is selected per menu visit—standing, sitting, leaning, or an empty platform—and remains fixed until leaving. Normal selection avoids the immediately previous scene, including across reloads in the same browser tab.
+
+Mist drifts slowly and individual souls pass on independent schedules. The character, platform, and foreground details share one responsive coordinate space. Animated GIFs play directly in the browser; static first-frame PNGs under `mainmenu/stills` are used when motion is off, the tab is hidden, gameplay is active, or a GIF fails. **Options → Menu animation** offers Automatic (the device's reduced-motion preference), On, and Off, remembered on this browser.
+
+For repeatable scene previews, use `/?menuScene=watcher`, `/?menuScene=patient-traveller`, `/?menuScene=restless-flame`, or `/?menuScene=absent-traveller`. Scene assets, character anchors, and positions live in `src/ui/MenuScene.ts`.
+
+**Mechanical Heartbeat** (`public/assets/music/Mechanical Heartbeat.mp3`) loops on the title screen at a moderate volume. If the browser blocks autoplay, a click or key press starts it. It pauses during gameplay and while the window is inactive, resumes when returning to the menu, and follows the remembered **Music and sound** option. Missing music does not prevent play.
+
+Pause offers Resume, Restart level, Options, Controls, and Main menu. Returning to the main menu preserves the current run for **Continue**; **New game** starts a fresh run. Options remember sound and encounter-hint preferences on this browser. Leaving the window still pauses play automatically.
 
 Vite serves TypeScript directly during development and reloads the browser when source files change. CSS updates apply without restarting the game. Run `npm run typecheck` separately for full-source type checking while developing. All game artwork is loaded locally from `public/assets`.
 
@@ -39,26 +51,32 @@ Humans and agents share the same schema, stable object IDs, and revision checks.
 | Action | Keys |
 | --- | --- |
 | Move | A and D or left and right arrows |
-| Jump | Space, W, or up arrow |
+| Jump | Space; hold for more height |
+| Sprint | Hold Shift while moving |
+| Aim up / diagonally | W or Up; combine with left/right |
+| Crouch / aim down | S or Down; downward aim while airborne |
 | Attack | Hold J or X |
 | Pause or resume | P or Escape |
 | Restart | R |
 | Toggle sound | M |
 | Collision and movement debug view | F2 |
 
-The game receives keyboard input while its canvas has focus. Switching tabs, leaving the window, or moving focus away pauses it and clears held input. Use Resume to continue. Mouse and keyboard controls for pause, restart, and sound are also above the game. The page fits smaller windows; gameplay currently requires a keyboard.
+Jumping includes a short coyote window and input buffer. Push toward a wall while falling to slide; press Space to jump away. Space is the jump key. You can fire while sprinting, jumping, and falling. Direction keys aim in eight directions; with no direction held, shots follow facing. Opposing keys cancel on their axis. Down on the ground crouches and fires horizontally from a lower palm position; crouched movement is a slow creep, including with Shift held. Release Down to stand, or press Jump to stand and jump when there is room. Low ceilings keep the collision body crouched until clear. Up and Down together cancel both the crouch request and vertical aim. Diagonal bolts travel at the same speed as horizontal and vertical bolts, and the muzzle path is checked against terrain.
+
+The game receives keyboard input while its canvas has focus. Switching tabs, leaving the window, or moving focus away pauses it and clears held input and queued actions. Use Resume to continue. Mouse and keyboard controls for pause, restart, and sound are also above the game. The page fits smaller windows; gameplay currently requires a keyboard.
 
 ## What is playable
 
 - A scrolling level with low obstacles, raised platforms, eight opponents across six enemy types, and an exit.
-- Movement, jumping, facing, and attacks that work together.
+- Sprint, variable-height jumps, coyote time, jump buffering, wall slides/jumps, and camera look-ahead.
+- A separate [movement course](http://127.0.0.1:3000/?level=movement-course) for practising these mechanics, authored as ordinary level JSON.
 - Projectile and terrain collisions, enemy health, player damage, and a brief recovery period after being hit.
 - Hit effects, animated character artwork, simple generated sound, and mute.
 - Start, pause, defeat, completion, and fresh restart flows.
 
-Ectoplasm, final powers, progression, and bosses are reserved for the next design discussion. The test attack does not consume a resource or define a final power.
+This implements the movement foundation in Phase 1 of the [design and implementation plan](docs/Underworld_Game_Design_and_Implementation_Plan_v1.md). Ectoplasm, Soul Spark, Grave Hopper, progression, and bosses remain for later phases. The existing test attack remains available during movement and does not consume a resource. See [Phase 1 implementation notes](docs/phase-1-movement.md) for provisional rules, tuning, and playtest priorities.
 
-The main character now uses a generated animation sheet based on the original `public/assets/character.png`: idle, running, airborne, attack, hurt, and defeat. The original artwork is preserved. See the [live animation preview](http://127.0.0.1:3000/docs/character-animations.html) and [asset notes](public/assets/character-animations-v1.md) for the frame layout and saved generation prompt.
+The playable hero uses `character-animations-v2.png`, adapted from the established menu design: a lean skeleton, visible skull and ribs, magenta soul-flame, burgundy scarf, dark clothing, and strapped boots. Its 36 frames cover idle, running, airborne movement, palm-fire, hurt, and defeat. The original artwork and v1 sheet remain available. See the [live animation preview](http://127.0.0.1:3000/docs/character-animations.html) and [v2 asset notes](public/assets/character-animations-v2.md) for the layout, anchors, and generation prompt.
 
 The [enemy art pack](public/assets/enemies/README.md) provides the six sheets used by the playable roster. Zombies lunge, skeletons charge horizontal shots, ghouls leap, ghosts phase and materialize, wights protect their front, and necromancers reactivate nearby corpses. The level introduces them individually before a small mixed encounter. See [enemy behavior](docs/enemy-behavior.md) for tells, counters, and limits. The [enemy roster preview](http://127.0.0.1:3000/docs/enemy-sprites.html) remains available to compare their animations.
 
@@ -88,7 +106,7 @@ GameElement
             └── Necromancer
 ```
 
-Each class has its own file. `GameElement` owns bounds and placement, `Actor` supplies shared physical movement, and `Character` owns player movement, firing, and damage state. `Enemy` supplies shared lifecycle and damage hooks. `GroundEnemy` shares the grounded attack cycle and ledge safety. Each concrete enemy owns its special behavior, defenses, tells, and encounter hint. Only `Necromancer` owns a revive budget and corpse-channel state.
+Each class has its own file. `GameElement` owns bounds and placement, `Actor` supplies shared physical movement, and `Character` composes `PlayerMovement` with firing and damage state. `PlayerMovement` owns fixed-step locomotion, contact state, and jump buffers. `Enemy` supplies shared lifecycle and damage hooks. `GroundEnemy` shares the grounded attack cycle and ledge safety. Each concrete enemy owns its special behavior, defenses, tells, and encounter hint. Only `Necromancer` owns a revive budget and corpse-channel state.
 
 `Map` builds terrain, signs, and the exit from level data. `Camera` follows the character and clamps its own view. Projectiles own their movement, lifetime, appearance, and valid targets. `CollisionSystem` resolves their nearest impact; `Combat` applies damage and defeat bookkeeping; `Graveyard` manages `Corpse` instances and reactivation; `ParticleSystem` manages `Particle` lifetimes.
 

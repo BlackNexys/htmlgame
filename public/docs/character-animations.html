@@ -6,27 +6,30 @@
 <style>
 body{margin:0;background:#10191b;color:#d8e1d5;font:15px system-ui,sans-serif}main{max-width:980px;margin:40px auto;padding:0 24px}h1{font-size:32px;font-weight:500}p{color:#9bb2a8;line-height:1.7}a{color:#e89abf}.reference{display:flex;align-items:center;gap:25px}.reference img{width:128px;height:128px;image-rendering:pixelated}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:28px 0}article{background:#1a2b30;border:1px solid #3b5150;padding:15px}h2{font-size:14px;font-weight:500;margin:0 0 12px}canvas{width:100%;height:auto;image-rendering:pixelated;background:linear-gradient(#15232d,#223a3d)}button{background:#cdddba;color:#182723;border:0;padding:10px 18px;font:inherit;cursor:pointer}small{color:#8ca99d}#error{color:#ff9cbe}@media(max-width:650px){.grid{grid-template-columns:repeat(2,1fr)}}
 </style>
+<style>.reference img{width:auto;height:160px;max-width:35vw}</style>
 <main>
 <p><a href="../">← Back to the game</a></p>
 <h1>Main character animation preview</h1>
-<div class="reference"><img src="../assets/character.png" alt="Original character design with a magenta flame and dark body"><div><strong>Original character.png</strong><p>The reference for the new animation sheet.<br>36 generated frames across six animation sequences.</p></div></div>
+<div class="reference"><img src="../assets/mainmenu/stills/hero_standing.png" alt="Established menu hero with a flaming skull, exposed ribs and a burgundy scarf"><div><strong>The established Underworld hero · gameplay v2</strong><p>The menu design adapted for gameplay.<br>36 frames: idle, run, airborne, palm-fire, hurt, and defeat.</p></div></div>
 <button id="pause">Pause animations</button> <small>Right facing · left facing is mirrored in game</small>
 <div class="grid" id="grid"></div>
 <p id="error" role="status"></p>
 <p>Airborne poses are shown in sequence here. The game selects them from vertical velocity, so the rise, apex, and fall follow the actual jump. Moving attacks combine the attack torso with the active leg pose.</p>
-<p><a href="../assets/character-animations-v1.png">Open the transparent sprite sheet</a> · <a href="../assets/character-animations-v1.prompt.txt">Generation prompt</a></p>
+<p><a href="../assets/character-animations-v2.png">Open the v2 transparent sprite sheet</a> · <a href="../assets/character-animations-v2.prompt.txt">Generation prompt</a> · <a href="../assets/character-animations-v1.png">Previous sheet</a></p>
 </main>
 <script>
 const names=['Idle and flame flicker','Run cycle','Takeoff rise apex fall landing','Attack and recovery','Hurt and recovery','Defeat'];
-const anchors=[[191,191,191,191,191,191],[191,191,191,191,191,191],[191,182,166,150,175,191],[191,189,180,176,193,191],[187,178,172,178,182,187],[176,176,176,176,176,176]];
+const anchors=[[200,200,200,200,200,200],[191,191,191,191,191,191],[198,196,166,151,182,198],[195,195,195,194,194,194],[193,193,193,193,193,193],[185,184,184,184,184,182]];
+const anchorsX=[[111,108,104,100,99,97],[112,110,108,106,104,102],[105,105,107,108,106,104],[109,109,105,103,101,101],[108,106,104,102,100,98],[107,105,103,101,99,97]];
 const canvases=names.map(name=>{const article=document.createElement('article');const heading=document.createElement('h2');heading.textContent=name;const canvas=document.createElement('canvas');canvas.width=280;canvas.height=230;article.append(heading,canvas);document.querySelector('#grid').append(article);return canvas;});
 let paused=false,elapsed=0,last=0;
 document.querySelector('#pause').onclick=()=>{paused=!paused;document.querySelector('#pause').textContent=paused?'Resume animations':'Pause animations';};
-const atlas=new Image();atlas.src='../assets/character-animations-v1.png';atlas.onerror=()=>document.querySelector('#error').textContent='The animation atlas could not load.';
+const atlas=new Image();atlas.src='../assets/character-animations-v2.png';atlas.onerror=()=>document.querySelector('#error').textContent='The animation atlas could not load.';
 atlas.onload=()=>requestAnimationFrame(function frame(time){if(last&&!paused)elapsed+=Math.min(.05,(time-last)/1000);last=time;
-canvases.forEach((canvas,row)=>{const c=canvas.getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,280,230);const fps=[8,14,7,14,12,8][row];const column=Math.floor(elapsed*fps)%(row<2?6:8);const index=Math.min(5,column);const size=230;
+canvases.forEach((canvas,row)=>{const c=canvas.getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,280,230);const fps=[8,14,7,14,12,8][row];const column=Math.floor(elapsed*fps)%(row<2?6:8);const index=Math.min(5,column);const size=209;
 c.strokeStyle='#52665a';c.beginPath();c.moveTo(22,205.5);c.lineTo(258,205.5);c.stroke();
-c.drawImage(atlas,index*209,row*209,209,209,140-114/209*size,205-anchors[row][index]/209*size,size,size);
+c.save();c.translate(140,205);if(row===0)c.scale(-1,1);
+c.drawImage(atlas,index*209,row*209,209,209,-anchorsX[row][index]/209*size,-anchors[row][index]/209*size,size,size);c.restore();
 c.fillStyle='#9bb2a8';c.font='11px monospace';c.fillText('FRAME '+(index+1)+' / 6',12,224);
 });requestAnimationFrame(frame);});
 </script>

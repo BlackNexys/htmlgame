@@ -51,3 +51,39 @@ test('input handles held aliases and one-shot jumps, clears on blur, and removes
     input.dispose();key('keydown','KeyD');key('keydown','KeyR');
     assert.equal(input.sample().right,false);assert.deepEqual(actions,['KeyP']);
 });
+
+test('input snapshots retain held actions and consume logical press and release edges once',()=>{
+    const canvas=new EventTarget(),input=new Input(canvas,()=>{},new EventTarget());
+    const key=(type,code,repeat=false)=>{
+        const event=new Event(type,{cancelable:true});
+        Object.defineProperties(event,{code:{value:code},repeat:{value:repeat}});canvas.dispatchEvent(event);
+    };
+    key('keydown','ShiftLeft');key('keydown','KeyW');key('keydown','KeyS');key('keydown','KeyJ');
+    let sample=input.sample();
+    assert.equal(sample.jump,false);assert.equal(sample.up,true);assert.equal(sample.down,true);
+    assert.equal(sample.sprint,true);assert.equal(sample.fire,true);
+    assert.deepEqual(new Set(sample.pressed),new Set(['sprint','up','down','fire']));
+    key('keydown','ShiftRight');key('keyup','ShiftLeft');key('keydown','KeyJ',true);
+    sample=input.sample();assert.equal(sample.sprint,true);assert.equal(sample.fire,true);
+    assert.deepEqual(sample.pressed,[]);assert.deepEqual(sample.released,[]);
+    key('keyup','ShiftRight');key('keyup','KeyJ');key('keydown','Space');
+    sample=input.sample();assert.equal(sample.jump,true);assert.equal(sample.jumpHeld,true);
+    assert.deepEqual(new Set(sample.released),new Set(['sprint','fire']));
+    sample=input.sample();assert.equal(sample.jump,false);assert.equal(sample.jumpHeld,true);assert.deepEqual(sample.released,[]);
+    key('keyup','Space');sample=input.sample();assert.equal(sample.jumpReleased,true);assert.equal(sample.jumpHeld,false);
+    assert.equal(input.sample().jumpReleased,false);input.dispose();
+});
+
+test('clearing inside a command rejects stale repeats until a new physical press',()=>{
+    const canvas=new EventTarget(),commands=[];
+    const input=new Input(canvas,code=>{commands.push(code);input.clear();},new EventTarget());
+    const key=(type,code,repeat=false)=>{
+        const event=new Event(type,{cancelable:true});
+        Object.defineProperties(event,{code:{value:code},repeat:{value:repeat}});canvas.dispatchEvent(event);
+    };
+    key('keydown','Space');key('keydown','KeyD');key('keydown','KeyJ');key('keydown','KeyP');
+    key('keydown','Space',true);key('keydown','KeyD',true);key('keydown','KeyJ',true);key('keydown','KeyP',true);
+    const sample=input.sample();assert.deepEqual(sample.held,[]);assert.deepEqual(sample.pressed,[]);
+    assert.deepEqual(commands,['KeyP']);
+    key('keyup','Space');key('keydown','Space');assert.equal(input.sample().jump,true);input.dispose();
+});

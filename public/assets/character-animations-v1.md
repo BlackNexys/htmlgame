@@ -1,5 +1,7 @@
 # Main character animations
 
+This is the historical v1 sheet. The active gameplay artwork is described in [v2 notes](character-animations-v2.md).
+
 The canonical design reference is the original `character.png`, which is preserved. The old cyan skeleton frames are also preserved but are no longer loaded for the main character.
 
 `character-animations-v1.png` was generated with the built-in image generation tool using `character.png` as its visual reference and a transparent-background request. The full final prompt is saved in `character-animations-v1.prompt.txt`.

@@ -1,4 +1,4 @@
-﻿const {test, expect} = require('@playwright/test');
+const {test, expect} = require('@playwright/test');
 const fs = require('node:fs');
 require('../register.cjs');
 const {createActionLevel} = require('../../src/maps/actionLevel.ts');
@@ -7,15 +7,17 @@ async function start(page) {
     await page.clock.install({time: new Date('2026-11-04T12:00:00Z')});
     await page.clock.pauseAt(new Date('2026-11-04T12:00:01Z'));
     await page.goto('/');
-    await expect(page.getByRole('button', {name: 'Enter the underworld'})).toBeEnabled();
-    await page.getByRole('button', {name: 'Enter the underworld'}).click();
+    await expect(page.getByRole('button', {name: 'Play'})).toBeEnabled();
+    await page.getByRole('button', {name: 'Play'}).click();
     await expect(page.locator('#overlay')).toBeHidden();
 }
 async function advance(page, milliseconds) { await page.clock.runFor(milliseconds); }
 
 test('movement, combat, pause, focus loss, resize and a clean restart', async ({page}, testInfo) => {
     const errors = []; page.on('pageerror', e => errors.push(e.message));
+    const hero = page.waitForResponse(response => response.url().endsWith('/assets/character-animations-v2.png') && response.ok());
     await start(page);
+    await hero;
     fs.mkdirSync('artifacts', {recursive: true});
     await page.screenshot({path: `artifacts/${testInfo.project.name}-start.png`, fullPage: true});
     await page.keyboard.down('KeyD'); await page.keyboard.down('KeyJ');
@@ -55,16 +57,18 @@ test('play through the scrolling level and replay after completion', async ({pag
     await start(page);
     const level = createActionLevel();
     await page.keyboard.down('KeyD'); await page.keyboard.down('KeyJ');
+    let jumpFrames = 0;
     for (let i = 0; i < 500 && await page.locator('#overlay').isHidden(); i++) {
         const x = await page.locator('#progress').evaluate(node => parseFloat(node.style.width) / 100) * level.exit.x;
         // Jump over the ground route's steps, rather than jumping into the
         // optional overhead platforms and landing in a skeleton's firing lane.
         const obstacle = level.solids.some(r => r.y < 576 && r.y + r.height > level.spawn.y && r.x >= x + 32 && r.x < x + 32 + 65);
-        if (obstacle) await page.keyboard.press('Space');
+        if (obstacle && jumpFrames === 0) { await page.keyboard.down('Space'); jumpFrames = 8; }
         await advance(page, 50);
+        if (jumpFrames > 0 && --jumpFrames === 0) await page.keyboard.up('Space');
         if (i === 60) await page.screenshot({path: `artifacts/${testInfo.project.name}-combat.png`, fullPage: true});
     }
-    await page.keyboard.up('KeyD'); await page.keyboard.up('KeyJ');
+    await page.keyboard.up('KeyD'); await page.keyboard.up('KeyJ'); await page.keyboard.up('Space');
     await expect(page.locator('#panel-title')).toHaveText('The passage is open');
     await page.screenshot({path: `artifacts/${testInfo.project.name}-complete.png`, fullPage: true});
     await page.getByRole('button', {name: 'Play again', exact: true}).click();

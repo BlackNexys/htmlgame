@@ -2,7 +2,7 @@
 
 Pixel art for an action platformer set in the underworld. Dead bodies, spirits, and old stone share the world with strange technology and vivid energy. The characters should feel restless, a little sinister, and capable of moving fast.
 
-The original PNGs in this folder are the visual references. This guide describes their existing character and gives us a working direction for extending them. It does not establish power types, factions, or other game mechanics.
+The current protagonist design is established by the menu poses in `mainmenu`: a lean skeleton with an exposed skull and ribs, magenta soul-flame, burgundy scarf, dark fitted clothing, and strapped boots. The original PNGs remain historical references. This guide does not establish power types, factions, or other game mechanics.
 
 ## The visual idea
 
@@ -16,12 +16,13 @@ Energy can behave like flame, spirit matter, or an electrical disturbance. Use s
 
 | Asset | What to preserve |
 | --- | --- |
-| [character.png](character.png) | Main character reference. Lean, dark body; slightly hunched posture; angular magenta flame; small gray and magenta details. Preserve the wiry proportions and jagged silhouette. |
+| [Menu standing pose](mainmenu/stills/hero_standing.png) and [leaning pose](mainmenu/stills/hero_leaning.png) | Current protagonist identity. Preserve the visible skull and ribs, lean proportions, magenta flame, tattered burgundy cloth, strapped boots and restrained belt details. Simplify these details at gameplay scale. |
+| [character.png](character.png) | Original character reference. Preserve its history and use it to understand the early wiry silhouette and magenta accent. |
 | [char-sprite.png](char-sprite.png) | Pale skeletal structure, rounded head, and oversized cyan hands. The bright patterned hands give a useful reference for the meeting of technology and spirit energy. |
 | [Spirithand-idel.png](Spirithand-idel.png) and [original idle frames](ghostman%20idel/) | Restrained character motion and small changes in the head and face. Useful references for personality through small movements. |
 | [wall.png](wall.png) | Uneven masonry and worn stone. The irregular shapes establish an older, physical underworld beneath the technological additions. |
 
-The cyan skeleton is a supporting visual reference. `character.png` defines the protagonist. Their different colors do not yet imply any gameplay distinction.
+The cyan skeleton is a supporting visual reference. The menu poses define the current protagonist. Their different colors do not imply a new gameplay distinction.
 
 ## Shape and proportion
 
@@ -71,7 +72,7 @@ Enemies should share the protagonist's pixel density and shading approach while 
 
 [character-animations-v1.png](character-animations-v1.png) is a first animation pass based on `character.png`. It provides usable pose sequences, but adds rounder shapes, a fuller flame, and more costume detail than the original. It also makes the cyber details less explicit.
 
-For future revisions, use the original protagonist as the design authority. Carry useful movement from the generated frames back toward the original angular silhouette, lean proportions, and deliberate technological accents.
+The active [v2 gameplay sheet](character-animations-v2.png) is generated from the established menu poses. Preserve that identity when refining the animations: readable skull and ribs, lean proportions, burgundy cloth, and a narrower streaming flame. The engine normalizes the authored idle direction and uses per-frame anchors to keep the character rooted. See [v2 notes](character-animations-v2.md).
 
 ## Brief for a new asset
 

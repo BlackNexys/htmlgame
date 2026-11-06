@@ -90,7 +90,7 @@ test('camera is bounded and completion is reachable through the real action leve
         const p = world.player;
         const obstacle = world.level.solids.some(r => r.y < 576 && r.y + r.height > p.y && r.x >= p.x + p.width && r.x < p.x + p.width + 65);
         const jump = p.grounded && obstacle && !jumping;
-        world.update(T.step, {...idle, right: true, fire: true, jump}); jumping = jump;
+        world.update(T.step, {...idle, right: true, fire: true, jump, jumpHeld: jump || (!p.grounded && p.vy < 0)}); jumping = jump;
         assert.ok(world.camera.x >= 0 && world.camera.x <= world.level.width - T.viewportWidth);
         assert.ok(world.camera.y >= 0 && world.camera.y <= world.level.height - T.viewportHeight);
         assert.ok(!world.level.solids.some(r => overlaps(world.player, r)), 'player overlaps terrain');

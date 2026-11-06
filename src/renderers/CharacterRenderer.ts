@@ -1,10 +1,12 @@
 import type { Character } from '../components/Character';
 import type { GameEvent } from '../interfaces/Game';
 import { CharacterAnimation, type CharacterFrame } from '../game/CharacterAnimation';
+import { characterAtlas } from '../game/CharacterAtlas';
+import { characterAimAtlas } from '../game/CharacterAimAtlas';
 
 export class CharacterRenderer {
     private animation = new CharacterAnimation();
-    constructor(private readonly ctx: CanvasRenderingContext2D, private readonly image: HTMLImageElement) {}
+    constructor(private readonly ctx: CanvasRenderingContext2D, private readonly image: HTMLImageElement, private readonly aimImage: HTMLImageElement) {}
     reset() { this.animation = new CharacterAnimation(); }
     update(character: Character, dt: number, events: GameEvent[], dead: boolean) { this.animation.update(character, dt, events, dead); }
 
@@ -15,7 +17,7 @@ export class CharacterRenderer {
         if (player.invulnerable > 0 && Math.floor(elapsed * 16) % 2) c.globalAlpha = .35;
         const pose = this.animation.sample(player);
         if (pose.upper) {
-            const hip = -17;
+            const hip = characterAtlas.hip + (player.crouched ? 12 : 0);
             c.save(); c.beginPath(); c.rect(-80, hip, 160, 100); c.clip(); this.frame(pose.base); c.restore();
             c.save(); c.beginPath(); c.rect(-80, -100, 160, 100 + hip); c.clip(); this.frame(pose.upper); c.restore();
         } else this.frame(pose.base);
@@ -23,8 +25,14 @@ export class CharacterRenderer {
     }
 
     private frame(frame: CharacterFrame) {
-        const cell = 209, size = 80;
-        this.ctx.drawImage(this.image, frame.column * cell, frame.row * cell, cell, cell,
-            -frame.anchorX / cell * size, -frame.anchorY / cell * size, size, size);
+        const atlas = frame.sheet === 'aim' ? characterAimAtlas : characterAtlas;
+        const {cell,size} = atlas;
+        const source = frame.sheet === 'aim' ? characterAimAtlas.rows[frame.row] : undefined;
+        const height = source?.height ?? cell;
+        this.ctx.save();
+        if (frame.mirror) this.ctx.scale(-1,1);
+        this.ctx.drawImage(frame.sheet === 'aim' ? this.aimImage : this.image, frame.column * cell, source?.sourceY ?? frame.row * cell, cell, height,
+            -frame.anchorX / cell * size, -frame.anchorY / cell * size + (frame.offsetY ?? 0), size, height / cell * size);
+        this.ctx.restore();
     }
 }

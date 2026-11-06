@@ -55,9 +55,9 @@ export class World {
         this.projectiles = this.projectiles.filter(shot => shot.update(this, dt));
         this.enemies = this.enemies.filter(enemy => enemy.health > 0);
         this.combat.checkContacts();
-        if (this.player.health <= 0 || this.player.y > this.level.height + 100) this.state = 'dead';
+        if (this.player.health <= 0 || this.player.y > this.level.height + 100) { this.state = 'dead'; this.player.clearActions(); }
         if (this.state === 'playing' && this.level.exit.reachedBy(this.player)) { this.state = 'won'; this.events.push('win'); }
         this.effects.update(dt);
-        this.camera.follow(this.player, this.level);
+        this.camera.follow(this.player, this.level, dt);
     }
 }
