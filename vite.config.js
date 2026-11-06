@@ -12,6 +12,7 @@ export default defineConfig({
                 game: fileURLToPath(new URL('./index.html', import.meta.url)),
                 editor: fileURLToPath(new URL('./editor.html', import.meta.url)),
                 menuPilot: fileURLToPath(new URL('./menu-pilot.html', import.meta.url)),
+                menuProduction: fileURLToPath(new URL('./menu-production.html', import.meta.url)),
             },
         },
     },

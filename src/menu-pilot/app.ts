@@ -48,7 +48,7 @@ function sync(){
     note.textContent=motion.value==='system'&&reduced.matches
         ?'Your system has reduced motion enabled. Select On or Play animation to see the authored loops.'
         :motion.value==='still'?'Still mode. Step one frame to inspect the drawings.':'Authored frames play independently; On overrides system reduced motion.';
-    if(renderer)status.textContent=running?'Playing · first production corner':'Still preview · first production corner';
+    if(renderer)status.textContent=running?'Playing · animation study':'Still preview · animation study';
     draw();
 }
 function choose(value:string){motion.value=value;try{localStorage.setItem(preferenceKey,value);}catch{/* Optional preference. */}sync();}

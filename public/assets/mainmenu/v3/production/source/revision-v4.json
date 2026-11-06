@@ -1,0 +1,14 @@
+{
+  "version": 4,
+  "generator": "built-in imagegen",
+  "date": "2026-11-06",
+  "direction": "Large wild mane of engulfing flames consumes the head; preserve punk jacket and seated cloak from v3",
+  "source": "punk-mane-v4.png",
+  "prompt": "punk-mane-v4.prompt.txt",
+  "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-54c87e45-ce18-41b0-8fc6-5f98b2f5ebc6.png",
+  "references": [
+    "../../../../character.png",
+    "punk-body-v3.png",
+    "punk-head-v3.png"
+  ]
+}

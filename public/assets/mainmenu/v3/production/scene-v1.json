@@ -1,0 +1,479 @@
+{
+  "version": 1,
+  "width": 1672,
+  "height": 941,
+  "background": "background-v1.png",
+  "foreground": "foreground-v1.png",
+  "clips": {
+    "standing": {
+      "image": "../../../character-animations-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "anchor": {
+        "x": 111,
+        "y": 200
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125,
+          "anchor": {
+            "x": 111,
+            "y": 200
+          }
+        },
+        {
+          "rect": [
+            209,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125,
+          "anchor": {
+            "x": 108,
+            "y": 200
+          }
+        },
+        {
+          "rect": [
+            418,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125,
+          "anchor": {
+            "x": 104,
+            "y": 200
+          }
+        },
+        {
+          "rect": [
+            627,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125,
+          "anchor": {
+            "x": 100,
+            "y": 200
+          }
+        },
+        {
+          "rect": [
+            836,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125,
+          "anchor": {
+            "x": 99,
+            "y": 200
+          }
+        },
+        {
+          "rect": [
+            1045,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125,
+          "anchor": {
+            "x": 97,
+            "y": 200
+          }
+        }
+      ],
+      "scale": 1.35
+    },
+    "sitting": {
+      "image": "sitting-v5.png",
+      "width": 1254,
+      "height": 209,
+      "anchor": {
+        "x": 104,
+        "y": 200
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125
+        },
+        {
+          "rect": [
+            209,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125
+        },
+        {
+          "rect": [
+            418,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125
+        },
+        {
+          "rect": [
+            627,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125
+        },
+        {
+          "rect": [
+            836,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125
+        },
+        {
+          "rect": [
+            1045,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125
+        }
+      ],
+      "scale": 1.35
+    },
+    "leaning": {
+      "image": "leaning-v5.png",
+      "width": 1254,
+      "height": 209,
+      "anchor": {
+        "x": 104,
+        "y": 200
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125
+        },
+        {
+          "rect": [
+            209,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125
+        },
+        {
+          "rect": [
+            418,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125
+        },
+        {
+          "rect": [
+            627,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125
+        },
+        {
+          "rect": [
+            836,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125
+        },
+        {
+          "rect": [
+            1045,
+            0,
+            209,
+            209
+          ],
+          "durationMs": 125
+        }
+      ],
+      "scale": 1.35
+    },
+    "cat": {
+      "image": "cat-v1.png",
+      "width": 400,
+      "height": 66,
+      "anchor": {
+        "x": 50,
+        "y": 59
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            100,
+            66
+          ],
+          "durationMs": 2600
+        },
+        {
+          "rect": [
+            100,
+            0,
+            100,
+            66
+          ],
+          "durationMs": 220
+        },
+        {
+          "rect": [
+            200,
+            0,
+            100,
+            66
+          ],
+          "durationMs": 1800
+        },
+        {
+          "rect": [
+            300,
+            0,
+            100,
+            66
+          ],
+          "durationMs": 240
+        }
+      ]
+    },
+    "vines": {
+      "image": "vines-v1.png",
+      "width": 360,
+      "height": 172,
+      "anchor": {
+        "x": 45,
+        "y": 8
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            90,
+            172
+          ],
+          "durationMs": 650
+        },
+        {
+          "rect": [
+            90,
+            0,
+            90,
+            172
+          ],
+          "durationMs": 650
+        },
+        {
+          "rect": [
+            180,
+            0,
+            90,
+            172
+          ],
+          "durationMs": 650
+        },
+        {
+          "rect": [
+            270,
+            0,
+            90,
+            172
+          ],
+          "durationMs": 650
+        }
+      ]
+    },
+    "soul": {
+      "image": "soul-v1.png",
+      "width": 176,
+      "height": 64,
+      "anchor": {
+        "x": 22,
+        "y": 32
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            44,
+            64
+          ],
+          "durationMs": 180
+        },
+        {
+          "rect": [
+            44,
+            0,
+            44,
+            64
+          ],
+          "durationMs": 180
+        },
+        {
+          "rect": [
+            88,
+            0,
+            44,
+            64
+          ],
+          "durationMs": 180
+        },
+        {
+          "rect": [
+            132,
+            0,
+            44,
+            64
+          ],
+          "durationMs": 180
+        }
+      ]
+    },
+    "lamp": {
+      "image": "lamp-v1.png",
+      "width": 92,
+      "height": 188,
+      "anchor": {
+        "x": 46,
+        "y": 10
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            92,
+            188
+          ],
+          "durationMs": 1000
+        }
+      ]
+    }
+  },
+  "heroes": {
+    "standing": {
+      "body": "standing",
+      "position": {
+        "x": 1120,
+        "y": 722
+      },
+      "ground": {
+        "x": 1120,
+        "y": 722
+      },
+      "light": {
+        "x": 111,
+        "y": 65
+      }
+    },
+    "sitting": {
+      "body": "sitting",
+      "position": {
+        "x": 1460,
+        "y": 750
+      },
+      "ground": {
+        "x": 1460,
+        "y": 750
+      },
+      "light": {
+        "x": 104,
+        "y": 94
+      }
+    },
+    "leaning": {
+      "body": "leaning",
+      "position": {
+        "x": 1355,
+        "y": 724
+      },
+      "ground": {
+        "x": 1355,
+        "y": 724
+      },
+      "light": {
+        "x": 104,
+        "y": 65
+      }
+    }
+  },
+  "lamp": {
+    "position": {
+      "x": 1308,
+      "y": 136
+    },
+    "glass": {
+      "x": 46,
+      "y": 112
+    }
+  },
+  "clock": {
+    "position": {
+      "x": 1519,
+      "y": 166
+    },
+    "radius": 66
+  },
+  "board": {
+    "position": {
+      "x": 1488,
+      "y": 358
+    },
+    "width": 265,
+    "height": 80,
+    "angle": -0.1
+  },
+  "cat": {
+    "x": 1555,
+    "y": 681
+  },
+  "vines": [
+    {
+      "x": 820,
+      "y": 760
+    },
+    {
+      "x": 1004,
+      "y": 799
+    }
+  ]
+}

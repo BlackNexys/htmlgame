@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "generator": "built-in imagegen",
+  "date": "2026-11-06",
+  "references": [
+    "../../composition-study-v1.png",
+    "../../corner-study-v1.png"
+  ],
+  "assets": [
+    {
+      "id": "background",
+      "source": "background-v1.png",
+      "prompt": "background-v1.prompt.txt",
+      "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-c9be37cf-4ca3-425e-9b6e-c1719a019e06.png"
+    },
+    {
+      "id": "foreground",
+      "source": "foreground-v1.png",
+      "prompt": "foreground-v1.prompt.txt",
+      "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-0a9ca907-56b1-4fb1-846b-ec70334f1e71.png"
+    },
+    {
+      "id": "body",
+      "source": "body-v1.png",
+      "prompt": "body-v1.prompt.txt",
+      "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-a679e998-ac9f-49a3-98aa-12cc39b3a87a.png"
+    },
+    {
+      "id": "lantern",
+      "source": "lantern-v1.png",
+      "prompt": "lantern-v1.prompt.txt",
+      "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-7fc4681c-0cd5-4c7c-8305-da3e6bc548fa.png"
+    },
+    {
+      "id": "flame",
+      "source": "flame-v1.png",
+      "prompt": "flame-v1.prompt.txt",
+      "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-f33a1cb3-91e6-4884-a12e-9ade14b88f45.png"
+    },
+    {
+      "id": "cape",
+      "source": "cape-v1.png",
+      "prompt": "cape-v1.prompt.txt",
+      "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-bf81b54a-3eec-41c7-9d8c-d6cc0f36b5fb.png"
+    },
+    {
+      "id": "cat",
+      "source": "cat-v1.png",
+      "prompt": "cat-v1.prompt.txt",
+      "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-2a4cdb50-757a-4d6a-a1dd-51d8d426ddd7.png"
+    },
+    {
+      "id": "vines",
+      "source": "vines-v1.png",
+      "prompt": "vines-v1.prompt.txt",
+      "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-a4fbf251-4e92-419a-acb0-bc6832aff52f.png"
+    },
+    {
+      "id": "soul",
+      "source": "soul-v1.png",
+      "prompt": "soul-v1.prompt.txt",
+      "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-a216df3f-a4c7-4a6f-a8eb-907d39eaa37b.png"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 Pixel art for an action platformer set in the underworld. Dead bodies, spirits, and old stone share the world with strange technology and vivid energy. The characters should feel restless, a little sinister, and capable of moving fast.
 
-The current protagonist design is established by the menu poses in `mainmenu`: a lean skeleton with an exposed skull and ribs, magenta soul-flame, burgundy scarf, dark fitted clothing, and strapped boots. The original PNGs remain historical references. This guide does not establish power types, factions, or other game mechanics.
+The current protagonist is defined by the sprites actually used in gameplay: [character-animations-v2.png](character-animations-v2.png) and its [aiming companion](character-aim-v1.png). Match their proportions, compact glowing black face, connected magenta flame, burgundy scarf/cloak, pale ribs within fitted dark clothing, lean limbs, belt details and buckled boots. The latest user correction explicitly makes these live sprites the reference for the menu rebuild. This guide does not establish power types, factions, or other game mechanics.
 
 ## The visual idea
 
@@ -16,23 +16,26 @@ Energy can behave like flame, spirit matter, or an electrical disturbance. Use s
 
 | Asset | What to preserve |
 | --- | --- |
-| [Menu standing pose](mainmenu/stills/hero_standing.png) and [leaning pose](mainmenu/stills/hero_leaning.png) | Current protagonist identity. Preserve the visible skull and ribs, lean proportions, magenta flame, tattered burgundy cloth, strapped boots and restrained belt details. Simplify these details at gameplay scale. |
-| [character.png](character.png) | Original character reference. Preserve its history and use it to understand the early wiry silhouette and magenta accent. |
+| [Live gameplay atlas](character-animations-v2.png) and [aiming companion](character-aim-v1.png) | Authoritative current character: preserve the face, connected flame, proportions, clothing, colours and pixel-cluster treatment. The menu standing preset reuses the live atlas directly. |
+| [character.png](character.png) | Historical original. It does not authorize another costume or anatomy redesign of the current playable hero. |
+| [Earlier menu standing](mainmenu/stills/hero_standing.png) and [leaning](mainmenu/stills/hero_leaning.png) | Historical menu references that informed the gameplay sheet. New menu character poses now use the gameplay idle strip as their direct visual reference. |
 | [char-sprite.png](char-sprite.png) | Pale skeletal structure, rounded head, and oversized cyan hands. The bright patterned hands give a useful reference for the meeting of technology and spirit energy. |
 | [Spirithand-idel.png](Spirithand-idel.png) and [original idle frames](ghostman%20idel/) | Restrained character motion and small changes in the head and face. Useful references for personality through small movements. |
 | [wall.png](wall.png) | Uneven masonry and worn stone. The irregular shapes establish an older, physical underworld beneath the technological additions. |
 
-The cyan skeleton is a supporting visual reference. The menu poses define the current protagonist. Their different colors do not imply a new gameplay distinction.
+The cyan skeleton is a supporting visual reference. Different reference colours do not imply a new gameplay distinction. Current menu assets and their exact prompts are documented in [production notes](mainmenu/v3/production/README.md).
 
 ## Shape and proportion
 
 - Favor angular silhouettes, wiry limbs, uneven edges, and slightly unnatural poses.
 - Give each character one strong identifying feature, such as a flame, distinctive hands, or a head shape.
 - Keep the main character lean. Preserve the original stance and proportions when adding poses or equipment.
+- Keep the familiar rounded face and connected flowing flame from the gameplay sprites. Preserve the source head/body ratio and fitted costume when adding poses; draw the whole character together.
+- In seated menu poses, the cloak compresses under the hips and thighs and hangs with gravity. It does not stream sideways from beneath the seated body.
 - Separate arms, torso, and legs clearly enough to read during movement.
 - Use broader shapes for important features and small pixel clusters for supporting detail.
 
-The original main character uses a 64 by 64 pixel canvas. New frames should match its apparent scale and pixel density. Transparent padding may be larger when an action needs room; it should not make the character larger or more detailed.
+The current gameplay atlas has 209×209 source cells rendered at gameplay scale. New pose exports use the same native cell scale, with apparent size and pixel density reviewed against that atlas. Transparent padding may be larger when an action needs room; it should not make the character larger or more detailed.
 
 ## Color and light
 

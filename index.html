@@ -29,35 +29,12 @@
 
   <dialog class="overlay" id="overlay" data-screen="title" aria-labelledby="title-heading">
     <section id="main-menu" class="main-menu" aria-label="Main menu">
-      <div class="title-art" aria-hidden="true">
-        <img class="title-background" data-menu-layer="background" src="./assets/mainmenu/stills/station_background_ambient.png" width="836" height="471" alt="" fetchpriority="high">
+      <div class="title-art" aria-hidden="true" data-renderer="loading">
         <div class="menu-scene">
-          <div class="menu-atmosphere">
-            <div class="menu-mist"></div>
-            <div class="menu-soul soul-distant"><img data-menu-layer="souls" src="./assets/mainmenu/stills/wandering_souls.png" width="836" height="471" alt=""></div>
-            <div class="menu-soul soul-platform"><img data-menu-layer="souls" src="./assets/mainmenu/stills/wandering_souls.png" width="836" height="471" alt=""></div>
-            <div class="menu-soul soul-near"><img data-menu-layer="souls" src="./assets/mainmenu/stills/wandering_souls.png" width="836" height="471" alt=""></div>
-          </div>
-          <img class="menu-platform" data-menu-layer="foreground" src="./assets/mainmenu/stills/station_foreground.png" width="1003" height="565" alt="">
-          <canvas class="menu-platform-motion" width="1003" height="565"></canvas>
-          <div class="menu-hero-shadow" hidden><span class="menu-shadow-cast"></span><span class="menu-shadow-contact"></span></div>
-          <img class="menu-character" data-menu-layer="character" width="520" height="620" alt="" hidden>
-          <canvas class="menu-character-motion" width="520" height="620" hidden></canvas>
-          <svg width="0" height="0" class="menu-masks" focusable="false"><defs>
-            <clipPath id="station-front-details" clipPathUnits="objectBoundingBox">
-              <rect x=".73" y="0" width=".27" height=".59"></rect>
-              <rect x=".87" y=".64" width=".065" height=".066"></rect>
-              <rect x="0" y=".84" width="1" height=".16"></rect>
-            </clipPath>
-          </defs></svg>
-          <img class="menu-details" data-menu-layer="foreground" src="./assets/mainmenu/stills/station_foreground.png" width="1003" height="565" alt="">
-          <canvas class="menu-details-motion" width="1003" height="565"></canvas>
-          <div class="menu-moving-details"></div>
-          <div class="menu-live-effects">
-            <canvas class="menu-lantern-light" width="86" height="86"></canvas>
-            <canvas class="menu-clock-hand" width="80" height="96"></canvas>
-            <canvas class="menu-cat-sleep" width="60" height="60"></canvas>
-          </div>
+          <img class="menu-poster" src="./assets/mainmenu/v3/production/poster-watcher-v1.png" width="1672" height="941" alt="" fetchpriority="high">
+          <img class="title-background" width="1672" height="941" alt="">
+          <img class="menu-platform" width="1672" height="941" alt="">
+          <canvas class="menu-scene-motion" width="1672" height="941"></canvas>
         </div>
       </div>
       <div class="title-content">

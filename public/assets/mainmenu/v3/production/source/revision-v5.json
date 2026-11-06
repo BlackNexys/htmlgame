@@ -1,0 +1,31 @@
+{
+  "version": 5,
+  "date": "2026-11-06",
+  "direction": "The user explicitly requested the current in-game sprites as the menu hero reference. Prior character interpretations are superseded.",
+  "standing": {
+    "mode": "original gameplay texture, reused directly",
+    "image": "../../../../character-animations-v2.png",
+    "row": 0,
+    "cell": 209,
+    "frames": 6,
+    "frameDurationMs": 125,
+    "anchorSource": "src/game/CharacterAtlas.ts",
+    "renderScale": 1.35
+  },
+  "newPoses": {
+    "generator": "built-in imagegen",
+    "onlyReference": "gameplay-idle-reference-v5.png",
+    "sources": [
+      {
+        "file": "gameplay-sitting-v5.png",
+        "prompt": "gameplay-sitting-v5.prompt.txt",
+        "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-c7c8b654-d8a9-4b95-970a-f34c1875295a.png"
+      },
+      {
+        "file": "gameplay-leaning-v5.png",
+        "prompt": "gameplay-leaning-v5.prompt.txt",
+        "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-8ae0eaa9-3942-4031-9e2a-9a9000c39546.png"
+      }
+    ]
+  }
+}

@@ -1,112 +1,107 @@
-import { selectMenuScene, type MenuAsset, type MenuScene } from './MenuScene';
-import type { MenuMotion } from './GamePreferences';
-import { TitleMotion } from './TitleMotion';
+import {selectMenuScene,titleArtRoot,type MenuScene} from './MenuScene';
+import type {MenuMotion} from './GamePreferences';
+import {validateTitleArt,type TitleArt} from './title/TitleArt';
+import {TitleArtRenderer} from './title/TitleArtRenderer';
 
-const previousKey = 'underworld-menu-scene:v1';
+const previousKey='underworld-menu-scene:v1';
 
-/** Still art plus continuous local motion; menu presentation never advances the game. */
+/** Production title presentation owns one cosmetic clock, separate from the game. */
 export class TitleScene {
-    private readonly layers: HTMLImageElement[];
-    private readonly character: HTMLImageElement;
-    private readonly characterMotion: HTMLCanvasElement;
-    private readonly shadow: HTMLElement;
-    private readonly reduced = matchMedia('(prefers-reduced-motion: reduce)');
-    private readonly events = new AbortController();
-    private readonly renderer: TitleMotion;
-    private readonly motionPrompt = document.querySelector<HTMLButtonElement>('#title-enable-motion')!;
+    private readonly reduced=matchMedia('(prefers-reduced-motion: reduce)');
+    private readonly events=new AbortController();
+    private readonly canvas: HTMLCanvasElement;
+    private readonly poster: HTMLImageElement;
+    private readonly background: HTMLImageElement;
+    private readonly foreground: HTMLImageElement;
+    private readonly motionPrompt=document.querySelector<HTMLButtonElement>('#title-enable-motion')!;
+    private renderer?: TitleArtRenderer;
     private scene?: MenuScene;
     private previous?: string;
-    private active = false;
-    private motion: MenuMotion = 'system';
-    private disposed = false;
+    private active=false;
+    private motion: MenuMotion='system';
+    private disposed=false;
+    private failed=false;
+    private running=false;
+    private frameId?: number;
+    private last=0;
+    private lastPaint=0;
+    private elapsed=0;
 
-    constructor(private readonly root: HTMLElement) {
-        this.layers = [...root.querySelectorAll<HTMLImageElement>('[data-menu-layer]')];
-        this.character = root.querySelector<HTMLImageElement>('.menu-character')!;
-        this.characterMotion = root.querySelector<HTMLCanvasElement>('.menu-character-motion')!;
-        this.shadow = root.querySelector<HTMLElement>('.menu-hero-shadow')!;
-        this.renderer = new TitleMotion(root);
-        try { this.previous = sessionStorage.getItem(previousKey) || undefined; } catch { /* Session selection still works. */ }
-        const options = {signal: this.events.signal};
-        this.reduced.addEventListener('change', this.sync, options);
-        document.addEventListener('visibilitychange', this.sync, options);
-        for (const image of this.layers) image.addEventListener('load', this.refresh, options);
+    constructor(private readonly root: HTMLElement){
+        this.canvas=root.querySelector<HTMLCanvasElement>('.menu-scene-motion')!;
+        this.poster=root.querySelector<HTMLImageElement>('.menu-poster')!;
+        this.background=root.querySelector<HTMLImageElement>('.title-background')!;
+        this.foreground=root.querySelector<HTMLImageElement>('.menu-platform')!;
+        try{this.previous=sessionStorage.getItem(previousKey)||undefined;}catch{/* Optional session selection. */}
+        const options={signal:this.events.signal};
+        this.reduced.addEventListener('change',this.sync,options);
+        document.addEventListener('visibilitychange',this.sync,options);
+        void this.load();
     }
+    show(){if(this.disposed)return;if(!this.active)this.select();this.active=true;this.sync();}
+    hide(){this.active=false;this.sync();}
+    preferences(motion: MenuMotion){this.motion=motion;this.sync();}
+    dispose(){this.hide();this.disposed=true;this.events.abort();this.renderer=undefined;}
 
-    show() {
-        if (this.disposed) return;
-        if (!this.active) this.select();
-        this.active = true; this.sync();
+    private select(){
+        this.scene=selectMenuScene(this.previous,Math.random,new URLSearchParams(location.search).get('menuScene'));
+        this.previous=this.scene.id;this.elapsed=0;
+        try{sessionStorage.setItem(previousKey,this.scene.id);}catch{/* Storage is not required. */}
+        this.root.dataset.scene=this.scene.id;
+        this.poster.src=this.scene.poster;
+        this.root.dataset.hero=String(!!this.scene.pose);
+        this.draw();
     }
-    hide() { this.active = false; this.sync(); }
-    preferences(motion: MenuMotion) { this.motion = motion; this.sync(); }
-    dispose() { this.hide(); this.renderer.dispose(); this.disposed = true; this.events.abort(); }
-
-    private select() {
-        this.scene = selectMenuScene(this.previous, Math.random, new URLSearchParams(location.search).get('menuScene'));
-        this.previous = this.scene.id;
-        try { sessionStorage.setItem(previousKey,this.scene.id); } catch { /* No persistence required to render. */ }
-        this.root.dataset.scene = this.scene.id;
-        this.root.dataset.ambient = this.scene.ambientPreset;
-        this.root.dataset.souls = String(this.scene.rareEvents.includes('wandering-soul'));
-        this.renderer.select(this.scene);
-        const character = this.scene.character;
-        this.character.hidden = !character;
-        this.characterMotion.hidden = !character;
-        this.shadow.hidden = !character;
-        if (character) {
-            this.character.style.left = `${character.position.x*100}%`;
-            this.character.style.top = `${character.position.y*100}%`;
-            this.character.style.width = `${character.width*100}%`;
-            this.character.style.transform = `translate(${-character.anchor.x*100}%,${-character.anchor.y*100}%)`;
-            this.characterMotion.style.cssText = this.character.style.cssText;
-            this.placeShadow(character,this.scene.keyLight);
-        } else this.character.removeAttribute('src');
-    }
-
-    private placeShadow(character: NonNullable<MenuScene['character']>, light: MenuScene['keyLight']) {
-        const {shadow,anchor,position} = character, ground = shadow.groundAnchor ?? anchor;
-        const characterWidth = character.width*1003, characterHeight = characterWidth*620/520;
-        const x = position.x*1003+(ground.x-anchor.x)*characterWidth;
-        const y = position.y*565+(ground.y-anchor.y)*characterHeight;
-        const width = shadow.width*characterWidth, depth = shadow.depth*characterWidth;
-        // Compress the light direction onto the painted platform's shallow ground plane.
-        const dx = x-light.x*1003, dy = (y-light.y*565)*.25, distance = Math.hypot(dx,dy) || 1;
-        const castX = dx/distance*shadow.length*characterWidth, castY = dy/distance*shadow.length*characterWidth;
-        const angle = Math.min(15,Math.atan2(castY,width+Math.abs(castX))*180/Math.PI)*Math.sign(castX);
-        Object.assign(this.shadow.style,{left: `${x/1003*100}%`,top: `${y/565*100}%`,width: `${width/1003*100}%`,height: `${depth/565*100}%`});
-        this.shadow.style.setProperty('--shadow-cast-x',`${castX/width*100}%`);
-        this.shadow.style.setProperty('--shadow-cast-y',`${castY/depth*100}%`);
-        this.shadow.style.setProperty('--shadow-angle',`${angle}deg`);
-        this.shadow.style.setProperty('--shadow-opacity',String(shadow.opacity));
-        this.shadow.style.setProperty('--shadow-cast-opacity',String(shadow.opacity*.55));
-    }
-
-    private asset(image: HTMLImageElement): MenuAsset | undefined {
-        switch (image.dataset.menuLayer) {
-            case 'background': return this.scene?.background;
-            case 'foreground': return this.scene?.foreground;
-            case 'souls': return this.scene?.souls;
-            case 'character': return this.scene?.character?.asset;
+    private async load(){
+        try{
+            const response=await fetch(titleArtRoot+'scene-v1.json',{signal:this.events.signal});
+            if(!response.ok)throw Error('Title metadata unavailable');
+            const value: unknown=await response.json();validateTitleArt(value);const art: TitleArt=value;
+            const images=new Map<string,HTMLImageElement>();
+            const read=async(id: string,file: string)=>{
+                const image=new Image();image.src=titleArtRoot+file;await image.decode();images.set(id,image);
+            };
+            await Promise.all([read('background',art.background),read('foreground',art.foreground),...Object.entries(art.clips).map(([id,clip])=>read(id,clip.image))]);
+            if(this.disposed)return;
+            for(const[id,clip]of Object.entries(art.clips)){
+                const image=images.get(id)!;if(image.naturalWidth!==clip.width||image.naturalHeight!==clip.height)throw Error(`Title image dimensions differ: ${id}`);
+            }
+            for(const id of ['background','foreground']){
+                const image=images.get(id)!;if(image.naturalWidth!==art.width||image.naturalHeight!==art.height)throw Error('Title layers do not share a frame');
+            }
+            this.renderer=new TitleArtRenderer(this.canvas,art,images);
+            this.background.src=images.get('background')!.src;this.foreground.src=images.get('foreground')!.src;
+            await Promise.all([this.background.decode(),this.foreground.decode()]);
+            if(this.disposed)return;
+            this.draw();this.root.dataset.renderer='ready';this.sync();
+        }catch{
+            if(this.disposed)return;
+            this.failed=true;this.root.dataset.renderer='fallback';this.sync();
         }
     }
-    private readonly sync = () => {
-        if (this.disposed || !this.scene) return;
-        const playing = this.active && !document.hidden;
-        const animate = playing && (this.motion === 'animated' || (this.motion === 'system' && !this.reduced.matches));
-        this.root.dataset.playing = String(playing);
-        this.root.dataset.motion = animate ? 'animated' : 'still';
-        for (const image of this.layers) {
-            const asset = this.asset(image);
-            if (!asset) continue;
-            if (image.getAttribute('src') !== asset.still) image.src = asset.still;
-        }
-        this.motionPrompt.hidden = !(playing && this.motion === 'system' && this.reduced.matches);
-        this.refresh(); this.renderer.play(animate);
+    private readonly sync=()=>{
+        if(this.disposed)return;
+        const playing=this.active&&!document.hidden;
+        const animate=playing&&(this.motion==='animated'||this.motion==='system'&&!this.reduced.matches);
+        this.root.dataset.playing=String(playing);this.root.dataset.motion=animate?'animated':'still';
+        this.motionPrompt.hidden=!(playing&&this.motion==='system'&&this.reduced.matches);
+        const run=animate&&!!this.renderer&&!this.failed;
+        if(run===this.running){if(!animate&&playing)this.draw(0);return;}
+        this.running=run;this.last=0;this.lastPaint=0;
+        if(this.frameId!==undefined)cancelAnimationFrame(this.frameId);this.frameId=undefined;
+        if(run){this.draw();this.frameId=requestAnimationFrame(this.frame);}
+        else if(playing)this.draw(0);
     };
-    private readonly refresh = () => {
-        if (this.disposed || !this.scene) return;
-        const foreground = this.root.querySelector<HTMLImageElement>('.menu-platform')!;
-        this.renderer.refresh(foreground,this.character);
+    private readonly frame=(time: number)=>{
+        if(!this.running||this.disposed)return;
+        if(this.last)this.elapsed+=Math.min(50,Math.max(0,time-this.last));this.last=time;
+        // Authored clips run at their own rates; rigid motion needs only 30 paints/s.
+        if(!this.lastPaint||time-this.lastPaint>=1000/30-1){this.lastPaint=time;this.draw();}
+        if(this.running)this.frameId=requestAnimationFrame(this.frame);
     };
+    private draw(time=this.elapsed){
+        if(!this.renderer||!this.scene||this.failed)return;
+        try{this.renderer.draw(time,this.scene.pose??'absent');}
+        catch{this.failed=true;this.root.dataset.renderer='fallback';this.running=false;if(this.frameId!==undefined)cancelAnimationFrame(this.frameId);this.frameId=undefined;}
+    }
 }

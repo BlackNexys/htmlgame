@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "status": "still studies for visual review",
+  "generator": "built-in imagegen",
+  "generatedOn": "2026-11-06",
+  "flattened": true,
+  "productionLayersAvailable": false,
+  "studies": [
+    {
+      "image": "composition-study-v1.png",
+      "width": 1672,
+      "height": 941,
+      "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-20b2b982-499e-4502-a993-4522252af622.png",
+      "prompt": "source/composition-v1.prompt.txt"
+    },
+    {
+      "image": "corner-study-v1.png",
+      "width": 1672,
+      "height": 941,
+      "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-9ffe8035-b2bb-4b49-b22d-d0a5afcea92f.png",
+      "prompt": "source/corner-v1.prompt.txt"
+    }
+  ]
+}

@@ -1,10 +1,14 @@
-# Main menu v2 · first production corner
+# Main menu v2 · animation study
 
-**Status:** First art and animation pass, ready for visual review. The wider station and the remaining pose presets are not produced yet.
+**Status:** Preserved animation study. Its coarse sprite treatment is superseded by the original concept's richly illustrated pixel-art direction. See the [updated production plan](../../../../docs/Underworld_Main_Menu_Art_and_Animation_Plan_v1.md). The wider station and the remaining pose presets are not produced yet.
+
+The subsequent [illustrated production scene](../v3/production/README.md) now replaces the game's title artwork and includes all four presets. The files here remain a historical animation study.
 
 Open [the running pilot](../../../../menu-pilot.html). The standalone app assembles new assets at 640×360, with native/2× views, playback and frame stepping, light/shadow controls, and attachment markers. The existing game menu remains the interim scene until the replacement is ready.
 
 ## Art direction
+
+The user clarified that the sprite work was a reference for animation craft: stable roots, attachment points, authored shape changes, timing and loops. The menu should retain the original's fine detail, material richness and atmospheric lighting. This study's 640×360 canvas, small figure and 32-colour palette describe the experiment; they are not constraints for the replacement artwork. Keep the files below unchanged as study sources and provenance.
 
 The existing station/hero paintings were used as concept references for a newly generated [style study](source/style-study-v1.png). The actual pilot uses separate new body, flame, cloth, lantern, hanger and platform exports. It does not cut moving parts out of the old paintings or deform the new sprite drawings at runtime.
 
@@ -58,4 +62,4 @@ The render script owns a temporary Vite server and closes it afterwards; it does
 
 Judge the silhouette, relative prop scale, flame/cloth attachment, loop boundaries and lighting at 1× and in the enlarged assembled scene. Pixel export checks and stable anchors do not replace that judgement. The generated source is not treated as automatically finished pixel art merely because it has been reduced and palette-mapped.
 
-After this corner establishes the shared style, the next work is the surrounding station, cat/clock/vegetation, and seated/leaning/empty presets. The new menu has not replaced the game's current title screen.
+The next visual deliverable is a new detailed still corner and composition sketch matching the original concept's illustrated pixel-art finish. Establish that finish before producing new animation or expanding the station. The study has not replaced the game's current title screen.

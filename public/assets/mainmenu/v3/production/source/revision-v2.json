@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "generator": "built-in imagegen",
+  "date": "2026-11-06",
+  "posterReferenceState": "Initial production render with separate flame and a windblown seated cape; the derived posters were regenerated after this correction.",
+  "sources": [
+    {
+      "file": "head-fire-v2.png",
+      "prompt": "head-fire-v2.prompt.txt",
+      "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-6dec7f58-1f1a-4428-a0cd-b764c7d1f3e1.png",
+      "references": [
+        "../../../stills/hero_standing.png",
+        "body-v1.png",
+        "../poster-patient-traveller-v1.png"
+      ]
+    },
+    {
+      "file": "seated-cloak-v2.png",
+      "prompt": "seated-cloak-v2.prompt.txt",
+      "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-9c58c8ee-92db-42db-9c56-09ff0bd6f986.png",
+      "references": [
+        "body-v1.png",
+        "../poster-patient-traveller-v1.png",
+        "../../../stills/hero_standing.png"
+      ]
+    }
+  ]
+}

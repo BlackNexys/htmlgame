@@ -2,6 +2,8 @@
 
 The current design references are the supplied [standing](mainmenu/stills/hero_standing.png) and [leaning](mainmenu/stills/hero_leaning.png) menu poses. The gameplay sheet carries over the skull, exposed ribs, magenta soul-flame, tattered burgundy scarf, fitted dark clothing, strapped boots, and small belt details at gameplay scale.
 
+The latest menu rebuild uses this **live gameplay sheet as its character reference**. Standing selects this atlas's idle row directly, with its original timing and anchors. New seated/leaning menu poses reference only an exported native idle strip; rejected later costume/head redesigns do not replace the playable character. This atlas remains unchanged.
+
 `character-animations-v2.png` was generated with the built-in imagegen tool from those two references and a transparent-background request. The exact prompt is saved in [character-animations-v2.prompt.txt](character-animations-v2.prompt.txt). The prompt requested 1536×1536; the returned file is a 1254×1254 RGBA PNG. The original generated pixels are used without recoloring, resizing, or background removal. The original references and v1 sheet are preserved.
 
 | Row from top | Sequence | Frames |

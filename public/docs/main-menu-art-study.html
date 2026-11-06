@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101320">
+  <title>Underworld · Illustrated menu studies</title>
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,sans-serif;background:#101320;color:#ede4ed;line-height:1.6}
+    *{box-sizing:border-box}body{margin:0}main{max-width:1760px;margin:auto;padding:clamp(16px,3vw,48px)}
+    a{color:#8ce3ed;text-underline-offset:4px}a:focus-visible{outline:2px solid #ff90d8;outline-offset:5px}
+    header{max-width:850px;margin-bottom:32px}h1{font-size:clamp(28px,4vw,48px);line-height:1.15;margin:16px 0}
+    h2{font-size:24px;margin:0 0 10px}p{margin:10px 0;color:#bcb8ca}.eyebrow{letter-spacing:.13em;font-size:12px;color:#f4a7d4}
+    nav{display:flex;gap:12px 24px;flex-wrap:wrap;margin-top:20px}section{margin:0 0 40px;scroll-margin-top:24px}
+    figure{margin:20px 0;background:#090d16;border:1px solid #30344b}figure img{display:block;width:100%;height:auto;image-rendering:pixelated}
+    figcaption{padding:12px 16px;font-size:14px;color:#bcb8ca}figcaption a{margin-left:12px}
+    .description{max-width:850px}.layers{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px;margin-top:20px}
+    article{background:#181c2c;padding:20px;border:1px solid #30344b}article h3{margin:0;font-size:17px}article p{font-size:15px}
+    details{border-top:1px solid #30344b;padding-top:20px}summary{cursor:pointer;color:#8ce3ed}footer{border-top:1px solid #30344b;padding-top:20px}
+    @media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <a href="../">← Back to Underworld</a>
+    <p class="eyebrow">MAIN MENU · ILLUSTRATED PIXEL ART · STILL STUDIES</p>
+    <h1>The station, in finer detail.</h1>
+    <p>New artwork studies carrying forward the original's weathered stone, deep city, fine character detail, and cyan/magenta light. The animation lessons guide how the artwork will move.</p>
+    <p><a href="../menu-production.html">View the production scene and animation →</a></p>
+    <nav aria-label="Study navigation"><a href="#composition">Full composition</a><a href="#corner">Detailed corner</a><a href="#layers">Animation layers</a></nav>
+  </header>
+  <section id="composition" aria-labelledby="composition-title">
+    <h2 id="composition-title">Full composition</h2>
+    <p class="description">Quiet shadow on the left leaves room for the real menu. The city gives depth; the traveller and station props anchor the right. The departure board is blank so its lettering can be composed separately.</p>
+    <figure><img src="../assets/mainmenu/v3/composition-study-v1.png" alt="Detailed pixel-art underworld station: shadowed arches on the left, a vast cyan city and railway at the centre, and a magenta-flamed skeletal traveller beside a lantern, clock and sleeping cat on the right.">
+      <figcaption>New composition study · still artwork <a href="../assets/mainmenu/v3/composition-study-v1.png" target="_blank" rel="noopener">Open at full resolution ↗</a></figcaption>
+    </figure>
+  </section>
+  <section id="corner" aria-labelledby="corner-title">
+    <h2 id="corner-title">Detailed corner</h2>
+    <p class="description">A closer study of the traveller, lantern, paving and light. Check the exposed bone, cloth folds, iron fittings, chipped stone and planted boots together.</p>
+    <figure><img src="../assets/mainmenu/v3/corner-study-v1.png" loading="lazy" alt="Close pixel-art study of a lean skeletal traveller with a streaming magenta flame and burgundy cape, standing on detailed stone paving under a cyan station lantern.">
+      <figcaption>New corner study · still artwork <a href="../assets/mainmenu/v3/corner-study-v1.png" target="_blank" rel="noopener">Open at full resolution ↗</a></figcaption>
+    </figure>
+  </section>
+  <section id="layers" aria-labelledby="layers-title">
+    <h2 id="layers-title">How this becomes animation</h2>
+    <p class="description">These images establish the visual finish. Production will draw separate layers and changing shapes at this level of detail. The studies are flattened references; the layer files and animation frames remain to be made.</p>
+    <div class="layers">
+      <article><h3>Flame and cloth</h3><p>Authored shape changes, each with a fixed attachment and deliberate frame holds. Keep the skull, neck seam and boots registered.</p></article>
+      <article><h3>Lantern and clock</h3><p>A separate lantern housing hangs from its link. Clock hands turn around their real pivot. Local emission masks vary gently.</p></article>
+      <article><h3>Stone and depth</h3><p>Stationary architecture and paving provide clean backing behind moving parts. Separate foreground leaves and prop edges provide occlusion.</p></article>
+      <article><h3>Light and contact</h3><p>Cyan lantern light and nearby magenta flame light agree across materials. Boots stay grounded with contact and cast shadows.</p></article>
+    </div>
+  </section>
+  <details><summary>Original station reference</summary>
+    <p>The original establishes the detail, atmosphere and depth we are preserving.</p>
+    <figure><img src="../assets/mainmenu/Background.png" loading="lazy" alt="Original underworld station concept showing intricate stone arches, magenta vegetation, suspended railways and a vast cyan-lit city."><figcaption>Original concept artwork · preserved unchanged</figcaption></figure>
+  </details>
+  <footer><p>Made with built-in imagegen. <a href="../assets/mainmenu/v3/README.md">Source notes and exact prompts</a> · <a href="../menu-pilot.html">Earlier animation study</a></p></footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#090d16"><title>Underworld · Production menu scene</title>
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,sans-serif;background:#090d16;color:#ece2ed;line-height:1.5}*{box-sizing:border-box}body{margin:0}main{max-width:1760px;margin:auto;padding:24px}a{color:#99e1e9}h1{font-size:clamp(26px,4vw,42px);margin:14px 0}p{color:#bdb5ca;max-width:850px}.viewer{position:relative;width:100%;aspect-ratio:1672/941;overflow:hidden;background:#090d16}.viewer img,.viewer canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}.tools{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:20px 0}button,select,input{font:inherit;accent-color:#ec3fae}button,select{padding:9px 14px;color:inherit;background:#202438;border:1px solid #4a435a}button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #ff90d8;outline-offset:3px}.sources{display:flex;flex-wrap:wrap;gap:12px}.sources img{max-width:100%;height:auto;image-rendering:pixelated;background:#151a29}details{padding:20px 0;border-top:1px solid #30344b}summary{cursor:pointer}#status{margin:0 0 18px}
+  </style>
+</head>
+<body><main>
+  <a href="./">← Main menu</a><h1>A restless soul waits.</h1>
+  <p>The production scene uses separate illustrated layers and authored animation frames. Use the controls to inspect each preset and the loop timing.</p>
+  <div class="viewer" role="img" aria-label="Animated underworld station, skeletal traveller, cyan lantern and sleeping skeletal cat."><img id="background" alt=""><img id="foreground" alt=""><canvas id="scene" width="1672" height="941"></canvas></div>
+  <div class="tools">
+    <button id="play" disabled>Play animation</button><button id="reset" disabled>Reset</button><button id="step" disabled>Step one frame</button>
+    <label>Traveller <select id="pose"><option value="standing">Standing</option><option value="sitting">Seated</option><option value="leaning">Leaning</option><option value="absent">Away</option></select></label>
+    <label>Time <input id="time" type="range" min="0" max="10000" value="0" step="1"></label>
+  </div>
+  <p id="status" role="status">Loading the station…</p>
+  <details><summary>Gameplay reference and pose frames</summary><p>Standing uses the current gameplay idle row directly, at its original 8 fps and foot anchors. The new seated and leaning drawings use only that strip as their visual reference.</p><div class="sources"><img src="./assets/mainmenu/v3/production/source/gameplay-idle-reference-v5.png" alt="The six actual gameplay idle frames, unchanged as the standing reference" loading="lazy"><img src="./assets/mainmenu/v3/production/review/sitting-frames-v5.png" alt="Six seated frames matching the gameplay hero, resting on the cloak" loading="lazy"><img src="./assets/mainmenu/v3/production/review/leaning-frames-v5.png" alt="Six leaning frames matching the gameplay hero" loading="lazy"></div></details>
+  <p><a href="./assets/mainmenu/v3/production/README.md">Asset notes and exact generation prompts</a> · <a href="./docs/main-menu-art-study.html">Approved visual studies</a></p>
+</main><script type="module" src="./src/ui/title/preview.ts"></script></body>
+</html>

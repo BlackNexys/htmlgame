@@ -1,0 +1,23 @@
+{
+  "version": 3,
+  "generator": "built-in imagegen",
+  "date": "2026-11-06",
+  "identityReference": "../../../../character.png",
+  "references": [
+    "../../../../character.png",
+    "../../corner-study-v1.png",
+    "seated-cloak-v2.png"
+  ],
+  "sources": [
+    {
+      "file": "punk-head-v3.png",
+      "prompt": "punk-head-v3.prompt.txt",
+      "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-2fc194fe-c849-4f5c-a322-428dff77e7f8.png"
+    },
+    {
+      "file": "punk-body-v3.png",
+      "prompt": "punk-body-v3.prompt.txt",
+      "generatedOriginal": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-2479d58e-fe28-4df4-a0a6-af11d1136a3e.png"
+    }
+  ]
+}
