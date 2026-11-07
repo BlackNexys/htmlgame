@@ -4,6 +4,12 @@ All six enemy types are playable in the lower passage. The level starts with ind
 
 This is the first combat pass. Timings, movement speeds, health, and ranges live in `src/game/config.ts` for adjustment after playtesting.
 
+## Setting boundary
+
+These classes describe the hostile combat roster in the test level. The [Deadways atlas](Worldbuilding/Underworld_Deadways_World_Atlas_v0_1.md) proposes undead societies with workers, neighbours, travellers, and opponents whose motives differ. A skeleton or ghost is not hostile merely because of its form. No region, faction, or origin is assigned to this roster by the atlas.
+
+The defeat and reactivation rules below are implemented mechanics. Whether an undead person can die again, what remains of them, and what reactivation means in the fiction are still open. Cosmetic cyan/magenta feedback is a combat convention, not an alignment or soul taxonomy.
+
 ## Enemies and counters
 
 | Enemy | Behavior and tell | How to respond |

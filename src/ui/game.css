@@ -4,6 +4,7 @@ body.game-app { height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; 
 #game { position: absolute; inset: 0; display: block; width: 100%; height: 100%; image-rendering: pixelated; }
 #game:focus-visible { outline-offset: -3px; }
 .game-hud { position: absolute; inset: 0; pointer-events: none; }
+.interaction-prompt { position: absolute; margin: 0; transform: translate(-50%, -100%); max-width: 90%; padding: 7px 10px; border: 1px solid #63dfeb88; background: #0a1219ed; color: #dbe8e7; font: 11px var(--bl-font-mono); text-align: center; }
 .game-toolbar { position: absolute; top: 0; left: 0; right: 0; min-height: 52px; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 6px 20px; background: #11171ded; border-bottom: 1px solid var(--bl-border-default); }
 .readouts { display: flex; flex-wrap: wrap; gap: 8px 24px; font: 11px var(--bl-font-mono); letter-spacing: 1px; color: var(--bl-text-tertiary); }
 .readouts strong { color: var(--bl-text-primary); margin-left: 10px; font-size: 14px; }
@@ -57,6 +58,8 @@ body.game-app { height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; 
 .title-footer { position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; color: #b2cad2; font: 9px var(--bl-font-mono); letter-spacing: 1px; text-shadow: 0 1px 3px #040608; }
 .title-footer button { padding: 0; border: 0; color: #f6b7df; background: transparent; font: inherit; letter-spacing: inherit; text-decoration: underline; cursor: pointer; }
 .title-footer button:focus-visible { outline: 2px solid var(--game-magenta); outline-offset: 5px; }
+.title-footer a { color: var(--game-cyan); font: inherit; }
+.title-footer a:focus-visible { outline: 2px solid var(--game-magenta); outline-offset: 5px; }
 
 .session-panel { width: min(440px, 100%); padding: clamp(20px, 4vw, 36px); border: 2px solid var(--bl-border-control); border-top-color: var(--game-magenta-edge); background: var(--bl-bg-surface); box-shadow: var(--game-frame-shadow); }
 .session-panel h2 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; letter-spacing: 0; margin: 0 0 16px; }

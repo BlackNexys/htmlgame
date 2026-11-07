@@ -2,6 +2,7 @@ import { Wall } from './Wall';
 import { Exit } from './Exit';
 import { Sign } from './Sign';
 import type { EnemySpawn, Level } from '../interfaces/Level';
+import type { NPCSpawn } from '../interfaces/NPC';
 
 export class Map implements Level {
     width: number;
@@ -10,6 +11,7 @@ export class Map implements Level {
     decorations: Wall[];
     spawn: {x: number; y: number};
     enemies: EnemySpawn[];
+    npcs: NPCSpawn[];
     exit: Exit;
     signs: Sign[];
 
@@ -20,6 +22,7 @@ export class Map implements Level {
         this.decorations = (level.decorations || []).map(bounds => new Wall(bounds));
         this.spawn = {...level.spawn};
         this.enemies = level.enemies.map(spawn => ({...spawn}));
+        this.npcs = (level.npcs ?? []).map(spawn => ({...spawn}));
         this.exit = new Exit(level.exit);
         this.signs = (level.signs || []).map(definition => new Sign(definition));
     }

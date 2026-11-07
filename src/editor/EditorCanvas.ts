@@ -3,14 +3,18 @@ import type { LevelOperation } from '../levels/LevelChanges';
 import { enemyTuning } from '../game/config';
 import type { EnemyKind } from '../interfaces/Enemy';
 import { selectionBounds, selectedObject, type EditorSelection } from './EditorSelection';
+import { npcCatalog } from '../game/NPCCatalog';
+import type { NPCKind } from '../interfaces/NPC';
 
-export type EditorTool = 'select' | 'terrain' | 'decorations' | 'enemy' | 'spawn' | 'exit' | 'sign';
+export type EditorTool = 'select' | 'terrain' | 'decorations' | 'enemy' | 'npc' | 'spawn' | 'exit' | 'sign';
 interface Drag { start: LevelPoint; end: LevelPoint; selection?: EditorSelection; }
 
 /** Authoring canvas only: no World, game loop, physics updates, or live entities. */
 export class EditorCanvas {
     tool: EditorTool = 'select';
     enemy: EnemyKind = 'zombie';
+    npc: NPCKind = 'rail-attendant';
+    scene = 'station-exchange';
     selection: EditorSelection;
     private document: LevelDocument;
     private zoom = .5;
@@ -30,10 +34,10 @@ export class EditorCanvas {
         canvas.addEventListener('pointermove', event => this.pointerMove(event));
         canvas.addEventListener('pointerup', event => this.pointerUp(event));
         canvas.addEventListener('pointercancel', () => { this.drag = undefined; this.draw(); });
-        for (const kind of ['hero', ...Object.keys(enemyTuning)]) {
+        for (const kind of ['hero', ...Object.keys(enemyTuning), ...Object.keys(npcCatalog)]) {
             const image = new Image();
             image.onload = () => { this.artwork.set(kind, image); this.draw(); };
-            image.src = kind === 'hero' ? './assets/character-animations-v1.png' : `./assets/enemies/${kind}-v1.png`;
+            image.src = kind === 'hero' ? './assets/character-animations-v1.png' : Object.hasOwn(npcCatalog, kind) ? npcCatalog[kind as NPCKind].image : `./assets/enemies/${kind}-v1.png`;
         }
         this.update(document);
     }
@@ -58,7 +62,7 @@ export class EditorCanvas {
     }
     private hit(point: LevelPoint): EditorSelection {
         const selections: Exclude<EditorSelection, undefined>[] = [
-            ...(['decorations', 'terrain', 'enemies', 'signs'] as const).flatMap(collection => this.document[collection].map(item => ({collection, id: item.id}))), 'spawn', 'exit',
+            ...(['decorations', 'terrain', 'enemies', 'npcs', 'signs'] as const).flatMap(collection => this.document[collection].map(item => ({collection, id: item.id}))), 'spawn', 'exit',
         ];
         return selections.reverse().find(selection => {
             const r = selectionBounds(this.document, selection);
@@ -132,6 +136,11 @@ export class EditorCanvas {
                     this.edit([{op: 'upsert', collection: 'signs', value: {id, x: x - 24, y, title: 'NEW SIGN', text: 'Edit this message in the inspector.'}}]);
                     this.selection = {collection: 'signs', id};
                 }
+                if (this.tool === 'npc') {
+                    const id = this.newId(this.npc);
+                    this.edit([{op: 'upsert', collection: 'npcs', value: {id, kind: this.npc, x, y, scene: this.scene}}]);
+                    this.selection = {collection: 'npcs', id};
+                }
                 this.select(this.selection);
             }
         } catch (error) { this.report(error instanceof Error ? error.message : 'Could not apply edit'); }
@@ -171,8 +180,10 @@ export class EditorCanvas {
             c.fillRect(x - width / 2, y - height, width, height);
             const image = this.artwork.get(kind);
             if (image) {
-                const cell = image.width / (kind === 'hero' ? 6 : 4), size = kind === 'hero' ? 76 : 80;
-                c.drawImage(image, 0, 0, cell, cell, x - size * .52, y - size * .94, size, size);
+                const isNPC = Object.hasOwn(npcCatalog, kind);
+                const cell = image.width / (kind === 'hero' ? 6 : 4), size = kind === 'hero' ? 76 : isNPC ? npcCatalog[kind as NPCKind].size : 80;
+                const width = isNPC ? size * cell / image.height : size;
+                c.drawImage(image, 0, 0, cell, isNPC ? image.height : cell, x - width * .5, y - size * .94, width, size);
             }
             c.fillStyle = kind === 'hero' ? color('--game-magenta') : color('--game-cyan');
             c.fillRect(x - 3, y - 3, 6, 6);
@@ -184,6 +195,10 @@ export class EditorCanvas {
             c.beginPath(); c.moveTo(enemy.patrol.left, enemy.y + 8); c.lineTo(enemy.patrol.right, enemy.y + 8); c.stroke(); c.setLineDash([]);
             actor(enemy.kind, enemy.x, enemy.y, stats.width, stats.height);
             c.fillStyle = color('--game-ash'); c.font = '16px monospace'; c.fillText(enemy.id, enemy.x - 16, enemy.y - 88);
+        }
+        for (const npc of view.npcs) {
+            const info = npcCatalog[npc.kind]; actor(npc.kind, npc.x, npc.y, info.width, info.height);
+            c.fillStyle = color('--game-bone'); c.font = '16px monospace'; c.fillText(npc.id, npc.x - 16, npc.y - 88);
         }
         c.font = '16px monospace'; c.fillStyle = color('--game-bone');
         for (const sign of view.signs) { c.fillText(sign.title, sign.x, sign.y); c.fillStyle = color('--game-dust'); c.fillText(sign.text, sign.x, sign.y + 22); c.fillStyle = color('--game-bone'); }

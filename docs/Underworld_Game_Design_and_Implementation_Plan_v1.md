@@ -13,11 +13,14 @@
 
 > **Design promise:** Move quickly, fight creatively, reclaim ectoplasm from the dead, and keep going. Complexity belongs in the interactions between mechanics—not in menus that interrupt the action.
 
+**Worldbuilding review (7 November 2026):** The [Deadways atlas v0.1](Worldbuilding/Underworld_Deadways_World_Atlas_v0_1.md) is an exploratory setting source, not established canon. [Alignment notes](Worldbuilding/README.md) distinguish its proposals from agreed mechanics and the playable build. This review does not start demo-level production or expand the delivery roadmap.
+
 ### Status key
 
 - **Agreed:** Established by our design discussion.
 - **Provisional:** Recommended implementation or tuning baseline; requires playtesting.
 - **Open:** Intentionally unresolved, not to be silently decided during implementation.
+- **Exploratory setting proposal:** Material under consideration in the Deadways atlas; not an agreed feature, campaign commitment, or claim of implementation.
 
 ---
 
@@ -26,6 +29,14 @@
 The player is a cyberundead protagonist searching the underworld for their soulmate. The protagonist **speaks** in scripted dialogue, but their personality, voice, history, and specific story beats remain **open**.
 
 The game consists of distinct, replayable stages rather than an interconnected Metroidvania map. Movement is expressive from the start. New weapons are primarily obtained by defeating bosses; optional discoveries yield **weapon-specific modifiers**. The game's combat economy is based on ectoplasm, used as ammunition for distinct attacks and replenished through fighting and harvesting remains.
+
+### Setting relationship — exploratory
+
+The atlas proposes a world whose alien geography and ecology contrast with the familiar civilization built by the dead. Primordial spectral rivers and historical Deadway railways connect inhabited and remote regions. The eight named regions are environmental proposals, with no fixed stage count or order. The existing menu station could be the Last Platform in or near the Confluence; that placement remains provisional.
+
+Use this direction to evaluate future setting and level briefs. Undeath alone should not be used to infer hostility: the current zombie, skeleton, and other enemy classes describe combat actors, not every member of a population. Opponents can have duties, homes, or competing aims. The soulmate's identity and agency, the separation, and the ending still need their own discussion.
+
+The setting's possible relationship to Blacklight / a Live Mausoleum is nonbinding. The use of Blacklight UI components is a technical dependency and establishes no fictional connection.
 
 ### Core pillars — agreed
 
@@ -239,6 +250,14 @@ Do **not** introduce stackable modifiers until a real test proves the value. If 
 
 Stages are **linear or branching discrete levels** with entrances, exits, secrets, checkpoints where appropriate, and strong replay value. They should support both quick completion and optional exploration.
 
+### Regional context and discoveries — exploratory
+
+The Deadways could connect discrete stages through main lines, branches, and lost stations. A rail network is world geography, not a requirement for a continuous map, mandatory backtracking, or train sequences at every entrance and exit. No region is assigned to the demo or to the existing Lower Passage fixture.
+
+The atlas proposes separate purposes for run resources, permanent mechanical discoveries, and world keepsakes. Ectoplasm and modifier design retain their existing status here; keepsakes, environmental stories, and optional encounters are candidate additions, with no new currency or completion requirement agreed. Secrets can reward curiosity as well as combat and movement mastery.
+
+Flooding, moving trains, sound-responsive growths, inverted traversal, and reflected routes are regional ideas requiring design and implementation review. They must preserve readable rules and reliable controls. Their appearance in concept art or the atlas does not make them part of the current vertical slice.
+
 ### Stage design grammar
 
 - **Arrival:** A readable starting area, movement teaching or introduction, and immediate orientation.
@@ -294,18 +313,20 @@ Bosses may be defeated without necessarily dying in the fiction. Their identitie
 
 **Agreed:** The protagonist talks. Personality and specific script are deliberately not defined yet. Characters communicate through scripted text and expressive portraits. No RPG choice tree is required.
 
+**Prototype implemented (7 November 2026):** The [dialogue system notes](dialogue-system.md) describe the preferred centered kinetic exchange at `/?dialogueDemo=kinetic`, hosted directly by `/dialogue.html` too. The earlier travelling overlay (`/?dialogueDemo=action`) and cinematic scene (`/?dialogueDemo=1`) remain for comparison. The current slice includes expression portraits, styled text beats and pauses, delivery, speed controls, transcript, pause/skip/replay, focus handling, and host-owned once-only demo effects. Blacklight supplies controls and badges. The scene and attendant are noncanonical test material. Neutral NPCs now support manual F interaction through validated level scene references and workshop placement; the railway attendant is the first prototype. Campaign rewards, persistent dialogue/NPC progression, arbitrary environmental triggers and full world choreography remain future work. See [the NPC slice](npc-system.md).
+
 ### Dialogue presentation
 
 - One active line at a time, with speaker name, portrait, expression, and dialogue text.
 - Portrait expressions switch on authored lines; idle/flame variations may add life.
 - Text can reveal progressively; first advance completes the current line, next advance moves forward.
 - Entire conversations can be skipped, especially on replay.
-- Gameplay simulation pauses during authored cutscenes; presentation, UI, camera, and deliberate cutscene animations may continue.
+- Presentation revision (7 November 2026): the preferred direction is a centered kinetic exchange with gameplay frozen and the HUD hidden. One large expressive portrait and prominent text trade sides with quick turn handoffs and authored pauses. The earlier small travelling overlay is retained only as a comparison option. Modal kinetic/cinematic scenes hold gameplay for the whole exchange; the optional overlay retains its read/focus holds.
 - Conversations support accessibility: adjustable text speed (including instant), readable contrast, keyboard/controller advance, and minimal flashing.
 
 ### Lightweight cutscene events
 
-Supported commands should include `dialogue`, `setExpression`, `cameraFocus`, `playAnimation`, `wait`, `spawnOrEnableBoss`, `startBoss`, `unlockWeapon`, `completeStage`, and `endCutscene`. Keep narrative text/data separate from gameplay state mutations.
+The full future command set should include `dialogue`, `setExpression`, `cameraFocus`, `playAnimation`, `wait`, `spawnOrEnableBoss`, `startBoss`, `unlockWeapon`, `completeStage`, and `endCutscene`. Keep narrative text/data separate from gameplay state mutations. The current prototype supports the smaller `line`, `cue`, and `wait` contract; cue focus drives the standalone backdrop, not the gameplay camera.
 
 **Critical invariant:** Skipping a scene resolves all *required* state changes exactly once. Optional presentation actions can be skipped; gameplay rewards and progression cannot.
 
@@ -345,7 +366,7 @@ This plan extends the existing **TypeScript + Canvas + Vite** project. Prefer in
 - `EctoplasmReserve`: bounded atomic spending/recovery.
 - `InteractionSystem`: proximity-based harvest and other simple interactions.
 - `CampaignProgress` / `SaveService`: persistent weapon unlocks, discovered modifiers, selection, and stage completion.
-- `DialogueController`, `DialogueView`, `CutsceneDirector`: authored scenes and presentation.
+- `DialogueController`, `DialogueView`, `CutsceneDirector`, and `DialogueSession`: implemented under `src/dialogue` for the first authored-scene slice; extend without merging simulation and presentation concerns.
 - `BossController` or per-boss subclasses: explicit encounter lifecycle and reward handoff.
 
 **Architecture recommendation:** Define a small stable data contract for weapons and modifiers, but use concrete behavior classes/functions for truly different projectile interactions. Don't build an elaborate generic ability framework before two or three weapons prove the abstraction.
@@ -415,6 +436,8 @@ Implement in vertical slices, preserving a playable main branch. Each phase ends
 
 ### Phase 4 — Narrative slice
 
+**Current progress:** The standalone and optional gameplay dialogue prototypes cover the initial two-character exchange and lifecycle behavior. Full campaign effects and world choreography remain later work; see [the implemented subset](dialogue-system.md).
+
 **Work:** One short two-character conversation, multiple portrait expressions, line reveal/advance, skip, camera/animation cue, correct simulation pause behavior.
 
 **Done when:** Dialogue plays and can be skipped without input leaks, stuck pause states, or missed required events; keyboard focus returns to gameplay.
@@ -477,7 +500,10 @@ Record observations separately from hypotheses, then revise values. A passing te
 ## 14. Decisions still intentionally open
 
 - Protagonist's personality, dialogue voice, backstory, and soulmate's characterization.
-- Underworld metaphysics and the exact relationship of technology, soul, and ectoplasm.
+- Underworld metaphysics and the exact relationship of technology, soul, and ectoplasm; whether rivers bring in newly dead people; and what body defeat or reactivation means for a person.
+- Which Deadways regions become part of the setting, their stage mapping/order, rail governance, and the Last Platform's location.
+- Regional environmental laws and traversal interactions; how world keepsakes or other nonmechanical discoveries would work.
+- Any Blacklight / Live Mausoleum continuity, which remains optional and nonbinding.
 - Boss identities, number, order, and final weapon-to-boss mapping.
 - Campaign episode count and length, checkpoints, death consequences, and scoring.
 - Final aiming edge cases, controller mapping, and rebinding UX.

@@ -67,6 +67,7 @@ export class GameMenu {
         this.panel.close(); this.panel.hidden = true; this.main.hide();
         this.hud.hidden = false; this.pause.textContent = 'Pause'; this.status.textContent = 'Playing';
     }
+    dialogue() { this.hud.hidden = true; this.status.textContent = 'Dialogue'; }
     paused() { this.pause.textContent = 'Resume'; this.show('paused', 'Take a breather', 'Your place in the passage is safe. Resume when you are ready.', 'Resume'); }
     outcome(state: PlayState, defeated: number, total: number) {
         if (state === 'dead') this.show('dead', 'The underworld bites back', 'A rough encounter. Take another run through the passage.', 'Try again');

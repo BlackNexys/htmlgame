@@ -2,10 +2,16 @@
 
 Open `/editor.html` through the development or preview server. The **Level workshop** is a separate application entry point with its own UI, state, history, canvas, and browser draft. It shares the JSON contract and validation with the game. It does not import the game controller, construct a simulation, or modify a running game.
 
+## Worldbuilding and level scope
+
+The [Deadways atlas](Worldbuilding/Underworld_Deadways_World_Atlas_v0_1.md) supplies exploratory setting ideas. Its regions are not required levels or a prescribed campaign sequence. The Lower Passage, movement course, and `dialogue-course` action-dialogue study remain mechanics fixtures; a campaign demo region and feature set have not been selected. The earlier travelling-dialogue study is selected by `?dialogueDemo=action`; it uses a session intro. The new `npc-study` fixture uses actual neutral actors and the optional `npcs` collection to trigger kinetic conversations by interaction.
+
+For a future level brief, record a candidate setting and its status, the movement/combat questions to test, and any proposed interactions separately from supported features. Keep spectacle subordinate to readable routes, threats, and collision boundaries. The current schema supports neutral NPC placement with registered dialogue scene references. It has no regional simulation, train, water, gravity-transition, reflection, or keepsake system. Decorations and signs cannot stand in for implementing those mechanics. A setting assignment does not require new runtime fields unless a concrete gameplay need warrants them.
+
 ## Human workflow
 
 1. Open the existing example, create a new level, or choose **Open JSON**.
-2. Use **Terrain** to drag solid rectangles on the grid. **Decoration** creates background blocks without collision. Place the **Player**, **Exit**, **Enemy**, or **Sign** by clicking; select the enemy type before placement.
+2. Use **Terrain** to drag solid rectangles on the grid. **Decoration** creates background blocks without collision. Place the **Player**, **Exit**, **Enemy**, **NPC**, or **Sign** by clicking; select the enemy type or NPC type/scene before placement. NPC coordinates mark their feet, and the inspector can change the registered scene reference.
 3. Use **Select / move** to pick and drag an object. Use the object list and inspector for keyboard access and precise coordinates. Terrain moves in 48-pixel steps; inspector values can place actors and signs precisely.
 4. Apply inspector or level properties. Invalid changes leave the committed document unchanged. **Reset property edits** discards unapplied form changes. Undo/redo covers validated changes, including JSON and AI patches; Ctrl/Cmd+Z and Ctrl/Cmd+Shift+Z work outside text inputs.
 5. Use **Playtest** to launch a separate game instance from a frozen JSON snapshot. Closing it leaves the editor and its history intact. Restarting the playtest retains that snapshot.
@@ -32,6 +38,7 @@ Each level is one JSON file, independent of editor state or executable scripts. 
 | `terrain` | Solid grid-aligned rectangles with stable IDs |
 | `decorations` | Grid-aligned background rectangles with stable IDs |
 | `enemies` | ID, kind, bottom-center position, and center-based patrol limits |
+| `npcs` | Optional array of neutral actor ID, kind, bottom-center position and registered scene ID; omitted arrays normalize to empty |
 | `signs` | ID, text origin X/Y, heading, and message |
 
 All authored coordinates use **world pixels**, with X increasing east and Y increasing down. For example, an enemy at `{ "x": 504, "y": 576 }` stands with its feet at Y=576. Patrol `left` and `right` describe the same center anchor. Actor sprite dimensions do not need to be subtracted by the author. The compiler handles the existing runtime's top-left and enemy spawn conventions.
@@ -41,6 +48,8 @@ Object IDs must be unique across all collections and use lowercase letters, digi
 Validation checks finite integer coordinates, known enemy kinds, dimensions, grid alignment, duplicate IDs, overlapping terrain, actor/exit overlap with terrain, actor bounds, and patrol containment. It limits files to 1 MB, collections to 1000 objects, and expanded terrain plus decoration to 10000 tiles. These checks do not prove that a jump or the exit is reachable; playtesting and simulation tests still serve that purpose.
 
 ## AI file workflow
+
+See [neutral NPCs](npc-system.md) for interaction rules, example JSON, neutral combat policy and extension points. Current kind: `rail-attendant`; current scene ID: `station-exchange`.
 
 An agent can read and edit the same JSON that the workshop imports and exports. Use the existing IDs and consult the schema. Prefer a revision-checked patch for bounded edits:
 

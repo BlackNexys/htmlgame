@@ -1,5 +1,6 @@
 import type { EnemyKind } from '../interfaces/Enemy';
 import type { Rect } from '../interfaces/Geometry';
+import type { NPCKind } from '../interfaces/NPC';
 
 export interface LevelPoint { x: number; y: number; }
 export interface TerrainDefinition extends Rect { id: string; }
@@ -9,6 +10,7 @@ export interface LevelEnemy extends LevelPoint {
     patrol: { left: number; right: number; };
 }
 export interface LevelSign extends LevelPoint { id: string; title: string; text: string; }
+export interface LevelNPC extends LevelPoint { id: string; kind: NPCKind; scene: string; }
 
 /** Authoring coordinates are world pixels. Actors are anchored at bottom center. */
 export interface LevelDocument {
@@ -24,12 +26,13 @@ export interface LevelDocument {
     terrain: TerrainDefinition[];
     decorations: TerrainDefinition[];
     enemies: LevelEnemy[];
+    npcs: LevelNPC[];
     signs: LevelSign[];
 }
 
-export type LevelCollection = 'terrain' | 'decorations' | 'enemies' | 'signs';
-export type LevelObject = TerrainDefinition | LevelEnemy | LevelSign;
-export const levelCollections: LevelCollection[] = ['terrain', 'decorations', 'enemies', 'signs'];
+export type LevelCollection = 'terrain' | 'decorations' | 'enemies' | 'npcs' | 'signs';
+export type LevelObject = TerrainDefinition | LevelEnemy | LevelNPC | LevelSign;
+export const levelCollections: LevelCollection[] = ['terrain', 'decorations', 'enemies', 'npcs', 'signs'];
 
 export function cloneDocument(document: LevelDocument): LevelDocument {
     return JSON.parse(JSON.stringify(document));

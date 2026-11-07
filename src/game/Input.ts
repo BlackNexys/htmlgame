@@ -5,7 +5,7 @@ const bindings: Record<PlayerAction, readonly string[]> = {
     up: ['KeyW', 'ArrowUp'], down: ['KeyS', 'ArrowDown'],
     jump: ['Space'], sprint: ['ShiftLeft', 'ShiftRight'], fire: ['KeyJ', 'KeyX'],
 };
-const commands = new Set(['KeyP', 'Escape', 'KeyR', 'KeyM', 'F2']);
+const commands = new Set(['KeyP', 'Escape', 'KeyR', 'KeyM', 'KeyF', 'F2']);
 const actions = Object.keys(bindings) as PlayerAction[];
 
 export class Input {

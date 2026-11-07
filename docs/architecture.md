@@ -8,12 +8,13 @@ The project uses a class for each entity or system with a distinct responsibilit
 | --- | --- |
 | `src/components` | Game entities and their behavior |
 | `src/game` | Session and loop control, loading, input, factories, and tuning |
-| `src/game/systems` | Combat, collision queries, corpses, effects, and ectoplasm |
+| `src/game/systems` | Combat, collision queries, corpses, effects, ectoplasm and interaction target selection |
 | `src/game/movement` | Player locomotion, aim, and stateless physics |
 | `src/game/animation` | Pose selection and atlas metadata |
 | `src/game/audio` | Gameplay sound synthesis and menu music |
 | `src/renderers` | Canvas drawing and the `GameScreen` drawing coordinator |
 | `src/ui` | DOM menu, toolbar, status, counters, progress, and encounter hints |
+| `src/dialogue` | Browser-free dialogue/scene controllers, authored scene data, modal UI and browser session lifetime |
 | `src/interfaces` | Shared contracts with no runtime behavior |
 | `src/maps` | Synchronous level fixture for tests and the original map reference |
 | `src/levels` | Shared JSON authoring contract, validation, compilation, loading, and revision-checked changes |
@@ -91,3 +92,17 @@ For a new enemy, add its class under `components`, add tuning and its level iden
 For a new projectile, extend `Projectile` with its targets and appearance. For a new level, supply level data. Put new visual effects in a renderer and their lifetime behavior in an entity or effect system. Add a new simulation system when a rule spans multiple entities and has a clear responsibility of its own.
 
 Use the simulation and lifecycle tests to protect behavior, and the browser playthroughs to protect loading, controls, screen flow, and replay. The full-source TypeScript check also covers modules that are not currently imported by the entry point.
+
+## Dialogue and scene presentation
+
+`src/dialogue` implements the first narrative slice. `DialogueController` reveals one line; `CutsceneDirector` sequences lines, captions/focus cues, waits, history, and explicit completion effects. `DialogueSession` owns browser timing, pause/log behavior, focus-loss handling and disposal. `ui/DialoguePresentation` defines the view/actions contract. `ui/KineticDialogueView` supplies the preferred centered exchange with directional portrait/text entry and managed animation lifetimes. `ui/ActionDialogueView` retains the compact nonmodal comparison; `ui/DialogueView` retains the earlier cinematic modal. Both own safe DOM text, portraits and Blacklight controls. The controllers have no browser or `World` dependency. Each runtime class has its own file.
+
+`Game` can supply an optional scene whose `presentation` selects kinetic, cinematic or overlay. Kinetic and cinematic scenes enter `dialogue` mode, suspend simulation, and hide the gameplay HUD. Overlays stay in `playing` mode with movement/combat active, and preserve held input on normal completion. Explicit log/focus holds notify the game to suspend simulation and clear input; game pause/title transitions suspend and hide the overlay. Terminal world states cancel unfinished scenes without effects; restart constructs a fresh run. Completion effects use a host-owned set for once-only delivery within a run; persistent campaign rewards remain outside this prototype.
+
+`dialogue.html` is a separate Vite entry point hosting the preferred kinetic station exchange and linking to `/?dialogueDemo=kinetic` over paused gameplay. It retains the earlier noncanonical cinematic and travelling-overlay studies for comparison. It also links to the neutral NPC study, where actors placed through level data launch the same session by interaction. See [the dialogue system](dialogue-system.md) for authoring, lifecycle, supported cues, and current limitations.
+
+## Neutral NPCs and interaction
+
+`NPC` is an `Actor` sibling of `Enemy`, with its own concrete `RailAttendant` class. It has no enemy health, damage, defeat or corpse lifecycle. `World` creates NPCs through `NPCFactory` and updates their physics/behavior; `NPCRenderer` draws them, and `InteractionPrompt` presents a world-anchored DOM prompt. `InteractionSystem` selects one grounded, living player's reachable NPC using distance, feet height, line of sight and stable ID tie-breaking. It does not launch UI.
+
+`Game` handles the one-shot F command, looks up the actor's scene through `SceneCatalog`, and starts the existing kinetic dialogue session. Completing/skipping marks the actor's per-run conversation count; cancellation does not. Restart creates fresh actors. Level validation/compiler and the workshop share optional NPC placement data, known kind/scene references and anchor conversion. Old level files normalize missing `npcs` to an empty collection. See [NPC system notes](npc-system.md).

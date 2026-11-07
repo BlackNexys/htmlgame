@@ -11,6 +11,9 @@ import type { GameMode } from '../interfaces/Game';
 import type { Level } from '../interfaces/Level';
 import { LevelLoader } from '../levels/LevelLoader';
 import { GamePreferences } from '../ui/GamePreferences';
+import { DialogueSession } from '../dialogue/DialogueSession';
+import type { DialogueScene } from '../dialogue/DialogueScene';
+import { sceneFor } from '../dialogue/SceneCatalog';
 
 export class Game {
     private world!: World;
@@ -28,12 +31,16 @@ export class Game {
     private mode: GameMode = 'loading';
     private disposed = false;
     private starting = false;
+    private dialogue?: DialogueSession;
+    private introPlayed = false;
+    private readonly sceneEffects = new Set<string>();
 
     constructor(private readonly canvas: HTMLCanvasElement,
-        private readonly loadLevel: (signal: AbortSignal) => Promise<Level> = signal => new LevelLoader().load('lower-passage', signal)) {
+        private readonly loadLevel: (signal: AbortSignal) => Promise<Level> = signal => new LevelLoader().load('lower-passage', signal),
+        private readonly intro?: DialogueScene) {
         this.input = new Input(canvas, key => this.handleKey(key));
         this.loop = new GameLoop(dt => this.update(dt), (elapsed, simulated) => this.draw(elapsed, simulated));
-        canvas.addEventListener('blur', this.pause);
+        canvas.addEventListener('blur', this.canvasBlur);
         window.addEventListener('blur', this.pause);
         document.addEventListener('visibilitychange', this.visibilityChanged);
         this.sound.muted = this.preferences.value.muted;
@@ -67,8 +74,9 @@ export class Game {
     dispose() {
         this.disposed = true;
         this.loading.abort();
+        this.dialogue?.dispose(); this.dialogue = undefined;
         this.loop.stop(); this.input.dispose(); this.menu.dispose(); this.sound.dispose(); this.music.dispose();
-        this.canvas.removeEventListener('blur', this.pause);
+        this.canvas.removeEventListener('blur', this.canvasBlur);
         window.removeEventListener('blur', this.pause);
         document.removeEventListener('visibilitychange', this.visibilityChanged);
     }
@@ -78,15 +86,55 @@ export class Game {
         this.music.update(false, this.sound.muted);
         this.sound.unlock(); this.input.clear(); this.world.player.clearActions(); this.loop.resume();
         this.mode = 'playing'; this.menu.playing(); this.canvas.focus({preventScroll: true});
+        this.dialogue?.setHostPaused(false);
+        if (this.dialogue?.holdsGameplay) this.loop.pause();
+        if (this.intro && !this.introPlayed) this.beginDialogue(this.intro);
+    }
+
+    private beginDialogue(scene: DialogueScene, onCompleted?: () => void) {
+        this.introPlayed = true;
+        const blocking = scene.presentation !== 'overlay';
+        if (blocking) { this.mode = 'dialogue'; this.input.clear(); this.world.player.clearActions(); this.loop.pause(); this.menu.dialogue(); }
+        this.dialogue = new DialogueSession(scene, () => {
+            // This prototype effect has no campaign reward. The host owns real effects.
+            this.canvas.dataset.dialogueDemo = 'heard';
+        }, result => {
+            if (result !== 'cancelled') onCompleted?.();
+            const held = this.dialogue?.holdsGameplay;
+            this.dialogue = undefined;
+            if (this.disposed) return;
+            if (!blocking) {
+                if (held && this.mode === 'playing') { this.input.clear(); this.world.player.clearActions(); this.loop.resume(); this.canvas.focus({preventScroll: true}); }
+                return;
+            }
+            this.input.clear(); this.world.player.clearActions();
+            if (result === 'cancelled') { this.mode = 'paused'; this.menu.paused(); }
+            else this.resume();
+        }, this.sceneEffects, {
+            container: this.canvas.parentElement!, hostManaged: !blocking,
+            returnFocus: () => this.canvas.focus({preventScroll: true}),
+            onFocusExit: target => { if (target !== this.canvas) this.pause(); },
+            onHold: held => {
+                if (this.mode !== 'playing') return;
+                this.input.clear(); this.world.player.clearActions();
+                if (held) this.loop.pause(); else this.loop.resume();
+            },
+        });
     }
 
     private restart() {
+        if (this.dialogue) { const scene = this.dialogue; this.dialogue = undefined; scene.cancel(); }
+        this.introPlayed = false; this.sceneEffects.clear(); delete this.canvas.dataset.dialogueDemo;
         this.world = new World(this.loadedLevel); this.screen!.resetAnimation(); this.hud.update(this.world); this.resume();
     }
 
     private readonly pause = () => {
         if (this.mode !== 'playing') return;
-        this.mode = 'paused'; this.input.clear(); this.world.player.clearActions(); this.loop.pause(); this.menu.paused();
+        this.mode = 'paused'; this.dialogue?.setHostPaused(true); this.input.clear(); this.world.player.clearActions(); this.loop.pause(); this.menu.paused();
+    };
+    private readonly canvasBlur = (event: FocusEvent) => {
+        if (this.dialogue?.isOverlay && this.dialogue.view.root.contains(event.relatedTarget as Node | null)) return;
+        this.pause();
     };
 
     private togglePause() { if (this.mode === 'playing') this.pause(); else if (this.mode === 'paused') this.resume(); }
@@ -96,6 +144,7 @@ export class Game {
     }
     private mainMenu() {
         this.input.clear(); this.world.player.clearActions(); this.loop.pause(); this.mode = 'menu';
+        this.dialogue?.setHostPaused(true);
         this.music.update(true, this.sound.muted);
         this.menu.mainMenu(this.hasSession && this.world.state === 'playing');
     }
@@ -112,11 +161,22 @@ export class Game {
     private readonly visibilityChanged = () => { if (document.hidden) this.pause(); };
 
     private handleKey(key: string) {
+        if (this.mode === 'dialogue') return;
         if (!this.screen || this.mode === 'loading' || this.mode === 'ready' || this.mode === 'menu' || this.mode === 'error') return;
+        if (key === 'KeyF') this.talk();
         if (key === 'KeyP' || key === 'Escape') this.togglePause();
         if (key === 'KeyR') this.restart();
         if (key === 'KeyM') this.toggleMute();
         if (key === 'F2') this.screen.debug = !this.screen.debug;
+    }
+
+    private talk() {
+        if (this.mode !== 'playing' || this.dialogue) return;
+        const npc = this.world.interactions.nearest(this.world.player, this.world.npcs);
+        const scene = npc && sceneFor(npc.scene);
+        if (!npc || !scene) return;
+        this.world.player.facing = Math.sign(npc.x - this.world.player.x) || this.world.player.facing;
+        this.beginDialogue(scene, () => npc.completeConversation());
     }
 
     private update(dt: number) {
@@ -125,6 +185,7 @@ export class Game {
         this.world.events.forEach(event => this.sound.play(event));
         if (this.world.state !== 'playing') {
             this.mode = this.world.state; this.input.clear(); this.loop.pause();
+            this.dialogue?.cancel();
             this.menu.outcome(this.world.state, this.world.defeated, this.world.level.enemies.length);
         }
     }

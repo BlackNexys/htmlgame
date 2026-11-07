@@ -11,5 +11,5 @@ export interface InputSnapshot extends Controls {
     held: readonly PlayerAction[]; pressed: readonly PlayerAction[]; released: readonly PlayerAction[];
 }
 export type PlayState = 'playing' | 'dead' | 'won';
-export type GameMode = 'loading' | 'ready' | 'menu' | PlayState | 'paused' | 'error';
+export type GameMode = 'loading' | 'ready' | 'menu' | PlayState | 'paused' | 'dialogue' | 'error';
 export type GameEvent = 'fire' | 'hit' | 'terrainHit' | 'ectoplasm' | 'hurt' | 'defeat' | 'jump' | 'win' | 'enemyFire' | 'charge' | 'block' | 'revive';

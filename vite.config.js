@@ -13,6 +13,7 @@ export default defineConfig({
                 editor: fileURLToPath(new URL('./editor.html', import.meta.url)),
                 menuPilot: fileURLToPath(new URL('./menu-pilot.html', import.meta.url)),
                 menuProduction: fileURLToPath(new URL('./menu-production.html', import.meta.url)),
+                dialogue: fileURLToPath(new URL('./dialogue.html', import.meta.url)),
             },
         },
     },

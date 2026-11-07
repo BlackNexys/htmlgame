@@ -2,6 +2,9 @@ import type { LevelDocument } from './LevelDocument';
 import type { Rect } from '../interfaces/Geometry';
 import { enemyTuning } from '../game/config';
 import { overlaps } from '../game/movement/physics';
+import { npcCatalog } from '../game/NPCCatalog';
+import type { NPCKind } from '../interfaces/NPC';
+import { sceneFor } from '../dialogue/SceneCatalog';
 
 const slug = /^[a-z][a-z0-9-]{0,79}$/;
 export class LevelValidationError extends Error {
@@ -33,7 +36,7 @@ export function parseLevelDocument(value: unknown): LevelDocument {
         if (!slug.test(result)) fail(path, 'use lowercase letters, numbers, and hyphens, starting with a letter');
         return result;
     };
-    const root = object(value, 'level', ['schemaVersion', 'id', 'name', 'revision', 'tileSize', 'width', 'height', 'spawn', 'exit', 'terrain', 'decorations', 'enemies', 'signs']);
+    const root = object(value, 'level', ['schemaVersion', 'id', 'name', 'revision', 'tileSize', 'width', 'height', 'spawn', 'exit', 'terrain', 'decorations', 'enemies', 'npcs', 'signs']);
     if (root.schemaVersion !== 1) fail('schemaVersion', 'only version 1 is supported');
     if (root.tileSize !== 48) fail('tileSize', 'version 1 uses 48-pixel tiles');
     const width = number(root.width, 'width', 960, 32736);
@@ -88,6 +91,14 @@ export function parseLevelDocument(value: unknown): LevelDocument {
             const p = object(input, path, ['id', 'x', 'y', 'title', 'text']);
             return {id: objectId(p.id, path), ...point(input, path, ['id', 'x', 'y', 'title', 'text']), title: string(p.title, `${path}.title`, 120), text: string(p.text, `${path}.text`, 300)};
         }),
+        npcs: root.npcs === undefined ? [] : array(root.npcs, 'npcs', (input, path) => {
+            const p = object(input, path, ['id', 'kind', 'x', 'y', 'scene']);
+            const kind = p.kind as NPCKind;
+            if (typeof kind !== 'string' || !Object.hasOwn(npcCatalog, kind)) fail(`${path}.kind`, 'unknown NPC kind');
+            const scene = id(p.scene, `${path}.scene`);
+            if (!sceneFor(scene)) fail(`${path}.scene`, 'unknown dialogue scene');
+            return {id: objectId(p.id, path), kind, scene, ...point(input, path, ['id', 'kind', 'x', 'y', 'scene'])};
+        }),
     };
     if (tiles > 10000) fail('terrain', 'at most 10000 expanded tiles are allowed, including decorations');
     for (let i = 0; i < result.terrain.length; i++) {
@@ -106,6 +117,10 @@ export function parseLevelDocument(value: unknown): LevelDocument {
         actor(enemy.x, enemy.y, stats.width, stats.height, `enemies[${index}]`);
         if (enemy.patrol.left > enemy.x || enemy.patrol.right < enemy.x || enemy.patrol.left > enemy.patrol.right) fail(`enemies[${index}].patrol`, 'range must contain the enemy');
         if (enemy.patrol.left < stats.width / 2 || enemy.patrol.right + stats.width / 2 > width) fail(`enemies[${index}].patrol`, 'actor bounds extend outside the level');
+    });
+    result.npcs.forEach((npc, index) => {
+        const info = Object.hasOwn(npcCatalog, npc.kind) ? npcCatalog[npc.kind] : undefined;
+        if (info) actor(npc.x, npc.y, info.width, info.height, `npcs[${index}]`);
     });
     if (!issues.length && new TextEncoder().encode(JSON.stringify(result)).byteLength > 1_000_000) fail('level', 'document exceeds 1 MB');
     if (issues.length) throw new LevelValidationError(issues);

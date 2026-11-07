@@ -1,8 +1,9 @@
 import type { Level } from '../interfaces/Level';
 import type { Rect } from '../interfaces/Geometry';
-import type { LevelDocument, TerrainDefinition } from './LevelDocument';
+import type { TerrainDefinition } from './LevelDocument';
 import { parseLevelDocument } from './LevelValidation';
 import { enemyTuning } from '../game/config';
+import { npcCatalog } from '../game/NPCCatalog';
 
 function tiles(rectangles: TerrainDefinition[], size: number): Rect[] {
     return rectangles.flatMap(rect => {
@@ -14,7 +15,7 @@ function tiles(rectangles: TerrainDefinition[], size: number): Rect[] {
     });
 }
 
-export function compileLevel(input: LevelDocument): Level {
+export function compileLevel(input: unknown): Level {
     const document = parseLevelDocument(input);
     return {
         width: document.width, height: document.height,
@@ -25,5 +26,6 @@ export function compileLevel(input: LevelDocument): Level {
             left: enemy.patrol.left - enemyTuning[enemy.kind].width / 2, right: enemy.patrol.right - enemyTuning[enemy.kind].width / 2,
         })),
         signs: document.signs.map(sign => ({x: sign.x, y: sign.y, title: sign.title, text: sign.text})),
+        npcs: document.npcs.map(npc => ({...npc, x: npc.x - npcCatalog[npc.kind].width / 2, y: npc.y - npcCatalog[npc.kind].height})),
     };
 }

@@ -10,6 +10,12 @@
 
 > A restless soul waits at a station where the departures are eternally delayed. The city feels enormous. The small things around them are still alive.
 
+## Setting context — exploratory, 7 November 2026
+
+The [Deadways atlas](Worldbuilding/Underworld_Deadways_World_Atlas_v0_1.md) proposes the Last Platform as this familiar station in or near the Confluence. The name and placement remain provisional. The station expresses the civilization built by the dead: ordinary waiting, maintenance, travel, and dry humour within an alien landscape. Its gothic masonry and cyan/magenta palette do not define every proposed region.
+
+Keep the live hero reference and current composition requirements. The new railway-city painting is setting concept reference, not a replacement for the production scene or ready-made animation layers. Illustrated station names and timetable text do not settle rail operators, destinations, or campaign progression. Worldbuilding alignment does not call for a new menu-art pass.
+
 ## 1. The direction
 
 Use the existing station artwork as **concept art**. Preserve its atmosphere, composition, character identity, and dry humour. Build a new scene whose assets are designed for animation from the beginning.

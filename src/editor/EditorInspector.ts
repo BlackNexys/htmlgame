@@ -1,6 +1,9 @@
 import { levelCollections, type LevelDocument } from '../levels/LevelDocument';
 import type { LevelOperation } from '../levels/LevelChanges';
 import { enemyTuning } from '../game/config';
+import { npcCatalog } from '../game/NPCCatalog';
+import type { NPCKind } from '../interfaces/NPC';
+import { sceneCatalog } from '../dialogue/SceneCatalog';
 import { selectedObject, selectionFromKey, selectionKey, type EditorSelection } from './EditorSelection';
 
 /** DOM property inspector. Authored text is always inserted as text, never HTML. */
@@ -40,12 +43,23 @@ export class EditorInspector {
             this.field('left', 'Patrol left', item.patrol.left); this.field('right', 'Patrol right', item.patrol.right);
         }
         if (item.title !== undefined && item.text !== undefined) { this.field('title', 'Heading', item.title); this.field('text', 'Message', item.text); }
+        if (item.scene !== undefined) {
+            const label = window.document.createElement('label'); label.textContent = 'NPC type';
+            const kind = window.document.createElement('select'); kind.name = 'kind';
+            kind.replaceChildren(...Object.entries(npcCatalog).map(([id, info]) => new Option(info.name, id))); kind.value = item.kind!;
+            label.append(kind); this.form.append(label);
+            const sceneLabel = window.document.createElement('label'); sceneLabel.textContent = 'Dialogue scene';
+            const scene = window.document.createElement('select'); scene.name = 'scene';
+            scene.replaceChildren(...Object.entries(sceneCatalog).map(([id, data]) => new Option(`${id} · ${data.title}`, id))); scene.value = item.scene;
+            sceneLabel.append(scene); this.form.append(sceneLabel);
+        }
         const button = window.document.createElement('bl-button'); button.type = 'submit'; button.textContent = 'Apply properties';
         this.form.append(button);
         const note = window.document.createElement('p'); note.className = 'editor-help';
-        note.textContent = selection === 'spawn' || (typeof selection === 'object' && selection.collection === 'enemies')
+        note.textContent = selection === 'spawn' || (typeof selection === 'object' && ['enemies', 'npcs'].includes(selection.collection))
             ? 'Actor X/Y mark the center of the feet. Patrol limits use the same center anchor.'
             : 'X/Y mark the top-left corner. Terrain and decoration sizes follow the 48-pixel grid.';
+        if (typeof selection === 'object' && selection.collection === 'npcs') note.textContent = 'NPC X/Y mark the center of the feet. The scene runs when the player presses F nearby; conversations are repeatable.';
         this.form.append(note);
     }
 
@@ -69,10 +83,11 @@ export class EditorInspector {
         const x = Number(data.get('x')), y = Number(data.get('y'));
         const value = {...item, x, y};
         if (value.width !== undefined) { value.width = Number(data.get('width')); value.height = Number(data.get('height')); }
-        if (value.kind) {
+        if (value.kind && value.patrol) {
             value.kind = String(data.get('kind')) as keyof typeof enemyTuning;
             value.patrol = {left: Number(data.get('left')), right: Number(data.get('right'))};
         }
+        if (value.scene !== undefined) { value.kind = String(data.get('kind')) as NPCKind; value.scene = String(data.get('scene')); }
         if (value.title !== undefined) { value.title = String(data.get('title')); value.text = String(data.get('text')); }
         this.edit([typeof this.selection === 'string'
             ? {op: 'set', field: this.selection, value}

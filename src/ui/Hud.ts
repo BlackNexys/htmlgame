@@ -1,7 +1,9 @@
 import type { World } from '../game/World';
 import { tuning } from '../game/config';
+import { InteractionPrompt } from './InteractionPrompt';
 
 export class Hud {
+    private readonly interaction = new InteractionPrompt();
     private readonly health = document.querySelector<HTMLElement>('#health')!;
     private readonly count = document.querySelector<HTMLElement>('#count')!;
     private readonly ectoplasm = document.querySelector<HTMLElement>('#ectoplasm')!;
@@ -9,6 +11,7 @@ export class Hud {
     private readonly encounter = document.querySelector<HTMLElement>('#encounter')!;
 
     update(world: World) {
+        this.interaction.update(world);
         this.health.textContent = `${world.player.health} / ${tuning.playerHealth}`;
         this.count.textContent = `${world.defeated} / ${world.level.enemies.length}`;
         this.ectoplasm.textContent = `${world.ectoplasm.amount} / ${world.ectoplasm.capacity}`;

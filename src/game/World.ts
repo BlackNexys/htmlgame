@@ -13,6 +13,9 @@ import { Graveyard } from './systems/Graveyard';
 import { Combat } from './systems/Combat';
 import { Ectoplasm } from './systems/Ectoplasm';
 import type { FlickerEvent } from '../interfaces/Weapon';
+import type { NPC } from '../components/NPC';
+import { createNPC } from './NPCFactory';
+import { InteractionSystem } from './systems/InteractionSystem';
 
 export class World implements CharacterContext, EnemyContext {
     readonly player: Character;
@@ -23,6 +26,8 @@ export class World implements CharacterContext, EnemyContext {
     readonly graveyard: Graveyard;
     readonly combat: Combat;
     readonly ectoplasm = new Ectoplasm();
+    readonly npcs: NPC[];
+    readonly interactions: InteractionSystem;
     enemies: Enemy[];
     projectiles: Projectile[] = [];
     events: GameEvent[] = [];
@@ -33,10 +38,12 @@ export class World implements CharacterContext, EnemyContext {
     constructor(level: Level) {
         this.level = new Map(level);
         this.collisions = new CollisionSystem(this.level);
+        this.interactions = new InteractionSystem(this.collisions);
         this.graveyard = new Graveyard(this);
         this.combat = new Combat(this);
         this.player = new Character({gameArea: this});
         this.enemies = this.level.enemies.map((spawn, id) => createEnemy({gameArea: this, spawn, id}));
+        this.npcs = this.level.npcs.map(createNPC);
         this.camera.follow(this.player, this.level);
     }
 
@@ -50,6 +57,7 @@ export class World implements CharacterContext, EnemyContext {
         if (this.state !== 'playing') return;
         this.elapsed += dt;
         this.player.update(dt, input);
+        this.npcs.forEach(npc => npc.update(dt, this.player, this.level.solids));
         this.graveyard.update(dt);
         for (const enemy of [...this.enemies]) {
             if (enemy.health <= 0) continue;

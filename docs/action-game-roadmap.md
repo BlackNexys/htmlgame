@@ -4,7 +4,7 @@
 
 We want to take the current TypeScript experiment far enough that we can run, jump, fight undead enemies, and replay a short level in the browser. That gives us something concrete to play before we discuss the detailed game mechanics.
 
-The direction is a platformer inspired by Jazz Jackrabbit, set in the underworld. The player is undead and is trying to find their soulmate, while everyone else seems determined to ruin their happiness. Undead powers, bosses, and a shared, recoverable ectoplasm resource with a maximum cap belong to the wider concept.
+The direction is a platformer inspired by Jazz Jackrabbit, set in the underworld. The player is undead and is trying to find their soulmate while facing opposition along the way. The early “everyone wants to ruin their happiness” shorthand is not a rule that every inhabitant is hostile; see the exploratory [Deadways atlas](Worldbuilding/Underworld_Deadways_World_Atlas_v0_1.md) and [alignment notes](Worldbuilding/README.md). Undead powers, bosses, and a shared, recoverable ectoplasm resource with a maximum cap belong to the wider concept.
 
 This roadmap gets us to the first playable action stage. Any attack or enemy behavior used to reach that point is a temporary test fixture. Its presence does not settle the final design.
 

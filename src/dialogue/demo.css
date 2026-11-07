@@ -1,0 +1,15 @@
+.dialogue-demo { min-height: 100dvh; background: #090c10; }
+.demo-scenery { position: fixed; inset: 0; background: linear-gradient(90deg, #050910d9, #05091033), url('/assets/mainmenu/v3/production/poster-absent-traveller-v1.png') center/cover; transition: transform 1s; }
+.demo-scenery[data-focus='left'] { transform: scale(1.04); transform-origin: 25% center; }
+.demo-scenery[data-focus='right'] { transform: scale(1.04); transform-origin: 75% center; }
+.dialogue-demo:has(.dialogue-overlay[open], .kinetic-dialogue[open]) .demo-home { visibility: hidden; }
+.demo-home { position: relative; min-height: 100dvh; display: flex; flex-direction: column; justify-content: center; align-items: start; padding: clamp(24px, 6vw, 100px); max-width: 800px; }
+.demo-home h1 { font: 500 clamp(36px, 5vw, 70px)/1.1 var(--bl-font-mono); }
+.demo-home p { color: #b9cbd5; line-height: 1.8; max-width: 550px; }
+.demo-home .demo-disclaimer { font-size: 12px; color: #93a4b2; }
+.demo-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; margin-top: 20px; }
+.demo-actions a { color: #63dfeb; font-size: 13px; }
+.demo-actions a.demo-play { padding: 14px 18px; color: #160b15; background: #ff52ab; font: 600 14px var(--bl-font-mono); text-decoration: none; }
+.demo-actions a.demo-play:focus-visible { outline: 2px solid #63dfeb; outline-offset: 4px; }
+#demo-result, #demo-effect { font: 11px/1.8 var(--bl-font-mono); }
+@media (prefers-reduced-motion: reduce) { .demo-scenery { transition: none; } }

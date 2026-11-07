@@ -2,6 +2,12 @@
 
 A browser platformer built with TypeScript and Canvas. Run through the lower passage, fight the undead, and reach the gate at the east end. This is the action foundation for the wider game concept; combat values and enemy behavior are temporary.
 
+## World and story direction
+
+The undead protagonist is searching for their soulmate. The new [Deadways atlas](docs/Worldbuilding/Underworld_Deadways_World_Atlas_v0_1.md) proposes familiar societies built by the dead within an immense alien world, linked by spectral rivers and railways. Undead inhabitants can be neighbours, travellers, or opponents with their own motives. Its eight regions, station geography, ecological interactions, and possible Blacklight continuity remain exploratory rather than established canon or implemented features.
+
+See [worldbuilding and design alignment](docs/Worldbuilding/README.md) for document responsibilities, open decisions, and the available concept art. The current lower passage is a mechanics test level; the demo's location and scope remain to be discussed.
+
 ## Run locally
 
 Use Node.js 26 LTS (also recorded in `.nvmrc`) and npm. Node.js 22.12 or newer is supported. npm is the package manager for this project; commit `package-lock.json` when changing dependencies.
@@ -64,6 +70,7 @@ Humans and agents share the same schema, stable object IDs, and revision checks.
 | Aim up / diagonally | W or Up; combine with left/right |
 | Crouch / aim down | S or Down; downward aim while airborne |
 | Attack | Hold J or X |
+| Talk to a nearby NPC | F |
 | Pause or resume | P or Escape |
 | Restart | R |
 | Toggle sound | M |
@@ -90,6 +97,16 @@ The playable hero uses `character-animations-v2.png`, adapted from the establish
 
 The [enemy art pack](public/assets/enemies/README.md) provides the six sheets used by the playable roster. Zombies lunge, skeletons charge horizontal shots, ghouls leap, ghosts phase and materialize, wights protect their front, and necromancers reactivate nearby corpses. The level introduces them individually before a small mixed encounter. See [enemy behavior](docs/enemy-behavior.md) for tells, counters, and limits. The [enemy roster preview](http://127.0.0.1:3000/docs/enemy-sprites.html) remains available to compare their animations.
 
+## Neutral NPCs
+
+Open [the NPC study](http://127.0.0.1:3000/?level=npc-study) or choose **Meet the attendant** from the dialogue demo page. Approach the neutral railway attendant and press **F** to start the kinetic exchange. The attendant idles and faces nearby players, takes no combat damage, and can be walked or fired through. Conversations can be repeated; restart resets their per-run state. The workshop now places NPCs with validated scene references, including undo/redo, JSON export and snapshot playtests. See [NPC behavior and architecture](docs/npc-system.md) and [asset notes](public/assets/npcs/README.md).
+
+## Dialogue prototype
+
+Open [Dialogue demo](http://127.0.0.1:3000/dialogue.html), also linked from the title footer, and choose **Play kinetic exchange**. The current direction puts the exchange at center stage: gameplay freezes, the HUD disappears, and one large expressive portrait trades sides with the next speaker. Short replies enter with directional movement, emphatic typography and authored pauses; a faint echo of the previous line connects the handoff. Enter/Space reveals/advances, L opens the log, and Hold, Skip, speed and autoplay controls remain available. Reduced motion removes the animated handoffs.
+
+**Try with gameplay paused** (`/?dialogueDemo=kinetic`) runs it over the frozen Lower Passage and returns focus/control cleanly afterward. The older cinematic (`/?dialogueDemo=1`) and travelling overlay (`/?dialogueDemo=action`) remain comparison tools. Presentation/pacing are scene-level choices; ordinary game URLs have no intro. All study dialogue, the attendant and the traversal fixture remain noncanonical test material, separate from the later demo level. See [dialogue architecture and authoring](docs/dialogue-system.md) and [portrait asset notes](public/assets/dialogue/README.md).
+
 ## Code layout
 
 `src/app.ts` creates and starts `Game`. The `Game` controller owns the session, `GameLoop` owns animation-frame scheduling, and `FixedClock` owns simulation timing. `Hud` and `GameMenu` own DOM presentation. `World` coordinates simulation updates while focused classes own collision queries, combat, corpses, and effects. Entities and weapons use capability contracts from `src/interfaces/Simulation.ts` instead of depending on the entire world.
@@ -106,6 +123,8 @@ GameElement
 │   └── EnemyProjectile
 └── Actor
     ├── Character
+    ├── NPC
+    │   └── RailAttendant
     └── Enemy
         ├── Ghost
         └── GroundEnemy

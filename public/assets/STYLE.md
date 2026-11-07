@@ -12,6 +12,14 @@ Keep the undead anatomy visible in the silhouette: a skull, a skeletal torso, th
 
 Energy can behave like flame, spirit matter, or an electrical disturbance. Use sharp, irregular shapes that feel alive. The connection between technology and the supernatural can remain strange and unexplained.
 
+## Wider world direction — exploratory
+
+The [Deadways atlas](../../docs/Worldbuilding/Underworld_Deadways_World_Atlas_v0_1.md) proposes **cyber-gothic afterlife meets alien natural history**. Familiar stations, homes, markets, and industry belong to the civilization of the dead; spectral rivers, impossible rib-like formations, strange organisms, and unusual spaces belong to the environment. Show inhabited places with ordinary purposes as well as room for action.
+
+Regional colour and mood can vary substantially: furnace amber and oxidized metal, translucent pearl growths, pale expanses, or black mirror coasts. Keep the protagonist's established magenta identity and clear combat silhouettes without making every environment the same neon-gothic city. Cyan scenery is not inherently hostile, and an undead body does not imply an enemy. Warm habitation and alien wilderness can each be peaceful or dangerous.
+
+The atlas and supplied railway-city painting are exploratory concepts. They do not supersede the live character reference, establish factions or metaphysics, or supply production-ready level layers. Preserve regional atmosphere when adapting concepts, then author separate readable terrain, backgrounds, and effects. See [alignment and asset status](../../docs/Worldbuilding/README.md).
+
 ## Original references
 
 | Asset | What to preserve |
@@ -69,7 +77,7 @@ Carry the same combination of age, death, and technology into future assets. Wor
 
 Keep scenery quieter in contrast and saturation than active characters and attacks. The existing wall's bright mortar is a useful detail to review when tiling large areas, since repetition can make it compete with the action.
 
-Enemies should share the protagonist's pixel density and shading approach while having distinct silhouettes. The generated sheets in `enemies/` are the current first playable art pass. The simple background architecture remains a placeholder. Use the original PNGs as the visual references when refining either.
+Enemies should share the protagonist's pixel density and shading approach while having distinct silhouettes. The generated sheets in `enemies/` are the current first playable art pass. The simple background architecture remains a placeholder. Use the live gameplay PNGs and relevant original references when refining sprites. Use the proposed regional direction when exploring environments; concept paintings still need production adaptation.
 
 ## Generated animation sheet
 

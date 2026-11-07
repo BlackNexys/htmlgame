@@ -10,6 +10,7 @@ import { CorpseRenderer } from './CorpseRenderer';
 import { ProjectileRenderer } from './ProjectileRenderer';
 import { ParticleRenderer } from './ParticleRenderer';
 import { DebugRenderer } from './DebugRenderer';
+import { NPCRenderer } from './NPCRenderer';
 
 export class GameScreen {
     debug = false;
@@ -22,6 +23,7 @@ export class GameScreen {
     private readonly projectiles: ProjectileRenderer;
     private readonly particles: ParticleRenderer;
     private readonly diagnostics: DebugRenderer;
+    private readonly npcs: NPCRenderer;
 
     constructor(public readonly canvas: HTMLCanvasElement, assets: GameAssets) {
         canvas.width = T.viewportWidth; canvas.height = T.viewportHeight;
@@ -36,6 +38,7 @@ export class GameScreen {
         this.projectiles = new ProjectileRenderer(ctx, assets.flicker);
         this.particles = new ParticleRenderer(ctx);
         this.diagnostics = new DebugRenderer(ctx);
+        this.npcs = new NPCRenderer(ctx, assets.npcs);
     }
 
     resetAnimation() { this.character.reset(); }
@@ -45,6 +48,7 @@ export class GameScreen {
         this.background.draw(world.camera, world.elapsed);
         this.ctx.save(); this.ctx.translate(-Math.round(world.camera.x), -Math.round(world.camera.y));
         this.map.draw(world.level, world.camera);
+        world.npcs.forEach(npc => { if (world.camera.canSee(npc)) this.npcs.draw(npc); });
         world.corpses.forEach(corpse => { if (world.camera.canSee(corpse.enemy)) this.corpses.draw(corpse); });
         world.enemies.forEach(enemy => { if (world.camera.canSee(enemy)) this.enemies.draw(enemy, world.elapsed, world.corpses); });
         this.character.draw(world.player, world.elapsed);

@@ -3,6 +3,8 @@ import type { EnemyKind } from '../interfaces/Enemy';
 import { enemyTuning } from './config';
 import { characterAtlas } from './animation/CharacterAtlas';
 import { characterAimAtlas } from './animation/CharacterAimAtlas';
+import { npcCatalog } from './NPCCatalog';
+import type { NPCKind } from '../interfaces/NPC';
 
 export class AssetLoader {
     async load(): Promise<GameAssets> {
@@ -20,7 +22,12 @@ export class AssetLoader {
             if (sheet.naturalWidth !== 1254 || sheet.naturalHeight !== 1254) throw new Error(`Unexpected ${kinds[index]} atlas dimensions`);
             enemies[kinds[index]] = sheet;
         });
-        return {wall, hero, heroAim, flicker, enemies};
+        const npcs: NonNullable<GameAssets['npcs']> = {};
+        await Promise.all((Object.keys(npcCatalog) as NPCKind[]).map(async kind => {
+            const image = await this.image(npcCatalog[kind].image).catch(() => undefined);
+            if (image && image.naturalWidth / image.naturalHeight > 2.8 && image.naturalWidth / image.naturalHeight < 4.2) npcs[kind] = image;
+        }));
+        return {wall, hero, heroAim, flicker, enemies, npcs};
     }
 
     private image(src: string) {
