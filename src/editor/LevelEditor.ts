@@ -12,7 +12,8 @@ import { LevelLoader } from '../levels/LevelLoader';
 import type { EnemyKind } from '../interfaces/Enemy';
 import type { NPCKind } from '../interfaces/NPC';
 import { npcCatalog } from '../game/NPCCatalog';
-import { sceneCatalog } from '../dialogue/SceneCatalog';
+import { conversationChoices } from '../dialogue/SceneCatalog';
+import { interactionPresets } from '../narrative/InteractionPresets';
 
 const element = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 export interface LevelEditorAPI {
@@ -102,7 +103,9 @@ export class LevelEditor {
         }
         element<HTMLSelectElement>('enemy-kind').onchange = event => { this.canvas.enemy = (event.currentTarget as HTMLSelectElement).value as EnemyKind; };
         element<HTMLSelectElement>('npc-kind').replaceChildren(...Object.entries(npcCatalog).map(([id, info]) => new Option(info.name, id)));
-        element<HTMLSelectElement>('npc-scene').replaceChildren(...Object.entries(sceneCatalog).map(([id, scene]) => new Option(`${id} · ${scene.title}`, id)));
+        element<HTMLSelectElement>('npc-scene').replaceChildren(...Object.entries(conversationChoices).map(([id, scene]) => new Option(`${id} · ${scene.title}`, id)));
+        element<HTMLSelectElement>('interaction-preset').replaceChildren(...Object.entries(interactionPresets).map(([id,preset])=>new Option(preset.label,id)));
+        element<HTMLSelectElement>('interaction-preset').onchange=event=>{this.canvas.interactionPreset=(event.currentTarget as HTMLSelectElement).value;};
         element<HTMLSelectElement>('npc-kind').onchange = event => { this.canvas.npc = (event.currentTarget as HTMLSelectElement).value as NPCKind; };
         element<HTMLSelectElement>('npc-scene').onchange = event => { this.canvas.scene = (event.currentTarget as HTMLSelectElement).value; };
         element<HTMLSelectElement>('zoom').onchange = event => { this.canvas.setZoom(Number((event.currentTarget as HTMLSelectElement).value)); this.syncZoom(); };

@@ -10,8 +10,8 @@ export class Hud {
     private readonly progress = document.querySelector<HTMLElement>('#progress')!;
     private readonly encounter = document.querySelector<HTMLElement>('#encounter')!;
 
-    update(world: World) {
-        this.interaction.update(world);
+    update(world: World, prompt?:string) {
+        this.interaction.update(world,prompt);
         this.health.textContent = `${world.player.health} / ${tuning.playerHealth}`;
         this.count.textContent = `${world.defeated} / ${world.level.enemies.length}`;
         this.ectoplasm.textContent = `${world.ectoplasm.amount} / ${world.ectoplasm.capacity}`;

@@ -6,11 +6,11 @@ Open `/?level=npc-study`, select Play, and approach the railway attendant. **F**
 
 The attendant is a stationary neutral actor with a four-frame idle, gravity/terrain support and facing toward nearby players. NPCs share `Actor` physics, not `Enemy` behavior. They have no health, attack, contact damage, defeat credit, corpse, resurrection, or ectoplasm reward. Players, enemies and projectiles pass through them; they are not cover. Missing artwork uses a labelled placeholder without preventing play or conversation.
 
-The interaction system chooses the nearest reachable NPC within 88 horizontal world pixels and 32 pixels of the player's feet height. The player must be grounded and alive, with clear terrain line of sight. Stable IDs break equal-distance ties. Only the chosen NPC gets the world-anchored, accessible talk prompt.
+The shared interaction system chooses among nearby NPCs and objects. NPC eligibility requires 88 horizontal world pixels, feet within 32 pixels, a grounded living player and clear terrain line of sight. Object reach uses its own bounds. Distance selects the target and stable IDs break ties. Only the chosen target gets the world-anchored accessible prompt.
 
 F uses the input service's command edge handling. Holding it through a conversation cannot immediately reopen that conversation. The game refuses talk while another scene or menu is active. Entering dialogue clears held input and movement buffers; the existing kinetic scene owns the exchange and returns focus through the normal game lifecycle.
 
-Completing or skipping increments that actor's per-run conversation count, changing the prompt to **Talk again**. Repeating is allowed; cancellation grants no conversation completion. Restart builds fresh actors and resets their counts. There is no persistent conversation history or quest flag system. Scene completion effects retain the dialogue system's once-per-run bookkeeping and do not grant NPC combat rewards.
+Completing or skipping increments that actor's per-run conversation count, changing the prompt to **Talk again**. Repeating is allowed; cancellation grants no conversation completion. Restart builds fresh actors and resets their counts. Campaign knowledge is separate: in `narrative-study`, `registry-attendant` resolves introduction, short directions, record reaction or farewell according to discoveries. The [narrative layer](narrative-system.md) owns persistent, idempotent effects; actors do not hold quest logic or grant combat rewards.
 
 ## Level and workshop contract
 
@@ -44,6 +44,6 @@ In the workshop, choose **NPC**, select a type and scene, then click above solid
 
 Add another NPC through its own class, metadata and factory entry, then update the kind contract and published schema. New dialogue data belongs in its own scene file and the scene catalog; add the ID to the schema. The workshop reads type and scene choices from the catalogs. Keep dialogue progression out of actor rendering and enemy behavior out of neutral actors.
 
-This slice does not implement wandering, schedules, shops, quests, persistent relationship state, dynamic dialogue selection, environmental triggers, NPC damage reactions or factions. Those can be discussed against the playable foundation rather than inferred from the attendant's presence.
+Dynamic dialogue selection and saved discoveries now exist in the narrative study. Wandering, schedules, shops, quest trees, persistent relationship state, automatic environmental triggers, NPC damage reactions and factions remain unimplemented.
 
 Simulation tests cover reachability, walls, neutral collision/combat behavior, anchors, validation and fresh state. Browser tests cover interaction, repeat prevention, airborne rejection, fallback art, workshop editing/export and an actual snapshot playtest in Chromium and Firefox.

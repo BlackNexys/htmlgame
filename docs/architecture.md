@@ -15,6 +15,7 @@ The project uses a class for each entity or system with a distinct responsibilit
 | `src/renderers` | Canvas drawing and the `GameScreen` drawing coordinator |
 | `src/ui` | DOM menu, toolbar, status, counters, progress, and encounter hints |
 | `src/dialogue` | Browser-free dialogue/scene controllers, authored scene data, modal UI and browser session lifetime |
+| `src/narrative` | Campaign knowledge, conditional scene selection, typed completion effects, current lead, saving and separate narrative UI |
 | `src/interfaces` | Shared contracts with no runtime behavior |
 | `src/maps` | Synchronous level fixture for tests and the original map reference |
 | `src/levels` | Shared JSON authoring contract, validation, compilation, loading, and revision-checked changes |
@@ -81,6 +82,8 @@ These systems are fresh for every new world. Reactivation preserves the original
 
 ## Presentation
 
+`NarrativeSession` coordinates a separate fact-driven layer. `InteractionSystem` selects NPCs or physical `Interactable` entities; the session resolves scenes/cards, commits complete effect batches, and reconciles permanent discoveries with a fresh world. `World` owns geometry and enabled exits, without story-specific conditions. `EffectApplier` validates a batch before mutation; `SaveStore` writes important discoveries immediately. Temporary gate state and NPC counts reset with each world. Workshop previews never read or write the campaign. See [narrative systems](narrative-system.md) for ownership, evidence provenance and save failure policy.
+
 `GameScreen` configures the canvas and composes renderers in the established draw order. It does not move actors, apply damage, or implement attacks. Each renderer reads model state and owns its canvas drawing. `CharacterAnimation` and `EnemyAnimation` choose poses independently of image loading and world rules.
 
 `MapRenderer` composes wall, sign, and exit drawing. Background, character, enemy, corpse, projectile, particle, and debug drawing each have a dedicated renderer. Camera translation is applied once around the world drawing passes. Menu and HUD rendering use the DOM rather than the canvas renderers.
@@ -97,7 +100,7 @@ Use the simulation and lifecycle tests to protect behavior, and the browser play
 
 `src/dialogue` implements the first narrative slice. `DialogueController` reveals one line; `CutsceneDirector` sequences lines, captions/focus cues, waits, history, and explicit completion effects. `DialogueSession` owns browser timing, pause/log behavior, focus-loss handling and disposal. `ui/DialoguePresentation` defines the view/actions contract. `ui/KineticDialogueView` supplies the preferred centered exchange with directional portrait/text entry and managed animation lifetimes. `ui/ActionDialogueView` retains the compact nonmodal comparison; `ui/DialogueView` retains the earlier cinematic modal. Both own safe DOM text, portraits and Blacklight controls. The controllers have no browser or `World` dependency. Each runtime class has its own file.
 
-`Game` can supply an optional scene whose `presentation` selects kinetic, cinematic or overlay. Kinetic and cinematic scenes enter `dialogue` mode, suspend simulation, and hide the gameplay HUD. Overlays stay in `playing` mode with movement/combat active, and preserve held input on normal completion. Explicit log/focus holds notify the game to suspend simulation and clear input; game pause/title transitions suspend and hide the overlay. Terminal world states cancel unfinished scenes without effects; restart constructs a fresh run. Completion effects use a host-owned set for once-only delivery within a run; persistent campaign rewards remain outside this prototype.
+`Game` can supply an optional scene whose `presentation` selects kinetic, cinematic or overlay. Kinetic and cinematic scenes enter `dialogue` mode, suspend simulation, and hide the gameplay HUD. Overlays stay in `playing` mode with movement/combat active, and preserve held input on normal completion. Explicit log/focus holds notify the game to suspend simulation and clear input; game pause/title transitions suspend and hide the overlay. Terminal world states cancel unfinished scenes without effects; restart constructs a fresh run. The director uses a host-owned set for once-only per-run callbacks. Narrative completion uses a separate validated, idempotent campaign batch through `NarrativeSession`.
 
 `dialogue.html` is a separate Vite entry point hosting the preferred kinetic station exchange and linking to `/?dialogueDemo=kinetic` over paused gameplay. It retains the earlier noncanonical cinematic and travelling-overlay studies for comparison. It also links to the neutral NPC study, where actors placed through level data launch the same session by interaction. See [the dialogue system](dialogue-system.md) for authoring, lifecycle, supported cues, and current limitations.
 

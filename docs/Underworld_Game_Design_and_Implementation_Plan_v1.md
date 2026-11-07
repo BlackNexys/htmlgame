@@ -15,6 +15,8 @@
 
 **Worldbuilding review (7 November 2026):** The [Deadways atlas v0.1](Worldbuilding/Underworld_Deadways_World_Atlas_v0_1.md) is an exploratory setting source, not established canon. [Alignment notes](Worldbuilding/README.md) distinguish its proposals from agreed mechanics and the playable build. This review does not start demo-level production or expand the delivery roadmap.
 
+**Narrative systems revision:** The [fact-driven narrative slice](narrative-system.md), based on the [supplied proposal](Worldbuilding/Underworld_Narrative_Interaction_Proposal_v0_1.md), now implements physical inspect/collect/operate interactions, conditional attendant scenes, a current lead, optional Keepsakes, versioned single-slot saving and next-stage unlocking. Important discoveries save immediately and survive death/restart, as explicitly chosen. `narrative-study` and `departure-study` are noncanonical systems fixtures, not the final demo. Weapon/modifier progression and bosses remain separate work.
+
 ### Status key
 
 - **Agreed:** Established by our design discussion.
@@ -313,7 +315,7 @@ Bosses may be defeated without necessarily dying in the fiction. Their identitie
 
 **Agreed:** The protagonist talks. Personality and specific script are deliberately not defined yet. Characters communicate through scripted text and expressive portraits. No RPG choice tree is required.
 
-**Prototype implemented (7 November 2026):** The [dialogue system notes](dialogue-system.md) describe the preferred centered kinetic exchange at `/?dialogueDemo=kinetic`, hosted directly by `/dialogue.html` too. The earlier travelling overlay (`/?dialogueDemo=action`) and cinematic scene (`/?dialogueDemo=1`) remain for comparison. The current slice includes expression portraits, styled text beats and pauses, delivery, speed controls, transcript, pause/skip/replay, focus handling, and host-owned once-only demo effects. Blacklight supplies controls and badges. The scene and attendant are noncanonical test material. Neutral NPCs now support manual F interaction through validated level scene references and workshop placement; the railway attendant is the first prototype. Campaign rewards, persistent dialogue/NPC progression, arbitrary environmental triggers and full world choreography remain future work. See [the NPC slice](npc-system.md).
+**Prototype implemented (7 November 2026):** The [dialogue system notes](dialogue-system.md) describe the preferred centered kinetic exchange at `/?dialogueDemo=kinetic`, hosted directly by `/dialogue.html` too. The earlier travelling overlay (`/?dialogueDemo=action`) and cinematic scene (`/?dialogueDemo=1`) remain for comparison. Expression portraits, styled text beats, pauses, transcript, pacing, skip, focus handling and Blacklight controls are implemented. Neutral NPCs support F interaction and workshop placement. The [narrative study](narrative-system.md) now adds persistent discoveries, physical evidence and fact-driven scene selection. Scene completion/skip commits validated idempotent narrative batches; cancellation grants nothing. The attendant and dialogue remain noncanonical test material. Arbitrary environmental triggers, boss rewards and full world choreography remain later work.
 
 ### Dialogue presentation
 
@@ -436,7 +438,7 @@ Implement in vertical slices, preserving a playable main branch. Each phase ends
 
 ### Phase 4 — Narrative slice
 
-**Current progress:** The standalone and optional gameplay dialogue prototypes cover the initial two-character exchange and lifecycle behavior. Full campaign effects and world choreography remain later work; see [the implemented subset](dialogue-system.md).
+**Current progress:** Dialogue presentation/lifecycle is implemented. The additional [narrative study](narrative-system.md) covers interactions, saved facts/Keepsakes, changed conversations, independent discovery order, current leads, a temporary gate and stage unlocking. Boss progression, final demo content and full world choreography remain later work.
 
 **Work:** One short two-character conversation, multiple portrait expressions, line reveal/advance, skip, camera/animation cue, correct simulation pause behavior.
 

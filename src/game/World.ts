@@ -16,6 +16,8 @@ import type { FlickerEvent } from '../interfaces/Weapon';
 import type { NPC } from '../components/NPC';
 import { createNPC } from './NPCFactory';
 import { InteractionSystem } from './systems/InteractionSystem';
+import { Interactable } from '../components/Interactable';
+import { Wall } from '../components/Wall';
 
 export class World implements CharacterContext, EnemyContext {
     readonly player: Character;
@@ -27,6 +29,8 @@ export class World implements CharacterContext, EnemyContext {
     readonly combat: Combat;
     readonly ectoplasm = new Ectoplasm();
     readonly npcs: NPC[];
+    readonly interactables: Interactable[];
+    get interactionTargets(){return [...this.npcs,...this.interactables.filter(item=>item.active)];}
     readonly interactions: InteractionSystem;
     enemies: Enemy[];
     projectiles: Projectile[] = [];
@@ -37,6 +41,8 @@ export class World implements CharacterContext, EnemyContext {
 
     constructor(level: Level) {
         this.level = new Map(level);
+        this.interactables=this.level.interactables.map(definition=>new Interactable(definition));
+        for(const object of this.interactables)if(object.definition.solid){object.blocker=new Wall(object);this.level.solids.push(object.blocker);}
         this.collisions = new CollisionSystem(this.level);
         this.interactions = new InteractionSystem(this.collisions);
         this.graveyard = new Graveyard(this);
@@ -48,6 +54,7 @@ export class World implements CharacterContext, EnemyContext {
     }
 
     get defeated() { return this.combat.defeated; }
+    syncInteractables(){for(let i=this.level.solids.length-1;i>=0;i--)if(this.interactables.some(object=>object.blocker===this.level.solids[i] && !object.active))this.level.solids.splice(i,1);}
     get corpses() { return this.graveyard.corpses; }
     get particles() { return this.effects.particles; }
 
@@ -70,7 +77,7 @@ export class World implements CharacterContext, EnemyContext {
         this.enemies = this.enemies.filter(enemy => enemy.health > 0);
         this.combat.checkContacts();
         if (this.player.health <= 0 || this.player.y > this.level.height + 100) { this.state = 'dead'; this.player.clearActions(); }
-        if (this.state === 'playing' && this.level.exit.reachedBy(this.player)) { this.state = 'won'; this.events.push('win'); }
+        if (this.state === 'playing' && this.level.exit.enabled && this.level.exit.reachedBy(this.player)) { this.state = 'won'; this.events.push('win'); }
         this.effects.update(dt);
         this.effects.consume(this.weaponEvents);
         this.camera.follow(this.player, this.level, dt);

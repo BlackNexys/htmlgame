@@ -43,9 +43,19 @@ export function sweepBody(body: Body, solids: Rect[], dt: number) {
         const dx = body.vx * remaining, dy = body.vy * remaining;
         if (!dx && !dy) break;
         let closest: SweptImpact | undefined;
+        let touching: BodyContacts | undefined;
         for (const wall of solids) {
             const hit = sweptImpact(body, dx, dy, wall);
             if (!hit || (hit.normalX === 0 && hit.normalY === 0)) continue;
+            // A zero-time corner at a tile seam must slide along an existing
+            // supporting face. An actual floor/wall corner still blocks both axes.
+            if (hit.time === 0 && hit.normalX && hit.normalY) {
+                touching ??= bodyContacts(body, solids);
+                const supportedX = hit.normalX < 0 ? touching.right : touching.left;
+                const supportedY = hit.normalY < 0 ? touching.ground : touching.ceiling;
+                if (supportedY && !supportedX) hit.normalX = 0;
+                if (supportedX && !supportedY) hit.normalY = 0;
+            }
             if (!closest || hit.time < closest.time - 1e-9) closest = {...hit};
             else if (Math.abs(hit.time - closest.time) <= 1e-9) {
                 closest.normalX ||= hit.normalX; closest.normalY ||= hit.normalY;

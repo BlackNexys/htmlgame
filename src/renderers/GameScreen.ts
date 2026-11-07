@@ -11,6 +11,7 @@ import { ProjectileRenderer } from './ProjectileRenderer';
 import { ParticleRenderer } from './ParticleRenderer';
 import { DebugRenderer } from './DebugRenderer';
 import { NPCRenderer } from './NPCRenderer';
+import { InteractableRenderer } from './InteractableRenderer';
 
 export class GameScreen {
     debug = false;
@@ -24,6 +25,7 @@ export class GameScreen {
     private readonly particles: ParticleRenderer;
     private readonly diagnostics: DebugRenderer;
     private readonly npcs: NPCRenderer;
+    private readonly objects:InteractableRenderer;
 
     constructor(public readonly canvas: HTMLCanvasElement, assets: GameAssets) {
         canvas.width = T.viewportWidth; canvas.height = T.viewportHeight;
@@ -39,6 +41,7 @@ export class GameScreen {
         this.particles = new ParticleRenderer(ctx);
         this.diagnostics = new DebugRenderer(ctx);
         this.npcs = new NPCRenderer(ctx, assets.npcs);
+        this.objects=new InteractableRenderer(ctx);
     }
 
     resetAnimation() { this.character.reset(); }
@@ -48,6 +51,7 @@ export class GameScreen {
         this.background.draw(world.camera, world.elapsed);
         this.ctx.save(); this.ctx.translate(-Math.round(world.camera.x), -Math.round(world.camera.y));
         this.map.draw(world.level, world.camera);
+        world.interactables.forEach(object=>{if(world.camera.canSee(object))this.objects.draw(object);});
         world.npcs.forEach(npc => { if (world.camera.canSee(npc)) this.npcs.draw(npc); });
         world.corpses.forEach(corpse => { if (world.camera.canSee(corpse.enemy)) this.corpses.draw(corpse); });
         world.enemies.forEach(enemy => { if (world.camera.canSee(enemy)) this.enemies.draw(enemy, world.elapsed, world.corpses); });

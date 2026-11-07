@@ -18,6 +18,7 @@ function tiles(rectangles: TerrainDefinition[], size: number): Rect[] {
 export function compileLevel(input: unknown): Level {
     const document = parseLevelDocument(input);
     return {
+        id: document.id,
         width: document.width, height: document.height,
         solids: tiles(document.terrain, document.tileSize), decorations: tiles(document.decorations, document.tileSize),
         spawn: {x: document.spawn.x - 16, y: document.spawn.y - 52}, exit: {...document.exit},
@@ -27,5 +28,6 @@ export function compileLevel(input: unknown): Level {
         })),
         signs: document.signs.map(sign => ({x: sign.x, y: sign.y, title: sign.title, text: sign.text})),
         npcs: document.npcs.map(npc => ({...npc, x: npc.x - npcCatalog[npc.kind].width / 2, y: npc.y - npcCatalog[npc.kind].height})),
+        interactables: document.interactables.map(item=>({...item})),
     };
 }

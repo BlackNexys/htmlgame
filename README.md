@@ -70,7 +70,8 @@ Humans and agents share the same schema, stable object IDs, and revision checks.
 | Aim up / diagonally | W or Up; combine with left/right |
 | Crouch / aim down | S or Down; downward aim while airborne |
 | Attack | Hold J or X |
-| Talk to a nearby NPC | F |
+| Interact with nearby NPC/object | F |
+| Journey / current lead (narrative study) | K |
 | Pause or resume | P or Escape |
 | Restart | R |
 | Toggle sound | M |
@@ -99,6 +100,8 @@ The [enemy art pack](public/assets/enemies/README.md) provides the six sheets us
 
 ## Neutral NPCs
 
+The new [narrative study](http://127.0.0.1:3000/?level=narrative-study) extends this foundation: inspect a physical transfer ledger, collect an optional Keepsake, hear the attendant react to discoveries, and open the departure route. **F** interacts; **K** opens Journey. Discoveries save immediately and survive death/restart/reload when browser storage succeeds. Stage completion separately unlocks the next destination. The workshop supports interactive objects and conditional NPC scene references; playtests leave campaign saves untouched. Story and layout remain noncanonical. See [narrative architecture, saving and authoring](docs/narrative-system.md).
+
 Open [the NPC study](http://127.0.0.1:3000/?level=npc-study) or choose **Meet the attendant** from the dialogue demo page. Approach the neutral railway attendant and press **F** to start the kinetic exchange. The attendant idles and faces nearby players, takes no combat damage, and can be walked or fired through. Conversations can be repeated; restart resets their per-run state. The workshop now places NPCs with validated scene references, including undo/redo, JSON export and snapshot playtests. See [NPC behavior and architecture](docs/npc-system.md) and [asset notes](public/assets/npcs/README.md).
 
 ## Dialogue prototype
@@ -117,7 +120,7 @@ The active entities follow the original class structure in `src/components`:
 
 ```text
 GameElement
-├── Wall, Exit, Sign, Camera, Particle
+├── Wall, Exit, Sign, Camera, Particle, Interactable
 ├── Projectile
 │   ├── FlickerProjectile
 │   └── EnemyProjectile

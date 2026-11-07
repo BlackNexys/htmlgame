@@ -5,8 +5,9 @@ import type { EnemyKind } from '../interfaces/Enemy';
 import { selectionBounds, selectedObject, type EditorSelection } from './EditorSelection';
 import { npcCatalog } from '../game/NPCCatalog';
 import type { NPCKind } from '../interfaces/NPC';
+import { interactionPresets } from '../narrative/InteractionPresets';
 
-export type EditorTool = 'select' | 'terrain' | 'decorations' | 'enemy' | 'npc' | 'spawn' | 'exit' | 'sign';
+export type EditorTool = 'select' | 'terrain' | 'decorations' | 'enemy' | 'npc' | 'interactable' | 'spawn' | 'exit' | 'sign';
 interface Drag { start: LevelPoint; end: LevelPoint; selection?: EditorSelection; }
 
 /** Authoring canvas only: no World, game loop, physics updates, or live entities. */
@@ -15,6 +16,7 @@ export class EditorCanvas {
     enemy: EnemyKind = 'zombie';
     npc: NPCKind = 'rail-attendant';
     scene = 'station-exchange';
+    interactionPreset='record';
     selection: EditorSelection;
     private document: LevelDocument;
     private zoom = .5;
@@ -62,7 +64,7 @@ export class EditorCanvas {
     }
     private hit(point: LevelPoint): EditorSelection {
         const selections: Exclude<EditorSelection, undefined>[] = [
-            ...(['decorations', 'terrain', 'enemies', 'npcs', 'signs'] as const).flatMap(collection => this.document[collection].map(item => ({collection, id: item.id}))), 'spawn', 'exit',
+            ...(['decorations', 'terrain', 'enemies', 'npcs', 'interactables', 'signs'] as const).flatMap(collection => this.document[collection].map(item => ({collection, id: item.id}))), 'spawn', 'exit',
         ];
         return selections.reverse().find(selection => {
             const r = selectionBounds(this.document, selection);
@@ -141,6 +143,11 @@ export class EditorCanvas {
                     this.edit([{op: 'upsert', collection: 'npcs', value: {id, kind: this.npc, x, y, scene: this.scene}}]);
                     this.selection = {collection: 'npcs', id};
                 }
+                if(this.tool==='interactable'){
+                    const preset=interactionPresets[this.interactionPreset],id=this.newId(this.interactionPreset);
+                    this.edit([{op:'upsert',collection:'interactables',value:{id,...preset,x:x-preset.width/2,y:y-preset.height}}]);
+                    this.selection={collection:'interactables',id};
+                }
                 this.select(this.selection);
             }
         } catch (error) { this.report(error instanceof Error ? error.message : 'Could not apply edit'); }
@@ -200,6 +207,7 @@ export class EditorCanvas {
             const info = npcCatalog[npc.kind]; actor(npc.kind, npc.x, npc.y, info.width, info.height);
             c.fillStyle = color('--game-bone'); c.font = '16px monospace'; c.fillText(npc.id, npc.x - 16, npc.y - 88);
         }
+        for(const object of view.interactables){c.fillStyle=object.kind==='collect'?'#bca084':'#385269';c.fillRect(object.x,object.y,object.width,object.height);c.strokeStyle='#63dfeb';c.strokeRect(object.x,object.y,object.width,object.height);c.fillStyle='#d5e1dc';c.font='14px monospace';c.fillText(object.label,object.x,object.y-8);}
         c.font = '16px monospace'; c.fillStyle = color('--game-bone');
         for (const sign of view.signs) { c.fillText(sign.title, sign.x, sign.y); c.fillStyle = color('--game-dust'); c.fillText(sign.text, sign.x, sign.y + 22); c.fillStyle = color('--game-bone'); }
         if (this.selection) {

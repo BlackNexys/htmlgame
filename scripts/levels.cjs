@@ -19,7 +19,7 @@ try {
     if (command === 'summary') console.log(JSON.stringify({
         id: document.id, name: document.name, revision: document.revision,
         size: {width: document.width, height: document.height},
-        objects: Object.fromEntries(['terrain', 'decorations', 'enemies', 'npcs', 'signs'].map(collection => [collection, document[collection].map(item => item.id)])),
+        objects: Object.fromEntries(['terrain', 'decorations', 'enemies', 'npcs', 'interactables', 'signs'].map(collection => [collection, document[collection].map(item => item.id)])),
     }, null, 2));
     if (command === 'format' || command === 'patch') {
         const updated = command === 'patch' ? applyLevelChanges(document, JSON.parse(fs.readFileSync(patchFile, 'utf8'))) : document;

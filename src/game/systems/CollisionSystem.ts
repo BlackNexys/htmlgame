@@ -6,9 +6,9 @@ import { impactTime } from '../movement/physics';
 export class CollisionSystem {
     constructor(private readonly level: Map) {}
 
-    canSee(a: Rect, b: Rect) {
+    canSee(a: Rect, b: Rect, ignore?:Rect) {
         const origin = {x: a.x + a.width / 2, y: a.y + a.height / 2, width: .1, height: .1};
-        return !this.level.solids.some(wall => impactTime(origin,
+        return !this.level.solids.some(wall => wall!==ignore && impactTime(origin,
             b.x + b.width / 2 - origin.x, b.y + b.height / 2 - origin.y, wall) !== undefined);
     }
 

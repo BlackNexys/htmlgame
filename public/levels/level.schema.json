@@ -19,6 +19,7 @@
     "decorations": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/terrain"}},
     "enemies": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/enemy"}},
     "npcs": {"type": "array", "default": [], "maxItems": 1000, "items": {"$ref": "#/$defs/npc"}},
+    "interactables": {"type": "array", "default": [], "maxItems": 1000, "items": {"$ref": "#/$defs/interactable"}},
     "signs": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/sign"}}
   },
   "$defs": {
@@ -46,7 +47,19 @@
     },
     "npc": {
       "type": "object", "additionalProperties": false, "required": ["id", "kind", "x", "y", "scene"],
-      "properties": {"id": {"$ref": "#/$defs/id"}, "kind": {"enum": ["rail-attendant"]}, "x": {"$ref": "#/$defs/coordinate"}, "y": {"$ref": "#/$defs/coordinate"}, "scene": {"enum": ["station-exchange"]}}
+      "properties": {"id": {"$ref": "#/$defs/id"}, "kind": {"enum": ["rail-attendant"]}, "x": {"$ref": "#/$defs/coordinate"}, "y": {"$ref": "#/$defs/coordinate"}, "scene": {"enum": ["station-exchange","registry-attendant","attendant-introduction","attendant-directions","attendant-record","attendant-farewell"]}}
+    },
+    "interactable": {
+      "type":"object","additionalProperties":false,"required":["id","kind","x","y","width","height","label","sceneId"],
+      "properties": {
+        "id":{"$ref":"#/$defs/id"},"kind":{"enum":["inspect","collect","operate"]},
+        "x":{"$ref":"#/$defs/coordinate"},"y":{"$ref":"#/$defs/coordinate"},
+        "width":{"type":"integer","minimum":8,"maximum":480},"height":{"type":"integer","minimum":8,"maximum":480},
+        "label":{"type":"string","minLength":1,"maxLength":80,"pattern":"\\S"},"reach":{"type":"integer","minimum":16,"maximum":160,"default":80},
+        "sceneId":{"enum":["transfer-record-card","route-key-card","letter-card","gate-card","locked-card","station-exchange","attendant-introduction","attendant-directions","attendant-record","attendant-farewell"]},
+        "effectId":{"enum":["inspect-transfer-record","decode-route","collect-letter","open-gate"]},
+        "conditionId":{"enum":["knows-registry","has-record","knows-destination"]},"solid":{"type":"boolean"}
+      }
     },
     "sign": {
       "type": "object", "additionalProperties": false, "required": ["id", "x", "y", "title", "text"],

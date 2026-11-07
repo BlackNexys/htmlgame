@@ -3,7 +3,11 @@ import type { LevelOperation } from '../levels/LevelChanges';
 import { enemyTuning } from '../game/config';
 import { npcCatalog } from '../game/NPCCatalog';
 import type { NPCKind } from '../interfaces/NPC';
-import { sceneCatalog } from '../dialogue/SceneCatalog';
+import { conversationChoices } from '../dialogue/SceneCatalog';
+import type { InteractionKind } from '../interfaces/Interactable';
+import { inspections } from '../narrative/InspectionCatalog';
+import { effectCatalog } from '../narrative/EffectApplier';
+import { conditions } from '../narrative/Conditions';
 import { selectedObject, selectionFromKey, selectionKey, type EditorSelection } from './EditorSelection';
 
 /** DOM property inspector. Authored text is always inserted as text, never HTML. */
@@ -50,8 +54,17 @@ export class EditorInspector {
             label.append(kind); this.form.append(label);
             const sceneLabel = window.document.createElement('label'); sceneLabel.textContent = 'Dialogue scene';
             const scene = window.document.createElement('select'); scene.name = 'scene';
-            scene.replaceChildren(...Object.entries(sceneCatalog).map(([id, data]) => new Option(`${id} · ${data.title}`, id))); scene.value = item.scene;
+            scene.replaceChildren(...Object.entries(conversationChoices).map(([id, data]) => new Option(`${id} · ${data.title}`, id))); scene.value = item.scene;
             sceneLabel.append(scene); this.form.append(sceneLabel);
+        }
+        if(item.sceneId!==undefined){
+            this.field('label','Label',item.label!);this.field('reach','Reach',item.reach!);
+            const choice=(name:string,title:string,values:string[],value:string)=>{const label=window.document.createElement('label');label.textContent=title;const select=window.document.createElement('select');select.name=name;select.replaceChildren(...values.map(id=>new Option(id||'(none)',id)));select.value=value;label.append(select);this.form.append(label);};
+            choice('kind','Action',['inspect','collect','operate'],item.kind!);
+            choice('sceneId','Inspection card',Object.keys(inspections),item.sceneId);
+            choice('effectId','Completion effect',['',...Object.keys(effectCatalog)],item.effectId??'');
+            choice('conditionId','Required condition',['',...Object.keys(conditions)],item.conditionId??'');
+            choice('solid','Blocks movement',['false','true'],String(item.solid??false));
         }
         const button = window.document.createElement('bl-button'); button.type = 'submit'; button.textContent = 'Apply properties';
         this.form.append(button);
@@ -88,6 +101,11 @@ export class EditorInspector {
             value.patrol = {left: Number(data.get('left')), right: Number(data.get('right'))};
         }
         if (value.scene !== undefined) { value.kind = String(data.get('kind')) as NPCKind; value.scene = String(data.get('scene')); }
+        if(value.sceneId!==undefined){
+            value.kind=String(data.get('kind')) as InteractionKind;value.label=String(data.get('label'));value.reach=Number(data.get('reach'));value.sceneId=String(data.get('sceneId'));value.solid=data.get('solid')==='true';
+            const effect=String(data.get('effectId')),condition=String(data.get('conditionId'));
+            if(effect)value.effectId=effect;else delete value.effectId;if(condition)value.conditionId=condition;else delete value.conditionId;
+        }
         if (value.title !== undefined) { value.title = String(data.get('title')); value.text = String(data.get('text')); }
         this.edit([typeof this.selection === 'string'
             ? {op: 'set', field: this.selection, value}

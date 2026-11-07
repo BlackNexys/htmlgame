@@ -14,6 +14,12 @@ import { GamePreferences } from '../ui/GamePreferences';
 import { DialogueSession } from '../dialogue/DialogueSession';
 import type { DialogueScene } from '../dialogue/DialogueScene';
 import { sceneFor } from '../dialogue/SceneCatalog';
+import { NarrativeSession } from '../narrative/NarrativeSession';
+import { SaveStore } from '../narrative/SaveStore';
+import { InspectionView } from '../narrative/ui/InspectionView';
+import { JourneyPanel } from '../narrative/ui/JourneyPanel';
+import { NarrativeHud } from '../narrative/ui/NarrativeHud';
+import { Interactable } from '../components/Interactable';
 
 export class Game {
     private world!: World;
@@ -34,10 +40,14 @@ export class Game {
     private dialogue?: DialogueSession;
     private introPlayed = false;
     private readonly sceneEffects = new Set<string>();
+    private narrative?:NarrativeSession;
+    private inspection?:InspectionView;
+    private readonly journey=new JourneyPanel();
+    private readonly narrativeHud=new NarrativeHud(()=>this.openJourney());
 
     constructor(private readonly canvas: HTMLCanvasElement,
         private readonly loadLevel: (signal: AbortSignal) => Promise<Level> = signal => new LevelLoader().load('lower-passage', signal),
-        private readonly intro?: DialogueScene) {
+        private readonly intro?: DialogueScene, private readonly preview=false) {
         this.input = new Input(canvas, key => this.handleKey(key));
         this.loop = new GameLoop(dt => this.update(dt), (elapsed, simulated) => this.draw(elapsed, simulated));
         canvas.addEventListener('blur', this.canvasBlur);
@@ -58,7 +68,10 @@ export class Game {
             const [assets, level] = await Promise.all([new AssetLoader().load(), this.loadLevel(this.loading.signal)]);
             if (this.disposed) return;
             this.loadedLevel = level;
+            this.narrative=new NarrativeSession(level.id??'',SaveStore.browser(),this.preview);
+            if(!this.narrative.allowed)throw Error('This railway destination has not been unlocked. Return to the narrative study first');
             this.world = new World(level);
+            this.narrative.attach(this.world);
             this.screen = new GameScreen(this.canvas, assets);
             this.hud.update(this.world);
             this.screen.draw(this.world);
@@ -74,6 +87,7 @@ export class Game {
     dispose() {
         this.disposed = true;
         this.loading.abort();
+        this.inspection?.dispose();this.journey.dispose();this.narrativeHud.dispose();
         this.dialogue?.dispose(); this.dialogue = undefined;
         this.loop.stop(); this.input.dispose(); this.menu.dispose(); this.sound.dispose(); this.music.dispose();
         this.canvas.removeEventListener('blur', this.canvasBlur);
@@ -82,6 +96,7 @@ export class Game {
     }
 
     private resume() {
+        this.narrative?.enter();this.narrativeHud.update(this.narrative);
         this.hasSession = true;
         this.music.update(false, this.sound.muted);
         this.sound.unlock(); this.input.clear(); this.world.player.clearActions(); this.loop.resume();
@@ -91,11 +106,12 @@ export class Game {
         if (this.intro && !this.introPlayed) this.beginDialogue(this.intro);
     }
 
-    private beginDialogue(scene: DialogueScene, onCompleted?: () => void) {
+    private beginDialogue(scene: DialogueScene, onCompleted?: () => void, effects?: (id:string)=>void) {
         this.introPlayed = true;
         const blocking = scene.presentation !== 'overlay';
         if (blocking) { this.mode = 'dialogue'; this.input.clear(); this.world.player.clearActions(); this.loop.pause(); this.menu.dialogue(); }
-        this.dialogue = new DialogueSession(scene, () => {
+        this.dialogue = new DialogueSession(scene, id => {
+            if(effects){effects(id);return;}
             // This prototype effect has no campaign reward. The host owns real effects.
             this.canvas.dataset.dialogueDemo = 'heard';
         }, result => {
@@ -123,9 +139,10 @@ export class Game {
     }
 
     private restart() {
+        this.inspection?.dispose();this.inspection=undefined;
         if (this.dialogue) { const scene = this.dialogue; this.dialogue = undefined; scene.cancel(); }
         this.introPlayed = false; this.sceneEffects.clear(); delete this.canvas.dataset.dialogueDemo;
-        this.world = new World(this.loadedLevel); this.screen!.resetAnimation(); this.hud.update(this.world); this.resume();
+        this.world = new World(this.loadedLevel);this.narrative?.attach(this.world); this.screen!.resetAnimation(); this.hud.update(this.world); this.resume();
     }
 
     private readonly pause = () => {
@@ -164,6 +181,7 @@ export class Game {
         if (this.mode === 'dialogue') return;
         if (!this.screen || this.mode === 'loading' || this.mode === 'ready' || this.mode === 'menu' || this.mode === 'error') return;
         if (key === 'KeyF') this.talk();
+        if (key === 'KeyK') this.openJourney();
         if (key === 'KeyP' || key === 'Escape') this.togglePause();
         if (key === 'KeyR') this.restart();
         if (key === 'KeyM') this.toggleMute();
@@ -172,11 +190,26 @@ export class Game {
 
     private talk() {
         if (this.mode !== 'playing' || this.dialogue) return;
-        const npc = this.world.interactions.nearest(this.world.player, this.world.npcs);
-        const scene = npc && sceneFor(npc.scene);
-        if (!npc || !scene) return;
-        this.world.player.facing = Math.sign(npc.x - this.world.player.x) || this.world.player.facing;
-        this.beginDialogue(scene, () => npc.completeConversation());
+        const target = this.world.interactions.nearest(this.world.player, this.world.interactionTargets);
+        if(!target || !this.narrative)return;
+        const plan=this.narrative.plan(target);
+        const complete=()=>{this.narrative!.complete(plan,this.world);if(!(target instanceof Interactable) && plan.scene)target.completeConversation();this.narrativeHud.update(this.narrative);};
+        if(plan.scene){
+            this.world.player.facing=Math.sign(target.x-this.world.player.x)||this.world.player.facing;
+            this.beginDialogue(plan.scene,complete,plan.effects.length?()=>{}:undefined);
+        }else if(plan.card){
+            this.mode='dialogue';this.input.clear();this.world.player.clearActions();this.loop.pause();this.menu.dialogue();
+            this.inspection=new InspectionView(plan.card,completed=>{this.inspection=undefined;if(this.disposed)return;if(completed)complete();this.resume();});
+        }
+    }
+    private openJourney(){
+        if(this.mode!=='playing' || this.dialogue || !this.narrative?.active)return;
+        this.mode='dialogue';this.input.clear();this.world.player.clearActions();this.loop.pause();this.menu.dialogue();
+        this.journey.open(this.narrative,reset=>{
+            if(this.disposed)return;
+            if(reset){this.narrative!.reset();if(this.loadedLevel.id==='departure-study'){location.href=`./?level=narrative-study${this.preview?'&preview=1':''}`;return;}this.restart();}
+            else this.resume();
+        });
     }
 
     private update(dt: number) {
@@ -184,6 +217,7 @@ export class Game {
         this.screen!.update(this.world, dt, this.world.events);
         this.world.events.forEach(event => this.sound.play(event));
         if (this.world.state !== 'playing') {
+            if(this.world.state==='won' && this.mode==='playing'){this.narrative?.completeStage();this.narrativeHud.update(this.narrative);}
             this.mode = this.world.state; this.input.clear(); this.loop.pause();
             this.dialogue?.cancel();
             this.menu.outcome(this.world.state, this.world.defeated, this.world.level.enemies.length);
@@ -193,7 +227,7 @@ export class Game {
     private draw(elapsed: number, simulated: boolean) {
         // The full-screen title owns presentation while it covers the game.
         if (this.mode === 'loading' || this.mode === 'ready' || this.mode === 'menu' || this.mode === 'error') return;
-        if (simulated) this.hud.update(this.world);
+        if (simulated){const target=this.world.interactions.nearest(this.world.player,this.world.interactionTargets);this.hud.update(this.world,this.narrative?.prompt(target));this.narrativeHud.update(this.narrative);}
         else if (this.mode === 'dead') this.screen!.update(this.world, Math.min(elapsed, .05));
         this.screen!.draw(this.world);
     }

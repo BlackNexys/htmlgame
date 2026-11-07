@@ -5,6 +5,11 @@ import { overlaps } from '../game/movement/physics';
 import { npcCatalog } from '../game/NPCCatalog';
 import type { NPCKind } from '../interfaces/NPC';
 import { sceneFor } from '../dialogue/SceneCatalog';
+import { sceneRules } from '../narrative/SceneResolver';
+import { inspections } from '../narrative/InspectionCatalog';
+import { effectCatalog } from '../narrative/EffectApplier';
+import { conditions } from '../narrative/Conditions';
+import type { InteractionKind } from '../interfaces/Interactable';
 
 const slug = /^[a-z][a-z0-9-]{0,79}$/;
 export class LevelValidationError extends Error {
@@ -36,7 +41,7 @@ export function parseLevelDocument(value: unknown): LevelDocument {
         if (!slug.test(result)) fail(path, 'use lowercase letters, numbers, and hyphens, starting with a letter');
         return result;
     };
-    const root = object(value, 'level', ['schemaVersion', 'id', 'name', 'revision', 'tileSize', 'width', 'height', 'spawn', 'exit', 'terrain', 'decorations', 'enemies', 'npcs', 'signs']);
+    const root = object(value, 'level', ['schemaVersion', 'id', 'name', 'revision', 'tileSize', 'width', 'height', 'spawn', 'exit', 'terrain', 'decorations', 'enemies', 'npcs', 'interactables', 'signs']);
     if (root.schemaVersion !== 1) fail('schemaVersion', 'only version 1 is supported');
     if (root.tileSize !== 48) fail('tileSize', 'version 1 uses 48-pixel tiles');
     const width = number(root.width, 'width', 960, 32736);
@@ -96,8 +101,26 @@ export function parseLevelDocument(value: unknown): LevelDocument {
             const kind = p.kind as NPCKind;
             if (typeof kind !== 'string' || !Object.hasOwn(npcCatalog, kind)) fail(`${path}.kind`, 'unknown NPC kind');
             const scene = id(p.scene, `${path}.scene`);
-            if (!sceneFor(scene)) fail(`${path}.scene`, 'unknown dialogue scene');
+            if (!sceneFor(scene) && !Object.hasOwn(sceneRules,scene)) fail(`${path}.scene`, 'unknown dialogue scene');
             return {id: objectId(p.id, path), kind, scene, ...point(input, path, ['id', 'kind', 'x', 'y', 'scene'])};
+        }),
+        interactables: root.interactables===undefined?[]:array(root.interactables,'interactables',(input,path)=>{
+            const keys=['id','kind','x','y','width','height','label','reach','sceneId','effectId','conditionId','solid'];
+            const p=object(input,path,keys),kind=p.kind as InteractionKind;
+            if(!['inspect','collect','operate'].includes(kind))fail(`${path}.kind`,'unknown interaction kind');
+            const bounds={...point(input,path,keys),width:number(p.width,`${path}.width`,8,480),height:number(p.height,`${path}.height`,8,480)};
+            if(bounds.x+bounds.width>width || bounds.y+bounds.height>height)fail(path,'object extends outside the level');
+            const sceneId=id(p.sceneId,`${path}.sceneId`);
+            if(!Object.hasOwn(inspections,sceneId) && !sceneFor(sceneId))fail(`${path}.sceneId`,'unknown inspection or scene');
+            const effectId=p.effectId===undefined?undefined:id(p.effectId,`${path}.effectId`);
+            const effect=effectId && Object.hasOwn(effectCatalog,effectId)?effectCatalog[effectId]:undefined;
+            if(effectId && (!effect || effect.source!==kind || effect.scene && effect.scene!==sceneId))fail(`${path}.effectId`,'effect does not match the physical interaction');
+            const conditionId=p.conditionId===undefined?undefined:id(p.conditionId,`${path}.conditionId`);
+            if(conditionId && !Object.hasOwn(conditions,conditionId))fail(`${path}.conditionId`,'unknown condition');
+            if(p.solid!==undefined && typeof p.solid!=='boolean')fail(`${path}.solid`,'must be boolean');
+            if(p.solid && kind!=='operate')fail(`${path}.solid`,'only operated objects can block movement');
+            return {id:objectId(p.id,path),kind,...bounds,label:string(p.label,`${path}.label`,80),reach:number(p.reach??80,`${path}.reach`,16,160),sceneId,
+                ...(effectId?{effectId}:{}),...(conditionId?{conditionId}:{}),...(p.solid?{solid:true}:{})};
         }),
     };
     if (tiles > 10000) fail('terrain', 'at most 10000 expanded tiles are allowed, including decorations');
@@ -121,6 +144,10 @@ export function parseLevelDocument(value: unknown): LevelDocument {
     result.npcs.forEach((npc, index) => {
         const info = Object.hasOwn(npcCatalog, npc.kind) ? npcCatalog[npc.kind] : undefined;
         if (info) actor(npc.x, npc.y, info.width, info.height, `npcs[${index}]`);
+    });
+    result.interactables.forEach((item,index)=>{
+        if(item.solid && result.terrain.some(wall=>overlaps(item,wall)))fail(`interactables[${index}]`,'solid object overlaps terrain');
+        if(item.solid && overlaps(item,{x:result.spawn.x-16,y:result.spawn.y-52,width:32,height:52}))fail(`interactables[${index}]`,'solid object overlaps player spawn');
     });
     if (!issues.length && new TextEncoder().encode(JSON.stringify(result)).byteLength > 1_000_000) fail('level', 'document exceeds 1 MB');
     if (issues.length) throw new LevelValidationError(issues);

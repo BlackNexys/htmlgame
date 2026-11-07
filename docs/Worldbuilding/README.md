@@ -17,6 +17,8 @@
 | [Dialogue system](../dialogue-system.md) | Implemented expressive scene prototype; demo dialogue and attendant remain noncanonical |
 | [Enemy behavior](../enemy-behavior.md) | Implemented hostile actors and reactivation limits; no claim that all undead are hostile |
 | [Neutral NPCs](../npc-system.md) | Implemented neutral actor and talk-interaction slice; the attendant remains prototype material |
+| [Narrative and interaction proposal](Underworld_Narrative_Interaction_Proposal_v0_1.md) | Supplied architecture sketch, preserved as a proposal rather than canon |
+| [Narrative systems](../narrative-system.md) | Implemented inspect/collect/operate, conditional scenes, discoveries, Journey and immediate saves; prototype story remains noncanonical |
 | [Level authoring](../level-authoring.md) | Supported editor/runtime format; atlas interactions are possibilities, not existing editor features |
 | [Foundation roadmap](../action-game-roadmap.md) | Historical development record; use the current design plan for later mechanics |
 
@@ -36,7 +38,7 @@ The soulmate search remains the personal anchor. The atlas proposes treating the
 
 ## Boundaries for future work
 
-- Keep run resources, permanent mechanical discoveries, and proposed world keepsakes distinct. “Keepsakes” is a working category, with no agreed catalog, collectible system, or completion requirement.
+- Keep run resources, permanent mechanical discoveries, and world Keepsakes distinct. One optional letter tests the collectible system; its story and the final Keepsake catalog remain open. Important discoveries and Keepsakes now save immediately and survive death/restart. They are not a currency or a mandatory completion checklist.
 - Give proposed regional mechanics their own design and playtest review. Flooding, moving trains, responsive organisms, gravity changes, and reflected routes are not currently supported merely because the atlas describes them.
 - Preserve dependable arcade controls and readable collision rules when exploring unusual environments. Regional spectacle must support traversal and combat readability.
 - Keep immediate defeat rewards separate from future harvesting/caches. The current build has Flicker, capped ectoplasm, and first-defeat recovery; harvesting, other weapons, progression, and bosses remain future work.
@@ -46,7 +48,7 @@ The soulmate search remains the personal anchor. The atlas proposes treating the
 
 ## Open decisions
 
-The atlas's [question list](Underworld_Deadways_World_Atlas_v0_1.md#9-questions-to-investigate-before-committing-canon) remains open: river origins and arrival of the dead; the nature of undead people; defeat and reactivation; rail governance; stable environmental laws; earlier civilizations; and the protagonist's search and emotional destination. Also unresolved are which regions to keep, their campaign order, the Last Platform's location, collectible implementation, and any outer continuity.
+The atlas's [question list](Underworld_Deadways_World_Atlas_v0_1.md#9-questions-to-investigate-before-committing-canon) remains open: river origins and arrival of the dead; the nature of undead people; defeat and reactivation; rail governance; stable environmental laws; earlier civilizations; and the protagonist's search and emotional destination. Also unresolved are which regions to keep, their campaign order, the Last Platform's location, final collectible content, and any outer continuity. The narrative-study loop uses the Last Platform as a labelled test setting; it does not settle those questions or establish why a transfer happened.
 
 Resolve only the questions needed for the next playable slice when that discussion happens. A temporary level fixture should be labelled as such rather than silently deciding the wider world.
 

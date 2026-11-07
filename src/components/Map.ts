@@ -3,8 +3,11 @@ import { Exit } from './Exit';
 import { Sign } from './Sign';
 import type { EnemySpawn, Level } from '../interfaces/Level';
 import type { NPCSpawn } from '../interfaces/NPC';
+import type { InteractableDefinition } from '../interfaces/Interactable';
 
 export class Map implements Level {
+    id?: string;
+    interactables: InteractableDefinition[];
     width: number;
     height: number;
     solids: Wall[];
@@ -16,6 +19,8 @@ export class Map implements Level {
     signs: Sign[];
 
     constructor(level: Level) {
+        this.id=level.id;
+        this.interactables=(level.interactables??[]).map(item=>({...item}));
         this.width = level.width;
         this.height = level.height;
         this.solids = level.solids.map(bounds => new Wall(bounds));

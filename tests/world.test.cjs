@@ -3,13 +3,28 @@ const {createActionLevel} = require('../src/maps/actionLevel.ts');
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const {World} = require('../src/game/World.ts');
-const {moveBody, overlaps} = require('../src/game/movement/physics.ts');
+const {moveBody, overlaps, sweepBody} = require('../src/game/movement/physics.ts');
 const {FixedClock} = require('../src/game/FixedClock.ts');
 const {FlickerProjectile} = require('../src/components/FlickerProjectile.ts');
 const {tuning: T} = require('../src/game/config.ts');
 const idle = {left: false, right: false, jump: false, fire: false};
 const run = (world, seconds, input = idle) => { for(let i = 0; i < Math.round(seconds / T.step); i++) world.update(T.step, input); };
 const fixture = (extra = {}) => ({width: 2400, height: 672, solids: [{x: 0, y: 576, width: 2400, height: 48}], spawn: {x: 100, y: 524}, enemies: [], exit: {x: 2200, y: 468, width: 64, height: 108}, ...extra});
+
+test('exact tile seams preserve sliding along floors and walls, while a real corner blocks both axes', () => {
+    for(const direction of [-1,1]) {
+        const body={x:direction===1?16:48,y:48,width:32,height:48,vx:direction*300,vy:15,grounded:true};
+        const start=body.x;
+        sweepBody(body,[{x:0,y:96,width:48,height:48},{x:48,y:96,width:48,height:48}],1/120);
+        assert.ok(direction*(body.x-start)>0);assert.equal(body.y,48);assert.equal(body.grounded,true);
+    }
+    const sliding={x:16,y:48,width:32,height:48,vx:30,vy:300,grounded:false};
+    sweepBody(sliding,[{x:48,y:0,width:48,height:96},{x:48,y:96,width:48,height:96}],1/120);
+    assert.equal(sliding.x,16);assert.ok(sliding.y>48);
+    const corner={x:16,y:48,width:32,height:48,vx:300,vy:15,grounded:true};
+    sweepBody(corner,[{x:0,y:96,width:48,height:48},{x:48,y:48,width:48,height:96}],1/120);
+    assert.equal(corner.x,16);assert.equal(corner.y,48);
+});
 
 test('fixed simulation gives equivalent movement at 30, 60, and 144 render frames per second', () => {
     const positions = [30, 60, 144].map(fps => {

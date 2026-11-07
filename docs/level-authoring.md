@@ -6,7 +6,7 @@ Open `/editor.html` through the development or preview server. The **Level works
 
 The [Deadways atlas](Worldbuilding/Underworld_Deadways_World_Atlas_v0_1.md) supplies exploratory setting ideas. Its regions are not required levels or a prescribed campaign sequence. The Lower Passage, movement course, and `dialogue-course` action-dialogue study remain mechanics fixtures; a campaign demo region and feature set have not been selected. The earlier travelling-dialogue study is selected by `?dialogueDemo=action`; it uses a session intro. The new `npc-study` fixture uses actual neutral actors and the optional `npcs` collection to trigger kinetic conversations by interaction.
 
-For a future level brief, record a candidate setting and its status, the movement/combat questions to test, and any proposed interactions separately from supported features. Keep spectacle subordinate to readable routes, threats, and collision boundaries. The current schema supports neutral NPC placement with registered dialogue scene references. It has no regional simulation, train, water, gravity-transition, reflection, or keepsake system. Decorations and signs cannot stand in for implementing those mechanics. A setting assignment does not require new runtime fields unless a concrete gameplay need warrants them.
+For a future level brief, record a candidate setting and its status, the movement/combat questions to test, and any proposed interactions separately from supported features. Keep spectacle subordinate to readable routes, threats, and collision boundaries. The current schema supports neutral NPCs with direct or conditional scene references and inspect/collect/operate objects, including an optional saved Keepsake in `narrative-study`. It has no regional simulation, train, water, gravity-transition or reflection system. Decorations and signs cannot stand in for implementing those mechanics. A setting assignment does not require new runtime fields unless a concrete gameplay need warrants them.
 
 ## Human workflow
 
@@ -39,6 +39,7 @@ Each level is one JSON file, independent of editor state or executable scripts. 
 | `decorations` | Grid-aligned background rectangles with stable IDs |
 | `enemies` | ID, kind, bottom-center position, and center-based patrol limits |
 | `npcs` | Optional array of neutral actor ID, kind, bottom-center position and registered scene ID; omitted arrays normalize to empty |
+| `interactables` | Optional inspect/collect/operate objects with top-left bounds, label, reach, registered card/scene and optional effect, condition and solid flag; omitted arrays normalize to empty |
 | `signs` | ID, text origin X/Y, heading, and message |
 
 All authored coordinates use **world pixels**, with X increasing east and Y increasing down. For example, an enemy at `{ "x": 504, "y": 576 }` stands with its feet at Y=576. Patrol `left` and `right` describe the same center anchor. Actor sprite dimensions do not need to be subtracted by the author. The compiler handles the existing runtime's top-left and enemy spawn conventions.
@@ -49,7 +50,7 @@ Validation checks finite integer coordinates, known enemy kinds, dimensions, gri
 
 ## AI file workflow
 
-See [neutral NPCs](npc-system.md) for interaction rules, example JSON, neutral combat policy and extension points. Current kind: `rail-attendant`; current scene ID: `station-exchange`.
+See [neutral NPCs](npc-system.md) for neutral combat policy and [narrative systems](narrative-system.md) for object JSON, catalogs and saving. Current NPC kind: `rail-attendant`; scenes include the direct `station-exchange` and the fact-driven `registry-attendant` resolver. The workshop's **Object** tool places ledger, letter, route-index and gate presets; the inspector edits bounds, label, reach, kind, scene, effect, condition and solidity. Invalid reference combinations are rejected before commit.
 
 An agent can read and edit the same JSON that the workshop imports and exports. Use the existing IDs and consult the schema. Prefer a revision-checked patch for bounded edits:
 
@@ -85,7 +86,7 @@ Example `changes.json`, targeting revision 1:
 
 Supported operations:
 
-- `upsert`: add or replace one complete object by ID in `terrain`, `decorations`, `enemies`, or `signs`.
+- `upsert`: add or replace one complete object by ID in `terrain`, `decorations`, `enemies`, `npcs`, `interactables`, or `signs`.
 - `remove`: remove an object by `collection` and `id`; missing IDs produce an error.
 - `set`: replace `id`, `name`, `width`, `height`, `spawn`, or `exit` with `value`.
 
@@ -113,6 +114,6 @@ window.levelEditor.select({ collection: 'enemies', id: 'skeleton-2' });
 
 `LevelLoader` fetches only the requested level JSON when the game starts. `LevelCompiler` translates validated documents into the simulation's `Level` interface. `Game` keeps the loaded definition for clean restarts. The synchronous `src/maps/actionLevel.ts` wrapper exists for tests; it is not imported by the browser runtime. The original `level0.ts` remains an old reference format.
 
-The game can also load a same-origin JSON URL through `?levelUrl=...`. The workshop uses a temporary Blob URL for playtests and revokes it when the playtest closes. No editor model, undo history, or mutable map is passed into the game.
+The game can also load a same-origin JSON URL through `?levelUrl=...`. The workshop uses a temporary Blob URL for playtests and revokes it when the playtest closes. No editor model, undo history, or mutable map is passed into the game. Every `levelUrl` run uses an isolated in-memory narrative session, even when the document has a campaign stage ID. `preview=1` also explicitly isolates a normal level URL. Playtest discoveries, reset and onward links cannot overwrite the real campaign.
 
 Run `pnpm run check` and `pnpm run test:browser` after changes. Editor tests cover visual edits, property changes, undo/redo, JSON round trips, draft persistence, AI conflicts, snapshot isolation, chosen-map restart, and runtime loading failures in Chromium and Firefox.

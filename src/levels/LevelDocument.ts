@@ -1,6 +1,7 @@
 import type { EnemyKind } from '../interfaces/Enemy';
 import type { Rect } from '../interfaces/Geometry';
 import type { NPCKind } from '../interfaces/NPC';
+import type { InteractableDefinition } from '../interfaces/Interactable';
 
 export interface LevelPoint { x: number; y: number; }
 export interface TerrainDefinition extends Rect { id: string; }
@@ -27,12 +28,13 @@ export interface LevelDocument {
     decorations: TerrainDefinition[];
     enemies: LevelEnemy[];
     npcs: LevelNPC[];
+    interactables: InteractableDefinition[];
     signs: LevelSign[];
 }
 
-export type LevelCollection = 'terrain' | 'decorations' | 'enemies' | 'npcs' | 'signs';
-export type LevelObject = TerrainDefinition | LevelEnemy | LevelNPC | LevelSign;
-export const levelCollections: LevelCollection[] = ['terrain', 'decorations', 'enemies', 'npcs', 'signs'];
+export type LevelCollection = 'terrain' | 'decorations' | 'enemies' | 'npcs' | 'interactables' | 'signs';
+export type LevelObject = TerrainDefinition | LevelEnemy | LevelNPC | LevelSign | InteractableDefinition;
+export const levelCollections: LevelCollection[] = ['terrain', 'decorations', 'enemies', 'npcs', 'interactables', 'signs'];
 
 export function cloneDocument(document: LevelDocument): LevelDocument {
     return JSON.parse(JSON.stringify(document));

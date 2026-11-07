@@ -43,4 +43,6 @@ Compare tap and held jumps beneath the ceiling; sprint and fire through the open
 
 Automated checks cover fixed simulation at 30/60/144 render FPS, jump windows and expiry, wall commitment, thin and diagonal terrain impacts, body contact and projectile damage, pause cancellation, firing cadence, camera bounds, input edges and aliases, and complete movement course and Lower Passage runs. Browser checks exercise the movement course, sprint, pause/resume, and restart alongside the existing game and workshop flows.
 
+The narrative gate study exposed an exact tile-seam collision: a player aligned with a floor-tile corner could be blocked horizontally after opening the gate. Zero-time corner contacts now preserve sliding along an existing supporting face. Deterministic tests cover both floor directions, wall sliding, and a real floor/wall corner that must still block both axes.
+
 Flicker and the first-defeat ectoplasm reward are now playable. The remaining Phase 2 work is Gravehopper, switching, corpse harvesting, and caches. Modifiers, progression, authored stages, bosses, and narrative are also outside this slice. Weapon-specific rules and tuning live in the Flicker spec rather than this movement document.
