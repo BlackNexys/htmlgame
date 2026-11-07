@@ -29,6 +29,7 @@ test('explore, cancel, collect, investigate, unlock and continue with immediate 
     expect((await save(page)).keepsakes).toEqual([]);
     await interact(page,'An unfinished letter','Keep letter');expect((await save(page)).keepsakes).toEqual(['lost-letter']);
     await walk(page,1040);await interact(page,'Transfer ledger');
+    await page.screenshot({path:`artifacts/${test.info().project.name}-inspection-panel.png`});
     const p=await position(page);await page.clock.runFor(1200);expect(await position(page)).toBe(p);
     await page.keyboard.press('Escape');expect((await save(page)).facts).not.toContain('found-transfer-record');
     await interact(page,'Transfer ledger','Record discovery');
@@ -118,6 +119,8 @@ test('Journey remains readable and keyboard-dismissible on a small viewport',asy
     await page.setViewportSize({width:360,height:640});await start(page);await page.keyboard.press('KeyK');
     const dialog=page.getByRole('dialog',{name:'Journey',exact:true});await expect(dialog).toBeVisible();
     const box=await dialog.boundingBox();expect(box.x).toBeGreaterThanOrEqual(0);expect(box.x+box.width).toBeLessThanOrEqual(360);
+    await expect(dialog.getByRole('heading',{name:'Your journey',exact:true})).toBeInViewport();
+    await page.screenshot({path:`artifacts/${test.info().project.name}-journey-small-opening.png`});
     await page.getByRole('button',{name:'Back to game',exact:true}).scrollIntoViewIfNeeded();
     await page.screenshot({path:`artifacts/${test.info().project.name}-journey-small.png`});
     await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();await expect(page.locator('#game')).toBeFocused();

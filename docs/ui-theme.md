@@ -34,6 +34,8 @@ Keep the bright primary-button fill paired with its dark `--game-on-energy` text
 
 Frames and controls use square corners, two-pixel outlines, and hard offset shadows. Shading uses a few distinct material values. Bright color stays concentrated around actions; large surfaces remain quiet beside the sprites. UI feedback is brief and stepped, with reduced motion following the system preference. Signal remains the display font; Voice Sans carries readable body text.
 
+The discovery cards and Journey panel use this same material language in `src/narrative/ui/narrative.css`: layered charcoal frames, a small magenta identity mark, cyan labels, Signal headings and Voice Sans reading text. Journey highlights the current lead in magenta and separates known facts from milestones and optional Keepsakes. Desktop layouts use two columns; narrow screens stack the sections. Reset stays visually secondary to returning to play. Overflowing dialogs initially focus their heading and open at the top, so small screens show the lead before the footer controls. Native modal focus containment and Escape remain intact.
+
 ## Components and package
 
 `src/ui/registerComponents.ts` imports Blacklight's supported `/atoms` entry. Start, pause, restart, and sound use `bl-button`. `GameMenu` presents session menus, `MainMenu` owns title navigation and auxiliary dialogs, and `MenuNavigation` adds arrow-key navigation to native Tab/Enter behavior. Native dialogs contain keyboard focus; gameplay resumes by explicitly returning focus to the canvas. `GamePreferences` stores sound and encounter-hint choices independently of level/editor drafts.

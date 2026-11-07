@@ -7,7 +7,16 @@ export class InspectionView {
     private finished=false;
     constructor(card:Inspection,private readonly end:(completed:boolean)=>void){
         this.root.className='inspection-dialog';this.root.setAttribute('aria-label',card.title);
-        this.root.innerHTML='<p class="eyebrow">UNDERWORLD / DISCOVERY</p><h2></h2><p class="inspection-body"></p><p class="inspection-note">Prototype material · observation is not proof of motive.</p><div><bl-button id="inspection-cancel" variant="quiet">Leave</bl-button><bl-button id="inspection-complete" variant="primary"></bl-button></div>';
+        this.root.innerHTML=`
+            <header class="narrative-heading">
+                <div><p class="eyebrow">UNDERWORLD / DISCOVERY</p><h2 tabindex="-1"></h2></div>
+                <span class="narrative-sigil" aria-hidden="true">◆</span>
+            </header>
+            <div class="inspection-record"><p class="inspection-label">A CLOSER LOOK</p><p class="inspection-body"></p></div>
+            <footer class="narrative-footer">
+                <p class="inspection-note"><kbd>Esc</kbd> Leave without confirming</p>
+                <div class="narrative-actions"><bl-button id="inspection-cancel" variant="quiet">Leave</bl-button><bl-button id="inspection-complete" variant="primary"></bl-button></div>
+            </footer>`;
         this.root.querySelector('h2')!.textContent=card.title;this.root.querySelector('.inspection-body')!.textContent=card.body;
         this.root.querySelector('#inspection-complete')!.textContent=card.action;
         const options={signal:this.events.signal};
@@ -16,7 +25,11 @@ export class InspectionView {
         this.root.addEventListener('cancel',event=>{event.preventDefault();this.finish(false);},options);
         document.body.append(this.root);this.root.showModal();
         const button=this.root.querySelector<BlButton>('#inspection-complete')!;
-        void button.updateComplete.then(()=>{if(!this.finished)button.focus({preventScroll:true});});
+        void button.updateComplete.then(()=>{
+            if(this.finished)return;
+            const target=this.root.scrollHeight>this.root.clientHeight?this.root.querySelector<HTMLElement>('h2')!:button;
+            target.focus({preventScroll:true});this.root.scrollTop=0;
+        });
     }
     private finish(completed:boolean){if(this.finished)return;this.dispose();this.end(completed);}
     dispose(){this.finished=true;this.events.abort();this.root.close();this.root.remove();}

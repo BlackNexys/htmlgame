@@ -13,6 +13,7 @@ export class NarrativeHud {
         this.button.addEventListener('pointerdown',event=>event.preventDefault());this.button.onclick=open;
         document.querySelector('.toolbar-actions')!.prepend(this.button);
         this.notice.className='lead-notice';this.notice.setAttribute('role','status');this.notice.hidden=true;
+        this.notice.innerHTML='<span class="lead-notice-label">Current lead</span><span class="lead-notice-copy"></span>';
         this.warning.className='save-warning';this.warning.setAttribute('role','alert');this.warning.hidden=true;
         document.querySelector('#game-hud')!.append(this.notice,this.warning);
         this.next.className='journey-next-stage';this.next.textContent='Continue along the next line →';this.next.hidden=true;document.querySelector('#session-menu')!.append(this.next);
@@ -23,7 +24,7 @@ export class NarrativeHud {
         this.next.hidden=!(session?.active && !session.store.warning && session.levelId==='narrative-study' && session.state.snapshot().completedStages.includes('narrative-study'));
         this.next.href=`./?level=departure-study${session?.preview?'&preview=1':''}`;
         if(!session?.active)return;
-        if(session.lead!==this.lead){this.lead=session.lead;this.notice.textContent=`Current lead · ${this.lead}`;this.notice.hidden=false;if(this.timer)clearTimeout(this.timer);this.timer=window.setTimeout(()=>{this.notice.hidden=true;},6000);}
+        if(session.lead!==this.lead){this.lead=session.lead;this.notice.querySelector('.lead-notice-copy')!.textContent=this.lead;this.notice.hidden=false;if(this.timer)clearTimeout(this.timer);this.timer=window.setTimeout(()=>{this.notice.hidden=true;},6000);}
         this.warning.hidden=!session.store.warning;if(this.warning.textContent!==session.store.warning)this.warning.textContent=session.store.warning;
         this.outcomeWarning.hidden=!session.store.warning;if(this.outcomeWarning.textContent!==session.store.warning)this.outcomeWarning.textContent=session.store.warning;
     }
