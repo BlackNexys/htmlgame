@@ -1,6 +1,6 @@
 import { GameElement } from './GameElement';
 import type { Rect } from '../interfaces/Geometry';
-import { clamp } from '../game/physics';
+import { clamp } from '../game/movement/physics';
 import { tuning as T } from '../game/config';
 
 export class Camera extends GameElement {

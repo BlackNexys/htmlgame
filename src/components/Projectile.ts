@@ -1,5 +1,5 @@
 import { GameElement } from './GameElement';
-import type { World } from '../game/World';
+import type { ProjectileContext } from '../interfaces/Simulation';
 import type { CollisionTarget, ProjectileProps, Impact } from '../interfaces/Projectile';
 
 export abstract class Projectile extends GameElement {
@@ -19,7 +19,7 @@ export abstract class Projectile extends GameElement {
         this.vx = props.vx; this.vy = props.vy; this.life = props.life;
     }
 
-    update(world: World, dt: number) {
+    update(world: ProjectileContext, dt: number) {
         const travel = Math.min(dt, this.life);
         if (travel <= 0) return false;
         this.age += travel; this.life -= travel;
@@ -27,7 +27,7 @@ export abstract class Projectile extends GameElement {
         return this.life > 1e-9 && this.x > -this.width && this.x < world.level.width && this.y > -this.height && this.y < world.level.height;
     }
 
-    protected advance(world: World, dx: number, dy: number) {
+    protected advance(world: ProjectileContext, dx: number, dy: number) {
         const impact = world.collisions.firstImpact(this, dx, dy, this.targets(world));
         if (impact) {
             this.x += dx * impact.time; this.y += dy * impact.time;
@@ -37,10 +37,10 @@ export abstract class Projectile extends GameElement {
         this.x += dx; this.y += dy; return true;
     }
 
-    protected onImpact(world: World, impact: Impact) {
+    protected onImpact(world: ProjectileContext, impact: Impact) {
         world.effects.burst(this.x + this.width / 2, this.y + this.height / 2, this.impactColor, 5);
         impact.target?.hit();
     }
 
-    protected abstract targets(world: World): CollisionTarget[];
+    protected abstract targets(world: ProjectileContext): CollisionTarget[];
 }

@@ -3,7 +3,7 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const {readFileSync}=require('node:fs');
 const {artFrame,validateTitleArt}=require('../src/ui/title/TitleArt.ts');
-const {characterAtlas}=require('../src/game/CharacterAtlas.ts');
+const {characterAtlas}=require('../src/game/animation/CharacterAtlas.ts');
 const art=JSON.parse(readFileSync('public/assets/mainmenu/v3/production/scene-v1.json','utf8'));
 
 test('production title clips use exact holds and wrap without advancing through a held pose',()=>{

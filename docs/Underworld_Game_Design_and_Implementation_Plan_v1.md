@@ -324,13 +324,13 @@ This plan extends the existing **TypeScript + Canvas + Vite** project. Prefer in
 | Current file/system | Planned responsibility or extension |
 |---|---|
 | `src/game/FixedClock.ts`, `GameLoop.ts` | Keep fixed simulation timing and bounded catch-up. Preserve lifecycle guarantees. |
-| `src/components/Actor.ts`, `src/game/physics.ts` | Preserve shared motion and collision; expose robust wall-contact/landing information for player movement. |
+| `src/components/Actor.ts`, `src/game/movement/physics.ts` | Preserve shared motion and collision; expose robust wall-contact/landing information for player movement. |
 | `src/components/Character.ts` | Compose player movement with ectoplasm and weapon selection. Keep logic from becoming one giant method. |
 | `src/game/Input.ts`, `src/interfaces/Game.ts` | Expand action map; expose held/pressed/released commands and directional vectors; preserve focus handling. |
 | `src/components/Projectile.ts`, `FlickerProjectile.ts`, `src/weapons/Flicker.ts` | Keep common projectile ownership and lifetime and the concrete Flicker weapon; later add explicit ricochet, spread, pierce, and seeking/sticky weapons. |
-| `src/game/CollisionSystem.ts` | Return enough impact context (normal/solid/target) for ricochet and penetration; preserve earliest-hit behavior. |
-| `src/game/Combat.ts` | Award per-enemy ectoplasm on original defeat; maintain damage and defeat-credit invariants. |
-| `src/components/Corpse.ts`, `src/game/Graveyard.ts` | Add harvest eligibility, single-use harvest, necromancer claim resolution, and reactivation prevention. |
+| `src/game/systems/CollisionSystem.ts` | Return enough impact context (normal/solid/target) for ricochet and penetration; preserve earliest-hit behavior. |
+| `src/game/systems/Combat.ts` | Award per-enemy ectoplasm on original defeat; maintain damage and defeat-credit invariants. |
+| `src/components/Corpse.ts`, `src/game/systems/Graveyard.ts` | Add harvest eligibility, single-use harvest, necromancer claim resolution, and reactivation prevention. |
 | `src/game/World.ts` | Orchestrate update order and gameplay events; do not bury weapon/harvest rules in the loop. |
 | `src/game/Camera.ts` | Speed-aware horizontal look-ahead and vertical traversal support. |
 | `src/ui/Hud.ts`, `GameMenu.ts` | Show ectoplasm, selected weapon/modifier, and transitions to stage selection/Arsenal. |

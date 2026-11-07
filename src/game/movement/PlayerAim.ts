@@ -1,4 +1,4 @@
-import type { Controls } from '../interfaces/Game';
+import type { Controls } from '../../interfaces/Game';
 
 export interface AimDirection { x: number; y: number; }
 

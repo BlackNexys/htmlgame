@@ -17,7 +17,7 @@ The latest menu rebuild uses this **live gameplay sheet as its character referen
 
 Each source cell is 209×209 pixels, displayed in an 80-pixel cell. Flame and cloth extend outside the collision box as decoration. The current Flicker weapon owns its manifestation origin and shot tuning; see the [weapon spec](../../docs/Underworld_Flicker_Weapon_Spec_v1_1.md). Standing collision height is 52 px, with the later crouch companion lowering it to 32 px.
 
-`src/game/CharacterAtlas.ts` records the source dimensions, render size, torso split, direction correction, and tuned per-frame anchors. Grounded poses use foot baselines; airborne poses retain a body root while the legs tuck. The generated idle row faces left, so the renderer mirrors it locally to normalize every clip to right-facing before applying the player's facing. Running and sprinting share a cycle at different rates. Wall slide/jump reuse falling/ascent poses.
+`src/game/animation/CharacterAtlas.ts` records the source dimensions, render size, torso split, direction correction, and tuned per-frame anchors. Grounded poses use foot baselines; airborne poses retain a body root while the legs tuck. The generated idle row faces left, so the renderer mirrors it locally to normalize every clip to right-facing before applying the player's facing. Running and sprinting share a cycle at different rates. Wall slide/jump reuse falling/ascent poses.
 
 Moving attacks retain the locomotion legs and overlay the palm-fire torso at the tuned hip line. Hurt overrides firing; defeat finishes and holds after simulation stops. Pause freezes presentation and restart resets animation state.
 

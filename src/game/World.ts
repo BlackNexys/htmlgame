@@ -1,3 +1,4 @@
+import type { CharacterContext, EnemyContext } from '../interfaces/Simulation';
 import type { Level } from '../interfaces/Level';
 import type { Controls, GameEvent, PlayState } from '../interfaces/Game';
 import { Enemy } from '../components/Enemy';
@@ -6,14 +7,14 @@ import { Map } from '../components/Map';
 import { Camera } from '../components/Camera';
 import { Projectile } from '../components/Projectile';
 import { createEnemy } from './EnemyFactory';
-import { CollisionSystem } from './CollisionSystem';
-import { ParticleSystem } from './ParticleSystem';
-import { Graveyard } from './Graveyard';
-import { Combat } from './Combat';
-import { Ectoplasm } from './Ectoplasm';
+import { CollisionSystem } from './systems/CollisionSystem';
+import { ParticleSystem } from './systems/ParticleSystem';
+import { Graveyard } from './systems/Graveyard';
+import { Combat } from './systems/Combat';
+import { Ectoplasm } from './systems/Ectoplasm';
 import type { FlickerEvent } from '../interfaces/Weapon';
 
-export class World {
+export class World implements CharacterContext, EnemyContext {
     readonly player: Character;
     readonly level: Map;
     readonly camera = new Camera();

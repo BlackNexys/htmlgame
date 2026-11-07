@@ -1,5 +1,5 @@
 import { Projectile } from './Projectile';
-import type { World } from '../game/World';
+import type { ProjectileContext } from '../interfaces/Simulation';
 import type { ProjectileProps } from '../interfaces/Projectile';
 import { tuning as T } from '../game/config';
 
@@ -14,7 +14,7 @@ export class EnemyProjectile extends Projectile {
         super({width: 12, height: 8, vy: 0, life: T.enemyProjectileLifetime, ...props});
     }
 
-    protected targets(world: World) {
+    protected targets(world: ProjectileContext) {
         return [{bounds: world.player, hit: () => world.combat.hurtPlayer()}];
     }
 }

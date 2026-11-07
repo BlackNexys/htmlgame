@@ -1,5 +1,5 @@
-import type { GameEvent } from '../interfaces/Game';
-import type { Character } from '../components/Character';
+import type { GameEvent } from '../../interfaces/Game';
+import type { Character } from '../../components/Character';
 import { characterAtlas } from './CharacterAtlas';
 import { characterAimAtlas } from './CharacterAimAtlas';
 

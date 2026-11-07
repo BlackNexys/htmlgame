@@ -1,6 +1,6 @@
 import type { Projectile } from '../components/Projectile';
 import type { FlickerEffect } from '../interfaces/Weapon';
-import { flickerVisuals as V, flickerDirection } from '../game/FlickerVisuals';
+import { flickerVisuals as V, flickerDirection } from '../game/animation/FlickerVisuals';
 
 /** Cosmetic only: flame animation never alters velocity, collision, or cadence. */
 export class FlickerRenderer {

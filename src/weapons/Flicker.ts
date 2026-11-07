@@ -1,6 +1,6 @@
 import type { Weapon, WeaponDefinition } from '../interfaces/Weapon';
 import type { Character } from '../components/Character';
-import type { World } from '../game/World';
+import type { WeaponContext } from '../interfaces/Simulation';
 import { FlickerProjectile } from '../components/FlickerProjectile';
 
 /** Playtest values from the Flicker v1.1 spec. Modifiers remain unequipped. */
@@ -12,7 +12,7 @@ export const flicker = {
 
 export class Flicker implements Weapon {
     readonly definition = flicker;
-    fire(world: World, player: Character) {
+    fire(world: WeaponContext, player: Character) {
         const {projectile: p} = flicker;
         const magnitude = Math.hypot(player.aim.x, player.aim.y);
         const dx = player.aim.x / magnitude, dy = player.aim.y / magnitude;

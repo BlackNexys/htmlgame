@@ -1,7 +1,7 @@
-import type { Body, Rect } from '../interfaces/Geometry';
-import type { Controls } from '../interfaces/Game';
+import type { Body, Rect } from '../../interfaces/Geometry';
+import type { Controls } from '../../interfaces/Game';
 import { bodyContacts, clamp, overlaps, sweepBody, type BodyContacts } from './physics';
-import { tuning as T } from './config';
+import { tuning as T } from '../config';
 
 export type PlayerMotion = 'idle' | 'running' | 'sprinting' | 'crouching' | 'airborne' | 'wall-slide' | 'wall-jump';
 interface PlayerBody extends Body { facing: number; }

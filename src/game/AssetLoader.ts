@@ -1,8 +1,8 @@
 import type { GameAssets } from '../interfaces/Assets';
 import type { EnemyKind } from '../interfaces/Enemy';
 import { enemyTuning } from './config';
-import { characterAtlas } from './CharacterAtlas';
-import { characterAimAtlas } from './CharacterAimAtlas';
+import { characterAtlas } from './animation/CharacterAtlas';
+import { characterAimAtlas } from './animation/CharacterAimAtlas';
 
 export class AssetLoader {
     async load(): Promise<GameAssets> {

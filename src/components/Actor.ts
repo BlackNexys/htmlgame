@@ -1,5 +1,5 @@
 import { GameElement } from './GameElement';
-import { moveBody } from '../game/physics';
+import { moveBody } from '../game/movement/physics';
 import type { Body, Rect } from '../interfaces/Geometry';
 import { tuning } from '../game/config';
 

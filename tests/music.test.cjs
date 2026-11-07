@@ -1,7 +1,7 @@
 require('./register.cjs');
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
-const {MenuMusic} = require('../src/game/MenuMusic.ts');
+const {MenuMusic} = require('../src/game/audio/MenuMusic.ts');
 const flush = () => new Promise(resolve => setImmediate(resolve));
 function setup(play) {
     const page = new EventTarget(), host = new EventTarget(); page.hidden = false;

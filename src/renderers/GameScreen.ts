@@ -2,14 +2,14 @@ import type { GameAssets } from '../interfaces/Assets';
 import type { GameEvent } from '../interfaces/Game';
 import type { World } from '../game/World';
 import { tuning as T } from '../game/config';
-import { BackgroundRenderer } from '../renderers/BackgroundRenderer';
-import { MapRenderer } from '../renderers/MapRenderer';
-import { CharacterRenderer } from '../renderers/CharacterRenderer';
-import { EnemyRenderer } from '../renderers/EnemyRenderer';
-import { CorpseRenderer } from '../renderers/CorpseRenderer';
-import { ProjectileRenderer } from '../renderers/ProjectileRenderer';
-import { ParticleRenderer } from '../renderers/ParticleRenderer';
-import { DebugRenderer } from '../renderers/DebugRenderer';
+import { BackgroundRenderer } from './BackgroundRenderer';
+import { MapRenderer } from './MapRenderer';
+import { CharacterRenderer } from './CharacterRenderer';
+import { EnemyRenderer } from './EnemyRenderer';
+import { CorpseRenderer } from './CorpseRenderer';
+import { ProjectileRenderer } from './ProjectileRenderer';
+import { ParticleRenderer } from './ParticleRenderer';
+import { DebugRenderer } from './DebugRenderer';
 
 export class GameScreen {
     debug = false;

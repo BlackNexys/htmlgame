@@ -1,8 +1,8 @@
 import type { Character } from '../components/Character';
 import type { GameEvent } from '../interfaces/Game';
-import { CharacterAnimation, type CharacterFrame } from '../game/CharacterAnimation';
-import { characterAtlas } from '../game/CharacterAtlas';
-import { characterAimAtlas } from '../game/CharacterAimAtlas';
+import { CharacterAnimation, type CharacterFrame } from '../game/animation/CharacterAnimation';
+import { characterAtlas } from '../game/animation/CharacterAtlas';
+import { characterAimAtlas } from '../game/animation/CharacterAimAtlas';
 
 export class CharacterRenderer {
     private animation = new CharacterAnimation();

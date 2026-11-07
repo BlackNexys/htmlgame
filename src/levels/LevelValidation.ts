@@ -1,7 +1,7 @@
 import type { LevelDocument } from './LevelDocument';
 import type { Rect } from '../interfaces/Geometry';
 import { enemyTuning } from '../game/config';
-import { overlaps } from '../game/physics';
+import { overlaps } from '../game/movement/physics';
 
 const slug = /^[a-z][a-z0-9-]{0,79}$/;
 export class LevelValidationError extends Error {

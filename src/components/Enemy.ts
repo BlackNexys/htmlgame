@@ -1,11 +1,11 @@
 import { Actor } from './Actor';
 import { EnemyProjectile } from './EnemyProjectile';
-import type { World } from '../game/World';
+import type { EnemyContext } from '../interfaces/Simulation';
 import type { EnemyKind, EnemyState, EnemyHit, AimLine } from '../interfaces/Enemy';
 import type { EnemySpawn } from '../interfaces/Level';
 import { enemyTuning, tuning as T } from '../game/config';
 
-export interface EnemyProps { gameArea: World; spawn: EnemySpawn; id: number; }
+export interface EnemyProps { gameArea: EnemyContext; spawn: EnemySpawn; id: number; }
 
 export abstract class Enemy extends Actor {
     readonly id: number;
@@ -31,7 +31,7 @@ export abstract class Enemy extends Actor {
     private defeatedThisLife = false;
     protected targetX: number;
     protected targetY: number;
-    protected readonly gameArea: World;
+    protected readonly gameArea: EnemyContext;
 
     protected constructor({gameArea, spawn, id}: EnemyProps, kind: EnemyKind) {
         super(enemyTuning[kind]);

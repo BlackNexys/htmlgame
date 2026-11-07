@@ -1,4 +1,4 @@
-import type { GameEvent } from '../interfaces/Game';
+import type { GameEvent } from '../../interfaces/Game';
 import { FlickerSound } from './FlickerSound';
 export class Sound {
     muted = false;

@@ -3,7 +3,7 @@ const {createActionLevel} = require('../src/maps/actionLevel.ts');
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const {World} = require('../src/game/World.ts');
-const {CharacterAnimation} = require('../src/game/CharacterAnimation.ts');
+const {CharacterAnimation} = require('../src/game/animation/CharacterAnimation.ts');
 const advance = (animation, world, dt, events = []) => animation.update(world.player, dt, events, world.state === 'dead');
 
 test('idle, run and airborne select different rows and airborne poses follow velocity', () => {

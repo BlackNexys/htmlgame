@@ -1,7 +1,7 @@
 import {readFile,writeFile,copyFile,mkdir} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import {chromium} from '@playwright/test';
-import {characterAtlas} from '../src/game/CharacterAtlas.ts';
+import {characterAtlas} from '../src/game/animation/CharacterAtlas.ts';
 
 // Deterministic export preparation: crop, register and pack authored drawings.
 // Preserve source colour detail; no palette mapping, invented poses or deformation.

@@ -1,5 +1,5 @@
 import { Enemy } from './Enemy';
-import { clamp, overlaps } from '../game/physics';
+import { clamp, overlaps } from '../game/movement/physics';
 
 export abstract class GroundEnemy extends Enemy {
     protected get tracksPlayer() { return true; }

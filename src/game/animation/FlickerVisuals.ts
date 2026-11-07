@@ -1,4 +1,4 @@
-import type { FlickerEffectKind } from '../interfaces/Weapon';
+import type { FlickerEffectKind } from '../../interfaces/Weapon';
 
 export const flickerVisuals = {
     cell: 32, columns: 6, flightFrameTime: .05,

@@ -1,6 +1,6 @@
 import type { Weapon } from '../interfaces/Weapon';
 import type { Character } from '../components/Character';
-import type { World } from '../game/World';
+import type { WeaponContext } from '../interfaces/Simulation';
 import { Flicker } from './Flicker';
 
 /** One concrete starting weapon; each owned weapon retains its own cadence. */
@@ -8,7 +8,7 @@ export class WeaponController {
     readonly selected: Weapon = new Flicker();
     private cooldown = 0;
 
-    update(dt: number, firing: boolean, world: World, player: Character) {
+    update(dt: number, firing: boolean, world: WeaponContext, player: Character) {
         this.cooldown = Math.max(0, this.cooldown - dt);
         if (!firing || this.cooldown > 1e-9) return;
         const weapon = this.selected;

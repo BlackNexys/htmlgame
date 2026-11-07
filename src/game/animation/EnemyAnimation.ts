@@ -1,4 +1,4 @@
-import type { Enemy } from '../components/Enemy';
+import type { Enemy } from '../../components/Enemy';
 
 export class EnemyAnimation {
     static frame(enemy: Enemy, elapsed: number): {row: number; column: number} {

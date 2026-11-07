@@ -1,5 +1,5 @@
 import type { Character } from '../components/Character';
-import type { World } from '../game/World';
+import type { WeaponContext } from './Simulation';
 
 export interface WeaponDefinition {
     readonly id: string;
@@ -13,7 +13,7 @@ export interface WeaponDefinition {
 }
 export interface Weapon {
     readonly definition: WeaponDefinition;
-    fire(world: World, player: Character): void;
+    fire(world: WeaponContext, player: Character): void;
 }
 export type FlickerEffectKind = 'ignition' | 'enemy' | 'terrain' | 'blocked';
 export interface FlickerEvent { kind: FlickerEffectKind; x: number; y: number; angle: number; }

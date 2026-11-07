@@ -1,4 +1,4 @@
-import type { Rect, Body } from '../interfaces/Geometry';
+import type { Rect, Body } from '../../interfaces/Geometry';
 export const overlaps = (a: Rect, b: Rect) => a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
 export const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
 

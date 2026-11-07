@@ -1,6 +1,6 @@
-import type { World } from './World';
-import type { Enemy } from '../components/Enemy';
-import { overlaps } from './physics';
+import type { World } from '../World';
+import type { Enemy } from '../../components/Enemy';
+import { overlaps } from '../movement/physics';
 
 export class Combat {
     defeated = 0;

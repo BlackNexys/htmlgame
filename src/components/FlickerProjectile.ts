@@ -1,5 +1,5 @@
 import { Projectile } from './Projectile';
-import type { World } from '../game/World';
+import type { ProjectileContext } from '../interfaces/Simulation';
 import type { ProjectileProps, Impact } from '../interfaces/Projectile';
 import { flicker } from '../weapons/Flicker';
 
@@ -14,15 +14,15 @@ export class FlickerProjectile extends Projectile {
         const p = flicker.projectile;
         super({width: p.width, height: p.height, vy: 0, life: p.lifetime, ...props});
     }
-    manifest(world: World, reach: number) {
+    manifest(world: ProjectileContext, reach: number) {
         const speed = Math.hypot(this.vx, this.vy);
         return this.advance(world, this.vx / speed * reach, this.vy / speed * reach);
     }
-    protected targets(world: World) {
+    protected targets(world: ProjectileContext) {
         return world.enemies.filter(enemy => enemy.health > 0 && enemy.vulnerable)
             .map(enemy => ({bounds: enemy, hit: () => world.combat.hitEnemy(enemy, this.vx, flicker.projectile.damage)}));
     }
-    protected onImpact(world: World, impact: Impact) {
+    protected onImpact(world: ProjectileContext, impact: Impact) {
         const result = impact.target?.hit();
         const kind = !impact.target ? 'terrain' : result === 'blocked' ? 'blocked' : 'enemy';
         world.weaponEvents.push({kind, x: this.x + this.width / 2, y: this.y + this.height / 2, angle: Math.atan2(this.vy, this.vx)});

@@ -6,9 +6,13 @@ The project uses a class for each entity or system with a distinct responsibilit
 
 | Folder | Responsibility |
 | --- | --- |
-| `src/components` | Game entities and their behavior, plus the `GameScreen` canvas coordinator retained from the original structure |
-| `src/game` | Session and loop control, simulation systems, browser services, animation selection, factories, physics utilities, and tuning |
-| `src/renderers` | Canvas drawing for each entity or scene layer |
+| `src/components` | Game entities and their behavior |
+| `src/game` | Session and loop control, loading, input, factories, and tuning |
+| `src/game/systems` | Combat, collision queries, corpses, effects, and ectoplasm |
+| `src/game/movement` | Player locomotion, aim, and stateless physics |
+| `src/game/animation` | Pose selection and atlas metadata |
+| `src/game/audio` | Gameplay sound synthesis and menu music |
+| `src/renderers` | Canvas drawing and the `GameScreen` drawing coordinator |
 | `src/ui` | DOM menu, toolbar, status, counters, progress, and encounter hints |
 | `src/interfaces` | Shared contracts with no runtime behavior |
 | `src/maps` | Synchronous level fixture for tests and the original map reference |
@@ -16,11 +20,17 @@ The project uses a class for each entity or system with a distinct responsibilit
 | `src/editor` | Independent authoring application, canvas, inspector, history, file handling, and snapshot preview |
 | `public/levels` | Individual level JSON files and the published JSON Schema |
 
+Entities depend on capability contracts in `src/interfaces/Simulation.ts`, rather than on the concrete `World`. `EnemyContext` exposes target/terrain queries and corpse/projectile services; `CharacterContext`, `WeaponContext`, and `ProjectileContext` expose the capabilities needed for movement and attacks. Readonly properties prevent consumers from replacing world-owned collections, while shot/event queues remain appendable. Service capabilities expose selected methods, not their internal bookkeeping. `World` implements these contracts structurally, without adapters or a second simulation model. These are compile-time boundaries, not immutable runtime snapshots.
+
+`components` consistently means gameplay entities; screen composition lives under `renderers`. Keep shared base classes limited to behavior their descendants actually share, and prefer composition for independent abilities.
+
 Each runtime class has its own file. Small stateless geometry operations remain shared functions in `physics.ts`; level definitions and tuning remain data.
 
 ## Session and timing
 
 `app.ts` chooses the JSON level source and starts `Game`. `Game` coordinates loading, the current `World`, input, sound, screen presentation, and menu transitions. `GameMenu` presents pause/outcome menus and the toolbar; `MainMenu` owns title navigation and options/control dialogs. `MenuNavigation` supplements native keyboard interaction with arrows, Home, and End. `GamePreferences` persists sound and hint preferences. `Hud` owns the readouts and encounter hint.
+
+The title layout fits a centered scene frame to the viewport height on wide windows. Navigation scales against that frame rather than the full viewport width; artwork layers keep a common aspect ratio. Portrait windows crop the decorative scene, and a flowing footer reserves room for wrapped text and the extra Continue action. Very short landscape windows use a two-column title layout.
 
 The game canvas retains its 960×576 simulation view and scales uniformly inside the browser window. HUD placement and letterboxing live in game-only CSS. Native menu dialogs pause input access to the canvas. Returning to the title menu preserves a paused world for Continue; starting a new game or restarting creates a fresh world from the loaded definition. Options and controls do not resume the simulation when closed.
 

@@ -1,10 +1,10 @@
 import { AssetLoader } from './AssetLoader';
-import { GameScreen } from '../components/GameScreen';
+import { GameScreen } from '../renderers/GameScreen';
 import { World } from './World';
 import { Input } from './Input';
 import { GameLoop } from './GameLoop';
-import { Sound } from './Sound';
-import { MenuMusic } from './MenuMusic';
+import { Sound } from './audio/Sound';
+import { MenuMusic } from './audio/MenuMusic';
 import { Hud } from '../ui/Hud';
 import { GameMenu } from '../ui/GameMenu';
 import type { GameMode } from '../interfaces/Game';

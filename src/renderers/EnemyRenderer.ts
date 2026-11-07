@@ -1,7 +1,7 @@
 import type { Enemy } from '../components/Enemy';
 import type { Corpse } from '../components/Corpse';
 import type { GameAssets } from '../interfaces/Assets';
-import { EnemyAnimation } from '../game/EnemyAnimation';
+import { EnemyAnimation } from '../game/animation/EnemyAnimation';
 
 export class EnemyRenderer {
     constructor(private readonly ctx: CanvasRenderingContext2D, private readonly assets: GameAssets) {}

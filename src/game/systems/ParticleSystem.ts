@@ -1,6 +1,6 @@
-import { Particle } from '../components/Particle';
-import type { FlickerEvent, FlickerEffect } from '../interfaces/Weapon';
-import { flickerVisuals } from './FlickerVisuals';
+import { Particle } from '../../components/Particle';
+import type { FlickerEvent, FlickerEffect } from '../../interfaces/Weapon';
+import { flickerVisuals } from '../animation/FlickerVisuals';
 
 export class ParticleSystem {
     particles: Particle[] = [];

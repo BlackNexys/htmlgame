@@ -1,9 +1,9 @@
 import { Actor } from './Actor';
-import type { World } from '../game/World';
+import type { CharacterContext } from '../interfaces/Simulation';
 import type { Controls } from '../interfaces/Game';
 import { tuning as T } from '../game/config';
-import { PlayerMovement, type PlayerMotion } from '../game/PlayerMovement';
-import { resolveAim, type AimDirection } from '../game/PlayerAim';
+import { PlayerMovement, type PlayerMotion } from '../game/movement/PlayerMovement';
+import { resolveAim, type AimDirection } from '../game/movement/PlayerAim';
 import { WeaponController } from '../weapons/WeaponController';
 
 export class Character extends Actor {
@@ -15,9 +15,9 @@ export class Character extends Actor {
     aim: AimDirection = {x: 1, y: 0};
     get crouched() { return this.movement.crouched; }
     readonly movement: PlayerMovement;
-    private gameArea: World;
+    private gameArea: CharacterContext;
 
-    constructor({gameArea}: {gameArea: World}) {
+    constructor({gameArea}: {gameArea: CharacterContext}) {
         super({width: 32, height: T.standingHeight});
         this.gameArea = gameArea;
         this.spawn(gameArea.level.spawn);

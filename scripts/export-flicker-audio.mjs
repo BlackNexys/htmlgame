@@ -2,7 +2,7 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import {transformWithOxc} from 'vite';
 import {chromium} from '@playwright/test';
-const source=await readFile(new URL('../src/game/FlickerSound.ts',import.meta.url),'utf8');
+const source=await readFile(new URL('../src/game/audio/FlickerSound.ts',import.meta.url),'utf8');
 const javascript=(await transformWithOxc(source,'FlickerSound.ts')).code;
 const directory=fileURLToPath(new URL('../public/assets/weapons/flicker/audio/',import.meta.url));
 const browser=await chromium.launch();

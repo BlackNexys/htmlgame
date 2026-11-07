@@ -93,3 +93,42 @@ test('pause, options and the main menu freeze a run; Continue resumes and New ga
     await expect(page.locator('#count')).toHaveText('0 / 8');
     await expect(page.locator('#progress')).toHaveAttribute('style', initial);
 });
+
+test('title artwork and controls scale together without clipping or footer overlap', async ({page}) => {
+    await page.emulateMedia({reducedMotion: 'reduce'});
+    await page.goto('/?menuScene=watcher');
+    await expect(page.getByRole('button', {name: 'Play', exact: true})).toBeEnabled();
+    await expect(page.locator('.title-art')).toHaveAttribute('data-renderer', 'ready');
+    for (const continuing of [false, true]) {
+        if (continuing) {
+            await page.getByRole('button', {name: 'Play', exact: true}).click();
+            await page.keyboard.press('Escape');
+            await page.getByRole('button', {name: 'Main menu', exact: true}).click();
+        }
+        for (const [width, height] of [[1280,720], [1920,660], [2560,1080], [900,1200], [320,568], [320,480], [844,390], [640,320]]) {
+            await page.setViewportSize({width,height});
+            const geometry = await page.locator('#main-menu').evaluate(menu => {
+                const rect = selector => menu.querySelector(selector).getBoundingClientRect().toJSON();
+                return {menu: menu.getBoundingClientRect().toJSON(), content: rect('.title-content'),
+                    actions: rect('.title-actions'), footer: rect('.title-footer'), scene: rect('.menu-scene'), logo: rect('.title-logo'),
+                    controls: [...menu.querySelectorAll('[data-menu-item], #title-enable-motion')]
+                        .filter(e => !e.hidden).map(e => e.getBoundingClientRect().toJSON()),
+                    overlay: document.querySelector('#overlay').scrollHeight};
+            });
+            const label = `${width}x${height}, continue=${continuing}`;
+            expect(geometry.menu.height, label).toBeLessThanOrEqual(height + 1);
+            expect(geometry.overlay, label).toBeLessThanOrEqual(height + 1);
+            expect(geometry.content.bottom, label).toBeLessThanOrEqual(geometry.footer.top);
+            expect(geometry.footer.bottom, label).toBeLessThanOrEqual(height);
+            expect(Math.abs(geometry.scene.width / geometry.scene.height - 1672 / 941), label).toBeLessThan(.002);
+            expect(Math.abs(geometry.logo.width / geometry.logo.height - 1448 / 1086), label).toBeLessThan(.002);
+            for (const bounds of geometry.controls) {
+                expect(bounds.x, label).toBeGreaterThanOrEqual(0);
+                expect(bounds.y, label).toBeGreaterThanOrEqual(0);
+                expect(bounds.right, label).toBeLessThanOrEqual(width);
+                expect(bounds.bottom, label).toBeLessThanOrEqual(height);
+            }
+            if (continuing && [1280,2560,320,640].includes(width)) await page.screenshot({path:`artifacts/title-layout-${width}x${height}.png`});
+        }
+    }
+});

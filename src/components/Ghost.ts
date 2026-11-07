@@ -1,6 +1,6 @@
 import { Enemy, type EnemyProps } from './Enemy';
 import { tuning as T } from '../game/config';
-import { clamp, overlaps } from '../game/physics';
+import { clamp, overlaps } from '../game/movement/physics';
 
 export class Ghost extends Enemy {
     readonly displayName = 'Ghost';

@@ -1,7 +1,7 @@
-import type { Map } from '../components/Map';
-import type { Rect } from '../interfaces/Geometry';
-import type { CollisionTarget, Impact } from '../interfaces/Projectile';
-import { impactTime } from './physics';
+import type { Map } from '../../components/Map';
+import type { Rect } from '../../interfaces/Geometry';
+import type { CollisionTarget, Impact } from '../../interfaces/Projectile';
+import { impactTime } from '../movement/physics';
 
 export class CollisionSystem {
     constructor(private readonly level: Map) {}

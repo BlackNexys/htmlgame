@@ -1,6 +1,6 @@
-import { Corpse } from '../components/Corpse';
-import type { Enemy } from '../components/Enemy';
-import type { World } from './World';
+import { Corpse } from '../../components/Corpse';
+import type { Enemy } from '../../components/Enemy';
+import type { World } from '../World';
 
 export class Graveyard {
     corpses: Corpse[] = [];

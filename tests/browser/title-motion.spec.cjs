@@ -82,14 +82,17 @@ test('Enable animation overrides Windows reduced motion and persists; Off immedi
  await expect(scene(page)).toHaveAttribute('data-motion','still');const stopped=await hash(page);await page.clock.runFor(500);expect(await hash(page)).toBe(stopped);expect(await canvas(page).getAttribute('data-time')).toBe('0');
 });
 
-test('clock, lantern and cat animate independently and all artwork shares a fitted scene at every browser ratio',async({page})=>{
+test('clock, lantern and cat animate independently and all artwork stays registered inside the clipped scene at every browser ratio',async({page})=>{
  await clock(page);await open(page,'absent-traveller');const regions=[[1260,140,100,175],[1470,110,100,115],[1500,600,120,90]],first=[];
  for(const rect of regions)first.push(await hash(page,rect));await page.clock.runFor(900);
  for(let i=0;i<regions.length;i++)expect(await hash(page,regions[i])).not.toBe(first[i]);
  for(const[width,height]of [[1600,900],[2560,1080],[390,844],[844,390]]){
   await page.setViewportSize({width,height});const b=await page.locator('.menu-scene').boundingBox();expect(Math.abs(b.width/b.height-1672/941)).toBeLessThan(.005);
-  expect(b.x).toBeGreaterThanOrEqual(-1);expect(b.y).toBeGreaterThanOrEqual(-1);expect(b.x+b.width).toBeLessThanOrEqual(width+1);expect(b.y+b.height).toBeLessThanOrEqual(height+1);
-  for(const selector of ['.title-background','.menu-platform','.menu-scene-motion']){const r=await page.locator(selector).boundingBox();expect(Math.abs(r.x-b.x)).toBeLessThan(1);expect(Math.abs(r.y-b.y)).toBeLessThan(1);expect(Math.abs(r.width-b.width)).toBeLessThan(1);}
+  const frame=await page.locator('.title-art').boundingBox();
+  expect(frame.x).toBeGreaterThanOrEqual(-1);expect(frame.y).toBeGreaterThanOrEqual(-1);expect(frame.x+frame.width).toBeLessThanOrEqual(width+1);expect(frame.y+frame.height).toBeLessThanOrEqual(height+1);
+  expect(b.x).toBeLessThanOrEqual(frame.x+1);expect(b.y).toBeLessThanOrEqual(frame.y+1);expect(b.x+b.width).toBeGreaterThanOrEqual(frame.x+frame.width-1);expect(b.y+b.height).toBeGreaterThanOrEqual(frame.y+frame.height-1);
+  await expect(page.locator('.title-art')).toHaveCSS('overflow','hidden');
+  for(const selector of ['.title-background','.menu-platform','.menu-scene-motion']){const r=await page.locator(selector).boundingBox();expect(Math.abs(r.x-b.x)).toBeLessThan(1);expect(Math.abs(r.y-b.y)).toBeLessThan(1);expect(Math.abs(r.width-b.width)).toBeLessThan(1);expect(Math.abs(r.height-b.height)).toBeLessThan(1);}
  }
 });
 
