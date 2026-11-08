@@ -91,7 +91,7 @@ test('locked exits do not complete; stage completion separately unlocks the next
     f.world.update(1/120,{left:false,right:false,jump:false,fire:false});assert.equal(f.world.state,'won');
     f.session.completeStage();f.session.completeStage();
     assert.deepEqual(f.session.state.snapshot().completedStages,['narrative-study']);
-    assert.deepEqual(f.session.state.snapshot().unlockedStages,['narrative-study','departure-study']);
+    assert.deepEqual(f.session.state.snapshot().unlockedStages,['narrative-study','last-platform-demo','departure-study']);
     assert.equal(new NarrativeSession('departure-study',new SaveStore(f.disk)).allowed,true);
     assert.equal(new NarrativeSession('departure-study',new SaveStore(storage())).allowed,false);
 });

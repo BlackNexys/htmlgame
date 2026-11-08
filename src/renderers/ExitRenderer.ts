@@ -9,6 +9,6 @@ export class ExitRenderer {
         c.shadowBlur = 0; c.fillStyle = '#0e262c'; c.fillRect(exit.x, exit.y, exit.width, exit.height);
         c.fillStyle = exit.enabled?'#9cdebd':'#7e8a91';
         for (let i = 0; i < 4; i++) c.fillRect(exit.x + 10 + i * 13, exit.y + 14, 3, exit.height - 14);
-        c.font = '12px monospace'; c.textAlign = 'center'; c.fillText(exit.enabled?'PASSAGE':'FIND A LEAD', exit.x + 32, exit.y - 22);
+        c.font = '12px monospace'; c.textAlign = 'center'; c.fillText(exit.enabled?'PASSAGE':exit.lockedLabel, exit.x + 32, exit.y - 22);
     }
 }

@@ -12,6 +12,7 @@ import { ParticleRenderer } from './ParticleRenderer';
 import { DebugRenderer } from './DebugRenderer';
 import { NPCRenderer } from './NPCRenderer';
 import { InteractableRenderer } from './InteractableRenderer';
+import { ConfluenceEnvironment } from '../environment/ConfluenceEnvironment';
 
 export class GameScreen {
     debug = false;
@@ -26,6 +27,7 @@ export class GameScreen {
     private readonly diagnostics: DebugRenderer;
     private readonly npcs: NPCRenderer;
     private readonly objects:InteractableRenderer;
+    private readonly environment?:ConfluenceEnvironment;
 
     constructor(public readonly canvas: HTMLCanvasElement, assets: GameAssets) {
         canvas.width = T.viewportWidth; canvas.height = T.viewportHeight;
@@ -33,7 +35,8 @@ export class GameScreen {
         if (!ctx) throw new Error('This browser could not create a canvas renderer.');
         this.ctx = ctx; ctx.imageSmoothingEnabled = false;
         this.background = new BackgroundRenderer(ctx);
-        this.map = new MapRenderer(ctx, assets.wall);
+        if(assets.environment)this.environment=new ConfluenceEnvironment(ctx,assets.environment);
+        this.map = new MapRenderer(ctx, assets.wall,this.environment?.terrain,this.environment?.exit);
         this.character = new CharacterRenderer(ctx, assets.hero, assets.heroAim);
         this.enemies = new EnemyRenderer(ctx, assets);
         this.corpses = new CorpseRenderer(ctx, this.enemies);
@@ -41,15 +44,16 @@ export class GameScreen {
         this.particles = new ParticleRenderer(ctx);
         this.diagnostics = new DebugRenderer(ctx);
         this.npcs = new NPCRenderer(ctx, assets.npcs);
-        this.objects=new InteractableRenderer(ctx);
+        this.objects=new InteractableRenderer(ctx,this.environment?.objects);
     }
 
     resetAnimation() { this.character.reset(); }
     update(world: World, dt: number, events: GameEvent[] = []) { this.character.update(world.player, dt, events, world.state === 'dead'); }
 
     draw(world: World) {
-        this.background.draw(world.camera, world.elapsed);
+        if(!this.environment?.drawBackground(world.camera))this.background.draw(world.camera, world.elapsed);
         this.ctx.save(); this.ctx.translate(-Math.round(world.camera.x), -Math.round(world.camera.y));
+        this.environment?.drawScenery(world.camera);
         this.map.draw(world.level, world.camera);
         world.interactables.forEach(object=>{if(world.camera.canSee(object))this.objects.draw(object);});
         world.npcs.forEach(npc => { if (world.camera.canSee(npc)) this.npcs.draw(npc); });

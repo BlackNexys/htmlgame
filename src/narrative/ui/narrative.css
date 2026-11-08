@@ -35,7 +35,7 @@
 .inspection-record { position:relative;margin:28px 30px;padding:22px 24px;border:1px solid var(--game-steel);border-left:3px solid var(--game-cyan);background:var(--game-void); }
 .inspection-record::after { content:'';position:absolute;right:10px;bottom:10px;width:14px;height:5px;border-top:1px solid var(--game-stone);border-bottom:1px solid var(--game-stone); }
 .inspection-label { margin:0 0 16px;color:var(--game-cyan);font:9px var(--bl-font-mono);letter-spacing:2px; }
-.inspection-body { font:17px/1.85 var(--bl-font-body);margin:0;color:var(--game-bone); }
+.inspection-body { font:17px/1.85 var(--bl-font-body);margin:0;color:var(--game-bone);white-space:pre-line; }
 .narrative-footer { padding:18px 30px 22px;background:var(--game-void);border-top:1px solid var(--game-steel); }
 .narrative-actions { display:flex;align-items:center;justify-content:space-between;gap:16px; }
 .narrative-actions bl-button::part(button) { min-height:44px;font-size:13px; }

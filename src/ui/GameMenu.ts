@@ -69,8 +69,9 @@ export class GameMenu {
     }
     dialogue() { this.hud.hidden = true; this.status.textContent = 'Dialogue'; }
     paused() { this.pause.textContent = 'Resume'; this.show('paused', 'Take a breather', 'Your place in the passage is safe. Resume when you are ready.', 'Resume'); }
-    outcome(state: PlayState, defeated: number, total: number) {
+    outcome(state: PlayState, defeated: number, total: number, copy?: {title:string;message:string}) {
         if (state === 'dead') this.show('dead', 'The underworld bites back', 'A rough encounter. Take another run through the passage.', 'Try again');
+        else if(copy)this.show('won',copy.title,copy.message,'Play again');
         else this.show('won', 'The passage is open', `You made it through. ${defeated} of ${total} restless undead put to rest.`, 'Play again');
     }
     preferences(value: GamePreferencesValue) { this.main.preferences(value); this.sound(value.muted); }

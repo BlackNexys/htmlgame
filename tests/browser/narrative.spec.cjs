@@ -67,7 +67,7 @@ test('malformed saves are preserved with a warning until the player explicitly r
     await start(page);await expect(page.locator('.save-warning')).toContainText('preserved');
     expect(await page.evaluate(k=>localStorage.getItem(k),key)).toBe('broken original save');
     await page.keyboard.press('KeyK');page.once('dialog',dialog=>dialog.accept());
-    await page.getByRole('button',{name:'Reset prototype journey',exact:true}).click();
+    await page.getByRole('button',{name:'Reset saved journeys',exact:true}).click();
     expect((await save(page)).keepsakes).toEqual([]);await expect(page.locator('.save-warning')).toBeHidden();
 });
 

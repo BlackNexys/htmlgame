@@ -21,8 +21,9 @@ export class NarrativeHud {
     }
     update(session:NarrativeSession|undefined){
         this.button.hidden=!session?.active;
-        this.next.hidden=!(session?.active && !session.store.warning && session.levelId==='narrative-study' && session.state.snapshot().completedStages.includes('narrative-study'));
-        this.next.href=`./?level=departure-study${session?.preview?'&preview=1':''}`;
+        const destination=session?.nextDestination;
+        this.next.hidden=!(session?.active && !session.store.warning && destination?.url);
+        this.next.href=destination?.url??'#';
         if(!session?.active)return;
         if(session.lead!==this.lead){this.lead=session.lead;this.notice.querySelector('.lead-notice-copy')!.textContent=this.lead;this.notice.hidden=false;if(this.timer)clearTimeout(this.timer);this.timer=window.setTimeout(()=>{this.notice.hidden=true;},6000);}
         this.warning.hidden=!session.store.warning;if(this.warning.textContent!==session.store.warning)this.warning.textContent=session.store.warning;

@@ -6,7 +6,7 @@ A browser platformer built with TypeScript and Canvas. Run through the lower pas
 
 The undead protagonist is searching for their soulmate. The new [Deadways atlas](docs/Worldbuilding/Underworld_Deadways_World_Atlas_v0_1.md) proposes familiar societies built by the dead within an immense alien world, linked by spectral rivers and railways. Undead inhabitants can be neighbours, travellers, or opponents with their own motives. Its eight regions, station geography, ecological interactions, and possible Blacklight continuity remain exploratory rather than established canon or implemented features.
 
-See [worldbuilding and design alignment](docs/Worldbuilding/README.md) for document responsibilities, open decisions, and the available concept art. The current lower passage is a mechanics test level; the demo's location and scope remain to be discussed.
+See [worldbuilding and design alignment](docs/Worldbuilding/README.md) for document responsibilities, open decisions, and the available concept art. The Lower Passage remains a mechanics test level. The playable [Last Platform district demo](docs/last-platform-demo.md) now explores the supplied station brief; its setting and writing remain provisional.
 
 ## Run locally
 
@@ -82,6 +82,8 @@ Jumping includes a short coyote window and input buffer. Push toward a wall whil
 The game receives keyboard input while its canvas has focus. Switching tabs, leaving the window, or moving focus away pauses it and clears held input and queued actions. Use Resume to continue. Mouse and keyboard controls for pause, restart, and sound are also above the game. The page fits smaller windows; gameplay currently requires a keyboard.
 
 ## What is playable
+
+**The Last Platform:** open `/?level=last-platform-demo` or its title-footer link. The revision-4 demo is rebuilt as a railway district: arrivals square, inhabited frontage, upper freight and lower viaduct crossings, a Registry hall/gallery, archive works and departure. Balconies provide a second Registry entrance; the canal and lower records passage return to arrivals. The camera follows X and Y. All six enemy types, draft attendant dialogue, an optional saved letter, physical clues and an operated departure shutter are present. **F** interacts and **K** opens Journey. Discoveries save immediately; study progress remains separate. The [v1 environment kit](public/assets/environment/confluence/v1/README.md) and [twelve new architectural modules](public/assets/environment/confluence/v2/README.md) supply the art. Review `/docs/confluence-environment.html` and `/docs/last-platform-map.svg`. Gameplay music, animation, final balance and story canon remain open. See [demo notes](docs/last-platform-demo.md).
 
 - A scrolling level with low obstacles, raised platforms, eight opponents across six enemy types, and an exit.
 - Sprint, variable-height jumps, coyote time, jump buffering, wall slides/jumps, and camera look-ahead.

@@ -1,5 +1,5 @@
 import type { NarrativeSession } from '../NarrativeSession';
-import { facts,keepsakes,stages,milestones } from '../NarrativeCatalog';
+import { facts,keepsakes,milestones } from '../NarrativeCatalog';
 import type { BlButton } from '@blacklight/signal-soul/atoms';
 import './narrative.css';
 export class JourneyPanel {
@@ -24,22 +24,24 @@ export class JourneyPanel {
             <p class="journey-next"></p>
             <footer class="narrative-footer">
                 <p class="journey-save-note"></p><p class="journey-warning" role="status"></p>
-                <div class="narrative-actions"><bl-button id="journey-reset" variant="quiet">Reset prototype journey</bl-button><bl-button id="journey-close" variant="primary">Back to game</bl-button></div>
+                <div class="narrative-actions"><bl-button id="journey-reset" variant="quiet">Reset saved journeys</bl-button><bl-button id="journey-close" variant="primary">Back to game</bl-button></div>
             </footer>`;
         const options={signal:this.events.signal};
         this.root.querySelector('#journey-close')!.addEventListener('click',()=>this.finish(false),options);
-        this.root.querySelector('#journey-reset')!.addEventListener('click',()=>{if(confirm('Clear this prototype’s saved discoveries, Keepsakes and stage progress? This does not reset sound or other game preferences.'))this.finish(true);},options);
+        this.root.querySelector('#journey-reset')!.addEventListener('click',()=>{if(confirm('Clear all saved journeys, including demo and study discoveries, Keepsakes and stage progress? This does not reset sound or other game preferences.'))this.finish(true);},options);
         this.root.addEventListener('cancel',event=>{event.preventDefault();this.finish(false);},options);document.body.append(this.root);
     }
     open(session:NarrativeSession,end:(reset:boolean)=>void){
-        this.end=end;const save=session.state.snapshot();
+        this.end=end;const save=session.journal;
         this.root.querySelector('.journey-lead')!.textContent=session.lead;
         const list=(selector:string,values:string[])=>{const root=this.root.querySelector(selector)!;root.replaceChildren();root.classList.toggle('is-empty',!values.length);for(const text of values.length?values:['Nothing recorded yet.']){const li=document.createElement('li');li.textContent=text;root.append(li);}};
         list('.journey-facts',save.facts.map(id=>facts[id]));list('.journey-keepsakes',save.keepsakes.map(id=>keepsakes[id]));list('.journey-milestones',save.milestones.map(id=>milestones[id]));
         const next=this.root.querySelector('.journey-next')!;next.replaceChildren();
-        if(save.unlockedStages.includes('departure-study')){
+        const destination=session.nextDestination;
+        if(destination){
             if(session.store.warning)next.textContent='The next destination is unlocked in memory. Save successfully before changing stages.';
-            else{const a=document.createElement('a');a.href=`./?level=departure-study${session.preview?'&preview=1':''}`;a.textContent=`Continue: ${stages['departure-study']}`;next.append(a);}
+            else if(destination.url){const a=document.createElement('a');a.href=destination.url;a.textContent=`Continue: ${destination.title}`;next.append(a);}
+            else next.textContent='S-17 is open. Its continuation is beyond this demo.';
         }
         this.root.querySelector('.journey-warning')!.textContent=session.store.warning;
         this.root.querySelector('.journey-save-note')!.textContent=session.preview?'Workshop playtest: discoveries stay in this preview and never change the saved journey.':'Discoveries save immediately and survive death and stage restart. Temporary level changes reset.';

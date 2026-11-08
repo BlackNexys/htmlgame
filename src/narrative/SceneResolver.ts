@@ -2,6 +2,12 @@ import { conditionMet } from './Conditions';
 import type { NarrativeState } from './NarrativeState';
 
 export const sceneRules = {
+    'last-platform-attendant': [
+        {when:'platform-has-destination',scene:'platform-farewell'},
+        {when:'platform-has-record',scene:'platform-record-reaction'},
+        {when:'platform-has-registry',scene:'platform-directions'},
+        {scene:'platform-introduction'},
+    ],
     'registry-attendant': [
         {when: 'knows-destination', scene: 'attendant-farewell'},
         {when: 'has-record', scene: 'attendant-record'},

@@ -1,6 +1,6 @@
 # Narrative and interaction systems
 
-The first three slices of the [supplied architecture proposal](Worldbuilding/Underworld_Narrative_Interaction_Proposal_v0_1.md) are implemented: physical interactions, fact-driven narrative logic, and a versioned campaign save. This is a systems study, not production of the final demo level. Dialogue, route S-17, the letter, and the station layout are noncanonical fixtures.
+The first three slices of the [supplied architecture proposal](Worldbuilding/Underworld_Narrative_Interaction_Proposal_v0_1.md) are implemented: physical interactions, fact-driven narrative logic, and a versioned campaign save. The original study remains a regression fixture. A separate [Last Platform demo blockout](last-platform-demo.md) now uses the same systems with its own draft dialogue, discoveries and progression IDs; its setting and writing are not locked canon.
 
 ## Try the complete loop
 
@@ -14,7 +14,7 @@ Open `/?level=narrative-study`, select Play, and use **F** to interact and **K**
 
 The ledger can be found before any conversation. The attendant then responds to the record immediately, without forcing an introduction. The optional letter never gates a lead or stage completion. A record establishes a recorded transfer; it does not establish abduction, consent, authorization, or motive.
 
-`npc-study` remains the simple neutral-actor demonstration. `lower-passage`, `movement-course`, and the old dialogue fixtures retain their existing behavior and do not read/write the prototype campaign. The title's New game/Restart start a fresh attempt; **Reset prototype journey** in Journey explicitly clears campaign progress separately.
+`npc-study` remains the simple neutral-actor demonstration. `lower-passage`, `movement-course`, and the old dialogue fixtures retain their existing behavior and do not read/write the campaign. The title's New game/Restart start a fresh attempt; **Reset saved journeys** in Journey explicitly clears campaign progress, including both demo and study, after confirmation.
 
 ## Responsibilities
 
@@ -76,7 +76,7 @@ A new world restores collected Keepsakes from campaign ownership, while its gate
 
 Load validation rejects malformed JSON, oversized/unsupported saves, unknown fields/discoveries, duplicate IDs and invalid stage progress. Unreadable or future saves remain untouched. Play proceeds with fresh in-memory state and a visible warning; only explicit Journey reset permits replacing that slot. Storage write failures also warn and retain in-memory progress, which survives an attempt restart but cannot be promised across reload. Reset asks for confirmation and leaves game preferences alone. There is no cloud backup, migration from a future version, cross-tab merge or save-slot manager.
 
-Campaign saving is currently enabled only for `narrative-study` and `departure-study`. All `levelUrl` workshop playtests and `preview=1` runs use isolated in-memory state, including onward links and reset. Editing/testing a level cannot overwrite the real journey.
+Campaign saving is enabled for `narrative-study`, `departure-study` and `last-platform-demo` through `CampaignStages.ts`. `StoryCatalog.ts` groups each story's facts, milestone and Keepsake IDs; demo evidence is independent of the old study. Journey filters to the current story. Existing valid v1 saves gain the newly available demo stage while retaining all previous progress. The demo's unlocked `outbound-line` entry has no playable stage yet and therefore no navigation link. All `levelUrl` workshop playtests and `preview=1` runs use isolated in-memory state, including onward links and reset. Editing/testing a level cannot overwrite the real journey.
 
 ## Verification and boundaries
 

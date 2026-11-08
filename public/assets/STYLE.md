@@ -77,7 +77,7 @@ Carry the same combination of age, death, and technology into future assets. Wor
 
 Keep scenery quieter in contrast and saturation than active characters and attacks. The existing wall's bright mortar is a useful detail to review when tiling large areas, since repetition can make it compete with the action.
 
-Enemies should share the protagonist's pixel density and shading approach while having distinct silhouettes. The generated sheets in `enemies/` are the current first playable art pass. The simple background architecture remains a placeholder. Use the live gameplay PNGs and relevant original references when refining sprites. Use the proposed regional direction when exploring environments; concept paintings still need production adaptation.
+Enemies should share the protagonist's pixel density and shading approach while having distinct silhouettes. The generated sheets in `enemies/` are the current first playable art pass. The [Confluence gameplay kit](environment/confluence/v1/README.md) and [v2 architecture](environment/confluence/v2/README.md) adapt the station/river direction into terrain, facade, landmark, prop and background assets for The Last Platform. The rebuilt district uses inhabited balconies, bridge piers, warm Registry interiors and static archive machinery. Walkable edges stay brighter and simpler than background structures. Other mechanics fixtures retain their simple background. Use live gameplay PNGs and relevant original references when refining sprites; setting paintings remain references rather than collision-ready layers.
 
 ## Generated animation sheet
 

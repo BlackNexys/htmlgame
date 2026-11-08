@@ -19,6 +19,10 @@
 
 ### Status key
 
+**Environment art pass (8 November 2026):** The [Confluence kit](../public/assets/environment/confluence/v1/README.md) supplies terrain, facade, prop, landmark and city/river layers. [Twelve v2 architectural modules](../public/assets/environment/confluence/v2/README.md) now frame station entrances, inhabited balconies, freight/viaduct crossings, Registry interiors and archive machinery. The live actor art is preserved; decorative layers fail independently. Animation and gameplay audio remain later passes.
+
+**District rebuild (8 November 2026):** [The Last Platform](last-platform-demo.md), revision 4, replaces the shelf/shaft blockout with an architectural 9,408 × 2,496 district: arrivals, inhabited frontage, two crossings, public/freight Registry entrances, upper gallery, lower records return, reversible archive and departure. Existing movement/combat, draft dialogue, physical clues, optional persistent Keepsake, explicit shutter and demo completion remain. Story IDs stay separate from studies and old saves remain compatible. Duration, balance, audio and final canon remain open.
+
 - **Agreed:** Established by our design discussion.
 - **Provisional:** Recommended implementation or tuning baseline; requires playtesting.
 - **Open:** Intentionally unresolved, not to be silently decided during implementation.

@@ -13,6 +13,7 @@ export class InteractionPrompt {
         const text = override ?? `F · ${verb} ${target.displayName}`;
         if (this.element.textContent !== text) this.element.textContent = text;
         this.element.style.left = `${(target.x + target.width / 2 - world.camera.x) / tuning.viewportWidth * 100}%`;
-        this.element.style.top = `${(target.y - 26 - world.camera.y) / tuning.viewportHeight * 100}%`;
+        const anchor=target instanceof Interactable && target.height>120?Math.max(target.y,Math.min(world.player.y,target.y2-64)):target.y;
+        this.element.style.top = `${(anchor - 26 - world.camera.y) / tuning.viewportHeight * 100}%`;
     }
 }

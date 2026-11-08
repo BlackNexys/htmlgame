@@ -20,6 +20,7 @@ import { InspectionView } from '../narrative/ui/InspectionView';
 import { JourneyPanel } from '../narrative/ui/JourneyPanel';
 import { NarrativeHud } from '../narrative/ui/NarrativeHud';
 import { Interactable } from '../components/Interactable';
+import { EnvironmentLoader } from '../environment/EnvironmentLoader';
 
 export class Game {
     private world!: World;
@@ -67,6 +68,8 @@ export class Game {
         try {
             const [assets, level] = await Promise.all([new AssetLoader().load(), this.loadLevel(this.loading.signal)]);
             if (this.disposed) return;
+            assets.environment=await new EnvironmentLoader().load(level.id,this.loading.signal);
+            if(this.disposed)return;
             this.loadedLevel = level;
             this.narrative=new NarrativeSession(level.id??'',SaveStore.browser(),this.preview);
             if(!this.narrative.allowed)throw Error('This railway destination has not been unlocked. Return to the narrative study first');
@@ -207,7 +210,7 @@ export class Game {
         this.mode='dialogue';this.input.clear();this.world.player.clearActions();this.loop.pause();this.menu.dialogue();
         this.journey.open(this.narrative,reset=>{
             if(this.disposed)return;
-            if(reset){this.narrative!.reset();if(this.loadedLevel.id==='departure-study'){location.href=`./?level=narrative-study${this.preview?'&preview=1':''}`;return;}this.restart();}
+            if(reset){this.narrative!.reset();if(this.loadedLevel.id!==this.narrative!.story.start){location.href=`./?level=${this.narrative!.story.start}${this.preview?'&preview=1':''}`;return;}this.restart();}
             else this.resume();
         });
     }
@@ -220,7 +223,7 @@ export class Game {
             if(this.world.state==='won' && this.mode==='playing'){this.narrative?.completeStage();this.narrativeHud.update(this.narrative);}
             this.mode = this.world.state; this.input.clear(); this.loop.pause();
             this.dialogue?.cancel();
-            this.menu.outcome(this.world.state, this.world.defeated, this.world.level.enemies.length);
+            this.menu.outcome(this.world.state, this.world.defeated, this.world.level.enemies.length,this.narrative?.definition?.completionCopy);
         }
     }
 

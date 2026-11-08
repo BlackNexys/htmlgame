@@ -1,0 +1,472 @@
+{
+  "schemaVersion": 1,
+  "id": "last-platform-demo",
+  "name": "01 · The Last Platform — A Lead, Not an Answer",
+  "revision": 1,
+  "tileSize": 48,
+  "width": 9216,
+  "height": 864,
+  "spawn": {
+    "x": 192,
+    "y": 720
+  },
+  "exit": {
+    "x": 9000,
+    "y": 612,
+    "width": 64,
+    "height": 108
+  },
+  "terrain": [
+    {
+      "id": "platform-west",
+      "x": 0,
+      "y": 720,
+      "width": 2880,
+      "height": 144
+    },
+    {
+      "id": "river-catch-shelf",
+      "x": 2880,
+      "y": 816,
+      "width": 432,
+      "height": 48
+    },
+    {
+      "id": "platform-east",
+      "x": 3312,
+      "y": 720,
+      "width": 5904,
+      "height": 144
+    },
+    {
+      "id": "keepsake-plinth",
+      "x": 864,
+      "y": 624,
+      "width": 144,
+      "height": 96
+    },
+    {
+      "id": "concourse-crates-low",
+      "x": 1536,
+      "y": 624,
+      "width": 144,
+      "height": 96
+    },
+    {
+      "id": "concourse-crates-high",
+      "x": 1776,
+      "y": 576,
+      "width": 144,
+      "height": 144
+    },
+    {
+      "id": "concourse-crates-end",
+      "x": 2016,
+      "y": 624,
+      "width": 144,
+      "height": 96
+    },
+    {
+      "id": "bridge-lip",
+      "x": 2736,
+      "y": 672,
+      "width": 144,
+      "height": 48
+    },
+    {
+      "id": "bridge-island",
+      "x": 2928,
+      "y": 672,
+      "width": 144,
+      "height": 48
+    },
+    {
+      "id": "bridge-recovery",
+      "x": 3072,
+      "y": 720,
+      "width": 96,
+      "height": 48
+    },
+    {
+      "id": "bridge-right",
+      "x": 3168,
+      "y": 672,
+      "width": 144,
+      "height": 48
+    },
+    {
+      "id": "service-step",
+      "x": 3552,
+      "y": 624,
+      "width": 144,
+      "height": 96
+    },
+    {
+      "id": "service-tower",
+      "x": 3792,
+      "y": 528,
+      "width": 144,
+      "height": 192
+    },
+    {
+      "id": "service-descent",
+      "x": 4032,
+      "y": 624,
+      "width": 192,
+      "height": 96
+    },
+    {
+      "id": "freight-crates-low",
+      "x": 4752,
+      "y": 624,
+      "width": 144,
+      "height": 96
+    },
+    {
+      "id": "freight-crates-high",
+      "x": 4992,
+      "y": 576,
+      "width": 144,
+      "height": 144
+    },
+    {
+      "id": "freight-crates-end",
+      "x": 5232,
+      "y": 624,
+      "width": 144,
+      "height": 96
+    },
+    {
+      "id": "registry-stairs",
+      "x": 5808,
+      "y": 624,
+      "width": 144,
+      "height": 96
+    },
+    {
+      "id": "registry-overlook",
+      "x": 6000,
+      "y": 576,
+      "width": 192,
+      "height": 144
+    },
+    {
+      "id": "registry-stairs-end",
+      "x": 6240,
+      "y": 624,
+      "width": 144,
+      "height": 96
+    },
+    {
+      "id": "archive-cover",
+      "x": 6960,
+      "y": 624,
+      "width": 96,
+      "height": 96
+    }
+  ],
+  "decorations": [
+    {
+      "id": "back-arches-01",
+      "x": 0,
+      "y": 384,
+      "width": 432,
+      "height": 48
+    },
+    {
+      "id": "back-arches-02",
+      "x": 1152,
+      "y": 432,
+      "width": 288,
+      "height": 48
+    },
+    {
+      "id": "back-viaduct-beam",
+      "x": 2352,
+      "y": 480,
+      "width": 288,
+      "height": 48
+    },
+    {
+      "id": "back-machinery-spine",
+      "x": 3696,
+      "y": 336,
+      "width": 384,
+      "height": 48
+    },
+    {
+      "id": "back-freight-canopy",
+      "x": 4656,
+      "y": 384,
+      "width": 432,
+      "height": 48
+    },
+    {
+      "id": "back-registry-rose",
+      "x": 5760,
+      "y": 384,
+      "width": 480,
+      "height": 48
+    },
+    {
+      "id": "back-archive-support",
+      "x": 6960,
+      "y": 384,
+      "width": 384,
+      "height": 48
+    },
+    {
+      "id": "back-gate-vault",
+      "x": 8160,
+      "y": 384,
+      "width": 288,
+      "height": 48
+    }
+  ],
+  "enemies": [
+    {
+      "id": "platform-stray",
+      "kind": "zombie",
+      "x": 1344,
+      "y": 720,
+      "patrol": {
+        "left": 1272,
+        "right": 1416
+      }
+    },
+    {
+      "id": "signal-shooter",
+      "kind": "skeleton",
+      "x": 2280,
+      "y": 720,
+      "patrol": {
+        "left": 2208,
+        "right": 2352
+      }
+    },
+    {
+      "id": "bridge-leaper",
+      "kind": "ghoul",
+      "x": 2616,
+      "y": 720,
+      "patrol": {
+        "left": 2568,
+        "right": 2664
+      }
+    },
+    {
+      "id": "river-apparition",
+      "kind": "ghost",
+      "x": 3408,
+      "y": 624,
+      "patrol": {
+        "left": 3228,
+        "right": 3588
+      }
+    },
+    {
+      "id": "maintenance-stray",
+      "kind": "zombie",
+      "x": 3630,
+      "y": 624,
+      "patrol": {
+        "left": 3594,
+        "right": 3666
+      }
+    },
+    {
+      "id": "switchyard-marksman",
+      "kind": "skeleton",
+      "x": 4416,
+      "y": 720,
+      "patrol": {
+        "left": 4344,
+        "right": 4488
+      }
+    },
+    {
+      "id": "freight-ghoul",
+      "kind": "ghoul",
+      "x": 4656,
+      "y": 720,
+      "patrol": {
+        "left": 4608,
+        "right": 4704
+      }
+    },
+    {
+      "id": "freight-skeleton",
+      "kind": "skeleton",
+      "x": 5520,
+      "y": 720,
+      "patrol": {
+        "left": 5472,
+        "right": 5568
+      }
+    },
+    {
+      "id": "archive-stray",
+      "kind": "zombie",
+      "x": 7200,
+      "y": 720,
+      "patrol": {
+        "left": 7128,
+        "right": 7272
+      }
+    },
+    {
+      "id": "archive-reactivator",
+      "kind": "necromancer",
+      "x": 7512,
+      "y": 720,
+      "patrol": {
+        "left": 7440,
+        "right": 7584
+      }
+    },
+    {
+      "id": "last-signal-warden",
+      "kind": "wight",
+      "x": 8232,
+      "y": 720,
+      "patrol": {
+        "left": 8184,
+        "right": 8280
+      }
+    }
+  ],
+  "npcs": [
+    {
+      "id": "platform-attendant",
+      "kind": "rail-attendant",
+      "x": 624,
+      "y": 720,
+      "scene": "registry-attendant"
+    }
+  ],
+  "interactables": [
+    {
+      "id": "optional-lost-letter",
+      "kind": "collect",
+      "x": 920,
+      "y": 576,
+      "width": 24,
+      "height": 24,
+      "label": "Unfinished letter",
+      "reach": 80,
+      "sceneId": "letter-card",
+      "effectId": "collect-letter"
+    },
+    {
+      "id": "registry-transfer-ledger",
+      "kind": "inspect",
+      "x": 6504,
+      "y": 654,
+      "width": 48,
+      "height": 48,
+      "label": "Transfer ledger",
+      "reach": 88,
+      "sceneId": "transfer-record-card",
+      "effectId": "inspect-transfer-record"
+    },
+    {
+      "id": "archive-route-index",
+      "kind": "inspect",
+      "x": 7824,
+      "y": 648,
+      "width": 48,
+      "height": 56,
+      "label": "Route index",
+      "reach": 96,
+      "sceneId": "route-key-card",
+      "effectId": "decode-route",
+      "conditionId": "has-record"
+    },
+    {
+      "id": "departure-shutter",
+      "kind": "operate",
+      "x": 8496,
+      "y": 288,
+      "width": 48,
+      "height": 432,
+      "label": "Departure shutter",
+      "reach": 112,
+      "sceneId": "gate-card",
+      "effectId": "open-gate",
+      "conditionId": "knows-destination",
+      "solid": true
+    }
+  ],
+  "signs": [
+    {
+      "id": "arrival-board",
+      "x": 208,
+      "y": 482,
+      "title": "THE LAST PLATFORM",
+      "text": "ARRIVALS: PLEASE REPORT TO STATION PERSONNEL"
+    },
+    {
+      "id": "attendant-board",
+      "x": 512,
+      "y": 456,
+      "title": "INFORMATION",
+      "text": "APPROACH THE ATTENDANT AND PRESS F TO TALK"
+    },
+    {
+      "id": "concourse-board",
+      "x": 1250,
+      "y": 480,
+      "title": "CONCOURSE CLOSED",
+      "text": "EASTBOUND SERVICES: USE THE SERVICE WALKWAY"
+    },
+    {
+      "id": "river-board",
+      "x": 2460,
+      "y": 480,
+      "title": "RIVER CROSSING",
+      "text": "DO NOT LEAN OVER THE RAILING. IT LEANS BACK."
+    },
+    {
+      "id": "maintenance-board",
+      "x": 3610,
+      "y": 414,
+      "title": "SERVICE ACCESS",
+      "text": "TRAIN STAFF ONLY. JUMPS, WALLS AND PATIENCE REQUIRED."
+    },
+    {
+      "id": "freight-board",
+      "x": 4780,
+      "y": 450,
+      "title": "GOODS IN TRANSIT",
+      "text": "ALL PARCELS MUST HAVE A DESTINATION. NO EXCEPTIONS."
+    },
+    {
+      "id": "registry-board",
+      "x": 6070,
+      "y": 442,
+      "title": "THE REGISTRY",
+      "text": "ARRIVALS AND TRANSFERS. F TO INSPECT RECORDS."
+    },
+    {
+      "id": "archive-board",
+      "x": 7030,
+      "y": 438,
+      "title": "ARCHIVE LOWER WORKS",
+      "text": "CAUTION: REACTIVATION TECHNICIAN ON DUTY"
+    },
+    {
+      "id": "route-board",
+      "x": 7670,
+      "y": 452,
+      "title": "ROUTE INDEX",
+      "text": "A RECORDED TRANSFER IS NOT A REASON."
+    },
+    {
+      "id": "departure-board",
+      "x": 8640,
+      "y": 462,
+      "title": "DEPARTURES",
+      "text": "FOLLOW THE LEAD. THE NEXT LINE IS WAITING."
+    }
+  ]
+}

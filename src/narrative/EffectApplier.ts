@@ -3,10 +3,11 @@ import type { NarrativeState } from './NarrativeState';
 import type { Interactable } from '../components/Interactable';
 import { conditionMet } from './Conditions';
 import { parseCampaign } from './SaveStore';
+import { lastPlatformEffects } from './lastPlatformEffects';
 
 type Action = {type:'fact';id:Fact} | {type:'keepsake';id:Keepsake} | {type:'milestone';id:Milestone} |
     {type:'unlock-stage'|'complete-stage';id:Stage} | {type:'object';state:'collected'|'operated'};
-interface Effect { source:'npc'|'inspect'|'collect'|'operate'|'stage'; scene?:string; condition?:string; actions:readonly Action[]; }
+export interface Effect { source:'npc'|'inspect'|'collect'|'operate'|'stage'; scene?:string; condition?:string; actions:readonly Action[]; }
 export const effectCatalog: Readonly<Record<string,Effect>> = {
     'arrive-station': {source:'stage',actions:[{type:'fact',id:'arrived-at-last-platform'}]},
     'attendant-introduction': {source:'npc',actions:[{type:'fact',id:'met-rail-attendant'},{type:'fact',id:'learned-about-registry'}]},
@@ -17,6 +18,7 @@ export const effectCatalog: Readonly<Record<string,Effect>> = {
     'open-gate': {source:'operate',scene:'gate-card',condition:'knows-destination',actions:[{type:'object',state:'operated'}]},
     'complete-opening': {source:'stage',condition:'knows-destination',actions:[{type:'complete-stage',id:'narrative-study'},{type:'unlock-stage',id:'departure-study'}]},
     'complete-departure': {source:'stage',actions:[{type:'complete-stage',id:'departure-study'}]},
+    ...lastPlatformEffects,
 };
 export interface EffectContext { source:Effect['source']; object?:Interactable; }
 
@@ -39,9 +41,9 @@ export class EffectApplier {
                 }else add(action.type==='fact'?'facts':action.type==='keepsake'?'keepsakes':action.type==='milestone'?'milestones':action.type==='unlock-stage'?'unlockedStages':'completedStages',action.id);
             }
         }
-        parseCampaign(draft);
-        this.state.replace(draft);
+        const validated=parseCampaign(draft);
+        this.state.replace(validated);
         operations.forEach(({object,state})=>{object[state]=true;});
-        return draft;
+        return validated;
     }
 }

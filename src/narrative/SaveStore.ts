@@ -14,7 +14,10 @@ export function parseCampaign(value: unknown): CampaignSave {
         if (Object.hasOwn(catalogs, field) && !list.every(id => Object.hasOwn(catalogs[field as keyof typeof catalogs],id))) throw Error('Unknown campaign discovery');
     }
     if (!data.unlockedStages.includes('narrative-study') || !data.completedStages.every(id => data.unlockedStages.includes(id))) throw Error('Invalid stage progress');
-    return structuredClone(data);
+    const normalized = structuredClone(data);
+    // Additive v1 catalog extension: preserve every existing discovery and stage.
+    if (!normalized.unlockedStages.includes('last-platform-demo')) normalized.unlockedStages.push('last-platform-demo');
+    return normalized;
 }
 
 /** One atomic localStorage value. Invalid/future saves are preserved until explicit reset. */

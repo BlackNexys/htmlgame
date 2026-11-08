@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "width": 1024,
+  "height": 768,
+  "frames": {
+    "stationEntrance": {
+      "x": 15,
+      "y": 4,
+      "width": 225,
+      "height": 248
+    },
+    "inhabitedBalcony": {
+      "x": 272,
+      "y": 4,
+      "width": 224,
+      "height": 248
+    },
+    "stationCanopy": {
+      "x": 516,
+      "y": 83,
+      "width": 248,
+      "height": 169
+    },
+    "retainingPier": {
+      "x": 837,
+      "y": 4,
+      "width": 118,
+      "height": 248
+    },
+    "bridgeDeck": {
+      "x": 4,
+      "y": 403,
+      "width": 248,
+      "height": 105
+    },
+    "bridgeArch": {
+      "x": 260,
+      "y": 289,
+      "width": 248,
+      "height": 219
+    },
+    "freightCage": {
+      "x": 524,
+      "y": 260,
+      "width": 232,
+      "height": 248
+    },
+    "maintenanceStairs": {
+      "x": 772,
+      "y": 296,
+      "width": 248,
+      "height": 212
+    },
+    "registryShelves": {
+      "x": 4,
+      "y": 525,
+      "width": 248,
+      "height": 239
+    },
+    "registryCounter": {
+      "x": 260,
+      "y": 555,
+      "width": 248,
+      "height": 209
+    },
+    "registryGallery": {
+      "x": 516,
+      "y": 556,
+      "width": 248,
+      "height": 208
+    },
+    "archiveMachinery": {
+      "x": 772,
+      "y": 550,
+      "width": 248,
+      "height": 214
+    }
+  }
+}

@@ -19,6 +19,8 @@
 | [Neutral NPCs](../npc-system.md) | Implemented neutral actor and talk-interaction slice; the attendant remains prototype material |
 | [Narrative and interaction proposal](Underworld_Narrative_Interaction_Proposal_v0_1.md) | Supplied architecture sketch, preserved as a proposal rather than canon |
 | [Narrative systems](../narrative-system.md) | Implemented inspect/collect/operate, conditional scenes, discoveries, Journey and immediate saves; prototype story remains noncanonical |
+| [The Last Platform demo](../last-platform-demo.md) | Playable revision-4 railway district with overlapping floors, balcony/freight and public Registry entrances, lower return, X/Y camera and separate draft story IDs; audio, balance and final setting remain provisional |
+| [Confluence environment kit](../../public/assets/environment/confluence/v1/README.md) and [v2 architecture](../../public/assets/environment/confluence/v2/README.md) | Integrated terrain, station/freight/Registry/archive modules, props, landmarks and city/river backdrop; exact prompts, generated originals and alpha exports preserved |
 | [Level authoring](../level-authoring.md) | Supported editor/runtime format; atlas interactions are possibilities, not existing editor features |
 | [Foundation roadmap](../action-game-roadmap.md) | Historical development record; use the current design plan for later mechanics |
 
@@ -44,7 +46,7 @@ The soulmate search remains the personal anchor. The atlas proposes treating the
 - Keep immediate defeat rewards separate from future harvesting/caches. The current build has Flicker, capped ectoplasm, and first-defeat recovery; harvesting, other weapons, progression, and bosses remain future work.
 - Keep body defeat and corpse reactivation rules separate from their unresolved fictional meaning. No rule yet establishes whether an undead person can permanently die.
 - Keep the possible Blacklight / Live Mausoleum connection nonbinding. Underworld must make sense on its own. Use of the Blacklight UI library does not establish shared fictional continuity.
-- The demo level is still a later design discussion. The atlas does not select its region, encounters, features, or delivery date.
+- The revision-4 Last Platform district now explores the supplied Confluence station brief. Its architectural routes, new station/Registry assets, draft dialogue and existing mechanics are playable; the atlas's wider geography, final art/audio and story canon remain open.
 
 ## Open decisions
 

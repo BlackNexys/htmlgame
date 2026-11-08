@@ -4,6 +4,7 @@ import { overlaps } from '../game/movement/physics';
 
 export class Exit extends GameElement {
     enabled=true;
+    lockedLabel='FIND A LEAD';
     constructor(bounds: Rect) { super(bounds); this.spawn(bounds); }
     reachedBy(actor: Rect) { return overlaps(this, actor); }
 }

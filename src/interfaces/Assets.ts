@@ -1,5 +1,6 @@
 import type { EnemyKind } from './Enemy';
 import type { NPCKind } from './NPC';
+import type { EnvironmentImages } from './Environment';
 export interface GameAssets {
     hero: HTMLImageElement;
     heroAim: HTMLImageElement;
@@ -7,4 +8,5 @@ export interface GameAssets {
     wall: HTMLImageElement;
     enemies: Record<EnemyKind, HTMLImageElement>;
     npcs?: Partial<Record<NPCKind, HTMLImageElement>>;
+    environment?: EnvironmentImages;
 }

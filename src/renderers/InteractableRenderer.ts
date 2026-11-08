@@ -1,7 +1,9 @@
 import type { Interactable } from '../components/Interactable';
+import type { ConfluenceObjectsRenderer } from '../environment/ConfluenceObjectsRenderer';
 export class InteractableRenderer {
-    constructor(private readonly c:CanvasRenderingContext2D){}
+    constructor(private readonly c:CanvasRenderingContext2D,private readonly artwork?:ConfluenceObjectsRenderer){}
     draw(object:Interactable){
+        if(this.artwork?.draw(object))return;
         if(!object.active)return;
         const c=this.c,{x,y,width:w,height:h}=object;
         c.save();c.fillStyle=object.definition.kind==='collect'?'#c1a384':'#273d4b';c.fillRect(x,y,w,h);

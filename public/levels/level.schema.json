@@ -47,7 +47,7 @@
     },
     "npc": {
       "type": "object", "additionalProperties": false, "required": ["id", "kind", "x", "y", "scene"],
-      "properties": {"id": {"$ref": "#/$defs/id"}, "kind": {"enum": ["rail-attendant"]}, "x": {"$ref": "#/$defs/coordinate"}, "y": {"$ref": "#/$defs/coordinate"}, "scene": {"enum": ["station-exchange","registry-attendant","attendant-introduction","attendant-directions","attendant-record","attendant-farewell"]}}
+      "properties": {"id": {"$ref": "#/$defs/id"}, "kind": {"enum": ["rail-attendant"]}, "x": {"$ref": "#/$defs/coordinate"}, "y": {"$ref": "#/$defs/coordinate"}, "scene": {"enum": ["station-exchange","attendant-introduction","attendant-directions","attendant-record","attendant-farewell","platform-introduction","platform-directions","platform-record-reaction","platform-farewell","last-platform-attendant","registry-attendant"]}}
     },
     "interactable": {
       "type":"object","additionalProperties":false,"required":["id","kind","x","y","width","height","label","sceneId"],
@@ -56,9 +56,9 @@
         "x":{"$ref":"#/$defs/coordinate"},"y":{"$ref":"#/$defs/coordinate"},
         "width":{"type":"integer","minimum":8,"maximum":480},"height":{"type":"integer","minimum":8,"maximum":480},
         "label":{"type":"string","minLength":1,"maxLength":80,"pattern":"\\S"},"reach":{"type":"integer","minimum":16,"maximum":160,"default":80},
-        "sceneId":{"enum":["transfer-record-card","route-key-card","letter-card","gate-card","locked-card","station-exchange","attendant-introduction","attendant-directions","attendant-record","attendant-farewell"]},
-        "effectId":{"enum":["inspect-transfer-record","decode-route","collect-letter","open-gate"]},
-        "conditionId":{"enum":["knows-registry","has-record","knows-destination"]},"solid":{"type":"boolean"}
+        "sceneId":{"enum":["platform-ledger-card","platform-index-card","platform-shutter-card","platform-letter-card","platform-locked-card","transfer-record-card","route-key-card","letter-card","gate-card","locked-card","station-exchange","attendant-introduction","attendant-directions","attendant-record","attendant-farewell","platform-introduction","platform-directions","platform-record-reaction","platform-farewell"]},
+        "effectId":{"enum":["inspect-transfer-record","decode-route","collect-letter","open-gate","platform-inspect-ledger","platform-decode-route","platform-collect-letter","platform-open-shutter"]},
+        "conditionId":{"enum":["knows-registry","has-record","knows-destination","platform-has-registry","platform-has-record","platform-has-destination"]},"solid":{"type":"boolean"}
       }
     },
     "sign": {
