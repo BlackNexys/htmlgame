@@ -3,7 +3,7 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const {parseEnvironmentFrames}=require('../src/environment/EnvironmentManifest.ts');
 const manifest=require('../public/assets/environment/confluence/v4/atlas-v4.json');
-const architecture=require('../public/assets/environment/confluence/v3/architecture-atlas-v3.json');
+const architecture=require('../public/assets/environment/confluence/v6/architecture-v6.json');
 const {architectureNames}=require('../src/environment/ConfluenceArchitecture.ts');
 
 test('building shells join station wings while retaining open arcades and distinct districts',()=>{
@@ -65,4 +65,14 @@ test('architectural modules validate against their own catalog and atlas dimensi
     assert.throws(()=>parseEnvironmentFrames(architecture,1024,768),/environment/);
     const copy=structuredClone(architecture);copy.frames.registryGallery.width=1024;
     assert.throws(()=>parseEnvironmentFrames(copy,1024,768,architectureNames),/environment/);
+});
+
+test('landmark crops exclude neighboring art and retain complete mounted fixtures',()=>{
+    const {landmarkNames}=require('../src/environment/ConfluenceLandmarks.ts');
+    const data=require('../public/assets/environment/confluence/v6/landmarks-v6.json');
+    const frames=parseEnvironmentFrames(data,768,512,landmarkNames);
+    assert.equal(Object.keys(frames).length,6);
+    assert.ok(frames.stationClock.width/frames.stationClock.height<.9,'clock crop excludes the neighboring frontage fragment');
+    const copy=structuredClone(data);delete copy.frames.stationClock;
+    assert.throws(()=>parseEnvironmentFrames(copy,768,512,landmarkNames),/environment/);
 });

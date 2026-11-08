@@ -98,3 +98,7 @@ The active [v2 gameplay sheet](character-animations-v2.png) is generated from th
 > Create a cyberundead pixel-art asset for a fast underworld platformer. Match the relevant original PNG reference in silhouette, proportions, pixel density, and palette. Combine recognizable undead forms with a few readable technological details. Use dark charcoal and cool gray forms with a focused vivid energy accent. Keep shapes angular, shading compact, and actions readable at gameplay size. For character sprites, use a genuinely transparent background and consistent frame anchors. Preserve the protagonist's magenta flame and wiry build when depicting them.
 
 Before accepting a new asset, compare it with the original reference at gameplay size, check its silhouette on dark scenery, and play its animation in context.
+
+### Architectural assembly checks
+
+Use a straight-on elevation for nearby wall fronts and canopy fascias. Show complete end caps, brackets and grounded column feet; attach clock rails and service boxes to a visible support. Give each facade bay one primary window, balcony or arcade treatment. Inspect at gameplay scale for conflicting rooflines, intersecting columns and neighboring sprite fragments. Dim solid material by tinting its RGB, preserving alpha; global opacity is reserved for intentionally spectral or distant scenery.
