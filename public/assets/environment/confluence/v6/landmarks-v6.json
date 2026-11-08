@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "frames": {
+    "registrySignal": {
+      "x": 34,
+      "y": 8,
+      "width": 193,
+      "height": 236
+    },
+    "freightGantry": {
+      "x": 271,
+      "y": 29,
+      "width": 228,
+      "height": 215
+    },
+    "wiredArch": {
+      "x": 523,
+      "y": 63,
+      "width": 230,
+      "height": 181
+    },
+    "spectralRib": {
+      "x": 11,
+      "y": 275,
+      "width": 229,
+      "height": 214
+    },
+    "stationClock": {
+      "x": 292,
+      "y": 275,
+      "width": 160,
+      "height": 209
+    },
+    "inhabitedFrontage": {
+      "x": 512,
+      "y": 291,
+      "width": 241,
+      "height": 191
+    }
+  }
+}

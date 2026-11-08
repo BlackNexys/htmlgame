@@ -1,33 +1,54 @@
 import type { EnvironmentImages } from '../interfaces/Environment';
 import { parseEnvironmentFrames } from './EnvironmentManifest';
 import { architectureNames } from './ConfluenceArchitecture';
+import {buildingTrimNames} from './ConfluenceBuildings';
+import {landmarkNames} from './ConfluenceLandmarks';
+import { parseTerrainBaselines } from './TerrainManifest';
 
 /** Decorative assets fail independently; missing art never prevents a level loading. */
 export class EnvironmentLoader {
     async load(levelId:string|undefined, signal:AbortSignal):Promise<EnvironmentImages|undefined> {
         if(levelId!=='last-platform-demo')return undefined;
         const images:EnvironmentImages={};
-        const manifest=fetch('./assets/environment/confluence/v1/atlas-v1.json',{signal}).then(r=>r.ok?r.json():undefined).catch(()=>undefined);
+        const manifest=fetch('./assets/environment/confluence/v4/atlas-v4.json',{signal}).then(r=>r.ok?r.json():undefined).catch(()=>undefined);
+        const baselines=fetch('./assets/environment/confluence/v4/terrain-v4.json',{signal}).then(r=>r.ok?r.json():undefined).catch(()=>undefined);
         const architecture=this.architecture(signal,images);
-        await Promise.all((['terrain','facades','props','city','landmarks'] as const).map(async name=>{
-            const image=await this.image(`./assets/environment/confluence/v1/${name}-v1.png`,signal);
-            const sizes={terrain:[192,192],facades:[768,768],props:[768,576],landmarks:[768,512]};
-            const size=name==='city'?undefined:sizes[name];
-            if(image && (!size || image.naturalWidth===size[0] && image.naturalHeight===size[1]))images[name]=image;
+        const buildings=this.buildings(signal,images);
+        const landmarkData=fetch('./assets/environment/confluence/v6/landmarks-v6.json',{signal}).then(r=>r.ok?r.json():undefined).catch(()=>undefined);
+        const files={terrain:['v4/terrain-v4.png',192,192],facades:['v6/insets-v6.png',768,768],props:['v4/props-v4.png',768,576],city:['v3/city-v3.png',0,0],landmarks:['v3/landmarks-v3.png',768,512],water:['v4/water-v4.png',512,256],canopy:['v6/canopy-v6.png',480,198]} as const;
+        await Promise.all(Object.entries(files).map(async([name,[file,width,height]])=>{
+            const image=await this.image(`./assets/environment/confluence/${file}`,signal);
+            if(image && (!width || image.naturalWidth===width && image.naturalHeight===height))images[name as keyof typeof files]=image;
         }));
+        const terrainData=await baselines;
+        if(images.terrain)try{images.terrainBaselines=parseTerrainBaselines(terrainData);}catch{/* Art remains usable without cap alignment metadata. */}
         const data=await manifest;
         if(images.props){
             try{images.frames=parseEnvironmentFrames(data,images.props.naturalWidth,images.props.naturalHeight);}
             catch{delete images.props;}
         }
-        await architecture;
+        const landmarkFrames=await landmarkData;
+        if(images.landmarks)try{images.landmarkFrames=parseEnvironmentFrames(landmarkFrames,768,512,landmarkNames);}catch{delete images.landmarks;}
+        await Promise.all([architecture,buildings]);
         return Object.keys(images).length?images:undefined;
+    }
+
+    private async buildings(signal:AbortSignal,images:EnvironmentImages){
+        const root='./assets/environment/confluence/v5/';
+        const [walls,trims,data]=await Promise.all([
+            this.image(root+'walls-v5.png',signal),this.image(root+'trims-v5.png',signal),
+            fetch(root+'trims-v5.json',{signal}).then(r=>r.ok?r.json():undefined).catch(()=>undefined),
+        ]);
+        if(walls?.naturalWidth===384&&walls.naturalHeight===384)images.buildingWalls=walls;
+        if(trims?.naturalWidth!==768||trims.naturalHeight!==768)return;
+        try{images.buildingFrames=parseEnvironmentFrames(data,768,768,buildingTrimNames);images.buildingTrims=trims;}
+        catch{/* Walls and existing scenery remain usable without optional trims. */}
     }
 
     private async architecture(signal:AbortSignal,images:EnvironmentImages){
         const [image,data]=await Promise.all([
-            this.image('./assets/environment/confluence/v2/architecture-v2.png',signal),
-            fetch('./assets/environment/confluence/v2/atlas-v2.json',{signal}).then(r=>r.ok?r.json():undefined).catch(()=>undefined),
+            this.image('./assets/environment/confluence/v6/architecture-v6.png',signal),
+            fetch('./assets/environment/confluence/v6/architecture-v6.json',{signal}).then(r=>r.ok?r.json():undefined).catch(()=>undefined),
         ]);
         if(!image || image.naturalWidth!==1024 || image.naturalHeight!==768)return;
         try{images.architectureFrames=parseEnvironmentFrames(data,1024,768,architectureNames);images.architecture=image;}

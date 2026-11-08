@@ -1,0 +1,157 @@
+{
+  "version": 1,
+  "width": 768,
+  "height": 576,
+  "frames": {
+    "bench": {
+      "x": 8,
+      "y": 76,
+      "width": 176,
+      "height": 108
+    },
+    "lamp": {
+      "x": 219,
+      "y": 8,
+      "width": 138,
+      "height": 176
+    },
+    "cargo": {
+      "x": 392,
+      "y": 47,
+      "width": 176,
+      "height": 137
+    },
+    "junction": {
+      "x": 609,
+      "y": 8,
+      "width": 126,
+      "height": 176
+    },
+    "ticketBooth": {
+      "x": 35,
+      "y": 200,
+      "width": 121,
+      "height": 176
+    },
+    "timetable": {
+      "x": 200,
+      "y": 243,
+      "width": 176,
+      "height": 133
+    },
+    "ledger": {
+      "x": 403,
+      "y": 200,
+      "width": 154,
+      "height": 176
+    },
+    "routeIndex": {
+      "x": 619,
+      "y": 200,
+      "width": 106,
+      "height": 176
+    },
+    "letter": {
+      "x": 8,
+      "y": 428,
+      "width": 176,
+      "height": 140
+    },
+    "shutterClosed": {
+      "x": 200,
+      "y": 396,
+      "width": 176,
+      "height": 172
+    },
+    "shutterOpen": {
+      "x": 392,
+      "y": 396,
+      "width": 176,
+      "height": 172
+    },
+    "railing": {
+      "x": 584,
+      "y": 501,
+      "width": 176,
+      "height": 67
+    }
+  },
+  "source": {
+    "width": 1448,
+    "height": 1086,
+    "bounds": {
+      "bench": {
+        "x": 35,
+        "y": 129,
+        "width": 327,
+        "height": 201
+      },
+      "lamp": {
+        "x": 362,
+        "y": 23,
+        "width": 251,
+        "height": 319
+      },
+      "cargo": {
+        "x": 745,
+        "y": 79,
+        "width": 317,
+        "height": 247
+      },
+      "junction": {
+        "x": 1178,
+        "y": 38,
+        "width": 209,
+        "height": 293
+      },
+      "ticketBooth": {
+        "x": 74,
+        "y": 369,
+        "width": 233,
+        "height": 339
+      },
+      "timetable": {
+        "x": 384,
+        "y": 431,
+        "width": 316,
+        "height": 238
+      },
+      "ledger": {
+        "x": 808,
+        "y": 428,
+        "width": 222,
+        "height": 254
+      },
+      "routeIndex": {
+        "x": 1192,
+        "y": 399,
+        "width": 175,
+        "height": 290
+      },
+      "letter": {
+        "x": 119,
+        "y": 848,
+        "width": 140,
+        "height": 111
+      },
+      "shutterClosed": {
+        "x": 384,
+        "y": 748,
+        "width": 317,
+        "height": 309
+      },
+      "shutterOpen": {
+        "x": 745,
+        "y": 748,
+        "width": 317,
+        "height": 309
+      },
+      "railing": {
+        "x": 1101,
+        "y": 851,
+        "width": 347,
+        "height": 132
+      }
+    }
+  }
+}

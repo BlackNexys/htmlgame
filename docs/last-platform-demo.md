@@ -1,58 +1,62 @@
-# The Last Platform · Confluence district demo
+# The Last Platform · cyberundead district demo
 
-**Rebuilt 8 November 2026.** The playable [runtime level](../public/levels/last-platform-demo.json) is revision **4**, **9,408 × 2,496** world pixels. This replaces the revision-3 shelf/shaft blockout with an architectural district. The [supplied design pack](The_Last_Platform_Demo_v0_1/Last_Platform_Level_Design_v0_1.md), its original revision-1 JSON and PNG remain preserved. Draft dialogue and setting details remain candidates, not locked canon.
+**Revision 5, 8 November 2026.** The [runtime level](../public/levels/last-platform-demo.json) is rebuilt as a **7,200 × 3,840** cyberpunk railway district, using the user's [Untitled.png](Worldbuilding/Untitled.png) as the primary environment reference. This supersedes the brass-heavy revision-4 art direction and layout. The supplied design pack and earlier maps remain preserved as historical iterations.
 
-Open `/?level=last-platform-demo`, or the title footer's **The Last Platform demo** link. **F** interacts and **K** opens Journey. The ordinary movement, jumping, aiming and firing controls apply. `preview=1` and editor playtests keep discoveries in memory.
+Play `/?level=last-platform-demo`. **F** interacts, **K** opens Journey. Existing running, sprinting, variable jumps, wall movement, aiming and firing remain unchanged. `preview=1` keeps progress in memory.
 
-## The district
+## Direction and routes
 
-The layout is designed around places, overlapping floors and connected routes:
+The theme is **cyberpunk with undead**: electronic infrastructure, cables, terminals, dark industrial metal, blue glass, cyan spectral rivers and magenta light/vegetation. Gothic buildings remain part of the inherited city. Small amber lights suggest inhabited places. Brass ornament, steam technology and clockwork do not define the environment. Magenta is shared with the world; character readability depends on silhouette, value and motion.
 
-| Place | Floor Y | What happens here |
+The station starts high in the district. The upper viaduct leads east, over a raised maintenance hatch, then down to the Registry's reading gallery. From its eastern desk, descend the east stair to the public hall, head west down to freight, turn east beneath the public stair, cross the archive approaches, inspect the route index and descend to departure.
+
+| Place | Floor Y | Role |
 | --- | --- | --- |
-| Arrivals square | 2016 | Safe start, attendant, ticket booth, benches, clock and river-city view |
-| Inhabited station frontage | 2016 / 1632 / 1344 | First encounters below; balconies, optional letter and roofs above |
-| Viaduct and freight | 1728 / 1344 | Two railway crossings, cargo and bridge supports; a canal towpath catches missed jumps at 2112 |
-| Registry square, hall and gallery | 1728 / 1344 / 1056 | Public stairs and freight entrance lead to the same westbound reading gallery and physical transfer ledger |
-| Registry overlook | 768 | Optional skyline balcony with a quiet view; returns to the gallery |
-| Lower records and archive works | 2112 / 1824 | Lower return beneath the Registry, reversible archive stairs, necromancer encounter and route index |
-| Departure | 2112 | Explicit shutter release, quiet final platform and demo completion |
+| Station roof | 288 | Optional letter and city view; rejoins arrivals |
+| Arrival / upper viaduct | 864, hatch 768 | Safe attendant area, first encounters, open crossing |
+| Registry reading gallery | 1248 | Physical transfer ledger at the east desk |
+| Lower station / Registry public hall | 1632 | Overlapping indoor routes and vertical return connections |
+| Freight exchange | 2400 | Cargo, electronic gantries, combat lane; connects station, Registry and canal |
+| Western service room / tenants' balcony | 2592 / 3168 | Optional inhabited side loop, with separate room stairs back into the canal spine |
+| Archive workshop | 2880 | Necromancer encounter and physical route-index terminal |
+| Departure | 3360 | Powered shutter, quiet final platform, explicit demo completion |
+| Canal towpath | 3648 | Safe catch route above the scenic river; climbs west to freight or east toward departure |
 
-The public route heads east through the frontage, crosses the old viaduct, climbs the public stairs and hall, then turns west into the gallery. The alternate route climbs the frontage's east stair westward, visits the inhabited balcony and optional letter, then heads east over the roofs and freight bridge into the gallery's service entrance.
+The canal spine climbs back to freight, then the station service stairs reach the lower hall, and the upper maintenance stair exits through the viaduct hatch. Departure and archive approaches also work in reverse. A player who finds a locked clue or shutter early can return to the evidence. The roof letter and western inhabited rooms are optional.
 
-From the gallery, retrace its eastern stair and descend the archive works to the route index. Departure stairs are reversible. The lower records passage continues beneath the building and viaduct back to arrivals. A separate climb between the bridge spans returns from the canal to the Registry square. Missing a jump or reaching the locked index early leaves a way back.
+See the [revision-5 schematic](The_Last_Platform_Demo_v0_1/Implemented_District_v0_5.svg), served at `/docs/last-platform-map.svg`, and the [actual renderer overview](../public/docs/last-platform-overview-v5.png). Regenerate them with `node scripts/map-last-platform.cjs` and, with Vite running, `node scripts/capture-confluence-overview.mjs`. The overview draws current terrain, scenery, objects, hero and enemies at world scale with a fitted city backdrop; normal play uses parallax. The earlier generated alternate concept is not a runtime screenshot.
 
-See the [current district map](The_Last_Platform_Demo_v0_1/Implemented_District_v0_4.svg), also served at `/docs/last-platform-map.svg`. Regenerate it with `node scripts/map-last-platform.cjs`. Dashed lines illustrate connections, not exact jump inputs. The older supplied PNG and revision-3 schematic describe earlier layouts.
+## Art and architecture
 
-## Architecture and art
+The [v4 material/support polish](../public/assets/environment/confluence/v4/README.md) fixes wall/surface cutouts, cap alignment, prop grounding and water textures. Review the [white-background check](../public/docs/confluence-material-check.html). The runtime combines v4 terrain/facades/props/water with v3 architecture, landmarks and city. Facade tinting preserves alpha; rear steel frames connect the existing landings, bridge columns reach bearing floors, and drain pipes anchor the textured cascades. Geometry and progression are unchanged.
 
-The existing [v1 Confluence kit](../public/assets/environment/confluence/v1/README.md) supplies four terrain materials, facade bays, props, landmarks and the city/river backdrop. A new [v2 architecture kit](../public/assets/environment/confluence/v2/README.md) adds twelve transparent modules: station entrance, inhabited balcony, canopy, retaining pier, bridge deck and arch, freight cage, maintenance stairs, Registry shelves, counter and gallery, and archive machinery.
+The replacement [v3 kit](../public/assets/environment/confluence/v3/README.md) provides new materials, facades, transparent props/modules/landmarks and a city backdrop. Original generated sources and [exact prompts](../public/assets/environment/confluence/v3/PROMPTS.md) are preserved. Earlier v1/v2 files remain archived; runtime requests only v3. The [asset gallery](../public/docs/confluence-environment.html) is served at `/docs/confluence-environment.html`.
 
-Arrival, river crossing, Registry and departure have distinct compositions. Warm windows, lamps, luggage, curtains, paper stacks, mugs, repaired hardware and conduits give the railway ordinary life within the alien city. The traveller retains the established magenta flame and live sprite; actors were not redesigned.
+`ConfluenceScene.ts` places room panels, props and landmarks. `ConfluenceArchitecture.ts` places canopies, bays, catwalk covers, terminals and static equipment. `ConfluenceStructuresRenderer.ts` owns rear bearing piers, frames and brackets; `ConfluenceMaterials.ts` defines visual regions. `ConfluenceWaterRenderer.ts` draws textured cosmetic falls and the river below the safe towpath; it adds no collision, damage or resource rules. The existing hero and actors retain their artwork.
 
-Architecture is background scenery; bright horizontal terrain caps indicate collision. Unused maintenance-stair modules remain available for later authoring rather than suggesting walk surfaces that do not match this map. The current map uses ordinary solid platforms, with headroom and gaps checked against the existing jump. City/river scenery has X/Y parallax; foreground architectural anchors follow world coordinates.
+The level JSON alone owns collision, actors, signs and interactive objects. Native rendering remains camera-culled. Optional art atlases load and fail independently; mechanics fixtures request none of this environment kit.
 
-Art placements, material regions, architectural rendering and image loading have separate files under `src/environment`. Level JSON owns collision, actors, signs and interactive objects. All optional images/manifests fail independently. The original mechanics levels request none of this kit.
+## Narrative and saves
 
-The [asset gallery](../public/docs/confluence-environment.html) is served at `/docs/confluence-environment.html`. Both generations preserve original image sources, exact prompts and alpha exports. Architecture packing uses `node scripts/pack-confluence-architecture.mjs`; the v1 packer is unchanged.
+Eleven enemies use all six existing types. Neither an enemy count nor the optional attendant/letter gates completion. The stable ledger, route index, Keepsake, attendant and shutter IDs are retained, so valid existing saves keep their discoveries. Study progress remains independent.
 
-## Story and saved progress
+The transfer entry is evidence of a recorded S-17 transfer with redacted authorization. It does not settle consent, coercion, motive or a culprit. Dialogue and Journey directions now describe the upper viaduct, east desk, public hall and freight connections. The writing remains draft material.
 
-The optional attendant, optional raised letter, physical ledger, route index and shutter use their existing stable IDs. Eleven enemies use all six existing types; no defeat count gates the route. Dialogue and Journey directions now describe the public stairs, balcony/freight entrance and upper gallery.
+Leaving an inspection grants nothing. Confirming a discovery saves it immediately; discoveries and Keepsakes survive death/restart/reload if storage succeeds. Enemies and the shutter reset each attempt. The exit requires both the destination fact and physical shutter operation. Climbing around the closed gate cannot finish.
 
-The ledger confirms a recorded S-17 transfer with redacted authorization. It does not establish coercion, consent, motive or a culprit. The letter belongs to somebody else's story. The optional attendant's reaction can supply the onward lead, so returning to the attendant remains useful.
-
-Leaving a card grants nothing. Confirming a discovery or completing/skipping an exchange commits its validated effects. Discoveries and Keepsakes save immediately and survive death/restart/reload when storage succeeds. Enemies and the shutter reset each attempt. Knowing the destination alone cannot finish: the shutter must be physically operated, and the exit checks both conditions.
-
-`CampaignStages.ts` owns stage completion and required exit objects; `StoryCatalog.ts` groups story IDs. Study progress remains independent and cannot pre-solve this demo. The save schema remains version 1; existing valid saves retain discoveries, arsenal fields and completion history while gaining access to the demo. Invalid/future saves remain protected.
-
-Completion marks `last-platform-demo` and unlocks the catalog entry `outbound-line`. **The next line is outside this demo and has no clickable continuation.**
+Completion marks `last-platform-demo` and unlocks the catalog-only `outbound-line`. The continuation is outside this demo and has no clickable stage link. Save shape remains version 1; malformed/future saves remain protected.
 
 ## Verification and limits
 
-Simulation coverage includes the public route and balcony/freight entrance with normal health/combat, the optional letter, reverse archive/departure stairs, skyline overlook, full lower return to arrivals, and canal recovery. Camera tests verify more than 800 pixels of vertical travel on the public route and more than 1,100 via the optional overlook. Save compatibility, independent evidence and explicit shutter gating remain covered.
+Simulation coverage checks the full main route and roof branch with normal combat/health, reverse archive/departure approaches, canal-to-arrival return, western inhabited loop, and east canal recovery. The main route moves the camera through over 2,200 pixels vertically. Browser tests use ordinary keyboard controls and the existing F2 debug drawing to steer, confirming physical clues, card cancellation, shutter operation, saved completion, dialogue and preview isolation.
 
-Chromium and Firefox playthroughs use ordinary keyboard input, reading only the existing F2 debug drawing to steer. They confirm ledger/index/shutter cards, immediate saved completion, preview isolation and the alternate entrance. Asset checks cover transparent exports, bounded atlas manifests, missing decorative layers and isolation from mechanics fixtures.
+The art checks validate wall/surface margins against white, alpha-preserving runtime shading, grounded cap metadata, bounded sprite crops, textured water draws, missing-layer fallbacks and current v3/v4 asset requests. Structural checks cover each small landing, pier bearing and waterfall source. Build/type checks and original mechanics/narrative regressions remain part of verification.
 
-This is a first art-led playable district, ready for human movement, route and pacing feedback. Difficulty and duration are not established by automated reachability tests. Moving trains, water physics, checkpoints, harvesting, extra powers, bosses, animated machinery, gameplay music and final story canon remain open; this rebuild does not decide them.
+This is a playable interpretation of the reference, not a pixel-for-pixel reproduction or a final balance pass. Human feedback is still needed on navigation, combat pressure and pacing. Water simulation, moving trains/lifts, checkpoints, new powers, bosses, gameplay music and final world/story canon remain unresolved.
 
+
+### Continuous building shells
+
+The v5 background kit separates continuous wall material from selected fa?ade bays. Station, residential, Registry and industrial buildings use world-aligned 96px textures, shared floor bands, exposed corners and rooflines; service conduits follow each shell. Station piers connect the stories while retaining open arcade views. The Registry has fewer repeated shelf bays and keeps its magenta landmark distinct.
+
+`ConfluenceBuildings.ts` owns decorative footprints and material families; `ConfluenceBuildingRenderer.ts` owns clipping and connected trim drawing. `EnvironmentLoader` validates optional wall/trim images and their manifest independently. The pass runs between water and rear support structures, before windows and props. Terrain collision, narrative anchors and save behavior are unchanged. Original generated assets and exact prompts live in `public/assets/environment/confluence/v5/`; the gallery and white-background checker include them.

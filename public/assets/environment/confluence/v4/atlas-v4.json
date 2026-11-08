@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "width": 768,
+  "height": 576,
+  "frames": {
+    "bench": {
+      "x": 8,
+      "y": 80,
+      "width": 176,
+      "height": 104
+    },
+    "lamp": {
+      "x": 260,
+      "y": 8,
+      "width": 56,
+      "height": 176
+    },
+    "cargo": {
+      "x": 392,
+      "y": 49,
+      "width": 176,
+      "height": 135
+    },
+    "junction": {
+      "x": 611,
+      "y": 8,
+      "width": 122,
+      "height": 176
+    },
+    "ticketBooth": {
+      "x": 35,
+      "y": 200,
+      "width": 121,
+      "height": 176
+    },
+    "timetable": {
+      "x": 200,
+      "y": 243,
+      "width": 176,
+      "height": 133
+    },
+    "ledger": {
+      "x": 404,
+      "y": 200,
+      "width": 152,
+      "height": 176
+    },
+    "routeIndex": {
+      "x": 621,
+      "y": 200,
+      "width": 102,
+      "height": 176
+    },
+    "letter": {
+      "x": 8,
+      "y": 434,
+      "width": 176,
+      "height": 134
+    },
+    "shutterClosed": {
+      "x": 200,
+      "y": 398,
+      "width": 176,
+      "height": 170
+    },
+    "shutterOpen": {
+      "x": 392,
+      "y": 398,
+      "width": 176,
+      "height": 170
+    },
+    "railing": {
+      "x": 584,
+      "y": 502,
+      "width": 176,
+      "height": 66
+    }
+  }
+}

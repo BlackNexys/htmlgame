@@ -3,9 +3,11 @@ import {fileURLToPath} from 'node:url';
 import {chromium} from '@playwright/test';
 
 // Crop and pack the authored cells; preserve the generated source and its alpha.
-const directory=fileURLToPath(new URL('../public/assets/environment/confluence/v2/',import.meta.url));
+const version=process.argv[2]??'v2';
+if(!/^v[1-9]\d*$/.test(version))throw Error('Expected an asset version such as v3');
+const directory=fileURLToPath(new URL(`../public/assets/environment/confluence/${version}/`,import.meta.url));
 const names=['stationEntrance','inhabitedBalcony','stationCanopy','retainingPier','bridgeDeck','bridgeArch','freightCage','maintenanceStairs','registryShelves','registryCounter','registryGallery','archiveMachinery'];
-const source=(await readFile(`${directory}sources/architecture-source-v2.png`)).toString('base64');
+const source=(await readFile(`${directory}sources/architecture-source-${version}.png`)).toString('base64');
 const browser=await chromium.launch();
 try{
     const page=await browser.newPage();
@@ -32,8 +34,9 @@ try{
         return {atlas:png(out),frames,sprites};
     },{source,names});
     await mkdir(`${directory}sprites`,{recursive:true});
-    await writeFile(`${directory}architecture-v2.png`,Buffer.from(packed.atlas,'base64'));
-    await writeFile(`${directory}atlas-v2.json`,JSON.stringify({version:1,width:1024,height:768,frames:packed.frames},null,2)+'\n');
-    for(const [name,data] of Object.entries(packed.sprites))await writeFile(`${directory}sprites/${name}-v2.png`,Buffer.from(data,'base64'));
+    await writeFile(`${directory}architecture-${version}.png`,Buffer.from(packed.atlas,'base64'));
+    const manifest=version==='v2'?'atlas-v2.json':`architecture-atlas-${version}.json`;
+    await writeFile(`${directory}${manifest}`,JSON.stringify({version:1,width:1024,height:768,frames:packed.frames},null,2)+'\n');
+    for(const [name,data] of Object.entries(packed.sprites))await writeFile(`${directory}sprites/${name}-${version}.png`,Buffer.from(data,'base64'));
     console.log('Packed twelve architectural modules; source and transparency preserved.');
 }finally{await browser.close();}

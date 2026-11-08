@@ -12,6 +12,6 @@ export class ConfluenceBackgroundRenderer {
             c.save();c.translate(px+(tile%2?width:0),y);if(tile%2)c.scale(-1,1);c.drawImage(this.city,0,0,width,height);c.restore();
         }
         // Keep scenic light below the contrast of the hero, tells and projectiles.
-        c.fillStyle='#07131c38';c.fillRect(0,0,T.viewportWidth,T.viewportHeight);
+        c.fillStyle='#07131c70';c.fillRect(0,0,T.viewportWidth,T.viewportHeight);
     }
 }

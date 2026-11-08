@@ -1,5 +1,7 @@
 # Confluence architecture · v2
 
+**Historical iteration:** the demo now uses the [v3 cyberpunk kit](../v3/README.md), following the user’s Untitled.png reference. This earlier artwork remains preserved, but does not define the current direction.
+
 Twelve new transparent pixel-art modules for the revision-4 Last Platform district. Built-in imagegen generated a new atlas using the v1 props and landmarks as style references; the existing kit and actors are unchanged.
 
 - [Packed atlas](architecture-v2.png): 1024 × 768, four columns by three rows.

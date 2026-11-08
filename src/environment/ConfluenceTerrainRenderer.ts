@@ -6,7 +6,7 @@ import { confluenceMaterial } from './ConfluenceMaterials';
 export class ConfluenceTerrainRenderer {
     private readonly atlas:ConfluenceAtlas;
     private readonly occupancy=new WeakMap<Map,Set<string>>();
-    constructor(private readonly ctx:CanvasRenderingContext2D,image:HTMLImageElement){this.atlas=new ConfluenceAtlas(ctx,image,4,4);}
+    constructor(private readonly ctx:CanvasRenderingContext2D,image:HTMLImageElement,private readonly baselines:readonly number[]=[]){this.atlas=new ConfluenceAtlas(ctx,image,4,4);}
     private key(x:number,y:number){return `${x},${y}`;}
     private cells(map:Map){
         let cells=this.occupancy.get(map);
@@ -22,7 +22,8 @@ export class ConfluenceTerrainRenderer {
         const cells=this.cells(map),top=!cells.has(this.key(wall.x,wall.y-48));
         const left=!cells.has(this.key(wall.x-48,wall.y)),right=!cells.has(this.key(wall.x+48,wall.y));
         const column=top?(left?0:right?2:1):3;
-        this.atlas.draw(this.material(wall.x,wall.y)*4+column,wall.x,wall.y,wall.width,wall.height);
+        const index=this.material(wall.x,wall.y)*4+column;
+        this.atlas.surface(index,wall.x,wall.y,wall.width,wall.height,top?this.baselines[index]??0:0);
         if(!cells.has(this.key(wall.x,wall.y+48))){this.ctx.fillStyle='#070d13';this.ctx.fillRect(wall.x,wall.y+46,48,2);}
     }
     decoration(wall:Wall){

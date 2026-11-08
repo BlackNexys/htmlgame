@@ -1,30 +1,28 @@
-/** Background architectural modules. The level document alone owns collision. */
+/** Static background modules; electronic equipment here adds no gameplay mechanics. */
 export const architectureNames=['stationEntrance','inhabitedBalcony','stationCanopy','retainingPier','bridgeDeck','bridgeArch','freightCage','maintenanceStairs','registryShelves','registryCounter','registryGallery','archiveMachinery'] as const;
 export type ArchitectureName=typeof architectureNames[number];
-export interface ArchitecturePlacement {
-    sprite:ArchitectureName;x:number;bottom:number;width:number;height:number;
-    light?:number;stretch?:boolean;flip?:boolean;
-}
+export interface ArchitecturePlacement {sprite:ArchitectureName;x:number;bottom:number;width:number;height:number;light?:number;stretch?:boolean;flip?:boolean;}
 export const architecture:readonly ArchitecturePlacement[]=[
-    {sprite:'stationEntrance',x:0,bottom:2016,width:300,height:360},
-    {sprite:'stationCanopy',x:288,bottom:1850,width:480,height:180,stretch:true,light:.7},
-    ...[1008,1200,1392].map(x=>({sprite:'inhabitedBalcony' as const,x,bottom:1662,width:192,height:216})),
-    {sprite:'stationCanopy',x:2112,bottom:1520,width:864,height:224,stretch:true,light:.75},
-    ...[3168,3696].map((x,i)=>({sprite:'bridgeArch' as const,x,bottom:2112,width:i?432:384,height:432,stretch:true,light:.5})),
-    ...[3120,3744].map((x,i)=>({sprite:'bridgeDeck' as const,x,bottom:1440,width:i?576:480,height:144,stretch:true})),
-    ...[2688,2784,2976].map((x,i)=>({sprite:'retainingPier' as const,x:x+24,bottom:2112,width:72,height:192+i*96,stretch:true,light:.42})),
-    {sprite:'bridgeArch',x:4320,bottom:2112,width:192,height:432,stretch:true,light:.45},
-    {sprite:'freightCage',x:3840,bottom:1344,width:224,height:256,light:.7},
-    ...[4992,5184,5376].map((x,i)=>({sprite:'retainingPier' as const,x:x+24,bottom:2112,width:96,height:480+i*96,stretch:true,light:.3})),
-    {sprite:'stationEntrance',x:4800,bottom:1728,width:192,height:288,light:.85},
-    ...[5580,5796,6012,6228].map(x=>({sprite:'registryShelves' as const,x,bottom:1344,width:192,height:240,light:.56})),
-    {sprite:'registryCounter',x:5720,bottom:1344,width:256,height:154,light:.8},
-    ...[5376,5568,5760,5952,6144].map(x=>({sprite:'registryGallery' as const,x,bottom:1104,width:192,height:240,light:.65})),
-    {sprite:'registryCounter',x:5940,bottom:1056,width:200,height:124,light:.75},
-    {sprite:'inhabitedBalcony',x:7112,bottom:798,width:240,height:288,light:.75},
-    ...[5568,5808,6048].map(x=>({sprite:'registryShelves' as const,x,bottom:2112,width:192,height:240,light:.4})),
-    ...[7056,7344,7632].map(x=>({sprite:'archiveMachinery' as const,x,bottom:2112,width:224,height:240,light:.5})),
-    {sprite:'archiveMachinery',x:7872,bottom:1824,width:152,height:176,light:.65},
-    {sprite:'stationEntrance',x:8880,bottom:2112,width:240,height:336,light:.6},
+    {sprite:'stationEntrance',x:0,bottom:864,width:288,height:336},
+    // This sprite includes columns and plinths: keep its proportions and seat it on the floor.
+    {sprite:'stationCanopy',x:288,bottom:864,width:480,height:337,light:.8},
+    ...[0,384].map(x=>({sprite:'stationCanopy' as const,x,bottom:288,width:384,height:270,light:.7})),
+    ...[1920,2688,3072,3648].map(x=>({sprite:'bridgeArch' as const,x,bottom:1200,width:384,height:384,stretch:true,light:.55})),
+    ...[1920,2688,3072,3648].map(x=>({sprite:'bridgeDeck' as const,x,bottom:960,width:384,height:144,stretch:true,light:.75})),
+    ...[2352,2496].map(x=>({sprite:'bridgeDeck' as const,x,bottom:864,width:96,height:144,stretch:true,light:.7})),
+    ...[4800,5184,5568].map(x=>({sprite:'registryGallery' as const,x,bottom:1248,width:384,height:336,light:.66})),
+    ...[4848,5376,5952].map(x=>({sprite:'registryShelves' as const,x,bottom:1632,width:192,height:288,light:.5})),
+    {sprite:'registryCounter',x:5640,bottom:1632,width:240,height:128,light:.85},
+    ...[0,768,1536].map(x=>({sprite:'stationCanopy' as const,x,bottom:1632,width:768,height:336,light:.6})),
+    {sprite:'freightCage',x:2208,bottom:2400,width:240,height:336,light:.7},
+    {sprite:'freightCage',x:3840,bottom:2400,width:240,height:336,light:.65},
+    ...[2112,2496,2880,3264,3648,4032,4416].map(x=>({sprite:'bridgeDeck' as const,x,bottom:2496,width:384,height:144,stretch:true,light:.7})),
+    ...[2112,2880,3648,4416].map(x=>({sprite:'bridgeArch' as const,x,bottom:2736,width:384,height:384,stretch:true,light:.4})),
+    {sprite:'registryShelves',x:5760,bottom:2880,width:192,height:240,light:.5},
+    {sprite:'archiveMachinery',x:6000,bottom:2880,width:144,height:176,light:.7},
+    {sprite:'archiveMachinery',x:4800,bottom:3648,width:192,height:224,light:.5},
+    ...[0,576].map(x=>({sprite:'stationCanopy' as const,x,bottom:2592,width:576,height:252,light:.65})),
+    ...[96,480,864].map(x=>({sprite:'inhabitedBalcony' as const,x,bottom:3222,width:240,height:288,light:.7})),
+    {sprite:'stationEntrance',x:6912,bottom:3360,width:240,height:336,light:.75},
 ];
 

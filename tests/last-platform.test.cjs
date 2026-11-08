@@ -38,7 +38,7 @@ test('demo evidence, dialogue, Keepsake and stage completion are separate from s
     assert.equal(f.session.plan(f.world.npcs[0]).scene.id,'platform-farewell');
     assert.equal(f.session.state.has('found-transfer-record'),false);
     assert.equal(f.world.level.exit.enabled,false,'knowing the route does not operate the shutter');
-    f.world.player.x=document.exit.x;f.world.player.y=2060;f.world.update(1/120,idle);assert.equal(f.world.state,'playing','jumping around the shutter cannot complete the demo');
+    f.world.player.x=document.exit.x;f.world.player.y=document.exit.y+document.exit.height-52;f.world.update(1/120,idle);assert.equal(f.world.state,'playing','jumping around the shutter cannot complete the demo');
     complete(f,'platform-open-shutter');assert.equal(f.world.level.exit.enabled,true);
     f.world.update(1/120,idle);assert.equal(f.world.state,'won');f.session.completeStage();
     assert.deepEqual(f.session.state.snapshot().completedStages,['last-platform-demo']);
@@ -49,7 +49,7 @@ test('demo evidence, dialogue, Keepsake and stage completion are separate from s
 test('the raised letter cannot be collected from the floor and does not gate the lead',()=>{
     const f=fixture(),letter=f.world.interactables[0],lead=f.session.lead;
     f.world.player.x=letter.x;assert.equal(f.world.interactions.nearest(f.world.player,[letter]),undefined);
-    f.world.player.y=1580;assert.equal(f.world.interactions.nearest(f.world.player,[letter]),letter);
+    f.world.player.y=236;assert.equal(f.world.interactions.nearest(f.world.player,[letter]),letter);
     complete(f,'platform-collect-letter');assert.equal(f.session.lead,lead);
     assert.deepEqual(f.session.state.snapshot().keepsakes,['platform-letter']);
     const restart=new World(compileLevel(document));f.session.attach(restart);assert.equal(restart.interactables[0].active,false);
@@ -59,35 +59,51 @@ test('the raised letter cannot be collected from the floor and does not gate the
 test('the demo traverses stacked districts in both directions with normal health and camera follow',()=>{
     const r=planRoute(),w=r.world;
     assert.equal(w.state,'won');assert.ok(w.player.health>0);
-    assert.ok(r.maxY-r.minY>800);assert.ok(w.camera.y>1600);
+    assert.ok(r.maxY-r.minY>2200);assert.ok(w.camera.y>2800);
     assert.ok(r.reversals>15,'the route reverses through the public stair, gallery and archive connections');
     assert.equal(r.session.state.has('platform-met-attendant'),false);
     assert.deepEqual(r.session.state.snapshot().keepsakes,[]);
 });
 
-test('the departure and archive stairs return to the Registry and its skyline overlook',()=>{
+
+test('departure and archive stairs climb back to the freight exchange',()=>{
     const r=planRoute([
-        {name:'east-stairs',points:[shelf('departure-stair-1'),shelf('departure-stair-0'),{x:8170,y:1824}]},
-        {name:'archive-return',points:[...Array.from({length:4},(_,i)=>shelf(`archive-descent-${3-i}`)),shelf('archive-entry-landing'),shelf('registry-east-stair-0'),shelf('registry-east-stair-1'),shelf('registry-gallery-east-landing')]},
-        {name:'overlook',points:[shelf('overlook-step-0'),shelf('overlook-step-1'),{x:7182,y:768}]},
-    ],{combat:false,spawn:{x:8790,y:2060}});
-    assert.equal(r.world.state,'playing');assert.equal(r.world.player.y2,768);
-    assert.ok(r.maxY-r.minY>1100);
+        {name:'departure-return',points:[...Array.from({length:4},(_,i)=>shelf('departure-stair-'+(3-i))),{x:6190,y:2880}]},
+        {name:'archive-return',points:[...Array.from({length:4},(_,i)=>shelf('archive-descent-'+(3-i))),{x:4700,y:2400}]},
+    ],{combat:false,spawn:{x:6790,y:3308}});
+    assert.equal(r.world.state,'playing');assert.equal(r.world.player.y2,2400);
+    assert.ok(r.maxY-r.minY>700);
 });
 
-test('inhabited balconies and freight form a second entrance to the Registry gallery',()=>{
+test('the roof Keepsake reconnects to the upper viaduct with normal combat',()=>{
     const r=planRoute(balconyRoute);
-    assert.equal(r.world.state,'playing');assert.equal(r.world.player.y2,1056);
-    assert.ok(r.world.player.health>0);
-    assert.deepEqual(r.session.state.snapshot().keepsakes,['platform-letter']);
+    assert.equal(r.world.state,'playing');assert.equal(r.world.player.y2,1248);
+    assert.ok(r.world.player.health>0);assert.deepEqual(r.session.state.snapshot().keepsakes,['platform-letter']);
 });
 
-test('the lower records passage returns beneath the Registry and viaduct to arrivals',()=>{
-    const r=planRoute([{name:'lower-return',points:[{x:4800,y:2112},{x:2800,y:2112},{x:2300,y:2016},{x:600,y:2016}]}],{combat:false,spawn:{x:8400,y:2060}});
-    assert.equal(r.world.state,'playing');assert.equal(r.world.player.y2,2016);assert.ok(r.world.player.x<640);
+test('the canal service spine returns through freight and the lower station to arrivals',()=>{
+    const r=planRoute([
+        {name:'canal-return',points:[...Array.from({length:12},(_,i)=>shelf('canal-return-'+i)),{x:2200,y:2400}]},
+        {name:'lower-station',points:[...Array.from({length:7},(_,i)=>shelf('station-service-'+(6-i))),{x:2400,y:1632}]},
+        {name:'upper-return',points:[...Array.from({length:7},(_,i)=>shelf('station-return-'+i)),{x:2800,y:864},shelf('viaduct-hatch-east'),shelf('viaduct-hatch-west'),{x:2200,y:864},{x:600,y:864}]},
+    ],{combat:false,spawn:{x:1300,y:3596}});
+    assert.equal(r.world.state,'playing');assert.equal(r.world.player.y2,864);assert.ok(r.world.player.x<640);
+    assert.ok(r.maxY-r.minY>2400);
 });
 
-test('the canal towpath below missed bridge jumps has a reversible climb to the east square',()=>{
-    const r=planRoute([{name:'river-recovery',points:[shelf('river-recovery-0'),shelf('river-recovery-1'),shelf('river-recovery-2'),shelf('viaduct-east-balcony'),{x:4750,y:1728}]}],{combat:false,spawn:{x:3600,y:2060}});
-    assert.equal(r.world.state,'playing');assert.equal(r.world.player.y2,1728);
+test('missed archive jumps can recover through the canal east stair and departure return',()=>{
+    const r=planRoute([
+        {name:'canal-east',points:[shelf('canal-east-stair-0'),shelf('canal-east-stair-1'),{x:6780,y:3360}]},
+        {name:'archive-index',points:[...Array.from({length:4},(_,i)=>shelf('departure-stair-'+(3-i))),{x:6190,y:2880}]},
+    ],{combat:false,spawn:{x:5500,y:3596}});
+    assert.equal(r.world.state,'playing');assert.equal(r.world.player.y2,2880);
+});
+
+test('the western inhabited balcony and service room loop back into the canal spine',()=>{
+    const r=planRoute([
+        {name:'balcony',points:[...Array.from({length:5},(_,i)=>shelf('canal-return-'+i)),shelf('west-room-stair-4'),{x:900,y:3168,drop:true}]},
+        {name:'service-room',points:[...Array.from({length:5},(_,i)=>shelf('west-room-stair-'+(4-i))),{x:1200,y:2592}]},
+        {name:'freight-return',points:[shelf('west-service-landing'),shelf('canal-return-10'),shelf('canal-return-11'),{x:2200,y:2400}]},
+    ],{combat:false,spawn:{x:1300,y:3596}});
+    assert.equal(r.world.state,'playing');assert.equal(r.world.player.y2,2400);
 });

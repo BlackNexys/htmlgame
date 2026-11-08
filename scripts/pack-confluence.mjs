@@ -4,11 +4,13 @@ import {chromium} from '@playwright/test';
 
 // Formatting only: crop authored cells, trim alpha bounds, and nearest-neighbor pack.
 // Generated source artwork remains unchanged under sources/.
-const directory=fileURLToPath(new URL('../public/assets/environment/confluence/v1/',import.meta.url));
+const version=process.argv[2]??'v1';
+if(!/^v[1-9]\d*$/.test(version))throw Error('Expected an asset version such as v3');
+const directory=fileURLToPath(new URL(`../public/assets/environment/confluence/${version}/`,import.meta.url));
 const names=['bench','lamp','cargo','junction','ticketBooth','timetable','ledger','routeIndex','letter','shutterClosed','shutterOpen','railing'];
 const landmarkNames=['roseWindow','freightGantry','viaductArch','mineralArc','stationClock','tenementWindows'];
 const sources={};
-for(const name of ['terrain','facades','props','landmarks'])sources[name]=(await readFile(`${directory}sources/${name}-source-v1.png`)).toString('base64');
+for(const name of ['terrain','facades','props','landmarks'])sources[name]=(await readFile(`${directory}sources/${name}-source-${version}.png`)).toString('base64');
 const browser=await chromium.launch();
 try{
     const page=await browser.newPage();
@@ -50,10 +52,10 @@ try{
         return {...result,props:png(out),frames,sprites,source:{width:im.width,height:im.height,bounds}};
     },{sources,names,landmarkNames});
     await mkdir(`${directory}sprites`,{recursive:true});
-    for(const name of ['terrain','facades','props','landmarks'])await writeFile(`${directory}${name}-v1.png`,Buffer.from(packed[name],'base64'));
-    for(const [name,b64] of Object.entries(packed.sprites))await writeFile(`${directory}sprites/${name}-v1.png`,Buffer.from(b64,'base64'));
-    for(const [name,b64] of Object.entries(packed.landmarkSprites))await writeFile(`${directory}sprites/${name}-v1.png`,Buffer.from(b64,'base64'));
-    await copyFile(`${directory}sources/city-source-v1.png`,`${directory}city-v1.png`);
-    await writeFile(`${directory}atlas-v1.json`,JSON.stringify({version:1,width:768,height:576,frames:packed.frames,source:packed.source},null,2)+'\n');
+    for(const name of ['terrain','facades','props','landmarks'])await writeFile(`${directory}${name}-${version}.png`,Buffer.from(packed[name],'base64'));
+    for(const [name,b64] of Object.entries(packed.sprites))await writeFile(`${directory}sprites/${name}-${version}.png`,Buffer.from(b64,'base64'));
+    for(const [name,b64] of Object.entries(packed.landmarkSprites))await writeFile(`${directory}sprites/${name}-${version}.png`,Buffer.from(b64,'base64'));
+    await copyFile(`${directory}sources/city-source-${version}.png`,`${directory}city-${version}.png`);
+    await writeFile(`${directory}atlas-${version}.json`,JSON.stringify({version:1,width:768,height:576,frames:packed.frames,source:packed.source},null,2)+'\n');
     console.log('Packed 16 terrain tiles, 16 facade panels, 12 alpha props and 6 landmarks; preserved all five generated sources.');
 }finally{await browser.close();}

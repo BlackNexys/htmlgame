@@ -89,28 +89,35 @@ async function navigate(page,points){
 test('draft attendant dialogue and Journey work in an isolated demo preview',async({page})=>{
     await start(page,true);await drive(page,550);await page.keyboard.press('KeyF');
     await expect(page.locator('.kinetic-dialogue')).toBeVisible();await page.getByRole('button',{name:'Skip exchange',exact:true}).click();
-    await page.keyboard.press('KeyK');await expect(page.locator('.journey-facts')).toContainText('up the public stairs');
+    await page.keyboard.press('KeyK');await expect(page.locator('.journey-facts')).toContainText('upper viaduct');
     await expect(page.locator('.journey-save-note')).toContainText('never change the saved journey');
     expect(await save(page)).toBeNull();
 });
 
 test('complete the climbing and descending demo with physical clues and a real shutter release',async({page},info)=>{
     test.setTimeout(180000);const errors=[];page.on('pageerror',error=>errors.push(error.message));
+    await page.addInitScript(exit=>{
+        window.waterDraws=0;window.blackExitBackings=0;
+        const draw=CanvasRenderingContext2D.prototype.drawImage,fill=CanvasRenderingContext2D.prototype.fillRect;
+        CanvasRenderingContext2D.prototype.drawImage=function(im,...args){if(im instanceof HTMLImageElement&&im.src.endsWith('/water-v4.png'))window.waterDraws++;return draw.call(this,im,...args);};
+        CanvasRenderingContext2D.prototype.fillRect=function(x,y,w,h){if(this.canvas.id==='game'&&this.fillStyle==='#070b10'&&x===exit.x&&y===exit.y&&w===exit.width&&h===exit.height)window.blackExitBackings++;return fill.call(this,x,y,w,h);};
+    },document.exit);
     await start(page);await page.screenshot({path:`artifacts/${info.project.name}-last-platform-arrival.png`});
     await enableDebugReading(page);await navigate(page,groups.find(g=>g.name==='service').points);
     await artScreenshot(page,`artifacts/${info.project.name}-last-platform-service.png`);
     await navigate(page,groups.find(g=>g.name==='ledger').points);await expect(page.locator('#interaction')).toContainText('Transfer ledger');
-    expect(await cameraFromPrompt(page,'registry-transfer-ledger')).toBeLessThan(900);
+    expect(await cameraFromPrompt(page,'registry-transfer-ledger')).toBeLessThan(1200);
     await artScreenshot(page,`artifacts/${info.project.name}-last-platform-registry.png`);
     await interact(page,'Arrivals / Transfer ledger','Leave');expect((await save(page)).facts).not.toContain('platform-found-transfer');
     await interact(page,'Arrivals / Transfer ledger','Record discovery');
     expect((await save(page)).facts).toContain('platform-found-transfer');expect((await save(page)).facts).not.toContain('platform-met-attendant');
     await navigate(page,groups.find(g=>g.name==='index').points);await expect(page.locator('#interaction')).toContainText('Route index');
-    expect(await cameraFromPrompt(page,'archive-route-index')).toBeGreaterThan(1350);
+    expect(await cameraFromPrompt(page,'archive-route-index')).toBeGreaterThan(2400);
     await interact(page,'Deadways route index','Follow this lead');
     await navigate(page,groups.find(g=>g.name==='shutter').points);await expect(page.locator('#interaction')).toBeInViewport();
     await artScreenshot(page,`artifacts/${info.project.name}-last-platform-shutter.png`);await interact(page,'Departure shutter','Release shutter');
     await navigate(page,groups.find(g=>g.name==='exit').points);await expect(page.locator('#panel-title')).toHaveText('A lead, not an answer');
+    expect(await page.evaluate(()=>window.waterDraws)).toBeGreaterThan(0);expect(await page.evaluate(()=>window.blackExitBackings)).toBe(0);
     const progress=await save(page);expect(progress.completedStages).toContain('last-platform-demo');expect(progress.unlockedStages).toContain('outbound-line');
     expect(progress.keepsakes).toEqual([]);expect(progress.completedStages).not.toContain('narrative-study');
     await expect(page.getByRole('link',{name:'Continue along the next line'})).toBeHidden();

@@ -8,16 +8,17 @@ const {SaveStore}=require('../../src/narrative/SaveStore.ts');
 const document=require('../../public/levels/last-platform-demo.json');
 const idle={left:false,right:false,jump:false,fire:true};
 const shelf=id=>{const r=document.terrain.find(r=>r.id===id);return {x:r.x+r.width/2-16,y:r.y,shaft:true};};
+const dropShelf=id=>({...shelf(id),drop:true});
 const groups=[
-    {name:'service',points:[{x:2500,y:2016},...Array.from({length:3},(_,i)=>shelf(`viaduct-approach-${i}`)),{x:3900,y:1728},shelf('viaduct-east-balcony'),{x:4750,y:1728}]},
-    {name:'ledger',points:[...Array.from({length:3},(_,i)=>shelf(`registry-public-stair-${i}`)),{x:6600,y:1344},shelf('registry-east-stair-0'),shelf('registry-east-stair-1'),shelf('registry-gallery-east-landing'),{x:5510,y:1056}],effect:'platform-inspect-ledger'},
-    {name:'index',points:[{x:6370,y:1056},shelf('registry-east-stair-1'),shelf('registry-east-stair-0'),shelf('archive-entry-landing'),...Array.from({length:4},(_,i)=>shelf(`archive-descent-${i}`)),{x:8140,y:1824}],effect:'platform-decode-route'},
-    {name:'shutter',points:[shelf('departure-stair-0'),shelf('departure-stair-1'),{x:8796,y:2112}],effect:'platform-open-shutter'},
-    {name:'exit',points:[{x:9160,y:2112}]},
+    {name:'service',points:[{x:1480,y:864},shelf('viaduct-west'),shelf('viaduct-hatch-west'),shelf('viaduct-hatch-east'),{x:3300,y:864},shelf('viaduct-east')]},
+    {name:'ledger',points:[...Array.from({length:3},(_,i)=>shelf(`registry-approach-${i}`)),{x:5990,y:1248}],effect:'platform-inspect-ledger'},
+    {name:'index',points:[shelf('registry-east-stair-0'),dropShelf('registry-east-stair-1'),dropShelf('registry-east-stair-2'),dropShelf('registry-east-landing'),{x:6300,y:1632},{x:4900,y:1632},...Array.from({length:7},(_,i)=>shelf(`registry-public-${i}`)),{x:4700,y:2400,drop:true},...Array.from({length:4},(_,i)=>shelf(`archive-descent-${i}`)),{x:6190,y:2880}],effect:'platform-decode-route'},
+    {name:'shutter',points:[shelf('departure-stair-0'),...Array.from({length:3},(_,i)=>dropShelf(`departure-stair-${i+1}`)),{x:6790,y:3360}],effect:'platform-open-shutter'},
+    {name:'exit',points:[{x:7050,y:3360}]},
 ];
 const balconyRoute=[
-    {name:'balcony',points:[shelf('frontage-stair-0'),shelf('frontage-stair-1'),shelf('frontage-stair-2'),{x:1510,y:1632},{x:1310,y:1632}],effect:'platform-collect-letter'},
-    {name:'freight',points:[{x:1530,y:1632},shelf('roof-step-0'),shelf('roof-step-1'),{x:2200,y:1344},{x:4100,y:1344},shelf('freight-entry-step'),shelf('registry-service-step'),shelf('registry-service-landing'),{x:5510,y:1056}],effect:'platform-inspect-ledger'},
+    {name:'balcony',points:[...Array.from({length:5},(_,i)=>shelf(`roof-stair-${i}`)),{x:400,y:288}],effect:'platform-collect-letter'},
+    {name:'freight',points:[{x:900,y:864},...groups[0].points,...groups[1].points],effect:'platform-inspect-ledger'},
 ];
 
 function pilotInput(p,solids,enemies,point,timer){
@@ -26,7 +27,7 @@ function pilotInput(p,solids,enemies,point,timer){
     const probe=edge+direction*8;
     const gap=direction && !solids.some(r=>Math.abs(r.y-p.y2)<3 && probe>=r.x && probe<=r.x+r.width);
     const foe=enemies.some(e=>e.health>0 && (e.x-p.x)*direction>0 && Math.abs(e.x-p.x)<130 && Math.abs(e.y+e.height-p.y2)<90);
-    const jump=direction && (p.grounded && (obstacle || gap&&(point.shaft||point.y<=p.y2+4) || foe) || p.movement.wallSide===direction && p.vy>=0 && point.y<p.y2) && timer.time-timer.lastJump>.3;
+    const jump=direction && (p.grounded && !point.drop && (obstacle || gap&&(point.shaft||point.y<=p.y2+4) || foe) || p.movement.wallSide===direction && p.vy>=0 && point.y<p.y2) && timer.time-timer.lastJump>.3;
     if(jump){timer.lastJump=timer.time;timer.held=.35;}
     return {...idle,left:direction<0,right:direction>0,jump:!!jump,jumpHeld:timer.held>0};
 }

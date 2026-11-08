@@ -4,6 +4,12 @@ Pixel art for an action platformer set in the underworld. Dead bodies, spirits, 
 
 The current protagonist is defined by the sprites actually used in gameplay: [character-animations-v2.png](character-animations-v2.png) and its [aiming companion](character-aim-v1.png). Match their proportions, compact glowing black face, connected magenta flame, burgundy scarf/cloak, pale ribs within fitted dark clothing, lean limbs, belt details and buckled boots. The latest user correction explicitly makes these live sprites the reference for the menu rebuild. This guide does not establish power types, factions, or other game mechanics.
 
+## Current environment authority
+
+The user's [Untitled.png](../../docs/Worldbuilding/Untitled.png) is the primary visual reference for the Confluence demo. The theme is **cyberpunk with undead**, not steampunk. Build electronic terminals, powered conduits, cables, dark gunmetal, industrial urban layers and blue-glass canopies into inherited Gothic/railway architecture. Use cyan spectral rivers and magenta lights/plants throughout the world, with smaller amber signs of habitation. Gothic shape alone does not make the technology Victorian. Brass ornament, steam boilers and clockwork are the wrong default.
+
+The [v3 environment kit](environment/confluence/v3/README.md) replaces v1/v2 for this level. Their sources remain historical iterations, not current style authority. Match the new environment reference while retaining the live hero/enemy/NPC identities and readable collision edges.
+
 ## The visual idea
 
 **Dark remains animated by vivid energy.**
@@ -49,11 +55,13 @@ The current gameplay atlas has 209×209 source cells rendered at gameplay scale.
 
 Build bodies from black, charcoal, and cool grays. Use enough separation between those values to keep the limbs visible against a dark environment. Place the brightest colors where the character's identity or action needs attention.
 
-Magenta is the protagonist's established flame accent. Cyan is established in the skeleton and hand artwork. Preserve those reference colors when extending the corresponding assets. Keep supporting palettes compact and chosen for the subject.
+Magenta is the protagonist’s established flame accent and also belongs to city infrastructure, vegetation and spectral light. Cyan belongs to rivers, technology and existing actor references. Neither color is reserved for a gameplay faction. Keep attacks and actors readable through shape, motion and value separation; do not remove the reference’s environmental magenta.
 
 Emissive effects should have a readable pixel shape before any glow is applied. Use a bright core and a small number of darker edge colors. Keep soft bloom restrained so it does not hide the underlying drawing.
 
 ## Pixel treatment
+
+Check environment cutouts against **white** as well as dark/checker backgrounds. Transparent atlas margins alone are not sufficient: inspect each cap, plant silhouette, roof edge and open frame. Preserve dark physical materials while clearing their external backing. Align the painted platform lip with its collider, and keep prop feet at their anchor. Facade shading must preserve source alpha. See the [v4 material check notes](environment/confluence/v4/README.md).
 
 Use crisp, intentional pixel clusters and a consistent scale of detail. Shade forms with a few clear steps. Let silhouettes, posture, and light placement do most of the work.
 
@@ -77,7 +85,7 @@ Carry the same combination of age, death, and technology into future assets. Wor
 
 Keep scenery quieter in contrast and saturation than active characters and attacks. The existing wall's bright mortar is a useful detail to review when tiling large areas, since repetition can make it compete with the action.
 
-Enemies should share the protagonist's pixel density and shading approach while having distinct silhouettes. The generated sheets in `enemies/` are the current first playable art pass. The [Confluence gameplay kit](environment/confluence/v1/README.md) and [v2 architecture](environment/confluence/v2/README.md) adapt the station/river direction into terrain, facade, landmark, prop and background assets for The Last Platform. The rebuilt district uses inhabited balconies, bridge piers, warm Registry interiors and static archive machinery. Walkable edges stay brighter and simpler than background structures. Other mechanics fixtures retain their simple background. Use live gameplay PNGs and relevant original references when refining sprites; setting paintings remain references rather than collision-ready layers.
+Enemies should share the protagonist's pixel density and shading approach while having distinct silhouettes. The generated sheets in `enemies/` are the current first playable art pass. The [v3 Confluence kit](environment/confluence/v3/README.md) follows the user’s cyberpunk reference with electronic station modules, powered catwalks, cold city layers and inhabited rooms. The v1/v2 brass-heavy direction is superseded. Other mechanics fixtures retain their simpler backgrounds. Setting images guide atmosphere and layout; collision is still authored separately.
 
 ## Generated animation sheet
 

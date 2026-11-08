@@ -1,5 +1,7 @@
 # The Confluence · environment kit v1
 
+**Historical iteration:** the demo now uses the [v3 cyberpunk kit](../v3/README.md), following the user’s Untitled.png reference. This earlier artwork remains preserved, but does not define the current direction.
+
 The revision-4 district also uses the [v2 architectural extension](../v2/README.md). This v1 kit and its generated sources are preserved unchanged.
 
 First integrated gameplay environment art for **The Last Platform**. Generated with the built-in **image_gen** tool using the supplied railway-city painting for setting/material reference and the live gameplay character atlas for pixel-cluster treatment. The original artwork and character sprites are preserved.

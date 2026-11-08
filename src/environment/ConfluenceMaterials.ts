@@ -1,11 +1,10 @@
-/** Architectural material regions, in priority order. No gameplay rules live here. */
+/** Art regions only. Collision belongs to the authored level. */
 export const materialRegions=[
-    {x:4992,y:0,width:2544,height:1632,row:2}, // Registry galleries, halls and public stair
-    {x:6624,y:1344,width:2784,height:1152,row:3}, // archive and departure foundations
-    {x:2592,y:1248,width:2400,height:576,row:1}, // both railway crossings
-    {x:1008,y:1296,width:1584,height:384,row:1}, // inhabited roof / balcony
-    {x:4512,y:1152,width:480,height:288,row:1}, // freight service entry
-    {x:4992,y:2016,width:1632,height:480,row:3}, // lower records
+    {x:4704,y:768,width:2208,height:1056,row:2},
+    {x:4608,y:2400,width:2592,height:1440,row:3},
+    {x:2112,y:2304,width:2688,height:144,row:1},
+    {x:1728,y:768,width:2496,height:288,row:1},
+    {x:1440,y:2400,width:672,height:1248,row:1},
 ] as const;
 export function confluenceMaterial(x:number,y:number){
     return materialRegions.find(r=>x>=r.x && x<r.x+r.width && y>=r.y && y<r.y+r.height)?.row??0;

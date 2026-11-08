@@ -53,7 +53,7 @@ export class GameScreen {
     draw(world: World) {
         if(!this.environment?.drawBackground(world.camera))this.background.draw(world.camera, world.elapsed);
         this.ctx.save(); this.ctx.translate(-Math.round(world.camera.x), -Math.round(world.camera.y));
-        this.environment?.drawScenery(world.camera);
+        this.environment?.drawScenery(world.camera,world.elapsed,world.level);
         this.map.draw(world.level, world.camera);
         world.interactables.forEach(object=>{if(world.camera.canSee(object))this.objects.draw(object);});
         world.npcs.forEach(npc => { if (world.camera.canSee(npc)) this.npcs.draw(npc); });
