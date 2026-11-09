@@ -28,5 +28,6 @@ const campaignStages: Partial<Record<Stage, CampaignStage>> = {
     },
 };
 export function campaignStage(id: string): CampaignStage | undefined {
+    if(id==='last-platform-rebuild')return campaignStages['last-platform-demo'];
     return Object.hasOwn(campaignStages,id) ? campaignStages[id as Stage] : undefined;
 }

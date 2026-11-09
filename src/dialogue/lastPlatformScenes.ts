@@ -17,13 +17,13 @@ export const lastPlatformScenes: Readonly<Record<string,DialogueScene>> = {
         line('traveller','Where am I?','worried'),
         line('attendant','Last Platform. Confluence side. Please keep clear of the tracks.'),
         line('traveller',"I’m looking for my girlfriend. I think she came through here.",'worried','urgent'),
-        line('attendant','Then try the Registry. Across the upper viaduct, down to the reading gallery. Transfers are kept at the east desk.','neutral','soft'),
+        line('attendant','Then try the Registry. Take the upper viaduct east and follow the Registry signs. Transfers are kept at the east desk.','neutral','soft'),
         line('traveller','You sound like this happens all the time.'),
         line('attendant','People losing things? Constantly. People finding them? Less often.','amused'),
         line('traveller',"I’ll improve the statistics.",'fierce'),
     ],['platform-introduction']),
     'platform-directions': scene('platform-directions',[
-        line('attendant','Upper viaduct east, then down to the reading gallery. If you reach freight first, the Registry public stair climbs east.'),
+        line('attendant','Upper viaduct east. Follow the signs to the Registry reading gallery. If you reach freight first, look for the Registry stair.'),
         line('attendant',"And don’t ask a ghoul for directions. They’ll follow you home.",'amused'),
     ]),
     'platform-record-reaction': scene('platform-record-reaction',[

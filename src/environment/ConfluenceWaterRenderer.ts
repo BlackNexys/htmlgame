@@ -6,10 +6,10 @@ import { waterfalls,river } from './ConfluenceWaterways';
 /** Scrolling water materials only; no collision, damage or resource behavior. */
 export class ConfluenceWaterRenderer {
     private readonly atlas?:ConfluenceAtlas;
-    constructor(private readonly ctx:CanvasRenderingContext2D,image?:HTMLImageElement){if(image)this.atlas=new ConfluenceAtlas(ctx,image,2,1);}
+    constructor(private readonly ctx:CanvasRenderingContext2D,image?:HTMLImageElement,private readonly waterways:{waterfalls:readonly Rect[];river:Rect}={waterfalls,river}){if(image)this.atlas=new ConfluenceAtlas(ctx,image,2,1);}
     private cascade(fall:Rect,clip:Rect,camera:Camera,time:number,alpha:number){
         if(!this.atlas||!camera.canSee(clip,0))return;
-        const c=this.ctx,phase=Math.floor(time*42)%256,start=fall.y-phase;
+        const c=this.ctx,phase=Math.floor(time*42)%256,start=fall.y+phase;
         const top=Math.max(clip.y,camera.y),bottom=Math.min(clip.y+clip.height,camera.y+camera.height);
         c.save();c.globalAlpha=alpha;c.beginPath();c.rect(clip.x,clip.y,clip.width,clip.height);c.clip();
         for(let y=start+Math.floor((top-start)/128)*128;y<bottom;y+=128){
@@ -20,6 +20,7 @@ export class ConfluenceWaterRenderer {
     }
     draw(camera:Camera,time:number){
         if(!this.atlas)return;
+        const {waterfalls,river}=this.waterways;
         for(const fall of waterfalls){
             if(!camera.canSee(fall,0))continue;
             const height=fall.height-64;
@@ -33,7 +34,7 @@ export class ConfluenceWaterRenderer {
         c.save();c.globalAlpha=.84;c.beginPath();c.rect(river.x,river.y,river.width,river.height);c.clip();
         for(let x=start+Math.floor((left-start)/256)*256;x<right;x+=256){
             c.save();if(Math.floor((x-start)/256)%2){c.translate(x*2+256,0);c.scale(-1,1);}
-            this.atlas.draw(1,x,river.y,256,128);c.restore();
+            this.atlas.draw(1,x,river.y,256,Math.max(128,river.height));c.restore();
         }
         c.restore();
     }

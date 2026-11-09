@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1450" height="830" viewBox="0 0 1450 830" role="img" aria-labelledby="title desc">
+<title id="title">The Last Platform: proposed route relationships</title>
+<desc id="desc">A forward main route crosses the station, viaduct, freight district, quiet Registry, archive and departure. An optional roof loop and a lower recovery route reconnect before required evidence. This is a topology proposal, not a playable map.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#75e0d7"/></marker><marker id="optional" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#ec8bc9"/></marker></defs>
+<rect width="1450" height="830" fill="#101921"/>
+<g font-family="Segoe UI, sans-serif" fill="#e7eeed">
+<text x="40" y="46" font-size="28" font-weight="700">THE LAST PLATFORM / PROPOSED ROUTE</text>
+<text x="40" y="78" font-size="16" fill="#afc2cb">Relationships and pacing only. Boxes are not room dimensions; lines are not jump trajectories.</text>
+<path d="M40 230H1410M40 400H1410M40 570H1410" stroke="#293d49" stroke-width="1" stroke-dasharray="4 8"/>
+<g fill="none" stroke="#75e0d7" stroke-width="4" marker-end="url(#arrow)">
+<path d="M210 335H237"/><path d="M410 335H437"/><path d="M610 335H625V495H637"/>
+<path d="M810 495H825V335H837"/><path d="M1010 335H1025V495H1037"/><path d="M1210 495H1225V335H1237"/>
+</g>
+<g fill="none" stroke="#ec8bc9" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#optional)">
+<path d="M325 280V205"/><path d="M510 175H525V277"/><path d="M525 390V635"/><path d="M620 675H660V595H715V553"/>
+<path d="M760 550V635" marker-start="url(#optional)"/>
+</g>
+<rect x="240" y="130" width="270" height="75" rx="10" fill="#362239" stroke="#ec8bc9"/>
+<text x="258" y="157" font-size="17" font-weight="700">OPTIONAL ROOF LOOP</text><text x="258" y="183" font-size="15">Letter + movement + city view</text>
+<rect x="400" y="635" width="220" height="80" rx="10" fill="#362239" stroke="#ec8bc9"/>
+<text x="418" y="664" font-size="17" font-weight="700">LOWER CATCH ROUTE</text><text x="418" y="691" font-size="15">Recover into forward progress</text>
+<rect x="690" y="635" width="230" height="80" rx="10" fill="#362239" stroke="#ec8bc9"/>
+<text x="708" y="664" font-size="17" font-weight="700">INHABITED SIDE SPUR</text><text x="708" y="691" font-size="15">Optional pause; short return</text>
+<text x="420" y="465" font-size="14" fill="#afc2cb">Missed jump</text>
+<text x="837" y="245" font-size="15" fill="#f2d38d">All required routes converge here</text>
+<rect x="40" y="280" width="170" height="110" rx="10" fill="#1d303a" stroke="#75e0d7" stroke-width="2"/><text x="52" y="309" font-size="17" font-weight="700">A · ARRIVALS</text><text x="52" y="340" font-size="14" fill="#c3d4db">Orient and talk</text><text x="52" y="364" font-size="14" fill="#c3d4db">Safe movement space</text>
+<rect x="240" y="280" width="170" height="110" rx="10" fill="#1d303a" stroke="#75e0d7" stroke-width="2"/><text x="252" y="309" font-size="17" font-weight="700">B · CONCOURSE</text><text x="252" y="340" font-size="14" fill="#c3d4db">Run and shoot</text><text x="252" y="364" font-size="14" fill="#c3d4db">First isolated threats</text>
+<rect x="440" y="280" width="170" height="110" rx="10" fill="#1d303a" stroke="#75e0d7" stroke-width="2"/><text x="452" y="309" font-size="17" font-weight="700">C · VIADUCT</text><text x="452" y="340" font-size="14" fill="#c3d4db">Choose and cross</text><text x="452" y="364" font-size="14" fill="#c3d4db">Visible catch route</text>
+<rect x="640" y="440" width="170" height="110" rx="10" fill="#1d303a" stroke="#75e0d7" stroke-width="2"/><text x="652" y="469" font-size="17" font-weight="700">D · FREIGHT</text><text x="652" y="500" font-size="14" fill="#c3d4db">Combine familiar skills</text><text x="652" y="524" font-size="14" fill="#c3d4db">Broad fighting space</text>
+<rect x="840" y="280" width="170" height="110" rx="10" fill="#1d303a" stroke="#f2d38d" stroke-width="2"/><text x="852" y="309" font-size="17" font-weight="700">E · REGISTRY</text><text x="852" y="340" font-size="14" fill="#c3d4db">Quiet evidence beat</text><text x="852" y="364" font-size="14" fill="#c3d4db">Required ledger</text>
+<rect x="1040" y="440" width="170" height="110" rx="10" fill="#1d303a" stroke="#75e0d7" stroke-width="2"/><text x="1052" y="469" font-size="17" font-weight="700">F · ARCHIVE</text><text x="1052" y="500" font-size="14" fill="#c3d4db">Reactivation encounter</text><text x="1052" y="524" font-size="14" fill="#c3d4db">Required route index</text>
+<rect x="1240" y="280" width="170" height="110" rx="10" fill="#1d303a" stroke="#75e0d7" stroke-width="2"/><text x="1252" y="309" font-size="17" font-weight="700">G · DEPARTURE</text><text x="1252" y="340" font-size="14" fill="#c3d4db">Final familiar challenge</text><text x="1252" y="364" font-size="14" fill="#c3d4db">Shutter, then exit</text>
+<text x="40" y="770" font-size="16" fill="#75e0d7">Solid line: required forward route, with deliberate climbs and descents.</text>
+<text x="40" y="797" font-size="16" fill="#ec8bc9">Dashed line: optional/recovery connection. Required clues remain on the main route.</text>
+<text x="1040" y="770" font-size="14" fill="#afc2cb">Design proposal · 8 November 2026</text>
+<text x="1040" y="797" font-size="14" fill="#afc2cb">Existing controls; no new traversal powers assumed.</text>
+</g></svg>

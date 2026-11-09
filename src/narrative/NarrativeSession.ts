@@ -22,8 +22,11 @@ export class NarrativeSession {
     readonly objectives=new ObjectiveTracker();
     private readonly effects:EffectApplier;
     constructor(readonly levelId:string,readonly store:SaveStore,readonly preview=false){
+        // Layout experiments must never overwrite the player's campaign, even via a bare URL.
+        this.preview=preview=preview || levelId==='last-platform-rebuild';
         const save=this.active && !preview?store.load():freshCampaign();
-        if(preview && this.definition && !save.unlockedStages.includes(levelId as keyof typeof stages))save.unlockedStages.push(levelId as keyof typeof stages);
+        const stageId=levelId==='last-platform-rebuild'?'last-platform-demo':levelId;
+        if(preview && this.definition && !save.unlockedStages.includes(stageId as keyof typeof stages))save.unlockedStages.push(stageId as keyof typeof stages);
         this.state=new NarrativeState(save);this.effects=new EffectApplier(this.state);
     }
     get definition(){return campaignStage(this.levelId);}

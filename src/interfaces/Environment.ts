@@ -1,7 +1,10 @@
 export interface EnvironmentImages {
+    layout?: 'rebuild';
     terrain?: HTMLImageElement;
     terrainBaselines?:number[];
     water?:HTMLImageElement;
+    drainage?:HTMLImageElement;
+    drainageFrames?:Record<string,SpriteFrame>;
     buildingWalls?:HTMLImageElement;
     buildingTrims?:HTMLImageElement;
     buildingFrames?:Record<string,SpriteFrame>;

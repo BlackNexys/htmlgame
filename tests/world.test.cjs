@@ -11,6 +11,16 @@ const idle = {left: false, right: false, jump: false, fire: false};
 const run = (world, seconds, input = idle) => { for(let i = 0; i < Math.round(seconds / T.step); i++) world.update(T.step, input); };
 const fixture = (extra = {}) => ({width: 2400, height: 672, solids: [{x: 0, y: 576, width: 2400, height: 48}], spawn: {x: 100, y: 524}, enemies: [], exit: {x: 2200, y: 468, width: 64, height: 108}, ...extra});
 
+test('fractional approach to a floor seam does not become a horizontal wall',()=>{
+    const tiles=[{x:6096,y:768,width:48,height:48},{x:6144,y:768,width:48,height:48}];
+    const body={x:6111.999999999999,y:716,width:32,height:52,vx:330,vy:15,grounded:true};
+    sweepBody(body,tiles,1/120);
+    assert.ok(body.x>6114);assert.equal(body.vx,330);assert.equal(body.y,716);assert.equal(body.grounded,true);
+    const ceiling=tiles.map(r=>({...r,y:668}));
+    const upper={x:6111.999999999999,y:716,width:32,height:52,vx:330,vy:-15,grounded:false};
+    sweepBody(upper,ceiling,1/120);assert.ok(upper.x>6114);assert.equal(upper.vx,330);assert.equal(upper.y,716);
+});
+
 test('exact tile seams preserve sliding along floors and walls, while a real corner blocks both axes', () => {
     for(const direction of [-1,1]) {
         const body={x:direction===1?16:48,y:48,width:32,height:48,vx:direction*300,vy:15,grounded:true};

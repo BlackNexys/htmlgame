@@ -7,7 +7,7 @@ export const facts = {
     'learned-next-destination': 'The recorded route points to the next railway destination.',
     'platform-arrival': 'Reached the Last Platform.',
     'platform-met-attendant': 'Met the Last Platform attendant.',
-    'platform-knows-registry': 'Across the upper viaduct, down to the reading gallery: the transfer ledger is at the east desk. The lower freight hall also connects through the Registry public stair.',
+    'platform-knows-registry': 'Take the upper viaduct east and follow the Registry signs to the reading gallery. The transfer ledger is at the east desk; freight also has a Registry stair.',
     'platform-found-transfer': 'Her name appears in a recorded S-17 transfer. Authorization is redacted.',
     'platform-knows-destination': 'S-17 points beyond the Last Platform; the departure shutter can be released.',
 };

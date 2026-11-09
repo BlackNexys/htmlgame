@@ -47,6 +47,16 @@ export function sweepBody(body: Body, solids: Rect[], dt: number) {
         for (const wall of solids) {
             const hit = sweptImpact(body, dx, dy, wall);
             if (!hit || (hit.normalX === 0 && hit.normalY === 0)) continue;
+            // Floating-point travel can stop a fraction before a seam. Its tiny
+            // positive X impact must not become a wall while sliding on the floor.
+            if(hit.time<=1e-9 && hit.normalX){
+                touching ??= bodyContacts(body,solids);
+                if(touching.ground && dy>=0 && Math.abs(body.y+body.height-wall.y)<1e-7){
+                    hit.normalX=0;hit.normalY=-1;hit.time=0;
+                }else if(touching.ceiling && dy<=0 && Math.abs(body.y-wall.y-wall.height)<1e-7){
+                    hit.normalX=0;hit.normalY=1;hit.time=0;
+                }
+            }
             // A zero-time corner at a tile seam must slide along an existing
             // supporting face. An actual floor/wall corner still blocks both axes.
             if (hit.time === 0 && hit.normalX && hit.normalY) {

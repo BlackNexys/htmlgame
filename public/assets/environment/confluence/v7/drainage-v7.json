@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "frames": {
+    "sluice": {
+      "x": 8,
+      "y": 120,
+      "width": 368,
+      "height": 256
+    },
+    "downpipe": {
+      "x": 542,
+      "y": 8,
+      "width": 67,
+      "height": 368
+    },
+    "outlet": {
+      "x": 37,
+      "y": 392,
+      "width": 309,
+      "height": 368
+    },
+    "basin": {
+      "x": 392,
+      "y": 601,
+      "width": 368,
+      "height": 159
+    },
+    "pipeShaft": {
+      "x": 542,
+      "y": 48,
+      "width": 67,
+      "height": 280
+    }
+  }
+}

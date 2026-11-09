@@ -210,7 +210,7 @@ export class Game {
         this.mode='dialogue';this.input.clear();this.world.player.clearActions();this.loop.pause();this.menu.dialogue();
         this.journey.open(this.narrative,reset=>{
             if(this.disposed)return;
-            if(reset){this.narrative!.reset();if(this.loadedLevel.id!==this.narrative!.story.start){location.href=`./?level=${this.narrative!.story.start}${this.preview?'&preview=1':''}`;return;}this.restart();}
+            if(reset){this.narrative!.reset();if(this.loadedLevel.id!==this.narrative!.story.start && this.loadedLevel.id!=='last-platform-rebuild'){location.href=`./?level=${this.narrative!.story.start}${this.preview?'&preview=1':''}`;return;}this.restart();}
             else this.resume();
         });
     }

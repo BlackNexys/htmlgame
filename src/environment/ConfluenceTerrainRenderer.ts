@@ -22,7 +22,8 @@ export class ConfluenceTerrainRenderer {
         const cells=this.cells(map),top=!cells.has(this.key(wall.x,wall.y-48));
         const left=!cells.has(this.key(wall.x-48,wall.y)),right=!cells.has(this.key(wall.x+48,wall.y));
         const column=top?(left?0:right?2:1):3;
-        const index=this.material(wall.x,wall.y)*4+column;
+        const material=map.id==='last-platform-rebuild'?(wall.x>=7248?3:wall.x>=5808?2:wall.x>=2208?1:0):this.material(wall.x,wall.y);
+        const index=material*4+column;
         this.atlas.surface(index,wall.x,wall.y,wall.width,wall.height,top?this.baselines[index]??0:0);
         if(!cells.has(this.key(wall.x,wall.y+48))){this.ctx.fillStyle='#070d13';this.ctx.fillRect(wall.x,wall.y+46,48,2);}
     }
