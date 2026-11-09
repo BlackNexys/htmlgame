@@ -1,36 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Main character animation preview</title>
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Underworld · Canon hero animation preview</title>
 <style>
-body{margin:0;background:#10191b;color:#d8e1d5;font:15px system-ui,sans-serif}main{max-width:980px;margin:40px auto;padding:0 24px}h1{font-size:32px;font-weight:500}p{color:#9bb2a8;line-height:1.7}a{color:#e89abf}.reference{display:flex;align-items:center;gap:25px}.reference img{width:128px;height:128px;image-rendering:pixelated}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:28px 0}article{background:#1a2b30;border:1px solid #3b5150;padding:15px}h2{font-size:14px;font-weight:500;margin:0 0 12px}canvas{width:100%;height:auto;image-rendering:pixelated;background:linear-gradient(#15232d,#223a3d)}button{background:#cdddba;color:#182723;border:0;padding:10px 18px;font:inherit;cursor:pointer}small{color:#8ca99d}#error{color:#ff9cbe}@media(max-width:650px){.grid{grid-template-columns:repeat(2,1fr)}}
+body{margin:0;background:#101422;color:#eee1e9;font:15px system-ui}main{max-width:1140px;margin:32px auto;padding:0 24px}a{color:#72dce9}p{line-height:1.6;color:#c1b5c5}.reference{display:flex;gap:24px;align-items:center}.reference img{width:45%;max-width:520px;height:auto;image-rendering:pixelated}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}article{background:#171e30;padding:16px;border:1px solid #38384c}h2{font-size:15px}canvas{width:100%;image-rendering:pixelated;background:#131c2b}button{background:#df80b5;color:#171426;border:0;padding:10px 16px;font:inherit;cursor:pointer}#error{color:#ffa1c8}@media(max-width:700px){.grid{grid-template-columns:repeat(2,1fr)}.reference{display:block}.reference img{width:100%}}
 </style>
-<style>.reference img{width:auto;height:160px;max-width:35vw}</style>
-<main>
-<p><a href="../">← Back to the game</a></p>
-<h1>Main character animation preview</h1>
-<div class="reference"><img src="../assets/mainmenu/stills/hero_standing.png" alt="Established menu hero with a flaming skull, exposed ribs and a burgundy scarf"><div><strong>The established Underworld hero · gameplay v2</strong><p>The menu design adapted for gameplay.<br>36 frames: idle, run, airborne, palm-fire, hurt, and defeat.</p></div></div>
-<button id="pause">Pause animations</button> <small>Right facing · left facing is mirrored in game</small>
-<div class="grid" id="grid"></div>
-<p id="error" role="status"></p>
-<p>Airborne poses are shown in sequence here. The game selects them from vertical velocity, so the rise, apex, and fall follow the actual jump. Moving attacks combine the attack torso with the active leg pose.</p>
-<p><a href="../assets/character-animations-v2.png">Open the v2 transparent sprite sheet</a> · <a href="../assets/character-animations-v2.prompt.txt">Generation prompt</a> · <a href="../assets/character-animations-v1.png">Previous sheet</a></p>
-</main>
+<main><a href="../">← Game</a><h1>The Traveller · canon animation</h1>
+<div class="reference"><img src="Underverdenens neon-skeletark__has_watermark____has_borders__.png" alt="Canonical Traveller design sheet"><div><p>Paired magenta eyes inside a black face, ivory cheek and jaw framing, connected pink fire, burgundy scarf and cloak, studded dark jacket, ribs, strapped boots and cyan hip vial.</p><p>Each card shows the complete character at gameplay size and twice that size. Left facing mirrors the same authored frames.</p></div></div>
+<button id="pause">Pause animations</button> <button id="mirror">Face left</button><p id="error" role="status">Loading canon frames…</p><div class="grid" id="grid"></div>
+<p>The sprint builds from 330 to 480 px/s over 0.6 seconds. Boot flames follow each sole and grow with earned speed. Air poses follow jump velocity in game; directional attacks preserve the moving legs.</p>
+<p><a href="../assets/hero/canon-v1/README.md">Sources, exact prompts and export notes</a> · <a href="../assets/hero/canon-v1/gameplay-v1.png">Gameplay sheet</a> · <a href="../assets/hero/canon-v1/aiming-v1.png">Aiming sheet</a> · <a href="../menu-production.html">Menu animation</a> · <a href="../dialogue.html">Dialogue portraits</a></p></main>
 <script>
-const names=['Idle and flame flicker','Run cycle','Takeoff rise apex fall landing','Attack and recovery','Hurt and recovery','Defeat'];
-const anchors=[[200,200,200,200,200,200],[191,191,191,191,191,191],[198,196,166,151,182,198],[195,195,195,194,194,194],[193,193,193,193,193,193],[185,184,184,184,184,182]];
-const anchorsX=[[111,108,104,100,99,97],[112,110,108,106,104,102],[105,105,107,108,106,104],[109,109,105,103,101,101],[108,106,104,102,100,98],[107,105,103,101,99,97]];
-const canvases=names.map(name=>{const article=document.createElement('article');const heading=document.createElement('h2');heading.textContent=name;const canvas=document.createElement('canvas');canvas.width=280;canvas.height=230;article.append(heading,canvas);document.querySelector('#grid').append(article);return canvas;});
-let paused=false,elapsed=0,last=0;
-document.querySelector('#pause').onclick=()=>{paused=!paused;document.querySelector('#pause').textContent=paused?'Resume animations':'Pause animations';};
-const atlas=new Image();atlas.src='../assets/character-animations-v2.png';atlas.onerror=()=>document.querySelector('#error').textContent='The animation atlas could not load.';
-atlas.onload=()=>requestAnimationFrame(function frame(time){if(last&&!paused)elapsed+=Math.min(.05,(time-last)/1000);last=time;
-canvases.forEach((canvas,row)=>{const c=canvas.getContext('2d');c.imageSmoothingEnabled=false;c.clearRect(0,0,280,230);const fps=[8,14,7,14,12,8][row];const column=Math.floor(elapsed*fps)%(row<2?6:8);const index=Math.min(5,column);const size=209;
-c.strokeStyle='#52665a';c.beginPath();c.moveTo(22,205.5);c.lineTo(258,205.5);c.stroke();
-c.save();c.translate(140,205);if(row===0)c.scale(-1,1);
-c.drawImage(atlas,index*209,row*209,209,209,-anchorsX[row][index]/209*size,-anchors[row][index]/209*size,size,size);c.restore();
-c.fillStyle='#9bb2a8';c.font='11px monospace';c.fillText('FRAME '+(index+1)+' / 6',12,224);
-});requestAnimationFrame(frame);});
-</script>
-</html>
+(async()=>{try{
+const root='../assets/hero/canon-v1/',metadata=await(await fetch(root+'atlas-v1.json')).json();
+const load=async file=>{const im=new Image();im.src=root+file;await im.decode();return im;};
+const [base,aim,fire]=await Promise.all(['gameplay-v1.png','aiming-v1.png','bootfire-v1.png'].map(load));
+const names=['Idle','Run','Air · rise, apex, fall, landing','Palm fire','Hurt','Defeat','Sprint · accelerating fire','Crouch','Crouched fire','Aim up','Aim diagonally up','Aim diagonally down','Aim down'];
+const cards=names.map(name=>{const article=document.createElement('article'),heading=document.createElement('h2'),canvas=document.createElement('canvas');heading.textContent=name;canvas.width=320;canvas.height=240;canvas.setAttribute('aria-label',name);article.append(heading,canvas);document.querySelector('#grid').append(article);return canvas;});
+let elapsed=0,last=0,paused=false,mirrored=false;
+document.querySelector('#pause').onclick=event=>{paused=!paused;event.target.textContent=paused?'Resume animations':'Pause animations';};
+document.querySelector('#mirror').onclick=event=>{mirrored=!mirrored;event.target.textContent=mirrored?'Face right':'Face left';};
+document.querySelector('#error').textContent='';
+requestAnimationFrame(function tick(time){if(last&&!paused)elapsed+=Math.min(.05,(time-last)/1000);last=time;
+cards.forEach((canvas,i)=>{const c=canvas.getContext('2d'),isAim=i>=7,row=isAim?i-7:i,atlas=isAim?metadata.aim:metadata.base,clip=isAim?atlas.rows[row]:atlas.anchors[['idle','run','air','attack','hurt','defeat','sprint'][row]],fps=i===6?18:i===1?14:8,column=Math.floor(elapsed*fps)%6;
+c.clearRect(0,0,320,240);c.imageSmoothingEnabled=false;c.fillStyle='#596075';c.fillRect(8,214,304,1);
+for(const[x,multiplier]of [[67,1],[219,2]]){const size=atlas.size*multiplier,scale=size/atlas.cell;c.save();c.translate(x,214);c.scale(mirrored?-1:1,1);
+if(i===6){const charge=Math.min(1,(elapsed%3)/.6),factor=(.3+charge*.4)*multiplier;c.globalAlpha=charge;metadata.base.boots[6][column].forEach((sole,n)=>c.drawImage(fire,(Math.floor(elapsed*18+n*3)%6)*32,0,32,24,(sole.x-clip.x[column])*scale-30*factor,(sole.y-clip.y[column])*scale-22*factor,32*factor,24*factor));c.globalAlpha=1;}
+c.drawImage(isAim?aim:base,column*atlas.cell,row*atlas.cell,atlas.cell,atlas.cell,-clip.x[column]*scale,-clip.y[column]*scale,size,size);c.restore();}
+c.fillStyle='#b8a8ba';c.font='11px monospace';c.fillText('1×          2×       FRAME '+(column+1)+'/6',12,232);
+});requestAnimationFrame(tick);});
+}catch(error){document.querySelector('#error').textContent=error.message;}})();
+</script></html>

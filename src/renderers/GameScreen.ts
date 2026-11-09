@@ -37,7 +37,7 @@ export class GameScreen {
         this.background = new BackgroundRenderer(ctx);
         if(assets.environment)this.environment=new ConfluenceEnvironment(ctx,assets.environment);
         this.map = new MapRenderer(ctx, assets.wall,this.environment?.terrain,this.environment?.exit);
-        this.character = new CharacterRenderer(ctx, assets.hero, assets.heroAim);
+        this.character = new CharacterRenderer(ctx, assets.hero, assets.heroAim, assets.bootFire);
         this.enemies = new EnemyRenderer(ctx, assets);
         this.corpses = new CorpseRenderer(ctx, this.enemies);
         this.projectiles = new ProjectileRenderer(ctx, assets.flicker);

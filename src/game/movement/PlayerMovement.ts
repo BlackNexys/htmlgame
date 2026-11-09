@@ -13,11 +13,13 @@ export class PlayerMovement {
     motion: PlayerMotion = 'idle';
     wallSide = 0;
     jumpedThisStep = false;
+    sprintCharge = 0;
     get crouched() { return this.body.height === T.crouchHeight; }
     private jumpBuffer = 0;
     private coyote = 0;
     private wallLock = 0;
     private wallPush = 0;
+    private sprintDirection = 0;
     private contacts: BodyContacts;
 
     constructor(private readonly body: PlayerBody, private readonly solids: Rect[], private readonly levelWidth: number) {
@@ -35,7 +37,9 @@ export class PlayerMovement {
         if (input.jump) this.jumpBuffer = T.jumpBuffer;
         const direction = Number(input.right) - Number(input.left);
         this.updateStance(input);
-        const speed = this.crouched ? T.crouchSpeed : input.sprint ? T.sprintSpeed : T.speed;
+        this.updateSprint(dt, input, direction);
+        const boost = this.sprintCharge * this.sprintCharge * (3 - 2 * this.sprintCharge);
+        const speed = this.crouched ? T.crouchSpeed : T.speed + (T.sprintSpeed - T.speed) * boost;
 
         this.tryJump();
         if (this.wallLock > 0) this.body.vx = this.wallPush * T.wallJumpX;
@@ -50,8 +54,9 @@ export class PlayerMovement {
         if (!this.body.grounded && this.wallSide && direction === this.wallSide && this.body.vy > 0) {
             this.body.vy = Math.min(this.body.vy, T.wallSlideSpeed);
         }
-        sweepBody(this.body, this.solids, dt);
-        this.clampToLevel(); this.refreshContacts();
+        const collision = sweepBody(this.body, this.solids, dt);
+        const clamped = this.clampToLevel(); this.refreshContacts();
+        if (collision.blockedX || clamped) this.resetSprint();
         this.updateStance(input);
         if (this.wallSide && direction === this.wallSide && this.body.vy > 0) this.body.vy = Math.min(this.body.vy, T.wallSlideSpeed);
         this.tryJump();
@@ -63,9 +68,23 @@ export class PlayerMovement {
     /** Pause/cutscene entry cancels buffered actions while preserving ordinary flight. */
     clearActions() {
         this.jumpBuffer = this.coyote = this.wallLock = 0;
+        this.resetSprint();
         this.jumpedThisStep = false;
         this.motion = this.body.grounded ? this.crouched ? 'crouching' : 'idle' : 'airborne';
     }
+    private updateSprint(dt: number, input: Controls, direction: number) {
+        const blocked = direction > 0 ? this.contacts.right : direction < 0 ? this.contacts.left : false;
+        const reversing = Math.abs(this.body.vx) > epsilon && Math.sign(this.body.vx) !== direction;
+        if (!input.sprint || !direction || this.crouched || this.wallLock > 0 || blocked || reversing) {
+            this.resetSprint(); return;
+        }
+        if (this.sprintDirection && this.sprintDirection !== direction) this.resetSprint();
+        this.sprintDirection = direction;
+        // Build on the ground; carry an earned boost through a jump without
+        // manufacturing extra speed by charging while airborne or against a wall.
+        if (this.body.grounded) this.sprintCharge = Math.min(1, this.sprintCharge + dt / T.sprintBuildTime);
+    }
+    private resetSprint() { this.sprintCharge = 0; this.sprintDirection = 0; }
     private updateStance(input: Controls) {
         const crouch = this.body.grounded && input.down && !input.up && this.jumpBuffer <= epsilon;
         const height = crouch ? T.crouchHeight : T.standingHeight;

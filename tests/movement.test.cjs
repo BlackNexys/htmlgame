@@ -39,7 +39,7 @@ test('sprint has equivalent travel at 30, 60 and 144 rendered frames per second'
     for (const sample of samples) { assert.ok(Math.abs(sample.x - samples[0].x) < .0001); assert.ok(Math.abs(sample.camera - samples[0].camera) < .0001); }
     const running = new World(level()), sprinting = new World(level());
     run(running, 1, {...idle, right: true}); run(sprinting, 1, {...idle, right: true, sprint: true});
-    assert.equal(sprinting.player.vx, 440); assert.equal(running.player.vx, 330);
+    assert.equal(sprinting.player.vx, T.sprintSpeed); assert.equal(running.player.vx, T.speed);
     assert.ok(sprinting.player.x > running.player.x + 80);
 });
 
@@ -138,7 +138,7 @@ test('pause clears queued jumps, preserves ordinary flight, and fresh worlds res
 
 test('shooting during sprint and jump preserves motion and the existing shot cadence', () => {
     const world = new World(level());
-    run(world, .4, {...idle, right: true, sprint: true, fire: true}); assert.equal(world.player.vx, T.sprintSpeed);
+    run(world, T.sprintBuildTime + .2, {...idle, right: true, sprint: true, fire: true}); assert.equal(world.player.vx, T.sprintSpeed);
     world.update(T.step, {...idle, right: true, sprint: true, jump: true, jumpHeld: true, fire: true});
     assert.equal(world.player.vx, T.sprintSpeed); assert.ok(world.player.vy < -600);
     run(world, .1, {...idle, right: true, sprint: true, jumpHeld: true, fire: true});

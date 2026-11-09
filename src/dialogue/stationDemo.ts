@@ -6,7 +6,7 @@ export const stationDemo: DialogueScene = {
     description: 'Dialogue study · fictional test exchange · not canon',
     speakers: {
         traveller: {name: 'Traveller', role: 'A long way from home', side: 'left', accent: '#ff52ab',
-            portrait: {image: './assets/dialogue/portraits-v1.png', row: 0}},
+            portrait: {image: './assets/hero/canon-v1/portraits-v1.png', row: 0}},
         attendant: {name: 'Attendant', role: 'Still on the clock', side: 'right', accent: '#63dfeb',
             portrait: {image: './assets/dialogue/portraits-v1.png', row: 1}},
     },

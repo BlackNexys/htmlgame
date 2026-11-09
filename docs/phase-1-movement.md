@@ -4,7 +4,7 @@ This is the first implementation slice of [Underworld's design plan](Underworld_
 
 ## Available now
 
-Space jumps and Shift sprints. A/D or left/right supply horizontal direction. Holding Space gives a higher jump than tapping. Pushing toward a wall while falling slows the slide; Space jumps away, with a brief horizontal commitment before steering returns. Holding jump never repeatedly triggers that action.
+Space jumps and Shift sprints. The speed cap builds smoothly from 330 to 480 px/s over 0.6 seconds of grounded travel. Stop, reverse, crouch, wall impact and action clearing reset the charge; jumps carry earned speed without charging in the air. Authored pixel flames follow each animated boot during the ground sprint. A/D or left/right supply horizontal direction. Holding Space gives a higher jump than tapping. Pushing toward a wall while falling slows the slide; Space jumps away, with a brief horizontal commitment before steering returns. Holding jump never repeatedly triggers that action.
 
 Movement uses no resource and grants no damage immunity. [Flicker](Underworld_Flicker_Weapon_Spec_v1_1.md) remains usable during sprint, jump, and wall movement. W/Up aims up; horizontal combinations aim diagonally. S/Down crouches on the ground, lowers the collision body and firing origin, and allows a slow creep. In the air it aims downward. Release Down or press Jump to stand when there is sufficient headroom. Opposing keys cancel on each axis; without directional input, fire follows facing.
 
@@ -18,7 +18,7 @@ Values live in `src/game/config.ts`; they are starting points for playtesting.
 
 | Property | Value |
 | --- | --- |
-| Run / sprint speed | 330 / 440 px/s |
+| Run / sprint speed | 330 / 480 px/s |
 | Run / sprint acceleration | 2600 / 3200 px/s² |
 | Deceleration | 2200 px/s² |
 | Air acceleration scale | 0.8 |

@@ -3,7 +3,7 @@ export const tuning = {
     tile: 48, viewportWidth: 960, viewportHeight: 576,
     step: 1 / 120, maxCatchUp: 8,
     acceleration: 2600, friction: 2200, speed: 330,
-    sprintSpeed: 440, sprintAcceleration: 3200, airAccelerationScale: .8,
+    sprintSpeed: 480, sprintAcceleration: 3200, sprintBuildTime: .6, airAccelerationScale: .8,
     standingHeight: 52, crouchHeight: 32, crouchSpeed: 110,
     gravity: 1800, jump: 700, jumpCutSpeed: 420, maxFall: 850,
     coyoteTime: .1, jumpBuffer: .12,

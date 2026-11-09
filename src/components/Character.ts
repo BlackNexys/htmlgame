@@ -14,6 +14,7 @@ export class Character extends Actor {
     motion: PlayerMotion = 'idle';
     aim: AimDirection = {x: 1, y: 0};
     get crouched() { return this.movement.crouched; }
+    get sprintCharge() { return this.movement.sprintCharge; }
     readonly movement: PlayerMovement;
     private gameArea: CharacterContext;
 

@@ -11,8 +11,9 @@ test('production title clips use exact holds and wrap without advancing through 
     const duration=cat.frames.reduce((sum,f)=>sum+f.durationMs,0);assert.equal(artFrame(cat,duration),0);assert.equal(artFrame(cat,-100),0);
     for(const pose of ['standing','sitting','leaning']){
         assert.equal(art.clips[pose].frames.length,6);
-        assert.equal(art.clips[pose].image,pose==='standing'?'../../../'+characterAtlas.image:`${pose}-v5.png`);
+        assert.equal(art.clips[pose].image,pose==='standing'?'../../../'+characterAtlas.image:`../../../hero/canon-v1/${pose}-v1.png`);
         assert.equal(art.clips[pose].scale,1.35);
+        assert.equal(art.clips[pose].mirror,true);
     }
     assert.equal(art.clips.headFire,undefined);assert.equal(art.clips.cape,undefined);
     assert.deepEqual(art.clips.standing.frames.map(f=>f.anchor),characterAtlas.anchors.idle.x.map((x,i)=>({x,y:characterAtlas.anchors.idle.y[i]})));

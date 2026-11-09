@@ -3,13 +3,14 @@ import type { Character } from '../../components/Character';
 import { characterAtlas } from './CharacterAtlas';
 import { characterAimAtlas } from './CharacterAimAtlas';
 
-export type CharacterClip = 'idle' | 'run' | 'air' | 'attack' | 'hurt' | 'defeat';
+export type CharacterClip = 'idle' | 'run' | 'air' | 'attack' | 'hurt' | 'defeat' | 'sprint';
 export interface CharacterFrame { row: number; column: number; anchorX: number; anchorY: number; mirror: boolean; sheet?: 'aim'; offsetY?: number; }
 
-const rows: Record<CharacterClip, number> = {idle: 0, run: 1, air: 2, attack: 3, hurt: 4, defeat: 5};
+const rows: Record<CharacterClip, number> = {idle: 0, run: 1, air: 2, attack: 3, hurt: 4, defeat: 5, sprint: 6};
 
 export class CharacterAnimation {
     private elapsed = 0;
+    private stride = 0;
     private attack = -1;
     private hurt = -1;
     private death = -1;
@@ -18,6 +19,7 @@ export class CharacterAnimation {
 
     update(character: Character, dt: number, events: GameEvent[] = [], dead = false) {
         this.elapsed += dt;
+        this.stride += dt * (14 + 4 * character.sprintCharge);
         if (events.includes('fire')) this.attack = 0;
         if (events.includes('hurt')) this.hurt = 0;
         if (this.airborne && character.grounded) this.landing = 0;
@@ -52,7 +54,7 @@ export class CharacterAnimation {
         } else if (this.landing >= 0) base = this.frame('air', 5);
         else {
             const running = p.motion === 'running' || p.motion === 'sprinting';
-            base = this.frame(running ? 'run' : 'idle', Math.floor(this.elapsed * (p.motion === 'sprinting' ? 18 : running ? 14 : 8)) % 6);
+            base = this.frame(p.motion === 'sprinting' ? 'sprint' : running ? 'run' : 'idle', Math.floor(running ? this.stride : this.elapsed * 8) % 6);
         }
         const column = this.attack < 0 ? 1 : Math.min(5, Math.floor(this.attack / 0.18 * 6));
         if (p.aim.y) {

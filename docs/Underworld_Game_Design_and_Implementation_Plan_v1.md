@@ -107,7 +107,7 @@ The player should be able to play cautiously; aggressive play is **rewarded**, n
 |---|---:|
 | Simulation timestep (already in engine) | 1/120 s |
 | Run speed | 330 px/s |
-| Sprint speed | 440 px/s |
+| Sprint speed | 480 px/s after 0.6 s buildup |
 | Ground acceleration / deceleration | 2,600 / 2,200 px/s² |
 | Air acceleration | 80% of ground acceleration |
 | Jump impulse / gravity | 700 px/s / 1,800 px/s² |

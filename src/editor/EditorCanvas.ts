@@ -1,3 +1,4 @@
+import { characterAtlas } from '../game/animation/CharacterAtlas';
 import { cloneDocument, levelCollections, type LevelDocument, type LevelPoint, type LevelObject } from '../levels/LevelDocument';
 import type { LevelOperation } from '../levels/LevelChanges';
 import { enemyTuning } from '../game/config';
@@ -39,7 +40,7 @@ export class EditorCanvas {
         for (const kind of ['hero', ...Object.keys(enemyTuning), ...Object.keys(npcCatalog)]) {
             const image = new Image();
             image.onload = () => { this.artwork.set(kind, image); this.draw(); };
-            image.src = kind === 'hero' ? './assets/character-animations-v1.png' : Object.hasOwn(npcCatalog, kind) ? npcCatalog[kind as NPCKind].image : `./assets/enemies/${kind}-v1.png`;
+            image.src = kind === 'hero' ? './assets/'+characterAtlas.image : Object.hasOwn(npcCatalog, kind) ? npcCatalog[kind as NPCKind].image : `./assets/enemies/${kind}-v1.png`;
         }
         this.update(document);
     }
@@ -188,9 +189,9 @@ export class EditorCanvas {
             const image = this.artwork.get(kind);
             if (image) {
                 const isNPC = Object.hasOwn(npcCatalog, kind);
-                const cell = image.width / (kind === 'hero' ? 6 : 4), size = kind === 'hero' ? 76 : isNPC ? npcCatalog[kind as NPCKind].size : 80;
+                const cell = image.width / (kind === 'hero' ? 6 : 4), size = kind === 'hero' ? characterAtlas.size : isNPC ? npcCatalog[kind as NPCKind].size : 80;
                 const width = isNPC ? size * cell / image.height : size;
-                c.drawImage(image, 0, 0, cell, isNPC ? image.height : cell, x - width * .5, y - size * .94, width, size);
+                c.drawImage(image, 0, 0, cell, isNPC ? image.height : cell, x - (kind==='hero'?characterAtlas.anchors.idle.x[0]/characterAtlas.cell: .5)*width, y - size * (kind==='hero'?characterAtlas.anchors.idle.y[0]/characterAtlas.cell:.94), width, size);
             }
             c.fillStyle = kind === 'hero' ? color('--game-magenta') : color('--game-cyan');
             c.fillRect(x - 3, y - 3, 6, 6);

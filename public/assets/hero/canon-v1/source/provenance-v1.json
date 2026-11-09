@@ -1,0 +1,70 @@
+{
+  "date": "2026-11-09",
+  "mode": "built-in imagegen",
+  "authority": "public/docs/Underverdenens neon-skeletark__has_watermark____has_borders__.png",
+  "preservation": "Source PNGs and exact prompts unchanged; derived exports prepared by scripts/pack-canon-hero.mjs",
+  "sources": [
+    {
+      "file": "locomotion-v1.png",
+      "prompt": "locomotion-v1.prompt.txt",
+      "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-ffe9eb0c-96f1-40fe-871b-816aee45f518.png",
+      "references": [
+        "public/docs/Underverdenens neon-skeletark__has_watermark____has_borders__.png"
+      ]
+    },
+    {
+      "file": "actions-v1.png",
+      "prompt": "actions-v1.prompt.txt",
+      "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-a18cfb65-e280-4921-9fec-55f61b7f0d3b.png",
+      "references": [
+        "public/docs/Underverdenens neon-skeletark__has_watermark____has_borders__.png",
+        "public/assets/hero/canon-v1/source/locomotion-v1.png"
+      ]
+    },
+    {
+      "file": "aiming-v1.png",
+      "prompt": "aiming-v1.prompt.txt",
+      "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-7bb845c9-4156-45df-817c-264aa3c42162.png",
+      "references": [
+        "public/docs/Underverdenens neon-skeletark__has_watermark____has_borders__.png",
+        "public/assets/hero/canon-v1/source/locomotion-v1.png"
+      ]
+    },
+    {
+      "file": "sitting-v1.png",
+      "prompt": "sitting-v1.prompt.txt",
+      "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-47d03b27-2213-40a0-9446-26774b419f71.png",
+      "references": [
+        "public/docs/Underverdenens neon-skeletark__has_watermark____has_borders__.png",
+        "public/assets/hero/canon-v1/source/locomotion-v1.png"
+      ]
+    },
+    {
+      "file": "leaning-v1.png",
+      "prompt": "leaning-v1.prompt.txt",
+      "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-f0e1698b-4318-4cbe-bc1c-7ddb3d790738.png",
+      "references": [
+        "public/docs/Underverdenens neon-skeletark__has_watermark____has_borders__.png",
+        "public/assets/hero/canon-v1/source/locomotion-v1.png"
+      ]
+    },
+    {
+      "file": "portraits-v1.png",
+      "prompt": "portraits-v1.prompt.txt",
+      "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-bc537bf4-de96-40b5-8947-b5df650acdd6.png",
+      "references": [
+        "public/docs/Underverdenens neon-skeletark__has_watermark____has_borders__.png",
+        "public/assets/hero/canon-v1/source/locomotion-v1.png"
+      ]
+    },
+    {
+      "file": "bootfire-v1.png",
+      "prompt": "bootfire-v1.prompt.txt",
+      "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-f0f1be27-0151-4ee5-810b-f165df4d6053.png",
+      "references": [
+        "public/docs/Underverdenens neon-skeletark__has_watermark____has_borders__.png",
+        "public/assets/hero/canon-v1/source/locomotion-v1.png"
+      ]
+    }
+  ]
+}

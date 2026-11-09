@@ -1,3 +1,4 @@
+import { characterAtlas } from '../game/animation/CharacterAtlas';
 export type MenuSceneId = 'watcher' | 'patient-traveller' | 'restless-flame' | 'absent-traveller';
 export interface MenuAsset {readonly still: string;}
 export interface MenuScene {
@@ -9,7 +10,7 @@ export interface MenuScene {
     readonly character?: {readonly asset: MenuAsset;readonly position: {x: number;y: number};readonly width: number};
 }
 export const titleArtRoot='./assets/mainmenu/v3/production/';
-const asset=(name: string): MenuAsset=>({still:titleArtRoot+name+(['standing','sitting','leaning'].includes(name)?'-v5.png':'-v1.png')});
+const asset=(name: string): MenuAsset=>({still:name==='standing'?'./assets/'+characterAtlas.image:['sitting','leaning'].includes(name)?'./assets/hero/canon-v1/'+name+'-v1.png':titleArtRoot+name+'-v1.png'});
 const station={background:asset('background'),foreground:asset('foreground')};
 export const menuScenes: readonly MenuScene[]=[
     {id:'watcher',pose:'standing',poster:titleArtRoot+'poster-watcher-v1.png',...station,character:{asset:asset('standing'),position:{x:1120/1672,y:722/941},width:300/1672}},

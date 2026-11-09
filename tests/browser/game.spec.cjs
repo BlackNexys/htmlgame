@@ -15,7 +15,7 @@ async function advance(page, milliseconds) { await page.clock.runFor(millisecond
 
 test('movement, combat, pause, focus loss, resize and a clean restart', async ({page}, testInfo) => {
     const errors = []; page.on('pageerror', e => errors.push(e.message));
-    const hero = page.waitForResponse(response => response.url().endsWith('/assets/character-animations-v2.png') && response.ok());
+    const hero = page.waitForResponse(response => response.url().endsWith('/assets/hero/canon-v1/gameplay-v1.png') && response.ok());
     await start(page);
     await hero;
     fs.mkdirSync('artifacts', {recursive: true});
@@ -118,7 +118,7 @@ for (const preview of ['character-animations', 'enemy-sprites']) {
         page.on('pageerror', error => errors.push(error.message));
         const response = await page.goto(`/docs/${preview}.html`);
         expect(response.ok()).toBe(true);
-        await expect(page.locator('article')).toHaveCount(6);
+        await expect(page.locator('article')).toHaveCount(preview==='character-animations'?13:6);
         await expect(page.locator('#error')).toBeEmpty();
         await expect.poll(() => page.locator('canvas').first().evaluate(canvas =>
             canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data.some(value => value !== 0)

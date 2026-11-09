@@ -15,7 +15,7 @@ export class TitleArtRenderer {
         if(pose){
             this.shadow(pose.ground,a.lamp.position);
             const body=a.clips[pose.body],scale=body.scale??1;
-            this.halo({x:pose.position.x+(pose.light.x-body.anchor.x)*scale,y:pose.position.y+(pose.light.y-body.anchor.y)*scale},45,'238,49,168',.055);
+            this.halo({x:pose.position.x+(pose.light.x-body.anchor.x)*scale*(body.mirror?-1:1),y:pose.position.y+(pose.light.y-body.anchor.y)*scale},45,'238,49,168',.055);
             // Each frame is the complete familiar gameplay character, including
             // face, flame, clothing and cloak. No separate head/cape compositing.
             this.clip(pose.body,pose.position,timeMs);
@@ -38,7 +38,8 @@ export class TitleArtRenderer {
     private clip(id: string,position: Point,timeMs: number){
         const clip=this.art.clips[id],frame=clip.frames[artFrame(clip,timeMs)];
         const anchor=frame.anchor??clip.anchor,scale=clip.scale??1;
-        this.c.drawImage(this.images.get(id)!,...frame.rect,Math.round(position.x-anchor.x*scale),Math.round(position.y-anchor.y*scale),frame.rect[2]*scale,frame.rect[3]*scale);
+        this.c.save();this.c.translate(Math.round(position.x),Math.round(position.y));if(clip.mirror)this.c.scale(-1,1);
+        this.c.drawImage(this.images.get(id)!,...frame.rect,Math.round(-anchor.x*scale),Math.round(-anchor.y*scale),frame.rect[2]*scale,frame.rect[3]*scale);this.c.restore();
     }
     private halo(at: Point,radius: number,color: string,alpha: number){
         const c=this.c;c.save();c.globalCompositeOperation='screen';

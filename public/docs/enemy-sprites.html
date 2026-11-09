@@ -11,11 +11,11 @@
 <div class="eyebrow">CYBERUNDEAD / FIRST ENEMY ART PASS</div>
 <h1>The restless locals</h1>
 <p>Six familiar undead forms, rebuilt with worn technology. Four frames each for idle, movement, attack, and defeat. All six are playable in the game; this preview lets us review their art independently of combat timing.</p>
-<div class="references"><img src="../assets/character.png" alt="Original magenta-flame protagonist"><img src="../assets/char-sprite.png" alt="Original cyan-handed skeleton"><p><strong>Your original references</strong><br>Angular bodies, compact gray shading, and focused energy color. Magenta stays with the protagonist; cyan ties this first enemy art pass together.</p></div>
+<div class="references"><img src="../assets/hero/canon-v1/idle-v1.png" alt="Current canon magenta-flame hero"><img src="../assets/char-sprite.png" alt="Original cyan-handed skeleton"><p><strong>Current hero and supporting reference</strong><br>The canon hero beside the original cyan-handed skeleton. The lineup below uses the actual gameplay drawing and scale.</p></div>
 <div class="controls"><label for="sequence">Animation</label><select id="sequence"><option value="0">Idle</option><option value="1">Movement</option><option value="2">Attack</option><option value="3">Defeat</option></select><button id="pause" type="button">Pause</button><button id="mirror" type="button" aria-pressed="false">Face left</button><button id="replay" type="button">Replay sequence</button></div>
 <p id="error" role="status">Loading sprites…</p>
 <div class="grid" id="grid"></div>
-<h2>At the game scale</h2><p>Original protagonist on the left. Enemies use an 80 pixel padded cell, close to the current game's display scale. Relative sizes are provisional.</p>
+<h2>At the game scale</h2><p>Current canon hero on the left. Enemies use an 80 pixel padded cell, close to the current game's display scale. Relative sizes are provisional.</p>
 <canvas class="lineup" id="lineup" width="1008" height="160" aria-label="Original protagonist and all six enemies at gameplay scale"></canvas>
 <footer>Generated with the built-in image generator from the original PNG references. Transparent source sheets, prompts, and frame metadata are saved in <a href="../assets/enemies/README.md">assets/enemies</a>. No original artwork was replaced.</footer>
 </main>
@@ -26,7 +26,7 @@
   const response=await fetch('../assets/enemies/manifest.json');if(!response.ok)throw new Error('Could not load enemy metadata');
   const pack=await response.json();
   const load=src=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error('Could not load '+src));image.src=src;});
-  const original=await load('../assets/character.png');
+  const heroAtlas=await(await fetch('../assets/hero/canon-v1/atlas-v1.json')).json();const hero=heroAtlas.base;const original=await load('../assets/'+hero.image);
   const entries=await Promise.all(pack.enemies.map(async enemy=>({...enemy,image:await load('../assets/enemies/'+enemy.file)})));
   for(const entry of entries){
    const article=document.createElement('article');const title=document.createElement('h2');title.textContent=entry.name;const note=document.createElement('p');note.textContent=entry.note;
@@ -54,8 +54,8 @@
      if(canvas===entry.large){ctx.font='10px monospace';ctx.fillStyle='#9bb4aa';ctx.fillText(animation.label.toUpperCase()+' · '+(column+1)+' / 4',12,233);}
     }
    }
-   line.clearRect(0,0,1008,160);line.strokeStyle='#425d56';line.beginPath();line.moveTo(20,126.5);line.lineTo(988,126.5);line.stroke();line.imageSmoothingEnabled=false;line.drawImage(original,46,62,64,64);
-   line.font='11px monospace';line.textAlign='center';line.fillStyle='#9bb4aa';line.fillText('Original hero',78,148);
+   line.clearRect(0,0,1008,160);line.strokeStyle='#425d56';line.beginPath();line.moveTo(20,126.5);line.lineTo(988,126.5);line.stroke();line.imageSmoothingEnabled=false;line.drawImage(original,0,0,hero.cell,hero.cell,78-hero.anchors.idle.x[0]/hero.cell*hero.size,126-hero.anchors.idle.y[0]/hero.cell*hero.size,hero.size,hero.size);
+   line.font='11px monospace';line.textAlign='center';line.fillStyle='#9bb4aa';line.fillText('Canon hero',78,148);
    entries.forEach((entry,index)=>{const x=220+index*145;draw(line,entry,x,126,80,column);line.fillText(entry.name,x,148);});
    requestAnimationFrame(frame);
   });

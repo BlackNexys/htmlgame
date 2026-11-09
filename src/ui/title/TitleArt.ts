@@ -1,7 +1,7 @@
 export interface Point {x: number; y: number;}
 export interface ArtClip {
     image: string; width: number; height: number; anchor: Point;
-    scale?: number;
+    scale?: number; mirror?: boolean;
     frames: {rect: [number,number,number,number]; durationMs: number; anchor?: Point}[];
 }
 export interface HeroPose {
@@ -37,6 +37,7 @@ export function validateTitleArt(value: unknown): asserts value is TitleArt {
         const clip=art.clips?.[key];
         if(!clip?.image||!point(clip.anchor)||!clip.frames?.length)throw Error(`Missing title clip: ${key}`);
         if(clip.scale!==undefined&&(!Number.isFinite(clip.scale)||clip.scale<=0))throw Error(`Invalid title scale: ${key}`);
+        if(clip.mirror!==undefined&&typeof clip.mirror!=='boolean')throw Error(`Invalid title mirror: ${key}`);
         for(const frame of clip.frames){
             const [x,y,w,h]=frame.rect;
             if(![x,y,w,h,frame.durationMs,clip.width,clip.height].every(Number.isFinite)||x<0||y<0||w<=0||h<=0||frame.durationMs<=0||x+w>clip.width||y+h>clip.height)throw Error(`Invalid title frame: ${key}`);

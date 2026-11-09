@@ -3,12 +3,14 @@ import type { GameEvent } from '../interfaces/Game';
 import { CharacterAnimation, type CharacterFrame } from '../game/animation/CharacterAnimation';
 import { characterAtlas } from '../game/animation/CharacterAtlas';
 import { characterAimAtlas } from '../game/animation/CharacterAimAtlas';
+import { BootFlameRenderer } from './BootFlameRenderer';
 
 export class CharacterRenderer {
     private animation = new CharacterAnimation();
-    constructor(private readonly ctx: CanvasRenderingContext2D, private readonly image: HTMLImageElement, private readonly aimImage: HTMLImageElement) {}
-    reset() { this.animation = new CharacterAnimation(); }
-    update(character: Character, dt: number, events: GameEvent[], dead: boolean) { this.animation.update(character, dt, events, dead); }
+    private readonly boots: BootFlameRenderer;
+    constructor(private readonly ctx: CanvasRenderingContext2D, private readonly image: HTMLImageElement, private readonly aimImage: HTMLImageElement, bootFire?: HTMLImageElement) { this.boots = new BootFlameRenderer(bootFire); }
+    reset() { this.animation = new CharacterAnimation(); this.boots.reset(); }
+    update(character: Character, dt: number, events: GameEvent[], dead: boolean) { this.animation.update(character, dt, events, dead); this.boots.update(character, dt, dead); }
 
     draw(player: Character, elapsed: number) {
         const c = this.ctx;
@@ -16,6 +18,7 @@ export class CharacterRenderer {
         c.save(); c.translate(Math.round(player.x + player.width / 2), Math.round(player.y2)); c.scale(player.facing, 1);
         if (player.invulnerable > 0 && Math.floor(elapsed * 16) % 2) c.globalAlpha = .35;
         const pose = this.animation.sample(player);
+        this.boots.draw(c, pose.base);
         if (pose.upper) {
             const hip = characterAtlas.hip + (player.crouched ? 12 : 0);
             c.save(); c.beginPath(); c.rect(-80, hip, 160, 100); c.clip(); this.frame(pose.base); c.restore();

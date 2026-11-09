@@ -2,7 +2,7 @@
 
 Pixel art for an action platformer set in the underworld. Dead bodies, spirits, and old stone share the world with strange technology and vivid energy. The characters should feel restless, a little sinister, and capable of moving fast.
 
-The current protagonist is defined by the sprites actually used in gameplay: [character-animations-v2.png](character-animations-v2.png) and its [aiming companion](character-aim-v1.png). Match their proportions, compact glowing black face, connected magenta flame, burgundy scarf/cloak, pale ribs within fitted dark clothing, lean limbs, belt details and buckled boots. The latest user correction explicitly makes these live sprites the reference for the menu rebuild. This guide does not establish power types, factions, or other game mechanics.
+The current protagonist is defined by the user’s [canon sheet](../docs/Underverdenens%20neon-skeletark__has_watermark____has_borders__.png), adopted 2026-11-09. Match its rounded black face with two magenta eyes, ivory cheek/jaw framing, connected pink fire, burgundy wrapped scarf/cloak, fitted dark studded jacket and ribs, slim strapped trousers, brown/red boots and cyan hip vial. The [canon v1 kit](hero/canon-v1/README.md) supplies gameplay, aiming, sprint, menu and portrait exports. Earlier gameplay and menu images are historical references. This guide does not establish powers, factions or other mechanics.
 
 ## Current environment authority
 
@@ -30,9 +30,9 @@ The atlas and supplied railway-city painting are exploratory concepts. They do n
 
 | Asset | What to preserve |
 | --- | --- |
-| [Live gameplay atlas](character-animations-v2.png) and [aiming companion](character-aim-v1.png) | Authoritative current character: preserve the face, connected flame, proportions, clothing, colours and pixel-cluster treatment. The menu standing preset reuses the live atlas directly. |
+| [Canon sheet](../docs/Underverdenens%20neon-skeletark__has_watermark____has_borders__.png) and [runtime kit](hero/canon-v1/README.md) | Current authority. Standing reuses the matching gameplay idle row directly; all other hero representations follow the same canon. |
 | [character.png](character.png) | Historical original. It does not authorize another costume or anatomy redesign of the current playable hero. |
-| [Earlier menu standing](mainmenu/stills/hero_standing.png) and [leaning](mainmenu/stills/hero_leaning.png) | Historical menu references that informed the gameplay sheet. New menu character poses now use the gameplay idle strip as their direct visual reference. |
+| [Earlier menu standing](mainmenu/stills/hero_standing.png) and [leaning](mainmenu/stills/hero_leaning.png) | Historical menu references that informed the gameplay sheet. The canon sheet supersedes these earlier interpretations. |
 | [char-sprite.png](char-sprite.png) | Pale skeletal structure, rounded head, and oversized cyan hands. The bright patterned hands give a useful reference for the meeting of technology and spirit energy. |
 | [Spirithand-idel.png](Spirithand-idel.png) and [original idle frames](ghostman%20idel/) | Restrained character motion and small changes in the head and face. Useful references for personality through small movements. |
 | [wall.png](wall.png) | Uneven masonry and worn stone. The irregular shapes establish an older, physical underworld beneath the technological additions. |
@@ -49,7 +49,7 @@ The cyan skeleton is a supporting visual reference. Different reference colours 
 - Separate arms, torso, and legs clearly enough to read during movement.
 - Use broader shapes for important features and small pixel clusters for supporting detail.
 
-The current gameplay atlas has 209×209 source cells rendered at gameplay scale. New pose exports use the same native cell scale, with apparent size and pixel density reviewed against that atlas. Transparent padding may be larger when an action needs room; it should not make the character larger or more detailed.
+The current gameplay atlas has 256×256 padded source cells rendered at gameplay scale. New pose exports use the same native cell scale, with apparent size and pixel density reviewed against that atlas. Transparent padding may be larger when an action needs room; it should not make the character larger or more detailed.
 
 ## Color and light
 
@@ -91,7 +91,7 @@ Enemies should share the protagonist's pixel density and shading approach while 
 
 [character-animations-v1.png](character-animations-v1.png) is a first animation pass based on `character.png`. It provides usable pose sequences, but adds rounder shapes, a fuller flame, and more costume detail than the original. It also makes the cyber details less explicit.
 
-The active [v2 gameplay sheet](character-animations-v2.png) is generated from the established menu poses. Preserve that identity when refining the animations: readable skull and ribs, lean proportions, burgundy cloth, and a narrower streaming flame. The engine normalizes the authored idle direction and uses per-frame anchors to keep the character rooted. See [v2 notes](character-animations-v2.md).
+The active [canon v1 kit](hero/canon-v1/README.md) supersedes the v2 sheet and its aiming companion. Preserve the paired eyes, cheek/jaw bone framing, connected fire and complete fitted costume when adding poses. The engine uses stable roots and reviewed sole attachments; historical sources remain intact.
 
 ## Brief for a new asset
 

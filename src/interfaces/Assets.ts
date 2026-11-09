@@ -4,6 +4,7 @@ import type { EnvironmentImages } from './Environment';
 export interface GameAssets {
     hero: HTMLImageElement;
     heroAim: HTMLImageElement;
+    bootFire?: HTMLImageElement;
     flicker?: HTMLImageElement;
     wall: HTMLImageElement;
     enemies: Record<EnemyKind, HTMLImageElement>;

@@ -39,18 +39,18 @@ Sources: [movement tuning](../src/game/config.ts), [camera](../src/components/Ca
 node scripts/analyze-platformer-movement.cjs
 ```
 
-The measurement uses the real World simulation at 120 Hz, a flat floor, no enemies and a one-second run-up. Same-height travel is body displacement, **not a guaranteed gap width**. Actual gaps also depend on body size, takeoff timing, height difference, ceilings and landing space.
+The measurement uses the real World simulation at 120 Hz, a flat floor, no enemies and a one-second run-up. Sprint measurements include the full 0.6-second grounded buildup (remeasured 2026-11-09). Same-height travel is body displacement, **not a guaranteed gap width**. Actual gaps also depend on body size, takeoff timing, height difference, ceilings and landing space.
 
 | Current property | Value |
 | --- | --- |
 | Collision grid / viewport | 48px / 960 x 576px, or 20 x 12 cells |
 | Standing / crouching height | 52px / 32px |
-| Run / sprint speed | 330 / 440px per second |
+| Run / sprint speed | 330 / 480px per second |
 | Held jump, measured peak | 133.21px above takeoff, about 2.78 cells |
 | Held jump, measured airtime | About 0.78 seconds |
-| Same-height travel at run / sprint | 255.75 / 341px |
+| Same-height travel at run / sprint | 255.75 / 372px |
 | Run jump released at 0.1 seconds | 107.5px peak; 222.75px same-height travel |
-| Release-to-stop travel at run / sprint | 23.38 / 42.17px on the flat fixture |
+| Release-to-stop travel at run / sprint | 23.38 / 50.38px on the flat fixture |
 | Existing camera | Horizontal velocity look-ahead; vertical dead zone and smoothing |
 
 Initial blockout targets, to be verified by play:

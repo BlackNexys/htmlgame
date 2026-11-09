@@ -25,8 +25,8 @@ test('standing reuses the live gameplay atlas; seated support and cloak remain s
  const cloth=await hash(page,[1440,690,70,45]);await page.clock.runFor(1200);expect(await hash(page,[1440,690,70,45])).toBe(cloth);
  const identity=await page.evaluate(async()=>{
   const root='./assets/mainmenu/v3/production/',art=await(await fetch(root+'scene-v1.json')).json();
-  const images=await Promise.all(['./assets/character-animations-v2.png',root+art.clips.standing.image].map(async path=>{const im=new Image();im.src=path;await im.decode();return im;}));
-  const arrays=images.map(im=>{const c=document.createElement('canvas');c.width=1254;c.height=209;const ctx=c.getContext('2d');ctx.drawImage(im,0,0);return ctx.getImageData(0,0,1254,209).data;});
+  const images=await Promise.all(['./assets/hero/canon-v1/gameplay-v1.png',root+art.clips.standing.image].map(async path=>{const im=new Image();im.src=path;await im.decode();return im;}));
+  const arrays=images.map(im=>{const c=document.createElement('canvas');c.width=1536;c.height=256;const ctx=c.getContext('2d');ctx.drawImage(im,0,0);return ctx.getImageData(0,0,1536,256).data;});
   let differences=0;for(let i=0;i<arrays[0].length;i++)if(arrays[0][i]!==arrays[1][i])differences++;
   return {differences,keys:Object.keys(art.clips),frames:art.clips.standing.frames.length};
  });
@@ -66,10 +66,10 @@ test('reduced motion, hidden tabs and gameplay stop decoration without advancing
 
 test('missing animation artwork or a failed decorative context restores the matching still and leaves Play usable',async({page})=>{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.route('**/production/sitting-v5.png',route=>route.abort());await open(page,'patient-traveller',false);await expect(scene(page)).toHaveAttribute('data-renderer','fallback');
+ await page.route('**/hero/canon-v1/sitting-v1.png',route=>route.abort());await open(page,'patient-traveller',false);await expect(scene(page)).toHaveAttribute('data-renderer','fallback');
  await expect(page.locator('.menu-poster')).toBeVisible();await expect(canvas(page)).toBeHidden();
  await page.getByRole('button',{name:'Play',exact:true}).click();await expect(page.locator('#overlay')).toBeHidden();
- await page.unroute('**/production/sitting-v5.png');
+ await page.unroute('**/hero/canon-v1/sitting-v1.png');
  await page.addInitScript(()=>{const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(...args){if(this.classList.contains('menu-scene-motion'))return null;return get.apply(this,args);};});
  await open(page,'restless-flame',false);await expect(scene(page)).toHaveAttribute('data-renderer','fallback');await expect(page.locator('.menu-poster')).toBeVisible();expect(errors).toEqual([]);
 });
@@ -101,7 +101,7 @@ test('production preview supports frame inspection and exports retain rich colou
  const first=await page.locator('#scene').getAttribute('data-actor-frame');await page.getByRole('button',{name:'Step one frame',exact:true}).click();expect(await page.locator('#scene').getAttribute('data-actor-frame')).not.toBe(first);
  await page.getByRole('combobox',{name:'Traveller',exact:true}).selectOption('sitting');await expect(page.locator('#status')).toContainText('Seated');
  const pixels=await page.evaluate(async()=>{
-  const im=new Image();im.src='./assets/mainmenu/v3/production/sitting-v5.png';await im.decode();const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const ctx=c.getContext('2d');ctx.drawImage(im,0,0);
+  const im=new Image();im.src='./assets/hero/canon-v1/sitting-v1.png';await im.decode();const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const ctx=c.getContext('2d');ctx.drawImage(im,0,0);
   const p=ctx.getImageData(0,0,im.width,im.height).data,colors=new Set();let transparent=0;for(let i=0;i<p.length;i+=4){if(!p[i+3])transparent++;else colors.add(p[i]*65536+p[i+1]*256+p[i+2]);}return {colors:colors.size,transparent,corner:p[3]};
  });
  expect(pixels.colors).toBeGreaterThan(100);expect(pixels.transparent).toBeGreaterThan(10000);expect(pixels.corner).toBe(0);

@@ -8,14 +8,14 @@ import {characterAtlas} from '../src/game/animation/CharacterAtlas.ts';
 const directory=fileURLToPath(new URL('../public/assets/mainmenu/v3/production/',import.meta.url));
 const encoded={};
 for(const key of ['lantern','cat','vines','soul','foreground'])encoded[key]=(await readFile(`${directory}/source/${key}-v1.png`)).toString('base64');
-for(const key of ['sitting','leaning'])encoded[key]=(await readFile(`${directory}/source/gameplay-${key}-v5.png`)).toString('base64');
+const canon=JSON.parse(await readFile(new URL('../public/assets/hero/canon-v1/atlas-v1.json',import.meta.url),'utf8'));
 encoded.gameplay=(await readFile(new URL('../public/assets/'+characterAtlas.image,import.meta.url))).toString('base64');
 await mkdir(`${directory}/review`,{recursive:true});
 await copyFile(`${directory}/source/background-v1.png`,`${directory}/background-v1.png`);
 const browser=await chromium.launch();
 try{
  const page=await browser.newPage();
- const result=await page.evaluate(async({encoded,gameplayAtlas})=>{
+ const result=await page.evaluate(async({encoded,gameplayAtlas,canon})=>{
   const sources={},exports={},clips={},preparation={};
   for(const [key,data]of Object.entries(encoded)){
    const image=new Image();image.src='data:image/png;base64,'+data;await image.decode();
@@ -62,31 +62,23 @@ try{
   };
   const heroes={},positions={standing:{x:1120,y:722},sitting:{x:1460,y:750},leaning:{x:1355,y:724}};
   const idle=gameplayAtlas.anchors.idle,cell=gameplayAtlas.cell;
-  const standing=create('standing',cell,cell,6,{x:idle.x[0],y:idle.y[0]},[125],5);
+  const standing=create('standing',cell,cell,6,{x:idle.x[0],y:idle.y[0]},[125],6);
   standing.c.drawImage(sources.gameplay.image,0,0,cell*6,cell,0,0,cell*6,cell);
   standing.clip.frames.forEach((frame,i)=>frame.anchor={x:idle.x[i],y:idle.y[i]});
-  standing.clip.scale=1.35;standing.finish(true);
+  standing.clip.scale=1.35;standing.clip.mirror=true;standing.finish(true);
   // Reuse the live gameplay texture itself. Canvas re-encoding can round
   // translucent RGB differently between browsers; the original has no drift.
-  delete exports['standing-v5.png'];
+  delete exports['standing-v6.png'];
   standing.clip.image='../../../'+gameplayAtlas.image;
   standing.clip.width=gameplayAtlas.width;standing.clip.height=gameplayAtlas.height;
-  heroes.standing={body:'standing',position:positions.standing,ground:positions.standing,light:{x:111,y:65}};
+  heroes.standing={body:'standing',position:positions.standing,ground:positions.standing,light:{x:160,y:100}};
   preparation.standing={source:gameplayAtlas.image,row:0,cell,frames:6,pixels:'unchanged gameplay idle row',timing:'125 ms per frame, matching gameplay idle at 8 fps',anchors:idle};
   // Keep a lossless reference strip so identity can be inspected beside the menu.
-  exports['source/gameplay-idle-reference-v5.png']=standing.canvas.toDataURL('image/png').split(',')[1];
+  exports['source/gameplay-idle-reference-canon-v1.png']=standing.canvas.toDataURL('image/png').split(',')[1];
   for(const key of ['sitting','leaning']){
-   const frameBounds=cells(key,3,2),roots=frameBounds.map(b=>({x:centroid(key,b,b.y+b.h*.94,b.h*.06),y:b.y+b.h}));
-   const scale=(key==='sitting'?170:190)/Math.max(...frameBounds.map(b=>b.h));
-   const target=create(key,209,209,6,{x:104,y:200},[125],5);target.clip.scale=1.35;
-   frameBounds.forEach((b,i)=>paint(key,target,b,roots[i],scale,i));
-   // Fixed boot/seat folds keep support contacts stable; the whole hero remains
-   // one frame at runtime, with all upper flame/cloth drawings intact.
-   const supportY=key==='sitting'?130:170;
-   for(let i=1;i<6;i++){target.c.clearRect(i*209,supportY,209,209-supportY);target.c.drawImage(target.canvas,0,supportY,209,209-supportY,i*209,supportY,209,209-supportY);}
-   target.finish();
-   heroes[key]={body:key,position:positions[key],ground:positions[key],light:{x:104,y:key==='sitting'?94:65}};
-   preparation[key]={bounds:frameBounds,roots,scale,reference:'gameplay-idle-reference-v5.png',heldSupportRect:[0,supportY,209,209-supportY]};
+   clips[key]={...canon.menuClips[key],image:'../../../hero/canon-v1/'+canon.menuClips[key].image};
+   heroes[key]={body:key,position:positions[key],ground:positions[key],light:{x:key==='sitting'?120:165,y:key==='sitting'?115:95}};
+   preparation[key]={source:clips[key].image,reference:'Underverdenens neon-skeletark__has_watermark____has_borders__.png',registration:'canon-v1/export-v1.json'};
   }
 
   for(const key of ['cat','vines','soul']){
@@ -108,7 +100,7 @@ try{
   const b=bounds('lantern',[0,0,sources.lantern.image.width,sources.lantern.image.height]),scale=166/b.h;
   const lamp=create('lamp',92,188,1,{x:46,y:10},[1000]);paint('lantern',lamp,b,{x:b.x+b.w/2,y:b.y+6},scale);lamp.finish();preparation.lamp={bounds:b,scale};
   return {exports,preparation,art:{version:1,width:1672,height:941,background:'background-v1.png',foreground:'foreground-v1.png',clips,heroes,lamp:{position:{x:1308,y:136},glass:{x:46,y:112}},clock:{position:{x:1519,y:166},radius:66},board:{position:{x:1488,y:358},width:265,height:80,angle:-.10},cat:{x:1555,y:681},vines:[{x:820,y:760},{x:1004,y:799}]} };
- },{encoded,gameplayAtlas:characterAtlas});
+ },{encoded,gameplayAtlas:characterAtlas,canon});
  for(const[file,data]of Object.entries(result.exports))await writeFile(directory+file,Buffer.from(data,'base64'));
  await writeFile(directory+'scene-v1.json',JSON.stringify(result.art,null,2)+'\n');
  await writeFile(directory+'source/export-v1.json',JSON.stringify(result.preparation,null,2)+'\n');

@@ -1,5 +1,7 @@
 # Underworld — Main Menu Art & Animation Plan
 
+**Current character authority · 2026-11-09:** The user’s `public/docs/Underverdenens neon-skeletark__has_watermark____has_borders__.png` now governs every hero representation. The [canon v1 kit](../public/assets/hero/canon-v1/README.md) supplies complete standing, seated and leaning pixel-art frames, gameplay and dialogue portraits. Standing reuses the new gameplay idle; all menu poses face into the scene. Older character directions below are historical iterations. The station setting, motion policy, integrated seated cloak and independent prop animation remain applicable.
+
 **Version:** 1.2
 
 **Date:** 6 November 2026

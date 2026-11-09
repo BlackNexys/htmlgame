@@ -6,226 +6,229 @@
   "foreground": "foreground-v1.png",
   "clips": {
     "standing": {
-      "image": "../../../character-animations-v2.png",
-      "width": 1254,
-      "height": 1254,
+      "image": "../../../hero/canon-v1/gameplay-v1.png",
+      "width": 1536,
+      "height": 1792,
       "anchor": {
-        "x": 111,
-        "y": 200
+        "x": 128,
+        "y": 240
       },
       "frames": [
         {
           "rect": [
             0,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125,
           "anchor": {
-            "x": 111,
-            "y": 200
+            "x": 128,
+            "y": 240
           }
         },
         {
           "rect": [
-            209,
+            256,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125,
           "anchor": {
-            "x": 108,
-            "y": 200
+            "x": 128,
+            "y": 240
           }
         },
         {
           "rect": [
-            418,
+            512,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125,
           "anchor": {
-            "x": 104,
-            "y": 200
+            "x": 128,
+            "y": 240
           }
         },
         {
           "rect": [
-            627,
+            768,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125,
           "anchor": {
-            "x": 100,
-            "y": 200
+            "x": 128,
+            "y": 240
           }
         },
         {
           "rect": [
-            836,
+            1024,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125,
           "anchor": {
-            "x": 99,
-            "y": 200
+            "x": 128,
+            "y": 240
           }
         },
         {
           "rect": [
-            1045,
+            1280,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125,
           "anchor": {
-            "x": 97,
-            "y": 200
+            "x": 128,
+            "y": 240
           }
         }
       ],
-      "scale": 1.35
+      "scale": 1.35,
+      "mirror": true
     },
     "sitting": {
-      "image": "sitting-v5.png",
-      "width": 1254,
-      "height": 209,
+      "image": "../../../hero/canon-v1/sitting-v1.png",
+      "width": 1536,
+      "height": 256,
       "anchor": {
-        "x": 104,
-        "y": 200
+        "x": 128,
+        "y": 240
       },
+      "scale": 1.35,
+      "mirror": true,
       "frames": [
         {
           "rect": [
             0,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125
         },
         {
           "rect": [
-            209,
+            256,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125
         },
         {
           "rect": [
-            418,
+            512,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125
         },
         {
           "rect": [
-            627,
+            768,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125
         },
         {
           "rect": [
-            836,
+            1024,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125
         },
         {
           "rect": [
-            1045,
+            1280,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125
         }
-      ],
-      "scale": 1.35
+      ]
     },
     "leaning": {
-      "image": "leaning-v5.png",
-      "width": 1254,
-      "height": 209,
+      "image": "../../../hero/canon-v1/leaning-v1.png",
+      "width": 1536,
+      "height": 256,
       "anchor": {
-        "x": 104,
-        "y": 200
+        "x": 128,
+        "y": 240
       },
+      "scale": 1.35,
+      "mirror": true,
       "frames": [
         {
           "rect": [
             0,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125
         },
         {
           "rect": [
-            209,
+            256,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125
         },
         {
           "rect": [
-            418,
+            512,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125
         },
         {
           "rect": [
-            627,
+            768,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125
         },
         {
           "rect": [
-            836,
+            1024,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125
         },
         {
           "rect": [
-            1045,
+            1280,
             0,
-            209,
-            209
+            256,
+            256
           ],
           "durationMs": 125
         }
-      ],
-      "scale": 1.35
+      ]
     },
     "cat": {
       "image": "cat-v1.png",
@@ -401,8 +404,8 @@
         "y": 722
       },
       "light": {
-        "x": 111,
-        "y": 65
+        "x": 160,
+        "y": 100
       }
     },
     "sitting": {
@@ -416,8 +419,8 @@
         "y": 750
       },
       "light": {
-        "x": 104,
-        "y": 94
+        "x": 120,
+        "y": 115
       }
     },
     "leaning": {
@@ -431,8 +434,8 @@
         "y": 724
       },
       "light": {
-        "x": 104,
-        "y": 65
+        "x": 165,
+        "y": 95
       }
     }
   },
