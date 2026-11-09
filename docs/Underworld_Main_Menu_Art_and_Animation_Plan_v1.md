@@ -1,5 +1,7 @@
 # Underworld — Main Menu Art & Animation Plan
 
+**Confluence successor · 9 November 2026:** The approved canal-side concept is now the default animated menu. Its [production assets](../public/assets/mainmenu/confluence-v1/README.md) provide complete Cole/cat clips, masked water and reflections, an authored outfall, sparse train events and a matching fallback poster. The [production plan](../public/docs/Underworld_Confluence_Menu_Production_Plan_v1.md) and [interactive breakdown](../public/docs/confluence-menu-breakdown.html) retain the original design decisions and estimates. The earlier composition and implementation history below remain preserved as explicit previews.
+
 **Current character authority · 2026-11-09:** The user’s `public/docs/Underverdenens neon-skeletark__has_watermark____has_borders__.png` now governs every hero representation. The [canon v1 kit](../public/assets/hero/canon-v1/README.md) supplies complete standing, seated and leaning pixel-art frames, gameplay and dialogue portraits. Standing reuses the new gameplay idle; all menu poses face into the scene. Older character directions below are historical iterations. The station setting, motion policy, integrated seated cloak and independent prop animation remain applicable.
 
 **Version:** 1.2

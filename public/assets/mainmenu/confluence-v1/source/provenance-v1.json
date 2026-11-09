@@ -1,0 +1,78 @@
+{
+  "date": "2026-11-09",
+  "mode": "built-in imagegen",
+  "sources": {
+    "plate": {
+      "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-cbd77652-0559-4888-8989-78360f708746.png",
+      "file": "plate-v1.png",
+      "references": [
+        "C:/Git/htmlgame/public/assets/mainmenu/confluence-study-v1/menu-concept-v1.png"
+      ]
+    },
+    "cole": {
+      "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-1f7fcdd3-8066-4fab-b398-67f8f4038cf1.png",
+      "file": "cole-v1.png",
+      "references": [
+        "C:/Git/htmlgame/public/assets/mainmenu/confluence-study-v1/menu-concept-v1.png",
+        "C:/Git/htmlgame/public/docs/Underverdenens neon-skeletark__has_watermark____has_borders__.png"
+      ]
+    },
+    "cat": {
+      "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-cb1f49ed-7704-4d01-a71b-6f0b759f34de.png",
+      "file": "cat-v1.png",
+      "references": [
+        "C:/Git/htmlgame/public/assets/mainmenu/confluence-study-v1/menu-concept-v1.png"
+      ]
+    },
+    "water": {
+      "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-6af4562e-f106-48b9-91ec-618321371ab8.png",
+      "file": "water-v1.png",
+      "references": [
+        "C:/Git/htmlgame/public/assets/mainmenu/confluence-study-v1/menu-concept-v1.png"
+      ]
+    },
+    "outfall": {
+      "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-aae62176-748f-4bb0-bd14-cb94d6b619f2.png",
+      "file": "outfall-v1.png",
+      "references": [
+        "C:/Git/htmlgame/public/assets/mainmenu/confluence-study-v1/menu-concept-v1.png"
+      ]
+    },
+    "reflections": {
+      "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-c4621da9-82c8-44b9-be74-d7d0cdbf8caa.png",
+      "file": "reflections-v1.png",
+      "references": [
+        "C:/Git/htmlgame/public/assets/mainmenu/confluence-study-v1/menu-concept-v1.png"
+      ]
+    },
+    "train": {
+      "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-5c9681c2-28b0-4c01-898a-911c404c7b2d.png",
+      "file": "train-v1.png",
+      "references": [
+        "C:/Git/htmlgame/public/assets/mainmenu/confluence-study-v1/menu-concept-v1.png"
+      ]
+    }
+  },
+  "reused": [
+    {
+      "from": "public/assets/mainmenu/v3/production/vines-v1.png",
+      "to": "vines-v1.png",
+      "role": "Authored rooted magenta foliage loop, unchanged"
+    }
+  ],
+  "activePlate": "plate-no-sign-v2.png",
+  "edits": {
+    "signRemoval": {
+      "mode": "built-in imagegen",
+      "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-1a2a4bda-4e0b-48c7-a7dc-2147182807ca.png",
+      "file": "sign-removal-v2.png",
+      "prompt": "sign-removal-v2.prompt.txt",
+      "references": [
+        "public/assets/mainmenu/confluence-v1/source/plate-v1.png"
+      ],
+      "derived": "plate-no-sign-v2.png",
+      "preparation": "scripts/prepare-confluence-sign-removal.mjs",
+      "reason": "User requested removal of the Eternally Delayed sign; remove its attached small lamp too so no fixture floats."
+    }
+  }
+}

@@ -22,9 +22,37 @@ test('idle, run and airborne select different rows and airborne poses follow vel
 test('firing preserves moving legs and damage temporarily overrides attack', () => {
     const world = new World(createActionLevel()); const animation = new CharacterAnimation();
     world.player.motion = 'running'; advance(animation, world, .01, ['fire']);
-    assert.equal(animation.sample(world.player).base.row, 1); assert.equal(animation.sample(world.player).upper.row, 3);
+    assert.equal(animation.sample(world.player).base.row, 1); assert.equal(animation.sample(world.player).upper.row, 7);
     advance(animation, world, .01, ['hurt']); assert.equal(animation.sample(world.player).base.row, 4);
     advance(animation, world, .35); assert.equal(animation.sample(world.player).base.row, 1); assert.equal(animation.sample(world.player).upper, undefined);
+});
+
+test('stride follows travelled distance, holds at rest and preserves phase through sprint transitions', () => {
+    const world = new World(createActionLevel()), a = new CharacterAnimation(), p = world.player;
+    p.grounded = true; p.motion = 'running'; a.update(p,.01);
+    a.update(p,5); assert.equal(a.sample(p).base.column,0);
+    p.x += 54; a.update(p,.01); assert.equal(a.sample(p).base.column,3);
+    p.motion = 'sprinting'; assert.equal(a.sample(p).base.column,3);
+    p.x += 18; a.update(p,.01); assert.equal(a.sample(p).base.column,4);
+    p.motion = 'running'; assert.equal(a.sample(p).base.column,4);
+    p.x -= 18; a.update(p,.01); assert.equal(a.sample(p).base.column,5);
+});
+
+test('held fire is fully aimed immediately and never drops the torso between shots', () => {
+    const world = new World(createActionLevel()), a = new CharacterAnimation(), p = world.player;
+    p.firing = true; p.motion = 'sprinting';
+    for(let n=0;n<120;n++){
+        a.update(p,1/120,n%24===0?['fire']:[]);
+        const pose=a.sample(p);assert.equal(pose.upper.row,8);assert.equal(pose.upper.column,0);
+        if(n%24===0)assert.equal(pose.upper.offsetX,0);
+    }
+    p.firing=false;a.update(p,.3);assert.equal(a.sample(p).upper,undefined);
+});
+
+test('taking damage does not disconnect a shot from its held firing pose', () => {
+    const world=new World(createActionLevel()),a=new CharacterAnimation(),p=world.player;
+    p.firing=true;p.aim={x:1,y:-1};a.update(p,.01,['fire','hurt']);
+    const pose=a.sample(p);assert.equal(pose.base.row,4);assert.equal(pose.upper.column,2);assert.equal(pose.upper.offsetX,0);
 });
 
 test('landing briefly selects crouch, defeat completes and holds, and fresh animation resets', () => {

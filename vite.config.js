@@ -14,6 +14,7 @@ export default defineConfig({
                 menuPilot: fileURLToPath(new URL('./menu-pilot.html', import.meta.url)),
                 menuProduction: fileURLToPath(new URL('./menu-production.html', import.meta.url)),
                 dialogue: fileURLToPath(new URL('./dialogue.html', import.meta.url)),
+                heroReview: fileURLToPath(new URL('./hero-review.html', import.meta.url)),
             },
         },
     },

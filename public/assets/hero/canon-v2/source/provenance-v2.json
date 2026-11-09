@@ -1,0 +1,16 @@
+{
+  "mode": "built-in imagegen",
+  "reference": "public/assets/hero/canon-v1/gameplay-v1.png",
+  "sources": {
+    "motion": {
+      "original": "C:\\Users\\almn\\.codex\\generated_images\\01a1aac1-6847-7b10-8b0d-cbab3363fd6c\\exec-da6c31bf-b616-4d2d-8044-070d7db486e9.png",
+      "saved": "motion-v2.png",
+      "prompt": "motion-v2.prompt.txt"
+    },
+    "aim": {
+      "original": "C:\\Users\\almn\\.codex\\generated_images\\01a1aac1-6847-7b10-8b0d-cbab3363fd6c\\exec-91f8f790-2f34-4692-b87c-dfd5b51544d2.png",
+      "saved": "aim-v2.png",
+      "prompt": "aim-v2.prompt.txt"
+    }
+  }
+}

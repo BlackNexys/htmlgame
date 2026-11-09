@@ -22,7 +22,7 @@ test('canon hero exports are transparent, unclipped and available in the product
  await page.getByRole('button',{name:'Face left',exact:true}).click();await expect(page.getByRole('button',{name:'Face right',exact:true})).toBeVisible();
 });
 
-test('actual sprint builds its speed and boot fire; release, reversal and pause stop the effect',async({page},testInfo)=>{
+test('actual sprint builds fire, release lets trails expire, and pause freezes effects',async({page},testInfo)=>{
  await page.addInitScript(()=>{
   const text=CanvasRenderingContext2D.prototype.fillText,draw=CanvasRenderingContext2D.prototype.drawImage;
   window.bootDraws=0;
@@ -36,7 +36,7 @@ test('actual sprint builds its speed and boot fire; release, reversal and pause 
  await page.keyboard.down('Shift');await page.keyboard.down('KeyD');await page.clock.runFor(150);const early=await velocity();expect(early).toBeGreaterThan(330);expect(early).toBeLessThan(400);
  await page.clock.runFor(500);expect(await velocity()).toBe(480);expect(await flames()).toBeGreaterThan(0);
  await page.screenshot({path:`artifacts/${testInfo.project.name}-canon-sprint.png`});
- await page.keyboard.up('Shift');await page.clock.runFor(30);const stopped=await flames();await page.clock.runFor(60);expect(await flames()).toBe(stopped);
+ await page.keyboard.up('Shift');await page.clock.runFor(350);const stopped=await flames();await page.clock.runFor(60);expect(await flames()).toBe(stopped);
  await page.keyboard.up('KeyD');await page.keyboard.press('KeyP');await page.clock.runFor(500);expect(await flames()).toBe(stopped);
 });
 

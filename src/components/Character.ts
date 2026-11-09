@@ -13,6 +13,7 @@ export class Character extends Actor {
     readonly weapons = new WeaponController();
     motion: PlayerMotion = 'idle';
     aim: AimDirection = {x: 1, y: 0};
+    firing = false;
     get crouched() { return this.movement.crouched; }
     get sprintCharge() { return this.movement.sprintCharge; }
     readonly movement: PlayerMovement;
@@ -29,6 +30,7 @@ export class Character extends Actor {
         this.invulnerable = Math.max(0, this.invulnerable - dt);
         this.movement.update(dt, input); this.motion = this.movement.motion;
         this.aim = resolveAim(input, this.grounded, this.facing);
+        this.firing = input.fire;
         if (this.movement.jumpedThisStep) this.gameArea.events.push('jump');
         this.weapons.update(dt, input.fire, this.gameArea, this);
     }
@@ -44,6 +46,7 @@ export class Character extends Actor {
     clearActions() {
         this.movement.clearActions(); this.motion = this.movement.motion;
         this.aim = {x: this.facing, y: 0};
+        this.firing = false;
     }
 
 }

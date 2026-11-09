@@ -1,0 +1,956 @@
+{
+  "version": 2,
+  "width": 1672,
+  "height": 941,
+  "poster": "poster-v2.png",
+  "images": {
+    "plate": {
+      "file": "plate-v2.png",
+      "width": 1672,
+      "height": 941
+    },
+    "cole": {
+      "file": "cole-v1.png",
+      "width": 4096,
+      "height": 512
+    },
+    "cat": {
+      "file": "cat-v1.png",
+      "width": 2048,
+      "height": 160
+    },
+    "outfall": {
+      "file": "outfall-v1.png",
+      "width": 1280,
+      "height": 192
+    },
+    "reflections": {
+      "file": "reflections-v1.png",
+      "width": 3072,
+      "height": 160,
+      "optional": true
+    },
+    "water": {
+      "file": "water-v1.png",
+      "width": 2048,
+      "height": 128
+    },
+    "train": {
+      "file": "train-v1.png",
+      "width": 224,
+      "height": 40,
+      "optional": true
+    },
+    "bench-front": {
+      "file": "bench-front-v1.png",
+      "width": 560,
+      "height": 152
+    },
+    "vines": {
+      "file": "vines-v1.png",
+      "width": 360,
+      "height": 172,
+      "optional": true
+    }
+  },
+  "clips": {
+    "cole": {
+      "image": "cole",
+      "width": 4096,
+      "height": 512,
+      "anchor": {
+        "x": 200,
+        "y": 488
+      },
+      "position": {
+        "x": 1255,
+        "y": 780
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            512,
+            512
+          ],
+          "durationMs": 175,
+          "emitter": {
+            "x": 282,
+            "y": 158
+          },
+          "intensity": 0.953
+        },
+        {
+          "rect": [
+            512,
+            0,
+            512,
+            512
+          ],
+          "durationMs": 175,
+          "emitter": {
+            "x": 282,
+            "y": 157
+          },
+          "intensity": 0.956
+        },
+        {
+          "rect": [
+            1024,
+            0,
+            512,
+            512
+          ],
+          "durationMs": 175,
+          "emitter": {
+            "x": 284,
+            "y": 152
+          },
+          "intensity": 0.977
+        },
+        {
+          "rect": [
+            1536,
+            0,
+            512,
+            512
+          ],
+          "durationMs": 175,
+          "emitter": {
+            "x": 287,
+            "y": 150
+          },
+          "intensity": 1
+        },
+        {
+          "rect": [
+            2048,
+            0,
+            512,
+            512
+          ],
+          "durationMs": 175,
+          "emitter": {
+            "x": 287,
+            "y": 152
+          },
+          "intensity": 0.993
+        },
+        {
+          "rect": [
+            2560,
+            0,
+            512,
+            512
+          ],
+          "durationMs": 175,
+          "emitter": {
+            "x": 281,
+            "y": 155
+          },
+          "intensity": 0.966
+        },
+        {
+          "rect": [
+            3072,
+            0,
+            512,
+            512
+          ],
+          "durationMs": 175,
+          "emitter": {
+            "x": 283,
+            "y": 157
+          },
+          "intensity": 0.957
+        },
+        {
+          "rect": [
+            3584,
+            0,
+            512,
+            512
+          ],
+          "durationMs": 175,
+          "emitter": {
+            "x": 281,
+            "y": 157
+          },
+          "intensity": 0.958
+        }
+      ]
+    },
+    "cat": {
+      "image": "cat",
+      "width": 2048,
+      "height": 160,
+      "anchor": {
+        "x": 128,
+        "y": 145
+      },
+      "position": {
+        "x": 1520,
+        "y": 646
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            256,
+            160
+          ],
+          "durationMs": 350
+        },
+        {
+          "rect": [
+            256,
+            0,
+            256,
+            160
+          ],
+          "durationMs": 350
+        },
+        {
+          "rect": [
+            512,
+            0,
+            256,
+            160
+          ],
+          "durationMs": 350
+        },
+        {
+          "rect": [
+            768,
+            0,
+            256,
+            160
+          ],
+          "durationMs": 350
+        },
+        {
+          "rect": [
+            1024,
+            0,
+            256,
+            160
+          ],
+          "durationMs": 350
+        },
+        {
+          "rect": [
+            1280,
+            0,
+            256,
+            160
+          ],
+          "durationMs": 350
+        },
+        {
+          "rect": [
+            1536,
+            0,
+            256,
+            160
+          ],
+          "durationMs": 350
+        },
+        {
+          "rect": [
+            1792,
+            0,
+            256,
+            160
+          ],
+          "durationMs": 350
+        }
+      ]
+    },
+    "outfall": {
+      "image": "outfall",
+      "width": 1280,
+      "height": 192,
+      "anchor": {
+        "x": 80,
+        "y": 174
+      },
+      "position": {
+        "x": 558,
+        "y": 704
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            160,
+            192
+          ],
+          "durationMs": 80
+        },
+        {
+          "rect": [
+            160,
+            0,
+            160,
+            192
+          ],
+          "durationMs": 80
+        },
+        {
+          "rect": [
+            320,
+            0,
+            160,
+            192
+          ],
+          "durationMs": 80
+        },
+        {
+          "rect": [
+            480,
+            0,
+            160,
+            192
+          ],
+          "durationMs": 80
+        },
+        {
+          "rect": [
+            640,
+            0,
+            160,
+            192
+          ],
+          "durationMs": 80
+        },
+        {
+          "rect": [
+            800,
+            0,
+            160,
+            192
+          ],
+          "durationMs": 80
+        },
+        {
+          "rect": [
+            960,
+            0,
+            160,
+            192
+          ],
+          "durationMs": 80
+        },
+        {
+          "rect": [
+            1120,
+            0,
+            160,
+            192
+          ],
+          "durationMs": 80
+        }
+      ]
+    },
+    "reflections": {
+      "image": "reflections",
+      "width": 3072,
+      "height": 160,
+      "anchor": {
+        "x": 192,
+        "y": 145
+      },
+      "position": {
+        "x": 1300,
+        "y": 908
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            384,
+            160
+          ],
+          "durationMs": 175
+        },
+        {
+          "rect": [
+            384,
+            0,
+            384,
+            160
+          ],
+          "durationMs": 175
+        },
+        {
+          "rect": [
+            768,
+            0,
+            384,
+            160
+          ],
+          "durationMs": 175
+        },
+        {
+          "rect": [
+            1152,
+            0,
+            384,
+            160
+          ],
+          "durationMs": 175
+        },
+        {
+          "rect": [
+            1536,
+            0,
+            384,
+            160
+          ],
+          "durationMs": 175
+        },
+        {
+          "rect": [
+            1920,
+            0,
+            384,
+            160
+          ],
+          "durationMs": 175
+        },
+        {
+          "rect": [
+            2304,
+            0,
+            384,
+            160
+          ],
+          "durationMs": 175
+        },
+        {
+          "rect": [
+            2688,
+            0,
+            384,
+            160
+          ],
+          "durationMs": 175
+        }
+      ]
+    },
+    "water": {
+      "image": "water",
+      "width": 2048,
+      "height": 128,
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "position": {
+        "x": 0,
+        "y": 680
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            256,
+            128
+          ],
+          "durationMs": 190
+        },
+        {
+          "rect": [
+            256,
+            0,
+            256,
+            128
+          ],
+          "durationMs": 190
+        },
+        {
+          "rect": [
+            512,
+            0,
+            256,
+            128
+          ],
+          "durationMs": 190
+        },
+        {
+          "rect": [
+            768,
+            0,
+            256,
+            128
+          ],
+          "durationMs": 190
+        },
+        {
+          "rect": [
+            1024,
+            0,
+            256,
+            128
+          ],
+          "durationMs": 190
+        },
+        {
+          "rect": [
+            1280,
+            0,
+            256,
+            128
+          ],
+          "durationMs": 190
+        },
+        {
+          "rect": [
+            1536,
+            0,
+            256,
+            128
+          ],
+          "durationMs": 190
+        },
+        {
+          "rect": [
+            1792,
+            0,
+            256,
+            128
+          ],
+          "durationMs": 190
+        }
+      ]
+    },
+    "train": {
+      "image": "train",
+      "width": 224,
+      "height": 40,
+      "anchor": {
+        "x": 0,
+        "y": 36
+      },
+      "position": {
+        "x": 580,
+        "y": 313
+      },
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            224,
+            40
+          ],
+          "durationMs": 1000
+        }
+      ]
+    },
+    "vines": {
+      "image": "vines",
+      "width": 360,
+      "height": 172,
+      "anchor": {
+        "x": 45,
+        "y": 8
+      },
+      "position": {
+        "x": 1650,
+        "y": 665
+      },
+      "scale": 0.45,
+      "frames": [
+        {
+          "rect": [
+            0,
+            0,
+            90,
+            172
+          ],
+          "durationMs": 850
+        },
+        {
+          "rect": [
+            90,
+            0,
+            90,
+            172
+          ],
+          "durationMs": 850
+        },
+        {
+          "rect": [
+            180,
+            0,
+            90,
+            172
+          ],
+          "durationMs": 850
+        },
+        {
+          "rect": [
+            270,
+            0,
+            90,
+            172
+          ],
+          "durationMs": 850
+        }
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "city-station",
+      "kind": "image",
+      "image": "plate",
+      "position": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "train",
+      "kind": "train",
+      "clip": "train",
+      "from": {
+        "x": 345,
+        "y": 313
+      },
+      "to": {
+        "x": 1060,
+        "y": 313
+      },
+      "firstMs": 18000,
+      "durationMs": 16000,
+      "gapMs": [
+        25000,
+        45000
+      ],
+      "mask": [
+        {
+          "x": 590,
+          "y": 277
+        },
+        {
+          "x": 948,
+          "y": 277
+        },
+        {
+          "x": 948,
+          "y": 315
+        },
+        {
+          "x": 590,
+          "y": 315
+        }
+      ]
+    },
+    {
+      "id": "mist",
+      "kind": "mist",
+      "region": [
+        545,
+        610,
+        430,
+        110
+      ],
+      "mask": [
+        {
+          "x": 500,
+          "y": 605
+        },
+        {
+          "x": 1005,
+          "y": 605
+        },
+        {
+          "x": 1005,
+          "y": 735
+        },
+        {
+          "x": 500,
+          "y": 735
+        }
+      ]
+    },
+    {
+      "id": "canal",
+      "kind": "water",
+      "clip": "water",
+      "speed": 16,
+      "opacity": 0.66,
+      "mask": [
+        {
+          "x": 0,
+          "y": 744
+        },
+        {
+          "x": 190,
+          "y": 727
+        },
+        {
+          "x": 520,
+          "y": 703
+        },
+        {
+          "x": 700,
+          "y": 683
+        },
+        {
+          "x": 887,
+          "y": 669
+        },
+        {
+          "x": 887,
+          "y": 709
+        },
+        {
+          "x": 910,
+          "y": 725
+        },
+        {
+          "x": 881,
+          "y": 737
+        },
+        {
+          "x": 854,
+          "y": 741
+        },
+        {
+          "x": 809,
+          "y": 756
+        },
+        {
+          "x": 782,
+          "y": 765
+        },
+        {
+          "x": 745,
+          "y": 773
+        },
+        {
+          "x": 735,
+          "y": 781
+        },
+        {
+          "x": 695,
+          "y": 792
+        },
+        {
+          "x": 689,
+          "y": 798
+        },
+        {
+          "x": 643,
+          "y": 808
+        },
+        {
+          "x": 632,
+          "y": 819
+        },
+        {
+          "x": 584,
+          "y": 827
+        },
+        {
+          "x": 571,
+          "y": 838
+        },
+        {
+          "x": 533,
+          "y": 848
+        },
+        {
+          "x": 525,
+          "y": 857
+        },
+        {
+          "x": 477,
+          "y": 867
+        },
+        {
+          "x": 465,
+          "y": 878
+        },
+        {
+          "x": 428,
+          "y": 891
+        },
+        {
+          "x": 421,
+          "y": 899
+        },
+        {
+          "x": 391,
+          "y": 911
+        },
+        {
+          "x": 383,
+          "y": 922
+        },
+        {
+          "x": 369,
+          "y": 927
+        },
+        {
+          "x": 361,
+          "y": 941
+        },
+        {
+          "x": 0,
+          "y": 941
+        }
+      ]
+    },
+    {
+      "id": "outfall",
+      "kind": "clip",
+      "clip": "outfall"
+    },
+    {
+      "id": "wet-reflections",
+      "kind": "reflection",
+      "clip": "reflections",
+      "sourceClip": "cole",
+      "opacity": 0.6,
+      "mask": [
+        {
+          "x": 1065,
+          "y": 770
+        },
+        {
+          "x": 1664,
+          "y": 774
+        },
+        {
+          "x": 1672,
+          "y": 941
+        },
+        {
+          "x": 950,
+          "y": 941
+        }
+      ]
+    },
+    {
+      "id": "contacts",
+      "kind": "shadows",
+      "contacts": [
+        {
+          "position": {
+            "x": 1327,
+            "y": 653
+          },
+          "width": 125,
+          "height": 14,
+          "opacity": 0.36
+        },
+        {
+          "position": {
+            "x": 1205,
+            "y": 780
+          },
+          "width": 76,
+          "height": 10,
+          "opacity": 0.42
+        },
+        {
+          "position": {
+            "x": 1300,
+            "y": 780
+          },
+          "width": 72,
+          "height": 10,
+          "opacity": 0.42
+        },
+        {
+          "position": {
+            "x": 1520,
+            "y": 647
+          },
+          "width": 155,
+          "height": 8,
+          "opacity": 0.32
+        }
+      ]
+    },
+    {
+      "id": "cole",
+      "kind": "clip",
+      "clip": "cole"
+    },
+    {
+      "id": "cat",
+      "kind": "clip",
+      "clip": "cat",
+      "offsetMs": 420
+    },
+    {
+      "id": "bench-front",
+      "kind": "image",
+      "image": "bench-front",
+      "position": {
+        "x": 1120,
+        "y": 640
+      }
+    },
+    {
+      "id": "foliage",
+      "kind": "clip",
+      "clip": "vines",
+      "offsetMs": 730
+    },
+    {
+      "id": "local-light",
+      "kind": "lights",
+      "sourceClip": "cole",
+      "points": [
+        {
+          "position": {
+            "x": 1226,
+            "y": 309
+          },
+          "radius": 60,
+          "color": "#f3bc6c",
+          "opacity": 0.025
+        },
+        {
+          "position": {
+            "x": 563,
+            "y": 699
+          },
+          "radius": 70,
+          "color": "#4ce9ec",
+          "opacity": 0.04
+        }
+      ]
+    },
+    {
+      "id": "terminal",
+      "kind": "screen",
+      "position": {
+        "x": 1102,
+        "y": 562
+      },
+      "width": 38,
+      "height": 26,
+      "angle": -0.1
+    },
+    {
+      "id": "sleep",
+      "kind": "sleep",
+      "position": {
+        "x": 1534,
+        "y": 563
+      }
+    }
+  ]
+}

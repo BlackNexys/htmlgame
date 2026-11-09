@@ -18,6 +18,9 @@ export class FlickerProjectile extends Projectile {
         const speed = Math.hypot(this.vx, this.vy);
         return this.advance(world, this.vx / speed * reach, this.vy / speed * reach);
     }
+    manifestAt(world: ProjectileContext, x: number, y: number) {
+        return this.advance(world, x - (this.x + this.width / 2), y - (this.y + this.height / 2));
+    }
     protected targets(world: ProjectileContext) {
         return world.enemies.filter(enemy => enemy.health > 0 && enemy.vulnerable)
             .map(enemy => ({bounds: enemy, hit: () => world.combat.hitEnemy(enemy, this.vx, flicker.projectile.damage)}));

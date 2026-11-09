@@ -40,7 +40,10 @@ body.game-app { height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; 
 .title-art[data-renderer='ready'] .title-background,
 .title-art[data-renderer='ready'] .menu-platform,
 .title-art[data-renderer='ready'] .menu-scene-motion { visibility: visible; }
+.title-art[data-composition='confluence'] .title-background,
+.title-art[data-composition='confluence'] .menu-platform { display: none; }
 .title-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #05090f55, transparent 55%); }
+.title-art[data-composition='confluence']::after { background: linear-gradient(90deg, #05090fdd, #05090fa6 26%, #05090f20 50%, transparent 62%); }
 .title-content { position: relative; width: clamp(240px, 32cqw, 540px); max-width: 100%; align-self: start; }
 .title-content h1 { line-height: 1; }
 .title-logo { display: block; width: min(100%, max(96px, calc((100dvh - 430px) * 1448 / 1086))); height: auto; image-rendering: pixelated; }

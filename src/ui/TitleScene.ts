@@ -1,7 +1,9 @@
-import {selectMenuScene,titleArtRoot,type MenuScene} from './MenuScene';
+import {selectMenuScene,titleArtRoot,confluenceArtRoot,menuScenes,type MenuScene} from './MenuScene';
 import type {MenuMotion} from './GamePreferences';
 import {validateTitleArt,type TitleArt} from './title/TitleArt';
 import {TitleArtRenderer} from './title/TitleArtRenderer';
+import {loadConfluenceArt} from './title/ConfluenceArt';
+import {ConfluenceRenderer} from './title/ConfluenceRenderer';
 
 const previousKey='underworld-menu-scene:v1';
 
@@ -14,7 +16,9 @@ export class TitleScene {
     private readonly background: HTMLImageElement;
     private readonly foreground: HTMLImageElement;
     private readonly motionPrompt=document.querySelector<HTMLButtonElement>('#title-enable-motion')!;
-    private renderer?: TitleArtRenderer;
+    private readonly legacy=menuScenes.some(scene=>scene.id===new URLSearchParams(location.search).get('menuScene'));
+    private renderer?: TitleArtRenderer|ConfluenceRenderer;
+    private seed=0;
     private scene?: MenuScene;
     private previous?: string;
     private active=false;
@@ -32,6 +36,7 @@ export class TitleScene {
         this.poster=root.querySelector<HTMLImageElement>('.menu-poster')!;
         this.background=root.querySelector<HTMLImageElement>('.title-background')!;
         this.foreground=root.querySelector<HTMLImageElement>('.menu-platform')!;
+        this.root.dataset.composition=this.legacy?'station-v3':'confluence';
         try{this.previous=sessionStorage.getItem(previousKey)||undefined;}catch{/* Optional session selection. */}
         const options={signal:this.events.signal};
         this.reduced.addEventListener('change',this.sync,options);
@@ -44,6 +49,11 @@ export class TitleScene {
     dispose(){this.hide();this.disposed=true;this.events.abort();this.renderer=undefined;}
 
     private select(){
+        if(!this.legacy){
+            this.seed=Math.floor(Math.random()*0x7fffffff);this.elapsed=0;
+            this.root.dataset.scene='confluence';this.root.dataset.hero='true';
+            this.poster.src=confluenceArtRoot+'poster-v2.png';this.draw();return;
+        }
         this.scene=selectMenuScene(this.previous,Math.random,new URLSearchParams(location.search).get('menuScene'));
         this.previous=this.scene.id;this.elapsed=0;
         try{sessionStorage.setItem(previousKey,this.scene.id);}catch{/* Storage is not required. */}
@@ -54,6 +64,12 @@ export class TitleScene {
     }
     private async load(){
         try{
+            if(!this.legacy){
+                const {art,images}=await loadConfluenceArt(confluenceArtRoot,this.events.signal);
+                if(this.disposed)return;
+                this.renderer=new ConfluenceRenderer(this.canvas,art,images);
+                this.draw();this.root.dataset.renderer='ready';this.sync();return;
+            }
             const response=await fetch(titleArtRoot+'scene-v1.json',{signal:this.events.signal});
             if(!response.ok)throw Error('Title metadata unavailable');
             const value: unknown=await response.json();validateTitleArt(value);const art: TitleArt=value;
@@ -100,8 +116,11 @@ export class TitleScene {
         if(this.running)this.frameId=requestAnimationFrame(this.frame);
     };
     private draw(time=this.elapsed){
-        if(!this.renderer||!this.scene||this.failed)return;
-        try{this.renderer.draw(time,this.scene.pose??'absent');}
+        if(!this.renderer||this.legacy&&!this.scene||this.failed)return;
+        try{
+            if(this.renderer instanceof ConfluenceRenderer)this.renderer.draw(time,'confluence',this.seed);
+            else this.renderer.draw(time,this.scene?.pose??'absent');
+        }
         catch{this.failed=true;this.root.dataset.renderer='fallback';this.running=false;if(this.frameId!==undefined)cancelAnimationFrame(this.frameId);this.frameId=undefined;}
     }
 }

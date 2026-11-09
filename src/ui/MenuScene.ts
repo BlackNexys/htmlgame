@@ -10,6 +10,7 @@ export interface MenuScene {
     readonly character?: {readonly asset: MenuAsset;readonly position: {x: number;y: number};readonly width: number};
 }
 export const titleArtRoot='./assets/mainmenu/v3/production/';
+export const confluenceArtRoot='./assets/mainmenu/confluence-v1/';
 const asset=(name: string): MenuAsset=>({still:name==='standing'?'./assets/'+characterAtlas.image:['sitting','leaning'].includes(name)?'./assets/hero/canon-v1/'+name+'-v1.png':titleArtRoot+name+'-v1.png'});
 const station={background:asset('background'),foreground:asset('foreground')};
 export const menuScenes: readonly MenuScene[]=[

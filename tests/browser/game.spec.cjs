@@ -15,7 +15,7 @@ async function advance(page, milliseconds) { await page.clock.runFor(millisecond
 
 test('movement, combat, pause, focus loss, resize and a clean restart', async ({page}, testInfo) => {
     const errors = []; page.on('pageerror', e => errors.push(e.message));
-    const hero = page.waitForResponse(response => response.url().endsWith('/assets/hero/canon-v1/gameplay-v1.png') && response.ok());
+    const hero = page.waitForResponse(response => response.url().endsWith('/assets/hero/canon-v2/gameplay-v2.png') && response.ok());
     await start(page);
     await hero;
     fs.mkdirSync('artifacts', {recursive: true});

@@ -1,0 +1,410 @@
+{
+  "version": 1,
+  "status": "planning-only",
+  "date": "2026-11-09",
+  "width": 1672,
+  "height": 941,
+  "reference": "menu-concept-v1.png",
+  "note": "All regions, anchors, timings and export names are proposed. Regions guide asset responsibilities; they are not extraction rectangles or existing separated assets.",
+  "plan": "../../../docs/Underworld_Confluence_Menu_Production_Plan_v1.md",
+  "layers": [
+    {
+      "id": "city",
+      "title": "01 · Distant city",
+      "kind": "static",
+      "order": 1,
+      "region": [
+        487,
+        0,
+        1185,
+        689
+      ],
+      "description": "Complete skyline, bridges, occupied windows and fixed banks behind the station.",
+      "motion": "Still architecture; keep the train track empty in this plate.",
+      "timing": "Static",
+      "exports": [
+        "city-plate-v1.png",
+        "train-occlusion-mask-v1.png"
+      ],
+      "notes": "Draw complete scenery behind moving and removable objects. Use current Confluence materials and the approved composition."
+    },
+    {
+      "id": "train",
+      "title": "02 · Distant train",
+      "kind": "event",
+      "order": 2,
+      "region": [
+        558,
+        279,
+        540,
+        84
+      ],
+      "description": "One small train travels along the upper central bridge.",
+      "motion": "A rigid train moves behind bridge parapets and station columns; restrained window changes.",
+      "timing": "12–18 s crossing; 25–45 s gap after exit",
+      "exports": [
+        "train-v1.png"
+      ],
+      "notes": "Use a menu-owned event track. Freeze travel and the gap during gameplay or hidden tabs."
+    },
+    {
+      "id": "mist",
+      "title": "03 · Canal mist",
+      "kind": "loop",
+      "order": 3,
+      "region": [
+        401,
+        544,
+        752,
+        233
+      ],
+      "description": "A few localized atmosphere patches above the canal and in the middle distance.",
+      "motion": "Slow masked drift; no haze crossing menu labels or Cole's face.",
+      "timing": "18–30 s",
+      "exports": [
+        "mist-v1.png",
+        "mist-mask-v1.png"
+      ],
+      "notes": "Preserve deliberate pixel texture. Keep this optional layer quiet and bounded."
+    },
+    {
+      "id": "architecture",
+      "title": "04 · Station structure",
+      "kind": "static",
+      "order": 4,
+      "region": [
+        983,
+        0,
+        689,
+        548
+      ],
+      "description": "Blue-glass shelter, steel columns, left wall/arch, pipes and fixed housings.",
+      "motion": "Structural masses and their supports stay fixed.",
+      "timing": "Static",
+      "exports": [
+        "station-frame-v1.png"
+      ],
+      "notes": "The region highlights the canopy; this group also includes the left framing wall. Finish hidden surfaces and preserve physical mounts."
+    },
+    {
+      "id": "canal",
+      "title": "05 · Canal surface",
+      "kind": "loop",
+      "order": 5,
+      "region": [
+        0,
+        645,
+        1110,
+        296
+      ],
+      "description": "The cyan water surface, bounded by the canal banks and the diagonal foreground lip.",
+      "motion": "Slow advancing pixel currents and broken horizontal highlights.",
+      "timing": "8-frame material loop, about 1.2–1.6 s, plus slow masked travel",
+      "exports": [
+        "canal-material-v1.png",
+        "canal-mask-v1.png"
+      ],
+      "notes": "The rectangle is a guide; the real boundary requires a shoreline-shaped mask. Keep static bright shimmer out of the clean plate."
+    },
+    {
+      "id": "outfall",
+      "title": "06 · Falling water",
+      "kind": "loop",
+      "order": 6,
+      "region": [
+        511,
+        552,
+        97,
+        160
+      ],
+      "description": "A narrow water ribbon starts behind the fixed mouth rim and meets the canal.",
+      "motion": "Downward authored flow; the pipe itself stays still.",
+      "timing": "8 × 80 ms = 0.64 s",
+      "exports": [
+        "outfall-water-v1.png",
+        "outfall-mouth-occluder-v1.png"
+      ],
+      "notes": "Mouth near (543,568); impact near (573,698). Align both in scene coordinates.",
+      "anchors": [
+        {
+          "label": "mouth",
+          "x": 543,
+          "y": 568
+        },
+        {
+          "label": "impact",
+          "x": 573,
+          "y": 698
+        }
+      ]
+    },
+    {
+      "id": "splash",
+      "title": "07 · Outfall splash",
+      "kind": "loop",
+      "order": 6.1,
+      "region": [
+        497,
+        665,
+        166,
+        65
+      ],
+      "description": "A small impact patch where the stream meets the surface.",
+      "motion": "Irregular short splashes and ripples, with timing offset from the water ribbon.",
+      "timing": "6 × 100 ms = 0.6 s",
+      "exports": [
+        "outfall-splash-v1.png"
+      ],
+      "notes": "Keep the impact seated at the waterline; its spray must not slide with the current."
+    },
+    {
+      "id": "quay",
+      "title": "08 · Quay and paving",
+      "kind": "static",
+      "order": 7,
+      "region": [
+        501,
+        645,
+        1171,
+        296
+      ],
+      "description": "Wet masonry, supported bench feet and the diagonal bank edge.",
+      "motion": "Fixed physical material; changing reflections are separate.",
+      "timing": "Static",
+      "exports": [
+        "quay-v1.png",
+        "wet-ground-mask-v1.png"
+      ],
+      "notes": "Finish paving under Cole and the cat. The bank lip covers the canal edge. Keep the water/ground masks distinct."
+    },
+    {
+      "id": "reflections",
+      "title": "09 · Wet-ground reflections",
+      "kind": "loop",
+      "order": 8,
+      "region": [
+        1045,
+        744,
+        563,
+        197
+      ],
+      "description": "Localized magenta, cyan and amber responses on wet paving.",
+      "motion": "Broken masked highlights; Cole's magenta brightness follows his current flame phase.",
+      "timing": "Phase-linked to Cole and surface motion",
+      "exports": [
+        "wet-reflections-v1.png"
+      ],
+      "notes": "Draw for the ground perspective; do not paste a flat mirrored whole character onto the angled paving."
+    },
+    {
+      "id": "bench-rear",
+      "title": "10 · Bench and rear rails",
+      "kind": "static",
+      "order": 9,
+      "region": [
+        879,
+        507,
+        793,
+        279
+      ],
+      "description": "Bench back, seat, rear railings and terminal housing behind the actors.",
+      "motion": "Fixed furniture, including complete surfaces hidden by the seated bodies.",
+      "timing": "Static",
+      "exports": [
+        "bench-rear-v1.png",
+        "rear-railing-v1.png"
+      ],
+      "notes": "Separate front arms and rails only where they pass in front of Cole or the cat."
+    },
+    {
+      "id": "cole",
+      "title": "11 · Cole, complete frames",
+      "kind": "loop",
+      "order": 11,
+      "region": [
+        1148,
+        360,
+        338,
+        433
+      ],
+      "description": "The entire seated canon character, including connected fire and the cloak under his weight.",
+      "motion": "Two flame cycles across one slower loose-scarf cycle; resting anatomy and support pixels held.",
+      "timing": "16 × 100 ms = 1.6 s; proposed cell up to 512 × 512",
+      "exports": [
+        "cole-seated-v1.png",
+        "cole-contact-mask-v1.png"
+      ],
+      "notes": "Inspect a few keyframes first. No detached flame/head layers, enlarged gameplay cell, floating boots or streaming cloth beneath the seated hips.",
+      "anchors": [
+        {
+          "label": "seat",
+          "x": 1300,
+          "y": 646
+        },
+        {
+          "label": "boot",
+          "x": 1205,
+          "y": 775
+        },
+        {
+          "label": "boot",
+          "x": 1305,
+          "y": 780
+        }
+      ]
+    },
+    {
+      "id": "cat",
+      "title": "12 · Sleeping cat",
+      "kind": "loop",
+      "order": 12,
+      "region": [
+        1441,
+        560,
+        155,
+        95
+      ],
+      "description": "The complete skeletal cat resting beside Cole.",
+      "motion": "Small authored upper-body breathing; paws and lower contact stay registered. Sleep marks are separate.",
+      "timing": "8 × 350 ms = 2.8 s; z marks over 4–5 s",
+      "exports": [
+        "cat-sleep-v1.png"
+      ],
+      "notes": "Keep the cat asleep in the first loop. Ear flicks or other variations can follow later.",
+      "anchors": [
+        {
+          "label": "bench contact",
+          "x": 1510,
+          "y": 638
+        }
+      ]
+    },
+    {
+      "id": "bench-front",
+      "title": "13 · Foreground furniture",
+      "kind": "static",
+      "order": 13,
+      "region": [
+        1130,
+        640,
+        542,
+        161
+      ],
+      "description": "Only the bench arms, supports and small rail edges that pass in front of the actors.",
+      "motion": "Fixed occluders.",
+      "timing": "Static",
+      "exports": [
+        "bench-front-v1.png",
+        "foreground-rail-v1.png"
+      ],
+      "notes": "Use cut openings and carefully ordered drawing so a broad furniture crop does not cover faces, hands or legs."
+    },
+    {
+      "id": "terminal",
+      "title": "14 · Terminal screen",
+      "kind": "event",
+      "order": 14,
+      "region": [
+        1070,
+        532,
+        82,
+        64
+      ],
+      "description": "Small cyan screen content inside the terminal's fixed housing.",
+      "motion": "A restrained indicator or scan detail; its frame and mount stay fixed.",
+      "timing": "Small updates, less frequent than the water",
+      "exports": [
+        "terminal-screen-v1.png"
+      ],
+      "notes": "Clip screen content to its inner face. No large scrolling text or distracting pulses.",
+      "anchors": [
+        {
+          "label": "screen",
+          "x": 1114,
+          "y": 562
+        }
+      ]
+    },
+    {
+      "id": "lamps",
+      "title": "15 · Local light",
+      "kind": "loop",
+      "order": 14.1,
+      "region": [
+        1197,
+        233,
+        345,
+        214
+      ],
+      "description": "Warm lamp cores and tight local lighting; housings belong to the structure.",
+      "motion": "Tiny changes in light intensity, with appropriate surface masks.",
+      "timing": "Gentle 6–10 s variation",
+      "exports": [
+        "lamp-light-mask-v1.png"
+      ],
+      "notes": "Distribute light passes at their receiving surfaces. Contact shadows remain under the actors. Do not pulse the whole image."
+    },
+    {
+      "id": "board",
+      "title": "16 · Departure display",
+      "kind": "event",
+      "order": 14.2,
+      "region": [
+        1344,
+        208,
+        245,
+        145
+      ],
+      "description": "The electronic departure board's clear face and deliberately rendered lettering.",
+      "motion": "A short refresh redraws the same message: ETERNALLY DELAYED.",
+      "timing": "Refresh around 25–40 s",
+      "exports": [
+        "board-face-mask-v1.png"
+      ],
+      "notes": "Render lettering from controlled pixel glyphs or a pre-rendered text texture. Generated concept lettering is not a runtime text asset.",
+      "anchors": [
+        {
+          "label": "panel",
+          "x": 1464,
+          "y": 274
+        }
+      ]
+    },
+    {
+      "id": "vines",
+      "title": "17 · Loose foliage tips",
+      "kind": "loop",
+      "order": 14.3,
+      "region": [
+        1537,
+        723,
+        135,
+        218
+      ],
+      "description": "A few foreground magenta tips; other rooted vegetation stays in the static plates.",
+      "motion": "Small authored shifts around fixed stems; optional sparse patches elsewhere.",
+      "timing": "3–5 s with phase offsets",
+      "exports": [
+        "foliage-tips-v1.png"
+      ],
+      "notes": "The highlighted patch is one example. Keep roots fixed and avoid deforming the complete foreground."
+    },
+    {
+      "id": "interface",
+      "title": "18 · Real menu interface",
+      "kind": "interface",
+      "order": 15,
+      "region": [
+        38,
+        112,
+        490,
+        450
+      ],
+      "description": "The real logo, menu actions, focus treatment and dialogs above the decorative scene.",
+      "motion": "Native focus/selection behavior; no baked fake controls.",
+      "timing": "Existing application behavior",
+      "exports": [],
+      "notes": "Remove the concept's title/menu lettering from environment plates and the fallback poster. Continue eligibility, keyboard navigation, options and saved-game behavior stay owned by the app."
+    }
+  ]
+}

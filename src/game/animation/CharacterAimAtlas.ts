@@ -1,8 +1,8 @@
-/** Canon companion: crouch and directional firing at the same pixel scale. */
+/** Registered canon v2 gameplay export. See scripts/pack-hero-motion.mjs. */
 export const characterAimAtlas = {
-  "image": "hero/canon-v1/aiming-v1.png",
+  "image": "hero/canon-v2/aiming-v2.png",
   "width": 1536,
-  "height": 1536,
+  "height": 2304,
   "cell": 256,
   "size": 98,
   "rows": [
@@ -124,6 +124,66 @@ export const characterAimAtlas = {
         240
       ],
       "sourceY": 1280,
+      "height": 256
+    },
+    {
+      "x": [
+        128,
+        128,
+        128,
+        128,
+        128,
+        128
+      ],
+      "y": [
+        240,
+        240,
+        240,
+        240,
+        240,
+        240
+      ],
+      "sourceY": 1536,
+      "height": 256
+    },
+    {
+      "x": [
+        128,
+        128,
+        128,
+        128,
+        128,
+        128
+      ],
+      "y": [
+        240,
+        240,
+        240,
+        240,
+        240,
+        240
+      ],
+      "sourceY": 1792,
+      "height": 256
+    },
+    {
+      "x": [
+        128,
+        128,
+        128,
+        128,
+        128,
+        128
+      ],
+      "y": [
+        240,
+        240,
+        240,
+        240,
+        240,
+        240
+      ],
+      "sourceY": 2048,
       "height": 256
     }
   ]

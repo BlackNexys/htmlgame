@@ -1,23 +1,15 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#090d16"><title>Underworld · Production menu scene</title>
-  <style>
-    :root{color-scheme:dark;font-family:system-ui,sans-serif;background:#090d16;color:#ece2ed;line-height:1.5}*{box-sizing:border-box}body{margin:0}main{max-width:1760px;margin:auto;padding:24px}a{color:#99e1e9}h1{font-size:clamp(26px,4vw,42px);margin:14px 0}p{color:#bdb5ca;max-width:850px}.viewer{position:relative;width:100%;aspect-ratio:1672/941;overflow:hidden;background:#090d16}.viewer img,.viewer canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}.tools{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:20px 0}button,select,input{font:inherit;accent-color:#ec3fae}button,select{padding:9px 14px;color:inherit;background:#202438;border:1px solid #4a435a}button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #ff90d8;outline-offset:3px}.sources{display:flex;flex-wrap:wrap;gap:12px}.sources img{max-width:100%;height:auto;image-rendering:pixelated;background:#151a29}details{padding:20px 0;border-top:1px solid #30344b}summary{cursor:pointer}#status{margin:0 0 18px}
-  </style>
-</head>
-<body><main>
-  <a href="./">← Main menu</a><h1>A restless soul waits.</h1>
-  <p>The production scene uses separate illustrated layers and authored animation frames. Use the controls to inspect each preset and the loop timing.</p>
-  <div class="viewer" role="img" aria-label="Animated underworld station, skeletal traveller, cyan lantern and sleeping skeletal cat."><img id="background" alt=""><img id="foreground" alt=""><canvas id="scene" width="1672" height="941"></canvas></div>
-  <div class="tools">
-    <button id="play" disabled>Play animation</button><button id="reset" disabled>Reset</button><button id="step" disabled>Step one frame</button>
-    <label>Traveller <select id="pose"><option value="standing">Standing</option><option value="sitting">Seated</option><option value="leaning">Leaning</option><option value="absent">Away</option></select></label>
-    <label>Time <input id="time" type="range" min="0" max="10000" value="0" step="1"></label>
-  </div>
-  <p id="status" role="status">Loading the station…</p>
-  <details><summary>Gameplay reference and pose frames</summary><p>Standing uses the current gameplay idle row directly, at its original 8 fps and foot anchors. All three poses follow the new canon sheet, including the paired magenta eyes, bone framing, scarf and cyan vial.</p><div class="sources"><img src="./assets/mainmenu/v3/production/source/gameplay-idle-reference-canon-v1.png" alt="The six actual gameplay idle frames, unchanged as the standing reference" loading="lazy"><img src="./assets/hero/canon-v1/sitting-v1.png" alt="Six seated frames matching the gameplay hero, resting on the cloak" loading="lazy"><img src="./assets/hero/canon-v1/leaning-v1.png" alt="Six leaning frames matching the gameplay hero" loading="lazy"></div></details>
-  <p><a href="./assets/mainmenu/v3/production/README.md">Asset notes and exact generation prompts</a> · <a href="./docs/main-menu-art-study.html">Approved visual studies</a></p>
-</main><script type="module" src="./src/ui/title/preview.ts"></script></body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#090f18"><title>Underworld · Confluence menu production</title>
+<style>
+:root{color-scheme:dark;font:16px system-ui,sans-serif;background:#090f18;color:#ece2ed;line-height:1.5}*{box-sizing:border-box}body{margin:0}main{max-width:1760px;margin:auto;padding:24px}a{color:#99e1e9}h1{font-size:clamp(26px,4vw,42px);margin:14px 0}p{color:#bdb5ca;max-width:1000px}.viewer{position:relative;width:100%;aspect-ratio:1672/941;overflow:hidden;background:#090f18}.viewer img,.viewer canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}.tools{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:15px 0}button,select,input{font:inherit;accent-color:#ec3fae}button,select{padding:8px 12px;color:inherit;background:#202b3b;border:1px solid #4a536a}button{cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid #ff90d8;outline-offset:3px}input[type=range]{width:min(45vw,500px)}.sources{display:flex;flex-wrap:wrap;gap:12px}.sources img{max-width:100%;height:auto;image-rendering:pixelated;background:#151a29}details{padding:20px 0;border-top:1px solid #30344b}summary{cursor:pointer}#status{margin:0 0 12px}#events{font-size:13px;color:#90b8c5}[hidden]{display:none!important}
+</style></head><body><main>
+<a href="./">← Main menu</a><h1>A quiet corner of Confluence</h1>
+<p>The production renderer plays whole-character Cole and cat frames over a clean station plate. Water, wet reflections, the outfall, foliage and distant train have their own timing and masks. Use these controls to inspect the actual scene.</p>
+<div class="viewer" role="img" aria-label="Animated Confluence canal-side station with Cole, a sleeping skeletal cat, blue-glass shelter and spectral canal."><img id="background" alt="" hidden><img id="foreground" alt="" hidden><canvas id="scene" width="1672" height="941"></canvas></div>
+<div class="tools"><button id="play" disabled>Play animation</button><button id="reset" disabled>Reset</button><button id="step" disabled>Step one frame</button><button id="train" disabled>Next train</button><label id="legacy-pose" hidden>Traveller <select id="pose"><option value="standing">Standing</option><option value="sitting">Seated</option><option value="leaning">Leaning</option><option value="absent">Away</option></select></label></div>
+<div class="tools" id="inspection"><label>Layer <select id="layer" disabled></select></label><label><input id="solo" type="checkbox"> Show only selected</label><label><input id="hide" type="checkbox"> Hide selected</label><label><input id="guides" type="checkbox"> Masks and anchors</label></div>
+<div class="tools"><label>Time <input id="time" type="range" min="0" max="90000" value="0" step="1" list="event-markers"></label><datalist id="event-markers"></datalist><span id="events"></span></div>
+<p id="status" role="status">Loading the station…</p>
+<details><summary>Authored frames and clean environment</summary><p>Cole's lower body, boots and seated cloak folds share held support pixels. The cat's lower contact stays settled. Source drawings and exact prompts are preserved with the exported artwork.</p><div class="sources"><a href="./assets/mainmenu/confluence-v1/review/cole-v1.png"><img src="./assets/mainmenu/confluence-v1/review/cole-v1.png" alt="Eight complete authored Cole frames with stable seated contacts" loading="lazy"></a><a href="./assets/mainmenu/confluence-v1/review/cat-v1.png"><img src="./assets/mainmenu/confluence-v1/review/cat-v1.png" alt="Eight sleeping skeletal cat breathing frames" loading="lazy"></a></div></details>
+<p><a href="./assets/mainmenu/confluence-v1/README.md">Production assets and exact prompts</a> · <a href="./docs/confluence-menu-study.html">Approved concept</a> · <a href="./docs/confluence-menu-breakdown.html">Planning breakdown</a> · <a href="?legacy=1">Earlier station renderer</a></p>
+</main><script type="module" src="./src/ui/title/preview.ts"></script></body></html>

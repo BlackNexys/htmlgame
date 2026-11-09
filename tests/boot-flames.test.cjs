@@ -8,16 +8,17 @@ const {World}=require('../src/game/World.ts');
 const {tuning:T}=require('../src/game/config.ts');
 const actor={grounded:true,crouched:false,vx:480,sprintCharge:1};
 const frame={row:6,column:0,anchorX:128,anchorY:240,mirror:false};
-function context(){const draws=[];return{draws,globalAlpha:1,save(){},restore(){},drawImage(...args){draws.push(args);}};}
+function context(){const draws=[];return{draws,globalAlpha:1,save(){},restore(){},translate(){},scale(){},fillRect(){},drawImage(...args){draws.push(args);}};}
 
 test('boot flames follow both authored soles and grow with earned sprint buildup',()=>{
  const flames=new BootFlameRenderer({}),c=context();flames.update({...actor,vx:350,sprintCharge:.25},T.step,false);flames.draw(c,frame);
- assert.equal(c.draws.length,2);const small=c.draws[0][7];c.draws.length=0;
+ assert.equal(c.draws.length,4);const small=c.draws[0][7];c.draws.length=0;
  flames.update(actor,T.step,false);flames.draw(c,frame);assert.ok(c.draws[0][7]>small);
- const factor=.7,scale=characterAtlas.size/characterAtlas.cell;
+ const scale=characterAtlas.size/characterAtlas.cell;
  characterAtlas.boots[6][0].forEach((sole,i)=>{
-  assert.equal(c.draws[i][5],Math.round((sole.x-128)*scale-30*factor));
-  assert.equal(c.draws[i][6],Math.round((sole.y-240)*scale-22*factor));
+  const draw=c.draws[i*2];
+  assert.ok(Math.abs(draw[5]+draw[7]*30/32-(sole.x-128)*scale)<=1);
+  assert.ok(Math.abs(draw[6]+draw[8]*22/24-(sole.y-240)*scale)<=1);
  });
 });
 
@@ -35,5 +36,13 @@ test('the earned sprint selects the authored sprint row, and firing keeps its mo
  const input={left:false,right:true,up:false,down:false,jump:false,jumpHeld:false,jumpReleased:false,sprint:true,fire:false};
  for(let i=0;i<100;i++){w.update(T.step,input);animation.update(w.player,T.step);}
  assert.equal(animation.sample(w.player).base.row,6);animation.update(w.player,T.step,['fire']);
- assert.equal(animation.sample(w.player).base.row,6);assert.equal(animation.sample(w.player).upper.row,3);
+ assert.equal(animation.sample(w.player).base.row,6);assert.equal(animation.sample(w.player).upper.row,8);
+});
+
+test('existing trails survive release, remain in world space and expire; death clears them',()=>{
+ const flame=new BootFlameRenderer({}),c=context(),p={...actor,x:100,y2:200,width:32,facing:1};
+ flame.update(p,1/60,false,frame);flame.drawTrail(c);assert.equal(c.draws.length,2);
+ p.x=500;p.vx=0;flame.update(p,.02,false,frame);c.draws.length=0;flame.drawTrail(c);assert.equal(c.draws.length,2);
+ flame.update(p,.31,false,frame);c.draws.length=0;flame.drawTrail(c);assert.equal(c.draws.length,0);
+ p.vx=480;flame.update(p,1/60,false,frame);flame.update(p,.01,true,frame);flame.drawTrail(c);assert.equal(c.draws.length,0);
 });

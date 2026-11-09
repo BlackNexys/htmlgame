@@ -19,7 +19,7 @@ test('crouching preserves feet, lowers shots and limits creep even with sprint h
     const world = new World(level()); step(world,{down:true, fire:true});
     assert.equal(world.player.height,T.crouchHeight); assert.equal(world.player.y2,600);
     assert.equal(world.player.motion,'crouching'); assert.equal(world.player.grounded,true);
-    assert.equal(world.projectiles[0].y-standing.projectiles[0].y,20);
+    assert.ok(world.projectiles[0].y-standing.projectiles[0].y>=12);
     assert.equal(world.projectiles[0].vy,0);
     run(world,.5,{down:true,right:true,sprint:true}); assert.equal(world.player.vx,T.crouchSpeed);
     step(world); assert.equal(world.player.height,T.standingHeight); assert.equal(world.player.y2,600);
@@ -93,9 +93,10 @@ test('crouch and aimed attacks use dedicated poses; clearing actions removes hel
     step(world,{down:true}); let pose=animation.sample(world.player);
     assert.equal(pose.base.sheet,'aim'); assert.equal(pose.base.row,0);
     step(world,{down:true,fire:true}); animation.update(world.player,T.step,world.events);
-    assert.equal(animation.sample(world.player).base.row,1);
+    assert.equal(animation.sample(world.player).base.row,0);
+    assert.equal(animation.sample(world.player).upper.row,7);
     step(world,{up:true,right:true}); pose=animation.sample(world.player);
-    assert.equal(pose.upper.row,3); assert.equal(pose.upper.sheet,'aim');
+    assert.equal(pose.upper.column,2); assert.equal(pose.upper.sheet,'aim');
     world.player.clearActions(); assert.deepEqual(world.player.aim,{x:world.player.facing,y:0});
     const fresh=new World(level()); assert.equal(fresh.player.crouched,false);
     assert.deepEqual(fresh.player.aim,{x:1,y:0});

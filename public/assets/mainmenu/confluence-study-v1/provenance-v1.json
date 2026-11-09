@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "date": "2026-11-09",
+  "status": "flattened concept study",
+  "mode": "built-in imagegen",
+  "image": "menu-concept-v1.png",
+  "prompt": "menu-concept-v1.prompt.txt",
+  "width": 1672,
+  "height": 941,
+  "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-97c5c5d9-165d-4724-b394-937eaf16684f.png",
+  "preservation": "PNG copied unchanged; source retained",
+  "references": [
+    {
+      "path": "public/assets/environment/confluence/v3/city-v3.png",
+      "role": "Confluence city, palette and architectural materials"
+    },
+    {
+      "path": "public/assets/environment/confluence/v6/canopy-v6.png",
+      "role": "Electronic blue-glass station canopy"
+    },
+    {
+      "path": "public/docs/Underverdenens neon-skeletark__has_watermark____has_borders__.png",
+      "role": "Authoritative Cole character design"
+    },
+    {
+      "path": "public/assets/hero/canon-v1/idle-v1.png",
+      "role": "Current pixel treatment and proportions"
+    }
+  ]
+}

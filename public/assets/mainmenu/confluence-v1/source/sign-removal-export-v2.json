@@ -1,0 +1,14 @@
+{
+  "original": "plate-v1.png",
+  "editedSource": "sign-removal-v2.png",
+  "result": "plate-no-sign-v2.png",
+  "region": [
+    1318,
+    174,
+    278,
+    244
+  ],
+  "edgeBlend": 18,
+  "outsideRegion": "unchanged",
+  "changedChannels": 193464
+}

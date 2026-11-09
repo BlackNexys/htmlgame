@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cole · Motion review</title>
+<style>body{margin:0;background:#101522;color:#eee1eb;font:15px system-ui}main{max-width:1200px;margin:24px auto;padding:0 20px}a{color:#7fe0ec}.controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:18px 0}label{display:flex;gap:8px;align-items:center}button,select{font:inherit;color:#eee1eb;background:#293047;border:1px solid #666078;padding:8px}canvas{display:block;width:100%;background:#172032;image-rendering:pixelated}p{line-height:1.6}output{display:block;white-space:pre-wrap;color:#a9c4d5;margin-top:12px}</style></head>
+<body><main><a href="./">← Game</a><h1>Cole · Motion review</h1><p>Posed scenarios using the game's character renderer, Flicker, and sprint effects. Inspect at 1×, or enlarge the pixels. <a href="./?level=movement-course">Play the movement course</a> to test actual controls and collisions.</p>
+<div class="controls">
+<label>Motion <select id="motion"><option value="sequence">Transitions</option><option value="idle">Standing</option><option value="running">Running</option><option value="sprinting">Sprinting</option><option value="crouching">Crouching</option><option value="airborne">Airborne</option><option value="wall-slide">Wall slide</option></select></label>
+<label>Aim <select id="aim"><option value="1,0">Right</option><option value="1,-1">Up-right</option><option value="0,-1">Up</option><option value="-1,-1">Up-left</option><option value="-1,0">Left</option><option value="-1,1">Down-left</option><option value="0,1">Down</option><option value="1,1">Down-right</option></select></label>
+<label><input id="fire" type="checkbox" checked>Fire</label><label><input id="guides" type="checkbox" checked>Guides</label>
+<label>Scale <select id="zoom"><option value="1">1×</option><option value="2" selected>2×</option><option value="3">3×</option></select></label>
+<label>Speed <select id="speed"><option value="1">Normal</option><option value="0.25">Quarter speed</option></select></label>
+<button id="pause">Pause</button><button id="step">Step 1/60 s</button><button id="reset">Restart</button><button id="facing">Face left</button>
+</div><canvas id="review" width="1152" height="480" aria-label="Cole runtime animation review"></canvas><output id="status" role="status">Loading…</output>
+</main><script type="module" src="/src/ui/heroReview.ts"></script></body></html>

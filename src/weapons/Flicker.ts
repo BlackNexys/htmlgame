@@ -2,6 +2,7 @@ import type { Weapon, WeaponDefinition } from '../interfaces/Weapon';
 import type { Character } from '../components/Character';
 import type { WeaponContext } from '../interfaces/Simulation';
 import { FlickerProjectile } from '../components/FlickerProjectile';
+import { heroMuzzle } from '../game/animation/HeroPose';
 
 /** Playtest values from the Flicker v1.1 spec. Modifiers remain unequipped. */
 export const flicker = {
@@ -23,8 +24,12 @@ export class Flicker implements Weapon {
         const shot = new FlickerProjectile({x: origin.x - width / 2, y: origin.y - height / 2,
             width, height, vx: dx * p.speed, vy: dy * p.speed});
         world.events.push('fire');
-        world.weaponEvents.push({kind: 'ignition', x: origin.x + dx * 20, y: origin.y + dy * 20, angle: Math.atan2(dy, dx)});
-        // Sweep the manifestation path; no life/time is consumed before flight.
-        if (shot.manifest(world, 24)) world.projectiles.push(shot);
+        const palm = heroMuzzle(player);
+        // Sweep from inside the body to the actual hand, including upward/sideways offsets.
+        // No ignition is drawn through a wall and no flight time is consumed by this sweep.
+        if (shot.manifestAt(world, palm.x, palm.y)) {
+            world.weaponEvents.push({kind: 'ignition', ...palm, angle: Math.atan2(dy, dx)});
+            world.projectiles.push(shot);
+        }
     }
 }

@@ -34,11 +34,11 @@ test('standing reuses the live gameplay atlas; seated support and cloak remain s
  expect(requested.some(url=>/head-fire-v[234]|punk-body-v3/.test(url))).toBe(false);
 });
 
-test('menu visits avoid repeats while dialogs preserve the current preset and Continue still works',async({page})=>{
- await page.addInitScript(()=>{Math.random=()=>0;});await open(page,null);await expect(scene(page)).toHaveAttribute('data-scene','watcher');
- await page.getByRole('button',{name:'Controls',exact:true}).click();await page.keyboard.press('Escape');await expect(scene(page)).toHaveAttribute('data-scene','watcher');
+test('Confluence remains the main composition while dialogs and Continue preserve the run',async({page})=>{
+ await page.addInitScript(()=>{Math.random=()=>0;});await open(page,null);await expect(scene(page)).toHaveAttribute('data-scene','confluence');
+ await page.getByRole('button',{name:'Controls',exact:true}).click();await page.keyboard.press('Escape');await expect(scene(page)).toHaveAttribute('data-scene','confluence');
  await page.getByRole('button',{name:'Play',exact:true}).click();await page.keyboard.press('KeyP');await page.getByRole('button',{name:'Main menu',exact:true}).click();
- await expect(scene(page)).toHaveAttribute('data-scene','patient-traveller');await expect(page.locator('.menu-poster')).toHaveAttribute('src',/poster-patient-traveller-v1\.png$/);
+ await expect(scene(page)).toHaveAttribute('data-scene','confluence');await expect(page.locator('.menu-poster')).toHaveAttribute('src',/confluence-v1\/poster-v2\.png$/);
  await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.locator('#overlay')).toBeHidden();
 });
 
@@ -97,7 +97,7 @@ test('clock, lantern and cat animate independently and all artwork stays registe
 });
 
 test('production preview supports frame inspection and exports retain rich colour and clean transparency',async({page})=>{
- await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/menu-production.html');await expect(page.getByRole('button',{name:'Play animation',exact:true})).toBeEnabled();
+ await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/menu-production.html?legacy=1');await expect(page.getByRole('button',{name:'Play animation',exact:true})).toBeEnabled();
  const first=await page.locator('#scene').getAttribute('data-actor-frame');await page.getByRole('button',{name:'Step one frame',exact:true}).click();expect(await page.locator('#scene').getAttribute('data-actor-frame')).not.toBe(first);
  await page.getByRole('combobox',{name:'Traveller',exact:true}).selectOption('sitting');await expect(page.locator('#status')).toContainText('Seated');
  const pixels=await page.evaluate(async()=>{
