@@ -35,10 +35,10 @@ test('new-scene motion override persists; hidden time and gameplay freeze every 
  const still=await hash(page,[0,0,1672,941]);await page.clock.runFor(1000);expect(await hash(page,[0,0,1672,941])).toBe(still);
  await page.getByRole('button',{name:'Reduced motion · Enable animation',exact:true}).click();await page.clock.runFor(300);await expect(scene(page)).toHaveAttribute('data-motion','animated');
  await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
- const time=await canvas(page).getAttribute('data-time');await page.clock.runFor(45000);expect(await canvas(page).getAttribute('data-time')).toBe(time);
+ const time=await canvas(page).getAttribute('data-time');await page.clock.fastForward(45000);expect(await canvas(page).getAttribute('data-time')).toBe(time);
  await page.evaluate(()=>{delete document.hidden;document.dispatchEvent(new Event('visibilitychange'));});await page.clock.runFor(100);expect(Number(await canvas(page).getAttribute('data-time'))-Number(time)).toBeLessThan(200);
  await page.reload();await expect(scene(page)).toHaveAttribute('data-renderer','ready');await expect(scene(page)).toHaveAttribute('data-motion','animated');
- await page.getByRole('button',{name:'Play',exact:true}).click();await expect(scene(page)).toHaveAttribute('data-playing','false');const frozen=await canvas(page).getAttribute('data-time');await page.clock.runFor(45000);expect(await canvas(page).getAttribute('data-time')).toBe(frozen);
+ await page.getByRole('button',{name:'Play',exact:true}).click();await expect(scene(page)).toHaveAttribute('data-playing','false');const frozen=await canvas(page).getAttribute('data-time');await page.clock.fastForward(45000);expect(await canvas(page).getAttribute('data-time')).toBe(frozen);
 });
 
 test('essential-art failure uses the matching poster and missing optional train art keeps animation usable',async({page})=>{

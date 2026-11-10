@@ -25,7 +25,7 @@ Classes define local parts and sockets. They do not load images, draw pixels, re
 
 `CollisionQueries` exposes contacts, actor sweeps, ordinary actor movement, overlaps and casts. The player controller, ground enemies, NPCs, ghost materialization, projectiles and line-of-sight checks use this common geometry service. Existing movement solvers retain their tested behavior. `Map` is a runtime scene container rather than an implementation of the serialized `Level` interface.
 
-The former `components/Wall.ts` wrapper and compiler expansion into 48-square physics tiles have been removed. The lower-passage map now supplies its eleven authored collision rectangles directly, instead of 254 separate physics tiles.
+The former `components/Wall.ts` wrapper and compiler expansion into 48-square physics tiles have been removed. Compiled scenes supply authored collision rectangles directly; their geometry is independent of sprite tile dimensions. The old lower-passage layout was removed in the source-first reset.
 
 ## Schema v2
 

@@ -1,3 +1,5 @@
+> Historical record: all authored levels were removed on 10 November 2026. Play URLs and old test totals below describe the retired layouts. See the [reset decisions](level-authoring-reset.md) and [current source workflow](level-source-authoring.md).
+
 # Level authoring improvement plan
 
 9 November 2026. Status: phases 1-5 implemented on 9 November 2026. The original scope and acceptance criteria below remain the design record; [authored scene art](authored-scene-art.md) describes the shipped contract. Final verification is tracked in the [friction log](level-authoring-friction.md).

@@ -1,3 +1,5 @@
+> Current playable work: [A Light Left On](../lantern-quay.md) is the first source-authored slice after the level reset. Old Last Platform play claims below are historical; its art and provisional setting remain references.
+
 # Worldbuilding and design alignment
 
 **Reviewed:** 7 November 2026  

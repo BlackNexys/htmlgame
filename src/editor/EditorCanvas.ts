@@ -1,3 +1,4 @@
+import type {Rect} from '../interfaces/Geometry';
 import { characterAtlas } from '../game/animation/CharacterAtlas';
 import { cloneDocument, levelCollections, type LevelDocument, type LevelPoint, type LevelObject } from '../levels/LevelDocument';
 import type { LevelOperation } from '../levels/LevelChanges';
@@ -16,8 +17,8 @@ import {resolveProps} from '../world/props/PropResolver';
 import {resolveInteractables} from '../world/scene/InteractableResolver';
 import {EditorSceneArt} from './EditorSceneArt';
 
-export type EditorTool = 'select' | 'terrain' | 'decorations' | 'water' | 'props' | 'enemy' | 'npc' | 'interactable' | 'spawn' | 'exit' | 'sign';
-interface Drag { start: LevelPoint; end: LevelPoint; selection?: EditorSelection; }
+export type EditorTool = 'assembly' | 'select' | 'terrain' | 'decorations' | 'water' | 'props' | 'enemy' | 'npc' | 'interactable' | 'spawn' | 'exit' | 'sign';
+interface Drag { start: LevelPoint; end: LevelPoint; selection?: EditorSelection; assembly?: {id: string; x: number; y: number; revision: number}; }
 
 /** Authoring canvas only: no World, game loop, physics updates, or live entities. */
 export class EditorCanvas {
@@ -32,6 +33,8 @@ export class EditorCanvas {
     scene = 'station-exchange';
     interactionPreset='record';
     selection: EditorSelection;
+    groupOutline?: Rect;
+    assembly?: {id: string; x: number; y: number};
     private document: LevelDocument;
     private zoom = .5;
     private drag?: Drag;
@@ -41,7 +44,8 @@ export class EditorCanvas {
     constructor(private readonly canvas: HTMLCanvasElement, document: LevelDocument,
         private readonly edit: (operations: LevelOperation[]) => void,
         private readonly select: (selection: EditorSelection) => void,
-        private readonly report: (message: string) => void) {
+        private readonly report: (message: string) => void,
+        private readonly moveAssembly?: (id: string, origin: LevelPoint, revision: number) => void) {
         this.document = document;
         const context = canvas.getContext('2d');
         if (!context) throw new Error('Could not create the editor canvas');
@@ -68,6 +72,12 @@ export class EditorCanvas {
     get scale() { return this.zoom; }
     setZoom(zoom: number) { this.zoom = Math.max(.05, Math.min(2, zoom)); this.resize(); this.draw(); }
     fit() { this.setZoom((this.canvas.parentElement!.clientWidth - 4) / this.document.width); }
+    focusBounds(bounds: Rect) {
+        const stage = this.canvas.parentElement!;
+        this.setZoom(Math.min(2, (stage.clientWidth - 48) / Math.max(1, bounds.width), (stage.clientHeight - 48) / Math.max(1, bounds.height)));
+        stage.scrollIntoView({block: 'nearest', inline: 'nearest'});
+        stage.scrollTo({left: (bounds.x + bounds.width / 2) * this.zoom - stage.clientWidth / 2, top: (bounds.y + bounds.height / 2) * this.zoom - stage.clientHeight / 2});
+    }
     private resize() {
         this.zoom = Math.min(this.zoom, 8192 / this.document.width, 4096 / this.document.height,
             Math.sqrt(8_000_000 / (this.document.width * this.document.height)));
@@ -103,7 +113,12 @@ export class EditorCanvas {
         if (event.button !== 0) return;
         this.canvas.focus({preventScroll: true}); this.canvas.setPointerCapture(event.pointerId);
         const point = this.point(event);
-        if (this.tool === 'select') {
+        if (this.tool === 'assembly') {
+            if (!this.assembly || !this.groupOutline) { this.report('Select a source assembly first.'); return; }
+            const r = this.groupOutline;
+            if (point.x < r.x || point.x > r.x + r.width || point.y < r.y || point.y > r.y + r.height) return;
+            this.drag = {start: point, end: point, assembly: {...this.assembly, revision: this.document.revision}};
+        } else if (this.tool === 'select') {
             this.selection = this.hit(point); this.select(this.selection);
             this.drag = {start: point, end: point, selection: this.selection};
         } else this.drag = {start: point, end: point};
@@ -147,6 +162,9 @@ export class EditorCanvas {
                 const delta = this.delta();
                 const operation = this.drag.selection && this.moved(this.document, this.drag.selection, delta);
                 if (operation && (delta.x || delta.y)) this.edit([operation]);
+            } else if(this.tool==='assembly' && this.drag.assembly){
+                const delta = this.delta(), a = this.drag.assembly;
+                if (delta.x || delta.y) this.moveAssembly?.(a.id, {x: a.x + delta.x, y: a.y + delta.y}, a.revision);
             } else if(this.tool==='props'){
                 const id=this.newId('prop'),f=sceneArt[this.propAsset].frame,point=this.drag.end;
                 this.edit([{op:'upsert',collection:'props',value:{id,asset:this.propAsset,x:point.x,y:point.y,width:f.width,height:f.height}}]);this.selection={collection:'props',id};this.select(this.selection);
@@ -265,6 +283,9 @@ export class EditorCanvas {
         }
         c.font = '16px monospace'; c.fillStyle = color('--game-bone');
         for (const sign of view.signs) { c.fillText(sign.title, sign.x, sign.y); c.fillStyle = color('--game-dust'); c.fillText(sign.text, sign.x, sign.y + 22); c.fillStyle = color('--game-bone'); }
+        if (this.groupOutline) {
+            const r = this.groupOutline; c.save(); c.strokeStyle = '#d68fc5'; c.lineWidth = 2 / this.zoom; c.setLineDash([10 / this.zoom, 6 / this.zoom]); const d = this.drag?.assembly ? this.delta() : {x: 0, y: 0}; c.strokeRect(r.x + d.x, r.y + d.y, r.width, r.height); c.restore();
+        }
         if (this.selection) {
             const bounds = selectionBounds(view, this.selection);
             if (bounds) { c.strokeStyle = color('--game-cyan-core'); c.lineWidth = 2 / this.zoom; c.strokeRect(bounds.x - 3, bounds.y - 3, bounds.width + 6, bounds.height + 6); }

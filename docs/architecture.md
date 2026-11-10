@@ -18,10 +18,11 @@ The project uses a class for each entity or system with a distinct responsibilit
 | `src/dialogue` | Browser-free dialogue/scene controllers, authored scene data, modal UI and browser session lifetime |
 | `src/narrative` | Campaign knowledge, conditional scene selection, typed completion effects, current lead, saving and separate narrative UI |
 | `src/interfaces` | Shared contracts with no runtime behavior |
-| `src/maps` | Synchronous level fixture for tests and the original map reference |
-| `src/levels` | Shared JSON authoring contract, validation, compilation, loading, and revision-checked changes |
+| `src/content/levels` | Importable TypeScript level sources; currently empty after the reset |
+| `src/levels/source` | Parameterized scene assemblies, source layouts, scoped overrides, validated builds and source/layout export |
+| `src/levels` | Compiled scene contract, validation, module/snapshot loading, compilation and revision-checked draft changes |
 | `src/editor` | Independent authoring application, canvas, inspector, history, file handling, and snapshot preview |
-| `public/levels` | Individual level JSON files and the published JSON Schema |
+| `public/levels` | Published JSON Schema for compiled interchange snapshots |
 
 Entities depend on capability contracts in `src/interfaces/Simulation.ts`, rather than on the concrete `World`. `EnemyContext` exposes target/terrain queries and corpse/projectile services; `CharacterContext`, `WeaponContext`, and `ProjectileContext` expose the capabilities needed for movement and attacks. Readonly properties prevent consumers from replacing world-owned collections, while shot/event queues remain appendable. Service capabilities expose selected methods, not their internal bookkeeping. `World` implements these contracts structurally, without adapters or a second simulation model. These are compile-time boundaries, not immutable runtime snapshots.
 
@@ -31,7 +32,7 @@ Each runtime class has its own file. Small stateless geometry operations remain 
 
 ## Session and timing
 
-`app.ts` chooses the JSON level source and starts `Game`. `Game` coordinates loading, the current `World`, input, sound, screen presentation, and menu transitions. `GameMenu` presents pause/outcome menus and the toolbar; `MainMenu` owns title navigation and options/control dialogs. `MenuNavigation` supplements native keyboard interaction with arrows, Home, and End. `GamePreferences` persists sound and hint preferences. `Hud` owns the readouts and encounter hint.
+`app.ts` chooses a TypeScript module, explicit JSON snapshot URL, or ephemeral empty workspace and starts `Game`. `Game` coordinates loading, the current `World`, input, sound, screen presentation, and menu transitions. `GameMenu` presents pause/outcome menus and the toolbar; `MainMenu` owns title navigation and options/control dialogs. `MenuNavigation` supplements native keyboard interaction with arrows, Home, and End. `GamePreferences` persists sound and hint preferences. `Hud` owns the readouts and encounter hint.
 
 The title layout fits a centered scene frame to the viewport height on wide windows. Navigation scales against that frame rather than the full viewport width; artwork layers keep a common aspect ratio. Portrait windows crop the decorative scene, and a flowing footer reserves room for wrapped text and the extra Continue action. Very short landscape windows use a two-column title layout.
 
@@ -63,7 +64,7 @@ Explicit older `menuScene` query IDs still load the earlier `TitleArt` v1 contra
 
 `Map` creates `Wall`, `Sign`, and `Exit` instances from level definitions. `Exit` tests whether the player has reached it. `Camera` follows an actor and clamps its view to the map.
 
-The runtime takes an explicit `Level`; it does not choose or author one. `LevelLoader` fetches a selected JSON document, validates it, and compiles it before `Game` constructs `World`. Restarting reuses the loaded definition with fresh entities. `LevelCompiler` converts bottom-center actor anchors and compact terrain rectangles into the runtime's existing coordinates and tiles. Decoration is drawn separately and never enters the collision set.
+The runtime takes an explicit `Level`; it does not choose or author one. `LevelLoader` imports a selected repository-owned TypeScript source module, builds and validates its document, and compiles it before `Game` constructs `World`. Explicit `levelUrl` requests still load JSON data. See [source-first authoring](level-source-authoring.md) for the composition boundary. Restarting reuses the loaded definition with fresh entities. `LevelCompiler` converts bottom-center actor anchors and structure definitions into independent runtime collision parts and surfaces. Decoration is drawn separately and never enters the collision set.
 
 `editor.html` and `src/editor/app.ts` form a separate application entry point. Editor history and gestures operate on JSON documents, not `World` instances. A playtest launches the normal game in a separate browsing context from a frozen JSON Blob URL. Only the shared level contract and validation cross that boundary. See [level authoring](level-authoring.md) for human and agent workflows.
 
@@ -79,7 +80,7 @@ The runtime takes an explicit `Level`; it does not choose or author one. `LevelL
 
 `CollisionSystem` owns line-of-sight queries and earliest projectile impacts, with terrain winning equal-time impacts. `Combat` owns damage feedback, defeat credit, and handing defeated actors to `Graveyard`. `Graveyard` owns corpse lookup, claim release, and reactivation membership. The necromancer still owns its channel decision and finite budget. `ParticleSystem` spawns and expires particles.
 
-Movement grants no damage immunity; enemy contact and projectile hits use the normal damage and recovery rules. Camera following uses fixed-step exponential damping, horizontal velocity look-ahead, a vertical dead zone, and level bounds. The movement course uses the same JSON contract and runtime as other levels, with no editor dependency.
+Movement grants no damage immunity; enemy contact and projectile hits use the normal damage and recovery rules. Camera following uses fixed-step exponential damping, horizontal velocity look-ahead, a vertical dead zone, and level bounds. The old movement course was removed with the level reset; movement tests use isolated geometry without an editor dependency.
 
 These systems are fresh for every new world. Reactivation preserves the original concrete enemy instance and its methods, without duplicating its defeat credit or active membership.
 
@@ -130,3 +131,5 @@ The v5 background kit separates continuous wall material from selected fa?ade ba
 The v6 canopy uses a complete front elevation. Windows are inset details on the v5 building shells, with duplicate full-frontage layers removed. Arrival windows sit between the roof-stair piers; the Registry arcade and archive furniture use distinct bays. Clock brackets mount on building corners, and tight landmark bounds exclude neighboring atlas fragments.
 
 `ConfluenceImageLighting` shades source RGB while retaining alpha. Architecture, rear supports, trims, props and near landmarks draw at full opacity. Authored depth and opacity distinguish distant spectral props from mounted or grounded landmarks. The v6 packing script preserves generated sources and emits validated frame metadata; the high-resolution canopy remains a separate optional image. Terrain, interactions and save data are unchanged. The screenshot utility captures eleven district details alongside the full-level image.
+
+Source-bound workshop sessions retain a `LevelSource` plus a `LevelLayout` across history and draft restoration. The game, CLI and editor all compile that pair through the same source build. Assembly movement/parameters operate on instances; generated-child edits become local property deltas. See [the shared authoring contract](source-editor-workflow.md).

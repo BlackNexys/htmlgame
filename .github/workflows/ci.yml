@@ -25,3 +25,5 @@ jobs:
         run: npx playwright install --with-deps chromium firefox
       - if: matrix.node == 26
         run: npx playwright test
+      - if: matrix.node == 26
+        run: npm run test:authoring

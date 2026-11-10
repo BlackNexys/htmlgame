@@ -14,9 +14,10 @@
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "test:browser": "npm run build && playwright test",
+    "test:authoring": "node scripts/verify-source-workshop.cjs",
     "check": "npm test && npm run build",
     "level": "node scripts/levels.cjs",
-    "level:audit": "node --test tests/level-audit.test.cjs",
+    "level:audit": "node scripts/audit-level-sources.cjs",
     "typecheck": "tsc --noEmit"
   },
   "author": "",

@@ -1,3 +1,5 @@
+> Historical record: all authored levels were removed on 10 November 2026. Play URLs and old test totals below describe the retired layouts. See the [reset decisions](level-authoring-reset.md) and [current source workflow](level-source-authoring.md).
+
 # Level authoring friction log
 
 Started 9 November 2026 while rebuilding `last-platform-rebuild` from an empty layout. This is a working record of obstacles encountered during actual work, rather than a speculative architecture wishlist. Entries retain the observed problem even when a local fix is made.

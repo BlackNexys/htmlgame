@@ -1,5 +1,5 @@
 require('./register.cjs');
-const {createActionLevel} = require('../src/maps/actionLevel.ts');
+const {createActionLevel} = require('./helpers/engine-fixture.cjs');
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const {World} = require('../src/game/World.ts');
@@ -108,7 +108,7 @@ test('contact damage has a grace period, death stops simulation, and a fresh wor
     assert.equal(fresh.particles.length, 0); assert.equal(fresh.corpses.length, 0); assert.equal(fresh.defeated, 0); assert.equal(fresh.state, 'playing');
 });
 
-test('camera is bounded and completion is reachable through the real action level', () => {
+test('camera is bounded and completion is reachable through a minimal combat fixture', () => {
     const world = new World(createActionLevel());
     let jumping = false;
     for (let i = 0; i < 120 * 25 && world.state === 'playing'; i++) {

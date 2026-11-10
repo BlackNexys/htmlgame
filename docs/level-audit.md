@@ -1,3 +1,5 @@
+> Historical record: all authored levels were removed on 10 November 2026. Play URLs and old test totals below describe the retired layouts. See the [reset decisions](level-authoring-reset.md) and [current source workflow](level-source-authoring.md).
+
 # Shipped level audit
 
 All ten playable JSON files use schema version 2 and explicit structure kinds. The 48-pixel artwork repeat no longer dictates their collision geometry. Existing campaign and interaction IDs are preserved.

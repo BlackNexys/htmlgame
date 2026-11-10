@@ -1,5 +1,5 @@
 require('./register.cjs');
-const {createActionLevel} = require('../src/maps/actionLevel.ts');
+const {createActionLevel} = require('./helpers/engine-fixture.cjs');
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const {World} = require('../src/game/World.ts');
@@ -136,7 +136,7 @@ test('reactivated concrete enemies retain their abilities and appear only once i
 test('walkers turn at unsupported edges and a fresh world clears corpses, shots and revive state',()=>{
     const w=worldFor([spawn('zombie',215)],1500,[{x:200,y:576,width:80,height:48}]);
     const e=w.enemies[0];e.facing=1;run(w,2);assert.equal(e.y+e.height,576);assert.ok(e.x>=200&&e.x+e.width<=280);
-    const fresh=new World(createActionLevel());assert.equal(new Set(fresh.enemies.map(e=>e.kind)).size,6);
+    const fresh=worldFor(['zombie','skeleton','ghoul','ghost','wight','necromancer'].map((kind,i)=>spawn(kind,300+i*200)));assert.equal(new Set(fresh.enemies.map(e=>e.kind)).size,6);
     assert.equal(fresh.corpses.length,0);assert.equal(fresh.projectiles.length,0);
     assert.equal(fresh.enemies.find(e=>e.kind==='necromancer').reviveBudget,T.reviveBudget);
 });

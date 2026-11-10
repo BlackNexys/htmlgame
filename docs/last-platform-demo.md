@@ -1,3 +1,5 @@
+> Historical record: all authored levels were removed on 10 November 2026. Play URLs and old test totals below describe the retired layouts. See the [reset decisions](level-authoring-reset.md) and [current source workflow](level-source-authoring.md).
+
 # The Last Platform · cyberundead district demo
 
 **New comparison build:** play `/?level=last-platform-rebuild`. See [rebuilt preview notes](last-platform-rebuild.md) for its forward route, roof loop, recovery path and save isolation. The older district described below retains its route layout; the [level audit](level-audit.md) records its schema migration and corrected viaduct marksman footing.

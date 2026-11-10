@@ -30,7 +30,7 @@ test('actual sprint builds fire, release lets trails expire, and pause freezes e
   CanvasRenderingContext2D.prototype.drawImage=function(image,...args){if(this.canvas.id==='game'&&image instanceof HTMLImageElement&&image.src.endsWith('/hero/canon-v1/bootfire-v1.png'))window.bootDraws++;return draw.call(this,image,...args);};
  });
  await page.clock.install({time:new Date('2026-11-09T09:00:00Z')});await page.clock.pauseAt(new Date('2026-11-09T09:00:01Z'));
- await page.goto('/?level=movement-course');await page.getByRole('button',{name:'Play',exact:true}).click();await page.keyboard.press('F2');
+ await page.goto('/');await page.getByRole('button',{name:'Play',exact:true}).click();await page.keyboard.press('F2');
  const velocity=()=>page.evaluate(()=>Number(window.movementDebug?.match(/vx (-?\d+)/)?.[1]));
  const flames=()=>page.evaluate(()=>window.bootDraws);
  await page.keyboard.down('Shift');await page.keyboard.down('KeyD');await page.clock.runFor(150);const early=await velocity();expect(early).toBeGreaterThan(330);expect(early).toBeLessThan(400);
@@ -41,6 +41,6 @@ test('actual sprint builds fire, release lets trails expire, and pause freezes e
 });
 
 test('optional boot artwork can fail without preventing gameplay',async({page})=>{
- await page.route('**/hero/canon-v1/bootfire-v1.png',route=>route.abort());await page.goto('/?level=movement-course');
+ await page.route('**/hero/canon-v1/bootfire-v1.png',route=>route.abort());await page.goto('/');
  await page.getByRole('button',{name:'Play',exact:true}).click();await expect(page.locator('#overlay')).toBeHidden();await expect(page.locator('#game')).toBeFocused();
 });

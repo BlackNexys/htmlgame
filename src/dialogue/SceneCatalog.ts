@@ -1,3 +1,4 @@
+import {lightLeftOn} from './lightLeftOn';
 import { kineticDemo } from './kineticDemo';
 import type { DialogueScene } from './DialogueScene';
 import { registryScenes } from './registryScenes';
@@ -7,6 +8,7 @@ import { lastPlatformScenes } from './lastPlatformScenes';
 /** Level files reference stable scene IDs, never executable scripts or arbitrary URLs. */
 export const sceneCatalog: Readonly<Record<string, DialogueScene>> = {
     'station-exchange': kineticDemo,
+    'light-left-on': lightLeftOn,
     ...registryScenes,
     ...lastPlatformScenes,
 };

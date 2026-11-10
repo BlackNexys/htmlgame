@@ -17,7 +17,6 @@ import {WaterNetwork} from '../world/water/WaterNetwork';
 import {parseProps,parsePresentation,parseVisual} from '../world/props/PropValidation';
 import {resolveProps} from '../world/props/PropResolver';
 import {resolveInteractables} from '../world/scene/InteractableResolver';
-import {legacyPresentation} from './legacy/LegacyPresentation';
 
 const slug = /^[a-z][a-z0-9-]{0,79}$/;
 export class LevelValidationError extends Error {
@@ -156,7 +155,6 @@ export function parseLevelDocument(value: unknown): LevelDocument {
     };
     try{result.water=parseWaterDefinitions(root.water,{width,height},objectId);}catch(error){fail('water',error instanceof Error?error.message:'Invalid water definitions');}
     try{result.props=parseProps(root.props,result,objectId);const p=parsePresentation(root.presentation);if(p)result.presentation=p;}catch(error){fail('props',String(error));}
-    if(legacy&&!issues.length){legacyPresentation(result);for(const p of result.props)objectId(p.id,'props');}
     if (legacy && tiles > 10000) fail('terrain', 'at most 10000 expanded legacy tiles are allowed, including decorations');
     let blocks:(Rect & {owner?:string})[]=result.terrain;
     let interactions=result.interactables;

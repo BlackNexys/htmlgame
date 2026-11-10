@@ -31,13 +31,22 @@ export class EditorInspector {
         this.props=new PropInspector(form);this.storyArt=new StoryArtInspector(form);
         form.addEventListener('submit', event => { event.preventDefault(); this.submit(); });
         list.addEventListener('change', () => this.select(selectionFromKey(list.value)));
+        window.document.getElementById('object-filter')!.addEventListener('input', () => this.update(this.document, this.selection));
     }
 
     update(document: LevelDocument, selection: EditorSelection) {
         this.document = document; this.selection = selection;
-        const options = [new Option('Player spawn', 'spawn'), new Option('Exit', 'exit')];
-        for (const collection of levelCollections) {
-            for (const item of document[collection]) options.push(new Option(`${item.id} · ${collection}`, `${collection}:${item.id}`));
+        const filter = (window.document.getElementById('object-filter') as HTMLInputElement).value.trim().toLowerCase();
+        const matches = (id: string) => !filter || id.toLowerCase().includes(filter);
+        const options: (HTMLOptionElement | HTMLOptGroupElement)[] = [new Option('Player spawn', 'spawn'), new Option('Exit', 'exit')];
+        const groups = new Map<string, HTMLOptGroupElement>();
+        for (const collection of levelCollections) for (const item of document[collection]) {
+            if (!matches(item.id)) continue;
+            const option = new Option(`${item.id} / ${collection}`, `${collection}:${item.id}`);
+            const instance = item.id.includes('--') ? item.id.split('--')[0] : 'Level objects';
+            let group = groups.get(instance);
+            if (!group) { group = window.document.createElement('optgroup'); group.label = instance; groups.set(instance, group); options.push(group); }
+            group.append(option);
         }
         this.list.replaceChildren(...options); this.list.value = selectionKey(selection);
         this.form.replaceChildren();
@@ -136,10 +145,11 @@ export class EditorInspector {
         if(typeof this.selection==='object'&&['terrain','decorations'].includes(this.selection.collection)){
             value.kind=String(data.get('structureKind')) as StructureKind;value.material=Number(data.get('material'));
             value.depth=Number(data.get('depth'));
+            if (item.depth === undefined && value.depth === 0) delete value.depth;
             const thickness=String(data.get('thickness')),parent=String(data.get('parent')).trim();
             if(thickness)value.thickness=Number(thickness);else delete value.thickness;
             if(parent)value.mount={parent,socket:String(data.get('socket'))};else delete value.mount;
-            if(this.selection.collection==='decorations')value.layer=String(data.get('layer')) as 'rear'|'foreground';
+            if(this.selection.collection==='decorations') { value.layer=String(data.get('layer')) as 'rear'|'foreground'; if (item.layer === undefined && value.layer === 'rear') delete value.layer; }
         }
         if (value.kind && value.patrol) {
             value.kind = String(data.get('kind')) as keyof typeof enemyTuning;

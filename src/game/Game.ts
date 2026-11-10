@@ -9,7 +9,8 @@ import { Hud } from '../ui/Hud';
 import { GameMenu } from '../ui/GameMenu';
 import type { GameMode } from '../interfaces/Game';
 import type { Level } from '../interfaces/Level';
-import { LevelLoader } from '../levels/LevelLoader';
+import {compileLevel} from '../levels/LevelCompiler';
+import {createEmptyLevel} from '../levels/createEmptyLevel';
 import { GamePreferences } from '../ui/GamePreferences';
 import { DialogueSession } from '../dialogue/DialogueSession';
 import type { DialogueScene } from '../dialogue/DialogueScene';
@@ -51,7 +52,7 @@ export class Game {
     private readonly narrativeHud=new NarrativeHud(()=>this.openJourney());
 
     constructor(private readonly canvas: HTMLCanvasElement,
-        private readonly loadLevel: (signal: AbortSignal) => Promise<Level> = signal => new LevelLoader().load('lower-passage', signal),
+        private readonly loadLevel: (signal: AbortSignal) => Promise<Level> = async () => compileLevel(createEmptyLevel()),
         private readonly intro?: DialogueScene, private readonly preview=false) {
         this.input = new Input(canvas, key => this.handleKey(key));
         this.loop = new GameLoop(dt => this.update(dt), (elapsed, simulated) => this.draw(elapsed, simulated));
@@ -215,7 +216,7 @@ export class Game {
         this.mode='dialogue';this.input.clear();this.world.player.clearActions();this.loop.pause();this.menu.dialogue();
         this.journey.open(this.narrative,reset=>{
             if(this.disposed)return;
-            if(reset){this.narrative!.reset();if(this.loadedLevel.id!==this.narrative!.story.start && this.loadedLevel.id!=='last-platform-rebuild'){location.href=`./?level=${this.narrative!.story.start}${this.preview?'&preview=1':''}`;return;}this.restart();}
+            if(reset){this.narrative!.reset();if(this.loadedLevel.id!==this.narrative!.story.start){location.href=`./?level=${this.narrative!.story.start}${this.preview?'&preview=1':''}`;return;}this.restart();}
             else this.resume();
         });
     }

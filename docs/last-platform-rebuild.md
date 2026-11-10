@@ -1,3 +1,5 @@
+> Historical record: all authored levels were removed on 10 November 2026. Play URLs and old test totals below describe the retired layouts. See the [reset decisions](level-authoring-reset.md) and [current source workflow](level-source-authoring.md).
+
 # The Last Platform: river crossing
 
 Rebuilt from an empty layout on 9 November 2026. Play **`/?level=last-platform-rebuild`**. The older district remains at `/?level=last-platform-demo` for comparison. The [authoring friction log](level-authoring-friction.md) records concrete obstacles encountered during this rebuild, workarounds and candidate improvements.

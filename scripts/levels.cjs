@@ -9,10 +9,21 @@ try {
     const args = process.argv.slice(2);
     if (args[0] === '--') args.shift();
     const [command, filename, patchFile] = args;
-    if (!['validate', 'summary', 'format', 'patch'].includes(command) || !filename || (command === 'patch' && !patchFile)) {
-        throw new Error('Usage: npm run level -- <validate|summary|format|patch> <level.json> [changes.json]');
+    if (!['build', 'validate', 'summary', 'format', 'patch'].includes(command) || !filename || (command === 'patch' && !patchFile)) {
+        throw new Error('Usage: npm run level -- <build|validate|summary|format|patch> <source.level.ts|level.json> [output.json|changes.json]');
     }
     const target = path.resolve(filename);
+    if (command === 'build') {
+        let source = require(target).default;
+        const companion = target.replace(/\.level\.ts$/, '.layout.ts');
+        if (companion !== target && fs.existsSync(companion)) source = source.withLayout(require(companion).default);
+        const {LevelSource} = require('../src/levels/source/LevelSource.ts');
+        if (!(source instanceof LevelSource)) throw new Error('Module must default-export defineLevel(...)');
+        const compiled = source.document();
+        if (patchFile) { fs.writeFileSync(path.resolve(patchFile), formatDocument(compiled), {flag: 'wx'}); console.log(`Built ${compiled.id}`); }
+        else process.stdout.write(formatDocument(compiled));
+        process.exit(0);
+    }
     const original = fs.readFileSync(target, 'utf8');
     const document = parseLevelJson(original);
     if (command === 'validate') console.log(`${document.id}: valid revision ${document.revision}`);

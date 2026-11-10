@@ -5,11 +5,15 @@ test('Flicker remains playable with missing weapon art and unavailable Web Audio
  await page.addInitScript(()=>{window.AudioContext=class{constructor(){throw Error('Audio unavailable');}};});
  await page.route('**/assets/weapons/flicker/flicker-v1.png',route=>route.abort());
  await page.clock.install({time:new Date('2026-11-06T12:00:00Z')});await page.clock.pauseAt(new Date('2026-11-06T12:00:01Z'));
- await page.goto('/');await page.getByRole('button',{name:'Play',exact:true}).click();
+ require('../register.cjs');
+ const level=require('../../src/levels/createEmptyLevel.ts').createEmptyLevel();
+ level.enemies=[{id:'target',kind:'zombie',x:500,y:576,patrol:{left:480,right:520}}];
+ await page.route(url=>url.pathname==='/test-fixture.json',route=>route.fulfill({json:level}));
+ await page.goto('/?levelUrl=/test-fixture.json');await page.getByRole('button',{name:'Play',exact:true}).click();
  await expect(page.locator('#weapon-label')).toHaveText('FLICKER · FREE');await expect(page.locator('#ectoplasm')).toHaveText('6 / 12');
  await page.keyboard.down('KeyD');await page.keyboard.down('KeyJ');await page.clock.runFor(1000);
  await page.keyboard.up('KeyD');await page.keyboard.up('KeyJ');
- await expect(page.locator('#count')).not.toHaveText('0 / 8');
+ await expect(page.locator('#count')).toHaveText('1 / 1');
  expect(parseInt(await page.locator('#ectoplasm').textContent())).toBeGreaterThan(6);
  await page.keyboard.press('KeyR');await expect(page.locator('#ectoplasm')).toHaveText('6 / 12');
  expect(errors).toEqual([]);

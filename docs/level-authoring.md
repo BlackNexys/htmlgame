@@ -1,3 +1,5 @@
+> Authoring now starts in [TypeScript source modules](level-source-authoring.md). The JSON operations below apply to compiled snapshots and workshop drafts; `?level=` loads a source module, while `?levelUrl=` loads a JSON snapshot. Old shipped layout examples have been removed.
+
 # Level authoring and collaboration
 
 Open `/editor.html` through the development or preview server. The **Level workshop** is a separate application entry point with its own UI, state, history, canvas, and browser draft. It shares the JSON contract and validation with the game. It does not import the game controller, construct a simulation, or modify a running game.

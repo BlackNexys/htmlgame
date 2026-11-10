@@ -1,3 +1,5 @@
+> Historical record: all authored levels were removed on 10 November 2026. Play URLs and old test totals below describe the retired layouts. See the [reset decisions](level-authoring-reset.md) and [current source workflow](level-source-authoring.md).
+
 # Sluice Exchange authoring friction
 
 Started 9 November 2026; continued 10 November 2026 alongside a new, standalone level built from an empty document. This log records actual construction and playtest findings. The original six authoring fixes remain in [the shared log](level-authoring-friction.md).

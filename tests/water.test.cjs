@@ -5,7 +5,6 @@ const {WaterfallRenderer}=require('../src/renderers/water/WaterfallRenderer.ts')
 const {compileLevel}=require('../src/levels/LevelCompiler.ts');
 const {rebuiltAssemblies}=require('../src/environment/RebuiltConfluenceAssemblies.ts');
 const {World}=require('../src/game/World.ts');
-const document=require('../public/levels/last-platform-rebuild.json');
 
 test('waterfall material travels downward and does not advance at frozen simulation time',()=>{
     let draws=[];
@@ -19,14 +18,4 @@ test('waterfall material travels downward and does not advance at frozen simulat
     assert.equal(firstBelowSource(b)-firstBelowSource(a),10);
     assert.deepEqual(capture(.25),b);
     assert.deepEqual(capture(256/42),a,'the two-tile material cycle wraps without changing its phase');
-});
-
-test('station drains and freight outfall terminate in receiving water without crossing playable floors',()=>{
-    const world=new World(compileLevel(document)),network=world.level.water;
-    assert.equal(network.drains.length,3);assert.equal(network.falls.length,5);
-    assert.equal(network.bodies.find(b=>b.kind==='river').width,document.width);
-    for(const fall of network.falls){
-        assert.ok(fall.height>0);assert.equal(fall.y2,fall.receiver.y);
-        assert.ok(!world.level.collision.overlaps(fall));
-    }
 });

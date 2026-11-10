@@ -14,6 +14,7 @@ export class PropInspector {
     }
     read(p:PropDefinition):PropDefinition{
         const d=new FormData(this.form),parent=String(d.get('parent')).trim(),result:PropDefinition={...p,id:p.id,asset:String(d.get('asset')),x:Number(d.get('x')),y:Number(d.get('y')),width:Number(d.get('width')),height:Number(d.get('height')),layer:d.get('layer') as 'rear'|'foreground',depth:Number(d.get('depth')),light:Number(d.get('light')),opacity:Number(d.get('opacity')),flip:d.get('flip')==='true'};
+        for (const [key, fallback] of [['layer','rear'],['depth',0],['light',100],['opacity',100],['flip',false]] as const) if (p[key] === undefined && result[key] === fallback) delete result[key];
         if(parent)result.mount={parent,socket:String(d.get('socket'))};else delete result.mount;
         if(d.get('stretch')==='catalog')delete result.stretch;else result.stretch=d.get('stretch')==='true';return result;
     }

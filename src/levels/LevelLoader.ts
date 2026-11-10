@@ -5,8 +5,10 @@ import type { LevelDocument } from './LevelDocument';
 export class LevelLoader {
     async document(id: string, signal?: AbortSignal): Promise<LevelDocument> {
         if (!/^[a-z][a-z0-9-]{0,79}$/.test(id)) throw new Error('Invalid level ID');
-        const url = new URL(`./levels/${id}.json`, document.baseURI);
-        const level = await this.documentFromURL(url.href, signal);
+        const {loadLevelSource} = await import('../content/LevelRegistry');
+        if (signal?.aborted) throw signal.reason;
+        const level = (await loadLevelSource(id)).document();
+        if (signal?.aborted) throw signal.reason;
         if (level.id !== id) throw new Error(`Level ID mismatch: expected ${id}, received ${level.id}`);
         return level;
     }

@@ -1,3 +1,5 @@
+> Historical record: all authored levels were removed on 10 November 2026. Play URLs and old test totals below describe the retired layouts. See the [reset decisions](level-authoring-reset.md) and [current source workflow](level-source-authoring.md).
+
 # The Sluice Exchange
 
 A new standalone level authored 9-10 November 2026 from an empty document. Play **`/?level=sluice-exchange`**. The existing Last Platform levels remain available unchanged by this layout.

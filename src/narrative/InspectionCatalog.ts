@@ -2,6 +2,7 @@ import { lastPlatformInspections } from './lastPlatformInspections';
 import {sluiceExchangeInspections} from './sluiceExchangeInspections';
 export interface Inspection { title:string; body:string; action:string; }
 export const inspections:Readonly<Record<string,Inspection>>={
+    'saved-seat-card': {title:'A saved seat',body:'Two initials have been scratched beneath the seat. Too worn to read. The lamp above it has been repaired more than once.',action:'Leave the seat free'},
     ...lastPlatformInspections,
     ...sluiceExchangeInspections,
     'transfer-record-card':{title:'Transfer ledger',body:'A familiar name appears in a transfer entry. The listed route is S-17. The ledger records a transfer; it does not establish who authorized it, or whether it was voluntary.',action:'Record discovery'},
