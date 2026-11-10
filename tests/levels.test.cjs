@@ -17,7 +17,10 @@ const patch = (document, operations) => ({levelId: document.id, baseRevision: do
 
 test('the shipped JSON preserves terrain, actor anchors, enemy roster and fresh runtime state', () => {
     const document = parseLevelDocument(original), level = compileLevel(document);
-    assert.equal(level.solids.length, 254);
+    assert.equal(level.solids.length, original.terrain.length);
+    assert.equal(document.schemaVersion,2);
+    assert.equal(document.gridSize,48);
+    assert.equal(level.solids.reduce((sum,r)=>sum+r.width*r.height,0),original.terrain.reduce((sum,r)=>sum+r.width*r.height,0));
     assert.deepEqual(level.spawn, {x: 144, y: 524});
     assert.deepEqual(level.exit, {x: 5184, y: 468, width: 64, height: 108});
     const world = new World(level);
@@ -30,21 +33,21 @@ test('the shipped JSON preserves terrain, actor anchors, enemy roster and fresh 
     assert.equal(parseLevelJson(formatDocument(document)).name, document.name);
 });
 
-test('decoration renders as separate tiles without becoming solid collision', () => {
+test('decoration renders as a separate surface without becoming solid collision', () => {
     const document = createBlankLevel();
     document.decorations.push({id: 'wall-in-background', x: 144, y: 480, width: 48, height: 96});
     const level = compileLevel(document);
-    assert.equal(level.decorations.length, 2);
+    assert.equal(level.decorations.length, 1);
     assert.ok(level.solids.every(wall => wall.y >= 576));
-    assert.equal(new World(level).level.decorations.length, 2);
+    assert.equal(new World(level).level.decorations.length, 1);
 });
 
 test('invalid documents are rejected with field paths before constructing a world', () => {
     const cases = [
-        [document => document.schemaVersion = 2, /schemaVersion/],
+        [document => document.schemaVersion = 99, /schemaVersion/],
         [document => document.spawn.y = 600, /spawn: actor overlaps/],
         [document => document.exit.y = 576, /exit:.*outside|exit: overlaps/],
-        [document => document.terrain[0].width = 50, /terrain\[0\].*48-pixel/],
+        [document => document.terrain[0].width = 0, /terrain\[0\].width/],
         [document => document.decorations.push({...document.terrain[0]}), /must be unique/],
         [document => document.terrain.push({...document.terrain[0], id: 'duplicate-floor'}), /overlaps floor/],
         [document => document.enemies.push({id: 'bad-enemy', kind: 'dragon', x: 600, y: 576, patrol: {left: 500, right: 700}}), /unknown enemy kind/],

@@ -133,7 +133,7 @@ test('object reach uses its rectangle, permits airborne inspection, ignores its 
     player.x-=200;assert.equal(f.world.interactions.nearest(player,[record]),undefined);
     const gate=object(f.world,'operate');player.x=gate.x-60;player.y=524;
     assert.equal(f.world.interactions.nearest(player,[gate]),gate);
-    f.world.level.solids.push({x:gate.x-20,y:480,width:8,height:96});
+    f.world.level.collision.register('test-wall','test',{x:gate.x-20,y:480,width:8,height:96});
     assert.equal(f.world.interactions.nearest(player,[gate]),undefined);
 });
 

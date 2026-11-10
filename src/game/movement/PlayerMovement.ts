@@ -1,6 +1,7 @@
-import type { Body, Rect } from '../../interfaces/Geometry';
+import type { Body } from '../../interfaces/Geometry';
 import type { Controls } from '../../interfaces/Game';
-import { bodyContacts, clamp, overlaps, sweepBody, type BodyContacts } from './physics';
+import {clamp,type BodyContacts} from './physics';
+import type {CollisionQueries} from '../../world/collision/CollisionQueries';
 import { tuning as T } from '../config';
 
 export type PlayerMotion = 'idle' | 'running' | 'sprinting' | 'crouching' | 'airborne' | 'wall-slide' | 'wall-jump';
@@ -22,8 +23,8 @@ export class PlayerMovement {
     private sprintDirection = 0;
     private contacts: BodyContacts;
 
-    constructor(private readonly body: PlayerBody, private readonly solids: Rect[], private readonly levelWidth: number) {
-        this.contacts = bodyContacts(body, solids);
+    constructor(private readonly body: PlayerBody, private readonly collision:CollisionQueries, private readonly levelWidth: number) {
+        this.contacts = collision.contacts(body);
         body.grounded = this.contacts.ground;
         this.coyote = body.grounded ? T.coyoteTime : 0;
     }
@@ -54,7 +55,7 @@ export class PlayerMovement {
         if (!this.body.grounded && this.wallSide && direction === this.wallSide && this.body.vy > 0) {
             this.body.vy = Math.min(this.body.vy, T.wallSlideSpeed);
         }
-        const collision = sweepBody(this.body, this.solids, dt);
+        const collision = this.collision.sweep(this.body,dt);
         const clamped = this.clampToLevel(); this.refreshContacts();
         if (collision.blockedX || clamped) this.resetSprint();
         this.updateStance(input);
@@ -91,13 +92,13 @@ export class PlayerMovement {
         if (this.body.height === height) return;
         const candidate = {...this.body, height, y: this.body.y + this.body.height - height};
         // Keep feet fixed, and never expand into a low ceiling on release/jump.
-        if (height > this.body.height && this.solids.some(solid => overlaps(candidate, solid))) return;
+        if (height > this.body.height && this.collision.overlaps(candidate)) return;
         this.body.y = candidate.y; this.body.height = height;
         if (this.crouched) this.body.vx = clamp(this.body.vx, -T.crouchSpeed, T.crouchSpeed);
         this.refreshContacts();
     }
     private refreshContacts() {
-        this.contacts = bodyContacts(this.body, this.solids);
+        this.contacts = this.collision.contacts(this.body);
         this.body.grounded = this.contacts.ground && this.body.vy >= 0;
         this.wallSide = this.contacts.left ? -1 : this.contacts.right ? 1 : 0;
     }

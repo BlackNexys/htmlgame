@@ -166,5 +166,8 @@ test('the movement course is valid, has a recovery floor, and keeps the regressi
     const compiled = compileLevel(course);
     assert.equal(compiled.height, 1152); assert.equal(compiled.enemies.length, 2);
     assert.ok(course.terrain.some(block => block.id === 'gap-recovery'));
-    assert.equal(require('../public/levels/lower-passage.json').revision, 1);
+    const regression = require('../public/levels/lower-passage.json');
+    assert.equal(regression.id, 'lower-passage');
+    assert.equal(regression.height, 672);
+    assert.equal(regression.enemies.length, 8);
 });

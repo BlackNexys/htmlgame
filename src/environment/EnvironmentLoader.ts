@@ -4,18 +4,29 @@ import { architectureNames } from './ConfluenceArchitecture';
 import {buildingTrimNames} from './ConfluenceBuildings';
 import {landmarkNames} from './ConfluenceLandmarks';
 import { parseTerrainBaselines } from './TerrainManifest';
+import type {PresentationDefinition} from '../world/props/PropDefinition';
+import {artFor} from '../world/props/SceneArtCatalog';
 
 /** Decorative assets fail independently; missing art never prevents a level loading. */
 export class EnvironmentLoader {
-    async load(levelId:string|undefined, signal:AbortSignal):Promise<EnvironmentImages|undefined> {
-        if(levelId!=='last-platform-demo' && levelId!=='last-platform-rebuild')return undefined;
+    async load(presentation:PresentationDefinition|undefined, signal:AbortSignal,hasWater=false,assets:readonly string[]=[]):Promise<EnvironmentImages|undefined> {
+        if(!presentation){
+            if(!hasWater&&!assets.length)return undefined;
+            const images:EnvironmentImages={layout:assets.length?'props':'water'};
+            if(hasWater)await Promise.all([this.drainage(signal,images),this.image('./assets/environment/confluence/v4/water-v4.png',signal).then(im=>{if(im?.naturalWidth===512&&im.naturalHeight===256)images.water=im;})]);
+            const packs=new Set(assets.map(key=>artFor(key).pack));
+            const files={props:['v4/props-v4.png',768,576],canopy:['v6/canopy-v6.png',480,198],facades:['v6/insets-v6.png',768,768],architecture:['v6/architecture-v6.png',1024,768],landmarks:['v3/landmarks-v3.png',768,512],buildingWalls:['v5/walls-v5.png',384,384],buildingTrims:['v5/trims-v5.png',768,768],terrain:['v4/terrain-v4.png',192,192]} as const;
+            await Promise.all([...packs].map(async pack=>{const [file,w,h]=files[pack],im=await this.image('./assets/environment/confluence/'+file,signal);if(im?.naturalWidth===w&&im.naturalHeight===h)images[pack]=im;}));
+            return images;
+        }
         const images:EnvironmentImages={};
-        if(levelId==='last-platform-rebuild')images.layout='rebuild';
+        if(presentation.scenery==='assemblies')images.layout='rebuild';
+        if(presentation.scenery!=='assemblies')images.layout='construction';
         const manifest=fetch('./assets/environment/confluence/v4/atlas-v4.json',{signal}).then(r=>r.ok?r.json():undefined).catch(()=>undefined);
         const baselines=fetch('./assets/environment/confluence/v4/terrain-v4.json',{signal}).then(r=>r.ok?r.json():undefined).catch(()=>undefined);
         const architecture=this.architecture(signal,images);
         const buildings=this.buildings(signal,images);
-        const drainage=levelId==='last-platform-rebuild'?this.drainage(signal,images):Promise.resolve();
+        const drainage=this.drainage(signal,images);
         const landmarkData=fetch('./assets/environment/confluence/v6/landmarks-v6.json',{signal}).then(r=>r.ok?r.json():undefined).catch(()=>undefined);
         const files={terrain:['v4/terrain-v4.png',192,192],facades:['v6/insets-v6.png',768,768],props:['v4/props-v4.png',768,576],city:['v3/city-v3.png',0,0],landmarks:['v3/landmarks-v3.png',768,512],water:['v4/water-v4.png',512,256],canopy:['v6/canopy-v6.png',480,198]} as const;
         await Promise.all(Object.entries(files).map(async([name,[file,width,height]])=>{

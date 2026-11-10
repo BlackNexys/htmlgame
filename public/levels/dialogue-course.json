@@ -1,28 +1,116 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "id": "dialogue-course",
   "name": "Along the Line · Dialogue Study",
-  "revision": 1,
-  "tileSize": 48,
+  "revision": 2,
+  "gridSize": 48,
   "width": 3456,
   "height": 768,
-  "spawn": {"x": 160, "y": 624},
-  "exit": {"x": 3264, "y": 516, "width": 64, "height": 108},
+  "spawn": {
+    "x": 160,
+    "y": 624
+  },
+  "exit": {
+    "x": 3264,
+    "y": 516,
+    "width": 64,
+    "height": 108
+  },
   "terrain": [
-    {"id": "floor", "x": 0, "y": 624, "width": 3456, "height": 144},
-    {"id": "first-step", "x": 816, "y": 576, "width": 96, "height": 48},
-    {"id": "first-overlook", "x": 1152, "y": 480, "width": 288, "height": 48},
-    {"id": "second-step", "x": 1920, "y": 576, "width": 144, "height": 48},
-    {"id": "second-overlook", "x": 2400, "y": 480, "width": 384, "height": 48}
+    {
+      "id": "floor",
+      "x": 0,
+      "y": 624,
+      "width": 3456,
+      "height": 144,
+      "kind": "wall",
+      "material": 0
+    },
+    {
+      "id": "first-step",
+      "x": 816,
+      "y": 576,
+      "width": 96,
+      "height": 48,
+      "kind": "platform",
+      "material": 0
+    },
+    {
+      "id": "first-overlook",
+      "x": 1008,
+      "y": 480,
+      "width": 288,
+      "height": 48,
+      "kind": "platform",
+      "material": 0
+    },
+    {
+      "id": "second-step",
+      "x": 1920,
+      "y": 576,
+      "width": 144,
+      "height": 48,
+      "kind": "platform",
+      "material": 0
+    },
+    {
+      "id": "second-overlook",
+      "x": 2160,
+      "y": 480,
+      "width": 384,
+      "height": 48,
+      "kind": "platform",
+      "material": 0
+    }
   ],
   "decorations": [],
+  "water": [],
   "enemies": [
-    {"id": "lane-zombie", "kind": "zombie", "x": 1080, "y": 624, "patrol": {"left": 984, "right": 1128}},
-    {"id": "lane-skeleton", "kind": "skeleton", "x": 2280, "y": 624, "patrol": {"left": 2184, "right": 2376}}
+    {
+      "id": "lane-zombie",
+      "kind": "zombie",
+      "x": 1080,
+      "y": 624,
+      "patrol": {
+        "left": 984,
+        "right": 1128
+      }
+    },
+    {
+      "id": "lane-skeleton",
+      "kind": "skeleton",
+      "x": 2280,
+      "y": 624,
+      "patrol": {
+        "left": 2184,
+        "right": 2376
+      }
+    }
   ],
   "signs": [
-    {"id": "arrival", "x": 96, "y": 432, "title": "ALONG THE LINE", "text": "MOVE - JUMP - FIRE WHILE THE CONVERSATION PLAYS"},
-    {"id": "overlook", "x": 1440, "y": 432, "title": "KEEP YOUR PACE", "text": "N - NEXT LINE     L - CONVERSATION LOG"},
-    {"id": "finish", "x": 2832, "y": 432, "title": "JUST A PASSING CONVERSATION", "text": "NONCANONICAL DIALOGUE AND MOVEMENT STUDY"}
-  ]
+    {
+      "id": "arrival",
+      "x": 96,
+      "y": 432,
+      "title": "ALONG THE LINE",
+      "text": "MOVE - JUMP - FIRE WHILE THE CONVERSATION PLAYS"
+    },
+    {
+      "id": "overlook",
+      "x": 1360,
+      "y": 432,
+      "title": "KEEP YOUR PACE",
+      "text": "N - NEXT LINE     L - CONVERSATION LOG"
+    },
+    {
+      "id": "finish",
+      "x": 2832,
+      "y": 432,
+      "title": "JUST A PASSING CONVERSATION",
+      "text": "NONCANONICAL DIALOGUE AND MOVEMENT STUDY"
+    }
+  ],
+  "npcs": [],
+  "interactables": [],
+  "props": []
 }

@@ -1,9 +1,9 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "id": "lower-passage",
   "name": "The Lower Passage",
-  "revision": 1,
-  "tileSize": 48,
+  "revision": 2,
+  "gridSize": 48,
   "width": 5376,
   "height": 672,
   "spawn": {
@@ -22,80 +22,103 @@
       "x": 0,
       "y": 576,
       "width": 5376,
-      "height": 96
+      "height": 96,
+      "kind": "wall",
+      "material": 0
     },
     {
       "id": "step-one",
       "x": 672,
       "y": 528,
       "width": 96,
-      "height": 48
+      "height": 48,
+      "kind": "platform",
+      "material": 0
     },
     {
       "id": "step-two",
       "x": 1440,
       "y": 528,
       "width": 96,
-      "height": 48
+      "height": 48,
+      "kind": "platform",
+      "material": 0
     },
     {
       "id": "step-three",
       "x": 2256,
       "y": 528,
       "width": 96,
-      "height": 48
+      "height": 48,
+      "kind": "platform",
+      "material": 0
     },
     {
       "id": "step-four",
       "x": 3024,
       "y": 528,
       "width": 96,
-      "height": 48
+      "height": 48,
+      "kind": "platform",
+      "material": 0
     },
     {
       "id": "upper-one",
       "x": 912,
       "y": 432,
       "width": 192,
-      "height": 48
+      "height": 48,
+      "kind": "platform",
+      "material": 0
     },
     {
       "id": "upper-two",
       "x": 1728,
       "y": 432,
       "width": 192,
-      "height": 48
+      "height": 48,
+      "kind": "platform",
+      "material": 0
     },
     {
       "id": "upper-three",
       "x": 2544,
       "y": 432,
       "width": 192,
-      "height": 48
+      "height": 48,
+      "kind": "platform",
+      "material": 0
     },
     {
       "id": "upper-four",
       "x": 3312,
       "y": 432,
       "width": 192,
-      "height": 48
+      "height": 48,
+      "kind": "platform",
+      "material": 0
     },
     {
       "id": "final-step",
       "x": 4224,
       "y": 528,
       "width": 96,
-      "height": 48
+      "height": 48,
+      "kind": "platform",
+      "material": 0
     },
     {
       "id": "final-platform",
       "x": 4560,
       "y": 432,
       "width": 192,
-      "height": 48
+      "height": 48,
+      "kind": "platform",
+      "material": 0
     }
   ],
   "decorations": [],
+  "water": [],
   "enemies": [
     {
       "id": "zombie-1",
@@ -221,5 +244,8 @@
       "title": "UNFINISHED BUSINESS",
       "text": "BREAK THE REACTIVATION LINK"
     }
-  ]
+  ],
+  "npcs": [],
+  "interactables": [],
+  "props": []
 }

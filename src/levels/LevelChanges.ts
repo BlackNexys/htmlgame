@@ -2,7 +2,7 @@ import { cloneDocument, levelCollections, type LevelCollection, type LevelDocume
 import { parseLevelDocument } from './LevelValidation';
 
 export type LevelOperation =
-    | {op: 'set'; field: 'id' | 'name' | 'width' | 'height' | 'spawn' | 'exit'; value: unknown}
+    | {op: 'set'; field: 'id' | 'name' | 'width' | 'height' | 'spawn' | 'exit' | 'gridSize' | 'presentation'; value: unknown}
     | {op: 'upsert'; collection: LevelCollection; value: Record<string, unknown>}
     | {op: 'remove'; collection: LevelCollection; id: string};
 export interface LevelChanges { levelId: string; baseRevision: number; operations: LevelOperation[]; }
@@ -17,7 +17,7 @@ export function applyLevelChanges(input: LevelDocument, changes: LevelChanges): 
     for (const operation of changes.operations) {
         if (!operation || typeof operation !== 'object') throw new Error('Invalid patch operation');
         if (operation.op === 'set') {
-            if (!['id', 'name', 'width', 'height', 'spawn', 'exit'].includes(operation.field)) throw new Error('Unsupported set field');
+            if (!['id', 'name', 'width', 'height', 'spawn', 'exit','gridSize','presentation'].includes(operation.field)) throw new Error('Unsupported set field');
             Object.assign(next, {[operation.field]: operation.value});
         } else if (operation.op === 'remove' || operation.op === 'upsert') {
             if (!levelCollections.includes(operation.collection)) throw new Error('Unsupported collection');

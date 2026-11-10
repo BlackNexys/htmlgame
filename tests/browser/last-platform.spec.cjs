@@ -4,7 +4,7 @@ const {groups,balconyRoute,pilotInput}=require('../helpers/last-platform-route.c
 const key='underworld-campaign:v1';
 async function start(page,preview=false){
     await page.clock.install({time:new Date('2026-11-08T00:00:00Z')});await page.clock.pauseAt(new Date('2026-11-08T00:00:01Z'));await page.emulateMedia({reducedMotion:'reduce'});
-    await page.goto(`/?level=last-platform-demo${preview?'&preview=1':''}`);
+    await page.goto(`/?level=last-platform-demo&observe=1${preview?'&preview=1':''}`);
     await page.getByRole('button',{name:'Play',exact:true}).click();await page.clock.runFor(100);
 }
 async function position(page){return page.locator('#progress').evaluate((el,x)=>parseFloat(el.style.width)*x/100,document.exit.x);}
@@ -29,62 +29,15 @@ async function interact(page,title,action){
 }
 async function save(page){return page.evaluate(k=>JSON.parse(localStorage.getItem(k)),key);}
 async function cameraFromPrompt(page,objectId){
-    const object=document.interactables.find(o=>o.id===objectId);
-    const top=await page.locator('#interaction').evaluate(el=>parseFloat(el.style.top));
-    return object.y-26-top/100*576;
+    return page.evaluate(()=>window.gameObservation().camera.y);
 }
 async function artScreenshot(page,path){
     await page.keyboard.press('F2');await page.clock.runFor(32);
     await page.screenshot({path});
     await page.keyboard.press('F2');await page.clock.runFor(32);
 }
-async function enableDebugReading(page){
-    // Observe the shipped F2 debug drawing; no access to Game/World internals.
-    await page.evaluate(()=>{
-        const stroke=CanvasRenderingContext2D.prototype.strokeRect,fill=CanvasRenderingContext2D.prototype.fillText;
-        CanvasRenderingContext2D.prototype.strokeRect=function(x,y,width,height){
-            if(this.strokeStyle==='#e9f279')window.debugDrawing={x,y,width,height,enemies:[]};
-            else if(this.strokeStyle==='#ff7e88' && window.debugDrawing)window.debugDrawing.enemies.push({x,y,width,height,health:1});
-            return stroke.call(this,x,y,width,height);
-        };
-        CanvasRenderingContext2D.prototype.fillText=function(text,...args){
-            if(window.debugDrawing){
-                const speed=/^x .+ y .+ vx (-?\d+) vy (-?\d+)$/.exec(String(text));
-                if(speed){window.debugDrawing.vx=Number(speed[1]);window.debugDrawing.vy=Number(speed[2]);}
-                const motion=/^(.+) · aim .+ · wall (-?\d+)$/.exec(String(text));
-                if(motion){window.debugDrawing.grounded=['idle','running','sprinting','crouching'].includes(motion[1]);window.debugDrawing.movement={wallSide:Number(motion[2])};}
-            }
-            return fill.call(this,text,...args);
-        };
-    });
-    await page.keyboard.press('F2');await page.clock.runFor(50);
-}
-async function navigate(page,points){
-    const held={left:false,right:false,fire:false,jumpHeld:false},timer={time:0,lastJump:-100,held:0};
-    const send=async input=>{
-        for(const [action,key] of [['left','KeyA'],['right','KeyD'],['fire','KeyJ']])if(input[action]!==held[action]){
-            await page.keyboard[input[action]?'down':'up'](key);held[action]=input[action];
-        }
-        if(input.jump){await page.keyboard.up('Space');await page.keyboard.down('Space');held.jumpHeld=true;}
-        else if(!!input.jumpHeld!==held.jumpHeld){await page.keyboard[input.jumpHeld?'down':'up']('Space');held.jumpHeld=!!input.jumpHeld;}
-        await page.clock.runFor(50);
-        timer.time+=.05;timer.held-=.05;
-    };
-    for(const point of points){
-        let reached=false,last;
-        for(let i=0;i<500;i++){
-            if(await page.locator('#overlay').getAttribute('data-screen')==='won'){reached=true;break;}
-            const p=await page.evaluate(()=>window.debugDrawing);expect(p?.movement).toBeTruthy();last=p;
-            p.x2=p.x+p.width;p.y2=p.y+p.height;
-            if(Math.abs(point.x-p.x)<20 && Math.abs(p.y2-point.y)<3 && p.grounded){reached=true;break;}
-            await send(pilotInput(p,document.terrain,p.enemies,point,timer));
-        }
-        expect(reached,`Route stopped at ${last?.x},${last?.y}, target ${point.x},${point.y}`).toBe(true);
-        for(let i=0;i<6;i++)await send({left:false,right:false,fire:true,jump:false,jumpHeld:false});
-    }
-    for(const key of ['KeyA','KeyD','KeyJ','Space'])await page.keyboard.up(key);
-    await expect(page.locator('#health')).not.toHaveText('0 / 5');
-}
+const {observe:enableDebugReading,navigate:driveRoute}=require('../helpers/browser-route.cjs');
+const navigate=(page,points)=>driveRoute(page,points,pilotInput);
 
 test('draft attendant dialogue and Journey work in an isolated demo preview',async({page})=>{
     await start(page,true);await drive(page,550);await page.keyboard.press('KeyF');

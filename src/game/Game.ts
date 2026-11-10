@@ -21,6 +21,9 @@ import { JourneyPanel } from '../narrative/ui/JourneyPanel';
 import { NarrativeHud } from '../narrative/ui/NarrativeHud';
 import { Interactable } from '../components/Interactable';
 import { EnvironmentLoader } from '../environment/EnvironmentLoader';
+import {sceneAssetKeys} from '../world/props/SceneAssetKeys';
+import {GameObservation} from './debug/GameObservation';
+import {worldSnapshot} from './debug/WorldSnapshot';
 
 export class Game {
     private world!: World;
@@ -37,6 +40,7 @@ export class Game {
     private screen?: GameScreen;
     private mode: GameMode = 'loading';
     private disposed = false;
+    private readonly observation=new GameObservation(options=>this.world?worldSnapshot(this.world,this.mode,options?.includeProps??false):undefined);
     private starting = false;
     private dialogue?: DialogueSession;
     private introPlayed = false;
@@ -68,7 +72,7 @@ export class Game {
         try {
             const [assets, level] = await Promise.all([new AssetLoader().load(), this.loadLevel(this.loading.signal)]);
             if (this.disposed) return;
-            assets.environment=await new EnvironmentLoader().load(level.id,this.loading.signal);
+            assets.environment=await new EnvironmentLoader().load(level.presentation,this.loading.signal,!!level.water?.length,sceneAssetKeys(level));
             if(this.disposed)return;
             this.loadedLevel = level;
             this.narrative=new NarrativeSession(level.id??'',SaveStore.browser(),this.preview);
@@ -88,6 +92,7 @@ export class Game {
     }
 
     dispose() {
+        this.observation.dispose();
         this.disposed = true;
         this.loading.abort();
         this.inspection?.dispose();this.journey.dispose();this.narrativeHud.dispose();

@@ -16,6 +16,7 @@
     "test:browser": "npm run build && playwright test",
     "check": "npm test && npm run build",
     "level": "node scripts/levels.cjs",
+    "level:audit": "node --test tests/level-audit.test.cjs",
     "typecheck": "tsc --noEmit"
   },
   "author": "",

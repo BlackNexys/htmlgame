@@ -10,7 +10,6 @@ const {selectionBounds}=require('../src/editor/EditorSelection.ts');
 const {World}=require('../src/game/World.ts');
 const {RailAttendant}=require('../src/components/RailAttendant.ts');
 const {Enemy}=require('../src/components/Enemy.ts');
-const {Wall}=require('../src/components/Wall.ts');
 const definition=(id='attendant',x=432)=>({id,kind:'rail-attendant',x,y:576,scene:'station-exchange'});
 const fixture=()=>{const level=createBlankLevel();level.npcs=[definition()];return level;};
 const tick=(world,seconds,input={left:false,right:false,jump:false,fire:false})=>{for(let i=0;i<seconds*120;i++)world.update(1/120,input);};
@@ -45,7 +44,7 @@ test('interaction requires range, level feet, ground, living player and clear li
     world.player.grounded=false;assert.equal(world.interactions.nearest(world.player,world.npcs),undefined);world.player.grounded=true;
     world.player.health=0;assert.equal(world.interactions.nearest(world.player,world.npcs),undefined);world.player.health=5;
     world.npcs.forEach(npc=>npc.y-=40);assert.equal(world.interactions.nearest(world.player,world.npcs),undefined);world.npcs.forEach(npc=>npc.y+=40);
-    world.level.solids.push(new Wall({x:192,y:480,width:16,height:96}));
+    world.level.collision.register('test-wall','test',{x:192,y:480,width:16,height:96});
     assert.equal(world.interactions.nearest(world.player,world.npcs),undefined);
 });
 

@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 2,
+  "id": "construction-study",
+  "name": "Free construction workshop",
+  "revision": 3,
+  "gridSize": 1,
+  "width": 2737,
+  "height": 1301,
+  "spawn": {
+    "x": 100,
+    "y": 901
+  },
+  "exit": {
+    "x": 2600,
+    "y": 793,
+    "width": 64,
+    "height": 108
+  },
+  "terrain": [
+    {
+      "id": "floor",
+      "x": 0,
+      "y": 901,
+      "width": 2737,
+      "height": 48,
+      "kind": "wall",
+      "material": 0
+    },
+    {
+      "id": "thin-ledge",
+      "x": 373,
+      "y": 805,
+      "width": 317,
+      "height": 14,
+      "kind": "platform",
+      "material": 1
+    },
+    {
+      "id": "bridge",
+      "x": 811,
+      "y": 707,
+      "width": 317,
+      "height": 150,
+      "kind": "bridge",
+      "material": 1,
+      "thickness": 14
+    },
+    {
+      "id": "narrow-wall",
+      "x": 1300,
+      "y": 721,
+      "width": 37,
+      "height": 180,
+      "kind": "wall",
+      "material": 2
+    },
+    {
+      "id": "open-doorway",
+      "x": 1741,
+      "y": 721,
+      "width": 173,
+      "height": 180,
+      "kind": "doorway",
+      "material": 2,
+      "thickness": 17
+    }
+  ],
+  "decorations": [
+    {
+      "id": "background-wall",
+      "x": 0,
+      "y": 613,
+      "width": 2737,
+      "height": 288,
+      "kind": "wall",
+      "material": 0,
+      "depth": -10
+    },
+    {
+      "id": "mounted-outfall",
+      "x": -48,
+      "y": 24,
+      "width": 96,
+      "height": 64,
+      "kind": "outfall",
+      "mount": {
+        "parent": "bridge",
+        "socket": "supportRight"
+      },
+      "material": 0
+    },
+    {
+      "id": "foreground-rail",
+      "x": 2200,
+      "y": 853,
+      "width": 200,
+      "height": 48,
+      "kind": "railing",
+      "material": 1,
+      "layer": "foreground"
+    }
+  ],
+  "water": [
+    {
+      "id": "study-river",
+      "kind": "river",
+      "x": 0,
+      "y": 1080,
+      "width": 2737,
+      "height": 221
+    },
+    {
+      "id": "study-basin",
+      "kind": "basin",
+      "x": -96,
+      "y": 200,
+      "width": 192,
+      "height": 72,
+      "mount": {
+        "parent": "mounted-outfall",
+        "socket": "mouth"
+      }
+    },
+    {
+      "id": "study-fall",
+      "kind": "waterfall",
+      "x": 0,
+      "y": 0,
+      "width": 24,
+      "from": {
+        "parent": "mounted-outfall",
+        "socket": "mouth"
+      },
+      "to": "study-basin",
+      "behindTerrain": true
+    },
+    {
+      "id": "study-overflow",
+      "kind": "waterfall",
+      "x": 0,
+      "y": 0,
+      "width": 12,
+      "from": {
+        "parent": "study-basin",
+        "socket": "spill"
+      },
+      "to": "study-river",
+      "overRim": true
+    }
+  ],
+  "enemies": [
+    {
+      "id": "zombie",
+      "kind": "zombie",
+      "x": 1500,
+      "y": 901,
+      "patrol": {
+        "left": 1400,
+        "right": 1600
+      }
+    },
+    {
+      "id": "skeleton",
+      "kind": "skeleton",
+      "x": 2460,
+      "y": 901,
+      "patrol": {
+        "left": 2420,
+        "right": 2500
+      }
+    }
+  ],
+  "signs": [
+    {
+      "id": "entry",
+      "x": 100,
+      "y": 660,
+      "title": "FREE CONSTRUCTION",
+      "text": "TAKE THE LEDGE AND BRIDGE OVER THE TALL WALL"
+    },
+    {
+      "id": "opening",
+      "x": 1780,
+      "y": 650,
+      "title": "WALK THROUGH",
+      "text": "THE OPENING IS EMPTY FOR ACTORS AND PROJECTILES"
+    },
+    {
+      "id": "foreground",
+      "x": 2190,
+      "y": 690,
+      "title": "FOREGROUND RAIL",
+      "text": "VISUAL LAYER / NO COLLISION"
+    }
+  ],
+  "npcs": [],
+  "interactables": [],
+  "props": [],
+  "presentation": {
+    "environment": "confluence",
+    "scenery": "construction"
+  }
+}

@@ -137,7 +137,7 @@ test('a missing city backdrop preserves the other scenery layers and neutral int
     const errors=[];page.on('pageerror',error=>errors.push(error.message));
     await page.goto('/?level=last-platform-demo&preview=1');await page.getByRole('button',{name:'Play',exact:true}).click();await page.clock.runFor(100);
     expect(await page.evaluate(()=>window.environmentDraws)).toEqual(expect.arrayContaining(['terrain-v4.png','insets-v6.png','props-v4.png']));
-    expect(requests.length).toBeGreaterThan(0);expect(requests.every(url=>/\/confluence\/v[3456]\//.test(url))).toBe(true);
+    expect(requests.length).toBeGreaterThan(0);expect(requests.every(url=>/\/confluence\/v[34567]\//.test(url))).toBe(true);
     await page.keyboard.down('KeyD');await page.clock.runFor(1200);await page.keyboard.up('KeyD');await page.clock.runFor(200);
     await expect(page.locator('#interaction')).toContainText('Rail attendant');await page.keyboard.press('KeyF');await expect(page.locator('.kinetic-dialogue')).toBeVisible();
     await page.screenshot({path:`artifacts/${info.project.name}-environment-layer-fallback.png`});expect(errors).toEqual([]);

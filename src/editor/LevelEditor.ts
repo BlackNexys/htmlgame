@@ -5,7 +5,7 @@ import { EditorFiles } from './EditorFiles';
 import { EditorPreview } from './EditorPreview';
 import { createBlankLevel } from './createBlankLevel';
 import { selectedObject, type EditorSelection } from './EditorSelection';
-import { formatDocument, type LevelDocument } from '../levels/LevelDocument';
+import { formatDocument,levelCollections, type LevelDocument } from '../levels/LevelDocument';
 import type { LevelChanges, LevelOperation } from '../levels/LevelChanges';
 import { parseLevelJson } from '../levels/LevelValidation';
 import { LevelLoader } from '../levels/LevelLoader';
@@ -14,6 +14,9 @@ import type { NPCKind } from '../interfaces/NPC';
 import { npcCatalog } from '../game/NPCCatalog';
 import { conversationChoices } from '../dialogue/SceneCatalog';
 import { interactionPresets } from '../narrative/InteractionPresets';
+import {structureKinds,type StructureKind} from '../world/structures/StructureDefinition';
+import type {WaterDefinition} from '../world/water/WaterDefinition';
+import {sceneArt} from '../world/props/SceneArtCatalog';
 
 const element = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 export interface LevelEditorAPI {
@@ -67,9 +70,9 @@ export class LevelEditor {
             }
             input.value = '';
         };
-        element('load-example').onclick = () => {
+        for(const [button,levelId] of [['load-example','lower-passage'],['load-construction','construction-study']])element(button).onclick = () => {
             const revision = this.session.document.revision, id = this.session.document.id, epoch = this.editEpoch;
-            void new LevelLoader().document('lower-passage').then(document => {
+            void new LevelLoader().document(levelId).then(document => {
                 if (this.session.document.revision !== revision || this.session.document.id !== id || epoch !== this.editEpoch) throw new Error('The draft changed while loading. Click Load example again to replace it.');
                 this.load(document);
             }).catch(error => this.report(String(error), true));
@@ -88,20 +91,33 @@ export class LevelEditor {
         element<HTMLFormElement>('level-properties').onsubmit = event => {
             event.preventDefault();
             const data = new FormData(event.currentTarget as HTMLFormElement);
-            this.run(() => this.edit(['id', 'name', 'width', 'height'].map(field => ({op: 'set', field: field as 'id' | 'name' | 'width' | 'height', value: field === 'width' || field === 'height' ? Number(data.get(field)) : String(data.get(field))}))));
+            this.run(() => this.edit([...['id', 'name', 'width', 'height'].map(field => ({op: 'set' as const, field: field as 'id' | 'name' | 'width' | 'height', value: field === 'width' || field === 'height' ? Number(data.get(field)) : String(data.get(field))})),{op:'set',field:'presentation',value:data.get('presentation')?{environment:'confluence',scenery:String(data.get('presentation'))}:undefined}]));
         };
         for (const button of document.querySelectorAll<HTMLElement>('[data-tool]')) {
             button.onclick = () => {
                 this.canvas.tool = button.dataset.tool as EditorTool;
                 for (const tool of document.querySelectorAll('[data-tool]')) tool.setAttribute('aria-pressed', String(tool === button));
                 element('tool-help').textContent = this.canvas.tool === 'select'
-                    ? 'Click an object to select it. Drag to move in 48-pixel steps; use the inspector for exact positions.'
+                    ? 'Click an object to select it. Drag using the selected snap; use the inspector for exact dimensions and mounts.'
                     : this.canvas.tool === 'terrain' || this.canvas.tool === 'decorations'
                         ? 'Drag a rectangle on the grid. Terrain blocks movement; decoration is visual only.'
-                        : 'Click to place. Actor positions mark the feet; place them on top of a platform.';
+                        : this.canvas.tool==='props'?'Click to place the selected catalog asset. X/Y mark its top-left; mount it to a structure in the inspector.':'Click to place. Actor positions mark the feet; place them on top of a platform.';
             };
         }
         element<HTMLSelectElement>('enemy-kind').onchange = event => { this.canvas.enemy = (event.currentTarget as HTMLSelectElement).value as EnemyKind; };
+        element<HTMLSelectElement>('prop-asset').replaceChildren(...Object.keys(sceneArt).map(key=>new Option(key,key)));element<HTMLSelectElement>('prop-asset').value=this.canvas.propAsset;
+        element<HTMLSelectElement>('prop-asset').onchange=e=>{this.canvas.propAsset=(e.currentTarget as HTMLSelectElement).value;};
+        element<HTMLSelectElement>('structure-kind').replaceChildren(...structureKinds.map(k=>new Option(k,k)));
+        element<HTMLSelectElement>('structure-kind').onchange=e=>{this.canvas.structureKind=(e.currentTarget as HTMLSelectElement).value as StructureKind;};
+        element<HTMLSelectElement>('water-kind').onchange=e=>{this.canvas.waterKind=(e.currentTarget as HTMLSelectElement).value as 'river'|'canal'|'basin'|'drain';};
+        element('connect-water').onclick=()=>this.run(()=>{
+            const d=this.session.document,source=element<HTMLSelectElement>('water-source').value,target=element<HTMLSelectElement>('water-target').value;
+            if(!source||!target)throw Error('Choose a water source and a receiving water body first');
+            const ids=new Set(levelCollections.flatMap(k=>d[k].map(e=>e.id)));let i=1;while(ids.has(`waterfall-${i}`))i++;
+            const id=`waterfall-${i}`,sourceWater=d.water.find(w=>w.id===source);
+            this.edit([{op:'upsert',collection:'water',value:{id,kind:'waterfall',x:0,y:0,width:12,from:{parent:source,socket:sourceWater&&sourceWater.kind!=='drain'?'spill':'mouth'},to:target}}]);this.select({collection:'water',id});
+        });
+        element<HTMLSelectElement>('grid-size').onchange=e=>this.run(()=>this.edit([{op:'set',field:'gridSize',value:Number((e.currentTarget as HTMLSelectElement).value)}]));
         element<HTMLSelectElement>('npc-kind').replaceChildren(...Object.entries(npcCatalog).map(([id, info]) => new Option(info.name, id)));
         element<HTMLSelectElement>('npc-scene').replaceChildren(...Object.entries(conversationChoices).map(([id, scene]) => new Option(`${id} · ${scene.title}`, id)));
         element<HTMLSelectElement>('interaction-preset').replaceChildren(...Object.entries(interactionPresets).map(([id,preset])=>new Option(preset.label,id)));
@@ -139,6 +155,12 @@ export class LevelEditor {
     private render() {
         const document = this.session.document;
         this.pendingProperties = false;
+        const snap=element<HTMLSelectElement>('grid-size');
+        if(![...snap.options].some(o=>Number(o.value)===document.gridSize))snap.add(new Option(`${document.gridSize} px`,String(document.gridSize)));
+        snap.value=String(document.gridSize);
+        const sources=[...document.terrain,...document.decorations].filter(s=>s.kind==='outfall').map(s=>s.id).concat(document.water.filter(w=>w.kind!=='waterfall').map(w=>w.id));
+        const targets=document.water.filter(w=>['river','canal','basin'].includes(w.kind)).map(w=>w.id);
+        for(const [id,values] of [['water-source',sources],['water-target',targets]] as const){const select=element<HTMLSelectElement>(id),previous=select.value;select.replaceChildren(new Option('(choose)',''),...values.map(v=>new Option(v,v)));if(values.includes(previous))select.value=previous;}
         if (this.selection && !selectedObject(document, this.selection)) this.selection = undefined;
         this.canvas.selection = this.selection; this.canvas.update(document);
         this.syncZoom();
@@ -148,6 +170,7 @@ export class LevelEditor {
         element<HTMLElementTagNameMap['bl-button']>('delete-object').disabled = typeof this.selection !== 'object';
         element('revision').textContent = `Revision ${document.revision}`;
         const form = element<HTMLFormElement>('level-properties');
+        (form.elements.namedItem('presentation') as HTMLSelectElement).value=document.presentation?.scenery??'';
         for (const name of ['id', 'name', 'width', 'height'] as const) (form.elements.namedItem(name) as HTMLInputElement).value = String(document[name]);
         const stored = this.files.saveDraft(document);
         this.report(stored ? 'Valid level · local draft saved' : 'Valid level · browser storage unavailable; export JSON to keep your work', !stored);

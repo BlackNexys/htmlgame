@@ -23,7 +23,7 @@ export class Character extends Actor {
         super({width: 32, height: T.standingHeight});
         this.gameArea = gameArea;
         this.spawn(gameArea.level.spawn);
-        this.movement = new PlayerMovement(this, gameArea.level.solids, gameArea.level.width);
+        this.movement = new PlayerMovement(this, gameArea.level.collision, gameArea.level.width);
     }
 
     update(dt: number, input: Controls) {

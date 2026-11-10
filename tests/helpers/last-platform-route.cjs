@@ -7,30 +7,22 @@ const {NarrativeSession}=require('../../src/narrative/NarrativeSession.ts');
 const {SaveStore}=require('../../src/narrative/SaveStore.ts');
 const document=require('../../public/levels/last-platform-demo.json');
 const idle={left:false,right:false,jump:false,fire:true};
-const shelf=id=>{const r=document.terrain.find(r=>r.id===id);return {x:r.x+r.width/2-16,y:r.y,shaft:true};};
+const {floor:at,object:near}=require('./route-anchors.cjs').routeAnchors(document);
+const shelf=id=>({...at(id),shaft:true});
 const dropShelf=id=>({...shelf(id),drop:true});
 const groups=[
-    {name:'service',points:[{x:1480,y:864},shelf('viaduct-west'),shelf('viaduct-hatch-west'),shelf('viaduct-hatch-east'),{x:3300,y:864},shelf('viaduct-east')]},
-    {name:'ledger',points:[...Array.from({length:3},(_,i)=>shelf(`registry-approach-${i}`)),{x:5990,y:1248}],effect:'platform-inspect-ledger'},
-    {name:'index',points:[shelf('registry-east-stair-0'),dropShelf('registry-east-stair-1'),dropShelf('registry-east-stair-2'),dropShelf('registry-east-landing'),{x:6300,y:1632},{x:4900,y:1632},...Array.from({length:7},(_,i)=>shelf(`registry-public-${i}`)),{x:4700,y:2400,drop:true},...Array.from({length:4},(_,i)=>shelf(`archive-descent-${i}`)),{x:6190,y:2880}],effect:'platform-decode-route'},
-    {name:'shutter',points:[shelf('departure-stair-0'),...Array.from({length:3},(_,i)=>dropShelf(`departure-stair-${i+1}`)),{x:6790,y:3360}],effect:'platform-open-shutter'},
-    {name:'exit',points:[{x:7050,y:3360}]},
+    {name:'service',points:[{...at('arrival-concourse',1480)},shelf('viaduct-west'),shelf('viaduct-hatch-west'),shelf('viaduct-hatch-east'),{...at('viaduct-middle',612)},shelf('viaduct-east')]},
+    {name:'ledger',points:[...Array.from({length:3},(_,i)=>shelf(`registry-approach-${i}`)),near('platform-inspect-ledger')],effect:'platform-inspect-ledger'},
+    {name:'index',points:[shelf('registry-east-stair-0'),dropShelf('registry-east-stair-1'),dropShelf('registry-east-stair-2'),dropShelf('registry-east-landing'),{...at('registry-hall',1500)},{...at('registry-hall',100)},...Array.from({length:7},(_,i)=>shelf(`registry-public-${i}`)),{...at('freight-hall',2588),drop:true},...Array.from({length:4},(_,i)=>shelf(`archive-descent-${i}`)),near('platform-decode-route')],effect:'platform-decode-route'},
+    {name:'shutter',points:[shelf('departure-stair-0'),...Array.from({length:3},(_,i)=>dropShelf(`departure-stair-${i+1}`)),near('platform-open-shutter',74)],effect:'platform-open-shutter'},
+    {name:'exit',points:[{...at('departure-foundations',906)}]},
 ];
 const balconyRoute=[
-    {name:'balcony',points:[...Array.from({length:5},(_,i)=>shelf(`roof-stair-${i}`)),{x:400,y:288}],effect:'platform-collect-letter'},
-    {name:'freight',points:[{x:900,y:864},...groups[0].points,...groups[1].points],effect:'platform-inspect-ledger'},
+    {name:'balcony',points:[...Array.from({length:5},(_,i)=>shelf(`roof-stair-${i}`)),near('platform-collect-letter',0)],effect:'platform-collect-letter'},
+    {name:'freight',points:[{...at('arrival-concourse',900)},...groups[0].points,...groups[1].points],effect:'platform-inspect-ledger'},
 ];
 
-function pilotInput(p,solids,enemies,point,timer){
-    const direction=Math.abs(point.x-p.x)>8?Math.sign(point.x-p.x):0,edge=direction>0?p.x2:p.x;
-    const obstacle=direction && solids.some(r=>r.y<p.y2-1 && r.y+r.height>p.y && (direction>0?r.x>=edge-.01&&r.x<edge+85:r.x+r.width<=edge+.01&&r.x+r.width>edge-85));
-    const probe=edge+direction*8;
-    const gap=direction && !solids.some(r=>Math.abs(r.y-p.y2)<3 && probe>=r.x && probe<=r.x+r.width);
-    const foe=enemies.some(e=>e.health>0 && (e.x-p.x)*direction>0 && Math.abs(e.x-p.x)<130 && Math.abs(e.y+e.height-p.y2)<90);
-    const jump=direction && (p.grounded && !point.drop && (obstacle || gap&&(point.shaft||point.y<=p.y2+4) || foe) || p.movement.wallSide===direction && p.vy>=0 && point.y<p.y2) && timer.time-timer.lastJump>.3;
-    if(jump){timer.lastJump=timer.time;timer.held=.35;}
-    return {...idle,left:direction<0,right:direction>0,jump:!!jump,jumpHeld:timer.held>0};
-}
+const {pilotInput}=require('./platformer-pilot.cjs');
 
 function planRoute(route=groups,{combat=true,spawn,onGroup=()=>{}}={}){
     const world=new World(compileLevel(document));

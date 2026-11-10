@@ -48,11 +48,23 @@ The build checks TypeScript before bundling. Deploy the contents of `dist/` to a
 
 Menus and toolbar controls use Blacklight Lit components with a game-owned Cyberundead theme: charcoal surfaces, bone text, magenta player actions, cyan details, and crisp edges. See [UI theme tokens](docs/ui-theme.md) to adjust the palette and [vendor notes](vendor/README.md) to update the local library snapshot.
 
+## Sluice Exchange experiment
+
+Play `/?level=sluice-exchange` for the new standalone stress level: a folded multi-height route, roof loop, crouched culvert, two recovery paths, 891 mounted props and 31 water elements. It uses existing combat and does not modify campaign progress. See the [level guide and whole-world overview](docs/sluice-exchange.md) and the [friction record](docs/sluice-exchange-friction.md).
+
 ## Create levels
+
+[Authored scene art](docs/authored-scene-art.md) adds catalog props, structure mounts and separate story-art bounds to the workshop. A scene's environment is explicit and portable across level IDs. The [friction log](docs/level-authoring-friction.md) records the six completed authoring fixes and the remaining assembly-grouping follow-up.
+
+Water is authored through the same workshop and level files. [Water elements](docs/water-elements.md) documents rivers, canals, catch basins, mounted drains and source-to-receiver waterfall connections. Their classes and renderers are independent of level names; effects use simulation time and remain cosmetic.
+
+The [world structure system](docs/world-structures.md) supports free placement, arbitrary rectangle dimensions, concrete structure classes, independent collision/art, socket mounts and foreground layers. Play `/?level=construction-study` for the construction proof. The workshop offers free placement and adjustable snapping, imports legacy maps, and exports schema v2. [Research and later shape stages](docs/flexible-world-geometry.md) remain documented.
 
 Open the separate [Level workshop](http://127.0.0.1:3000/editor.html) to place terrain, decoration, enemies, signs, the player, and the exit. It has an object inspector, undo/redo, direct JSON editing, import/export, local draft recovery, and independent snapshot playtests.
 
 Levels are versioned JSON files under `public/levels`. Export a level there and open `/?level=<id>` to play it. The game loads the requested file when needed; restarting keeps the chosen level. The editor has its own application entry point and does not edit a live game.
+
+All ten shipped maps use schema v2. Run `npm run level:audit` to check their entries, workshop documents and complete playable routes. The [level audit](docs/level-audit.md) lists each map's purpose, preview URL and verification scope.
 
 Humans and agents share the same schema, stable object IDs, and revision checks. Agents can edit files, use `npm run level -- validate <file>` and `npm run level -- patch <file> <changes.json>`, or apply structured changes through the editor's browser API. See [level authoring and collaboration](docs/level-authoring.md) for the format and workflow.
 

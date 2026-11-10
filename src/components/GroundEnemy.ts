@@ -1,5 +1,5 @@
 import { Enemy } from './Enemy';
-import { clamp, overlaps } from '../game/movement/physics';
+import { clamp } from '../game/movement/physics';
 
 export abstract class GroundEnemy extends Enemy {
     protected get tracksPlayer() { return true; }
@@ -38,11 +38,11 @@ export abstract class GroundEnemy extends Enemy {
         // Walking is ledge-safe; committed attacks retain their direction.
         if (this.state === 'idle' && this.grounded && this.vx !== 0) {
             const foot = {x: this.vx > 0 ? this.x2 + 3 : this.x - 5, y: this.y2, width: 2, height: 8};
-            if (!this.gameArea.level.solids.some(wall => overlaps(foot, wall))) { this.vx = 0; this.facing *= -1; }
+            if (!this.gameArea.level.collision.overlaps(foot)) { this.vx = 0; this.facing *= -1; }
         }
         this.applyGravity(dt);
         const wantedVX = this.vx;
-        this.move(dt, this.gameArea.level.solids);
+        this.move(dt, this.gameArea.level.collision);
         if (wantedVX && this.vx === 0 && this.state === 'idle') this.facing *= -1;
         this.x = clamp(this.x, 0, this.gameArea.level.width - this.width);
     }

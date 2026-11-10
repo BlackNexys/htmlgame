@@ -44,7 +44,6 @@ test('material lip metadata is bounded, cloned and never offsets interior fill',
 
 test('rear support piers terminate on terrain or an attached structural header',()=>{
     const {supportFrames,supportPiers}=require('../src/environment/ConfluenceStructures.ts');
-    const {waterfalls}=require('../src/environment/ConfluenceWaterways.ts');
     const level=require('../public/levels/last-platform-demo.json');
     for(const r of level.terrain.filter(r=>r.width<=192&&r.height===48)){
         const framed=supportFrames.some(f=>r.x>=f.x&&r.x+r.width<=f.x+f.width&&r.y>f.y&&r.y<f.y+f.height);
@@ -57,7 +56,7 @@ test('rear support piers terminate on terrain or an attached structural header',
         const header=supportFrames.some(f=>f.y+48===bottom&&p.x>=f.tieLeft&&p.x+p.width<=f.tieRight);
         assert.ok(floor||header,`Unanchored pier at ${p.x},${bottom}`);
     }
-    for(const f of waterfalls)assert.ok(level.terrain.some(r=>r.y+r.height===f.sourceY&&f.sourceX>=r.x&&f.sourceX<=r.x+r.width),'Cascade must attach to an actual platform');
+    for(const drain of level.water.filter(w=>w.kind==='drain'))assert.ok(level.terrain.some(r=>r.id===drain.mount.parent)&&drain.mount.socket==='bottomLeft','Drain infrastructure must attach to an authored platform');
 });
 
 test('architectural modules validate against their own catalog and atlas dimensions',()=>{

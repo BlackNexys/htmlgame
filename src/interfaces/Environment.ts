@@ -1,5 +1,5 @@
 export interface EnvironmentImages {
-    layout?: 'rebuild';
+    layout?: 'rebuild'|'construction'|'water'|'props';
     terrain?: HTMLImageElement;
     terrainBaselines?:number[];
     water?:HTMLImageElement;

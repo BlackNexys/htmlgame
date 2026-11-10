@@ -1,6 +1,6 @@
 # The Last Platform · cyberundead district demo
 
-**New comparison build:** play `/?level=last-platform-rebuild`. See [rebuilt preview notes](last-platform-rebuild.md) for its forward route, roof loop, recovery path and save isolation. The revision-5 district described below remains available unchanged in layout.
+**New comparison build:** play `/?level=last-platform-rebuild`. See [rebuilt preview notes](last-platform-rebuild.md) for its forward route, roof loop, recovery path and save isolation. The older district described below retains its route layout; the [level audit](level-audit.md) records its schema migration and corrected viaduct marksman footing.
 
 **Revision 5, 8 November 2026.** The [runtime level](../public/levels/last-platform-demo.json) is rebuilt as a **7,200 × 3,840** cyberpunk railway district, using the user's [Untitled.png](Worldbuilding/Untitled.png) as the primary environment reference. This supersedes the brass-heavy revision-4 art direction and layout. The supplied design pack and earlier maps remain preserved as historical iterations.
 
@@ -34,7 +34,7 @@ The [v4 material/support polish](../public/assets/environment/confluence/v4/READ
 
 The replacement [v3 kit](../public/assets/environment/confluence/v3/README.md) provides new materials, facades, transparent props/modules/landmarks and a city backdrop. Original generated sources and [exact prompts](../public/assets/environment/confluence/v3/PROMPTS.md) are preserved. Earlier v1/v2 files remain archived; the runtime selects the current components from v3-v6. The [asset gallery](../public/docs/confluence-environment.html) is served at `/docs/confluence-environment.html`.
 
-`ConfluenceScene.ts` places inset panels and props; `ConfluenceLandmarks.ts` owns mounted and distant landmarks. `ConfluenceArchitecture.ts` places canopies, bays, catwalk covers, terminals and static equipment. `ConfluenceStructuresRenderer.ts` owns rear bearing piers, frames and brackets; `ConfluenceMaterials.ts` defines visual regions. `ConfluenceWaterRenderer.ts` draws textured cosmetic falls and the river below the safe towpath; it adds no collision, damage or resource rules. The existing hero and actors retain their artwork.
+`ConfluenceScene.ts` places inset panels and props; `ConfluenceLandmarks.ts` owns mounted and distant landmarks. `ConfluenceArchitecture.ts` places canopies, bays, catwalk covers, terminals and static equipment. `ConfluenceStructuresRenderer.ts` owns rear bearing piers, frames and brackets; `ConfluenceMaterials.ts` defines visual regions. The level file now declares its drains, falls and lower river through [authored water elements](water-elements.md); shared water renderers add no collision, damage or resource rules. The existing hero and actors retain their artwork.
 
 The level JSON alone owns collision, actors, signs and interactive objects. Native rendering remains camera-culled. Optional art atlases load and fail independently; mechanics fixtures request none of this environment kit.
 
