@@ -1,0 +1,1 @@
+exports.createActionLevel=()=>({width:2400,height:672,spawn:{x:144,y:524},exit:{x:2200,y:468,width:64,height:108},solids:[{x:0,y:576,width:2400,height:96}],enemies:[{kind:'zombie',x:480,y:528,left:400,right:600}]});

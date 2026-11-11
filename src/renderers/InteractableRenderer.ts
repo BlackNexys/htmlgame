@@ -1,9 +1,14 @@
 import type { Interactable } from '../components/Interactable';
-import type { ConfluenceObjectsRenderer } from '../environment/ConfluenceObjectsRenderer';
+import type {PropRenderer} from '../world/props/PropRenderer';
 export class InteractableRenderer {
-    constructor(private readonly c:CanvasRenderingContext2D,private readonly artwork?:ConfluenceObjectsRenderer){}
+    constructor(private readonly c:CanvasRenderingContext2D,private readonly props?:PropRenderer){}
     draw(object:Interactable){
-        if(this.artwork?.draw(object))return;
+        const v=object.definition.visual;
+        if(v&&this.props){
+            if(object.collected)return;
+            this.props.draw(object.operated&&v.openAsset?v.openAsset:v.asset,{x:object.x+v.x,y:object.y+v.y,width:v.width,height:v.height});
+            if(object.active){const c=this.c;c.save();c.font='9px monospace';c.textAlign='center';c.fillStyle='#d1e0db';c.fillText(object.displayName,object.x+object.width/2,object.y+v.y-10);c.restore();}return;
+        }
         if(!object.active)return;
         const c=this.c,{x,y,width:w,height:h}=object;
         c.save();c.fillStyle=object.definition.kind==='collect'?'#c1a384':'#273d4b';c.fillRect(x,y,w,h);

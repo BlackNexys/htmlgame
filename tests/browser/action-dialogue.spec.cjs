@@ -68,17 +68,14 @@ test('finishing dialogue does not clear held movement; keyboard controls and mis
     expect(await page.locator('#progress').getAttribute('style')).not.toBe(progress);await page.keyboard.up('KeyD');
 });
 
+
 test('terminal game outcomes cancel travelling dialogue without rewards or resuming gameplay',async({page})=>{
-    const level=JSON.parse(require('node:fs').readFileSync(require('node:path').join(__dirname,'../../public/levels/dialogue-course.json'),'utf8'));
-    level.enemies=[{id:'contact-fixture',kind:'skeleton',x:160,y:624,patrol:{left:160,right:160}}];
-    await page.route('**/levels/dialogue-course.json',route=>route.fulfill({json:level}));
-    await start(page);
-    // Keep contact deterministic so defeat happens before the short conversation ends.
-    for(let i=0;i<10;i++){
-        if(await page.locator('#overlay[open]').count())break;
-        await page.clock.runFor(1000);
-    }
-    // This scenario must have reached defeat; no once-only effect is granted by cancellation.
+    require('../register.cjs');
+    const level=require('../../src/levels/createEmptyLevel.ts').createEmptyLevel();
+    level.enemies=[{id:'contact-fixture',kind:'skeleton',x:160,y:576,patrol:{left:160,right:160}}];
+    await page.route(url=>url.pathname==='/outcome-proof.json',route=>route.fulfill({json:level}));
+    await start(page,'/?dialogueDemo=action&levelUrl=/outcome-proof.json');
+    for(let i=0;i<10;i++){if(await page.locator('#overlay[open]').count())break;await page.clock.runFor(1000);}
     await expect(page.locator('#panel-title')).toHaveText('The underworld bites back');
     await expect(page.locator('.action-dialogue')).toHaveCount(0);
     expect(await page.locator('#game').getAttribute('data-dialogue-demo')).toBeNull();

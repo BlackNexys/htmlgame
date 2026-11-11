@@ -9,7 +9,8 @@ import { Hud } from '../ui/Hud';
 import { GameMenu } from '../ui/GameMenu';
 import type { GameMode } from '../interfaces/Game';
 import type { Level } from '../interfaces/Level';
-import { LevelLoader } from '../levels/LevelLoader';
+import {compileLevel} from '../levels/LevelCompiler';
+import {createEmptyLevel} from '../levels/createEmptyLevel';
 import { GamePreferences } from '../ui/GamePreferences';
 import { DialogueSession } from '../dialogue/DialogueSession';
 import type { DialogueScene } from '../dialogue/DialogueScene';
@@ -21,6 +22,9 @@ import { JourneyPanel } from '../narrative/ui/JourneyPanel';
 import { NarrativeHud } from '../narrative/ui/NarrativeHud';
 import { Interactable } from '../components/Interactable';
 import { EnvironmentLoader } from '../environment/EnvironmentLoader';
+import {sceneAssetKeys} from '../world/props/SceneAssetKeys';
+import {GameObservation} from './debug/GameObservation';
+import {worldSnapshot} from './debug/WorldSnapshot';
 
 export class Game {
     private world!: World;
@@ -37,6 +41,7 @@ export class Game {
     private screen?: GameScreen;
     private mode: GameMode = 'loading';
     private disposed = false;
+    private readonly observation=new GameObservation(options=>this.world?worldSnapshot(this.world,this.mode,options?.includeProps??false):undefined);
     private starting = false;
     private dialogue?: DialogueSession;
     private introPlayed = false;
@@ -47,7 +52,7 @@ export class Game {
     private readonly narrativeHud=new NarrativeHud(()=>this.openJourney());
 
     constructor(private readonly canvas: HTMLCanvasElement,
-        private readonly loadLevel: (signal: AbortSignal) => Promise<Level> = signal => new LevelLoader().load('lower-passage', signal),
+        private readonly loadLevel: (signal: AbortSignal) => Promise<Level> = async () => compileLevel(createEmptyLevel()),
         private readonly intro?: DialogueScene, private readonly preview=false) {
         this.input = new Input(canvas, key => this.handleKey(key));
         this.loop = new GameLoop(dt => this.update(dt), (elapsed, simulated) => this.draw(elapsed, simulated));
@@ -68,7 +73,7 @@ export class Game {
         try {
             const [assets, level] = await Promise.all([new AssetLoader().load(), this.loadLevel(this.loading.signal)]);
             if (this.disposed) return;
-            assets.environment=await new EnvironmentLoader().load(level.id,this.loading.signal);
+            assets.environment=await new EnvironmentLoader().load(level.presentation,this.loading.signal,!!level.water?.length,sceneAssetKeys(level));
             if(this.disposed)return;
             this.loadedLevel = level;
             this.narrative=new NarrativeSession(level.id??'',SaveStore.browser(),this.preview);
@@ -88,6 +93,7 @@ export class Game {
     }
 
     dispose() {
+        this.observation.dispose();
         this.disposed = true;
         this.loading.abort();
         this.inspection?.dispose();this.journey.dispose();this.narrativeHud.dispose();
@@ -210,7 +216,7 @@ export class Game {
         this.mode='dialogue';this.input.clear();this.world.player.clearActions();this.loop.pause();this.menu.dialogue();
         this.journey.open(this.narrative,reset=>{
             if(this.disposed)return;
-            if(reset){this.narrative!.reset();if(this.loadedLevel.id!==this.narrative!.story.start && this.loadedLevel.id!=='last-platform-rebuild'){location.href=`./?level=${this.narrative!.story.start}${this.preview?'&preview=1':''}`;return;}this.restart();}
+            if(reset){this.narrative!.reset();if(this.loadedLevel.id!==this.narrative!.story.start){location.href=`./?level=${this.narrative!.story.start}${this.preview?'&preview=1':''}`;return;}this.restart();}
             else this.resume();
         });
     }

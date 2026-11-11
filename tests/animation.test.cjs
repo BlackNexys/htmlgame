@@ -1,5 +1,5 @@
 require('./register.cjs');
-const {createActionLevel} = require('../src/maps/actionLevel.ts');
+const {createActionLevel} = require('./helpers/engine-fixture.cjs');
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const {World} = require('../src/game/World.ts');

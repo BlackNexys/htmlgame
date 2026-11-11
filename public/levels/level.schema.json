@@ -1,69 +1,1063 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Underworld level document v1",
-  "description": "World pixels; player and enemy positions mark bottom center. Runtime validation also checks bounds, overlaps, unique IDs, patrol ranges and tile budgets.",
+  "title": "Underworld level documents v1 and v2",
+  "description": "V1 imports normalize to v2. V2 uses free rectangle structures and optional editor snapping. Runtime validation also checks resolved bounds, collision overlaps, mounts, IDs and gameplay references. V2 includes catalog props, explicit presentation and mounted interactable visuals. Runtime validation checks catalog keys and resolved bounds.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "id", "name", "revision", "tileSize", "width", "height", "spawn", "exit", "terrain", "decorations", "enemies", "signs"],
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "revision",
+    "width",
+    "height",
+    "spawn",
+    "exit",
+    "terrain",
+    "decorations",
+    "enemies",
+    "signs"
+  ],
   "properties": {
-    "schemaVersion": {"const": 1},
-    "id": {"$ref": "#/$defs/id"},
-    "name": {"type": "string", "minLength": 1, "maxLength": 120, "pattern": "\\S"},
-    "revision": {"type": "integer", "minimum": 0, "maximum": 9007199254740990},
-    "tileSize": {"const": 48},
-    "width": {"type": "integer", "minimum": 960, "maximum": 32736, "multipleOf": 48},
-    "height": {"type": "integer", "minimum": 576, "maximum": 16368, "multipleOf": 48},
-    "spawn": {"$ref": "#/$defs/point"},
-    "exit": {"$ref": "#/$defs/rect"},
-    "terrain": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/terrain"}},
-    "decorations": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/terrain"}},
-    "enemies": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/enemy"}},
-    "npcs": {"type": "array", "default": [], "maxItems": 1000, "items": {"$ref": "#/$defs/npc"}},
-    "interactables": {"type": "array", "default": [], "maxItems": 1000, "items": {"$ref": "#/$defs/interactable"}},
-    "signs": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/sign"}}
-  },
-  "$defs": {
-    "id": {"type": "string", "maxLength": 80, "pattern": "^[a-z][a-z0-9-]{0,79}$"},
-    "coordinate": {"type": "integer", "minimum": 0},
-    "point": {
-      "type": "object", "additionalProperties": false, "required": ["x", "y"],
-      "properties": {"x": {"$ref": "#/$defs/coordinate"}, "y": {"$ref": "#/$defs/coordinate"}}
+    "schemaVersion": {
+      "enum": [
+        1,
+        2
+      ]
     },
-    "rect": {
-      "type": "object", "additionalProperties": false, "required": ["x", "y", "width", "height"],
-      "properties": {"x": {"$ref": "#/$defs/coordinate"}, "y": {"$ref": "#/$defs/coordinate"}, "width": {"type": "integer", "minimum": 1}, "height": {"type": "integer", "minimum": 1}}
+    "id": {
+      "$ref": "#/$defs/id"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "pattern": "\\S"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740990
+    },
+    "tileSize": {
+      "const": 48
+    },
+    "width": {
+      "type": "integer",
+      "minimum": 960,
+      "maximum": 32736
+    },
+    "height": {
+      "type": "integer",
+      "minimum": 576,
+      "maximum": 16368
+    },
+    "spawn": {
+      "$ref": "#/$defs/point"
+    },
+    "exit": {
+      "$ref": "#/$defs/rect"
     },
     "terrain": {
-      "type": "object", "additionalProperties": false, "required": ["id", "x", "y", "width", "height"],
-      "properties": {"id": {"$ref": "#/$defs/id"}, "x": {"type": "integer", "minimum": 0, "multipleOf": 48}, "y": {"type": "integer", "minimum": 0, "multipleOf": 48}, "width": {"type": "integer", "minimum": 48, "multipleOf": 48}, "height": {"type": "integer", "minimum": 48, "multipleOf": 48}}
+      "type": "array",
+      "maxItems": 1000,
+      "items": {}
+    },
+    "decorations": {
+      "type": "array",
+      "maxItems": 1000,
+      "items": {}
+    },
+    "enemies": {
+      "type": "array",
+      "maxItems": 1000,
+      "items": {
+        "$ref": "#/$defs/enemy"
+      }
+    },
+    "npcs": {
+      "type": "array",
+      "default": [],
+      "maxItems": 1000,
+      "items": {
+        "$ref": "#/$defs/npc"
+      }
+    },
+    "interactables": {
+      "type": "array",
+      "default": [],
+      "maxItems": 1000,
+      "items": {
+        "$ref": "#/$defs/interactable"
+      }
+    },
+    "signs": {
+      "type": "array",
+      "maxItems": 1000,
+      "items": {
+        "$ref": "#/$defs/sign"
+      }
+    },
+    "gridSize": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 256,
+      "default": 8
+    },
+    "water": {
+      "type": "array",
+      "default": [],
+      "maxItems": 1000,
+      "items": {
+        "$ref": "#/$defs/water"
+      }
+    },
+    "props": {
+      "type": "array",
+      "maxItems": 1000,
+      "items": {
+        "$ref": "#/$defs/prop"
+      }
+    },
+    "presentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "scenery"
+      ],
+      "properties": {
+        "environment": {
+          "const": "confluence"
+        },
+        "scenery": {
+          "enum": [
+            "assemblies",
+            "authored",
+            "construction"
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z][a-z0-9-]{0,79}$"
+    },
+    "coordinate": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y"
+      ],
+      "properties": {
+        "x": {
+          "$ref": "#/$defs/coordinate"
+        },
+        "y": {
+          "$ref": "#/$defs/coordinate"
+        }
+      }
+    },
+    "rect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "properties": {
+        "x": {
+          "$ref": "#/$defs/coordinate"
+        },
+        "y": {
+          "$ref": "#/$defs/coordinate"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
     },
     "enemy": {
-      "type": "object", "additionalProperties": false, "required": ["id", "kind", "x", "y", "patrol"],
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "x",
+        "y",
+        "patrol"
+      ],
       "properties": {
-        "id": {"$ref": "#/$defs/id"}, "kind": {"enum": ["zombie", "skeleton", "ghoul", "ghost", "wight", "necromancer"]},
-        "x": {"$ref": "#/$defs/coordinate"}, "y": {"$ref": "#/$defs/coordinate"},
-        "patrol": {"type": "object", "additionalProperties": false, "required": ["left", "right"], "properties": {"left": {"$ref": "#/$defs/coordinate"}, "right": {"$ref": "#/$defs/coordinate"}}}
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "zombie",
+            "skeleton",
+            "ghoul",
+            "ghost",
+            "wight",
+            "necromancer"
+          ]
+        },
+        "x": {
+          "$ref": "#/$defs/coordinate"
+        },
+        "y": {
+          "$ref": "#/$defs/coordinate"
+        },
+        "patrol": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "left",
+            "right"
+          ],
+          "properties": {
+            "left": {
+              "$ref": "#/$defs/coordinate"
+            },
+            "right": {
+              "$ref": "#/$defs/coordinate"
+            }
+          }
+        }
       }
     },
     "npc": {
-      "type": "object", "additionalProperties": false, "required": ["id", "kind", "x", "y", "scene"],
-      "properties": {"id": {"$ref": "#/$defs/id"}, "kind": {"enum": ["rail-attendant"]}, "x": {"$ref": "#/$defs/coordinate"}, "y": {"$ref": "#/$defs/coordinate"}, "scene": {"enum": ["station-exchange","attendant-introduction","attendant-directions","attendant-record","attendant-farewell","platform-introduction","platform-directions","platform-record-reaction","platform-farewell","last-platform-attendant","registry-attendant"]}}
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "x",
+        "y",
+        "scene"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "rail-attendant"
+          ]
+        },
+        "x": {
+          "$ref": "#/$defs/coordinate"
+        },
+        "y": {
+          "$ref": "#/$defs/coordinate"
+        },
+        "scene": {
+          "enum": [
+            "station-exchange",
+            "attendant-introduction",
+            "attendant-directions",
+            "attendant-record",
+            "attendant-farewell",
+            "platform-introduction",
+            "platform-directions",
+            "platform-record-reaction",
+            "platform-farewell",
+            "last-platform-attendant",
+            "registry-attendant"
+          ]
+        }
+      }
     },
     "interactable": {
-      "type":"object","additionalProperties":false,"required":["id","kind","x","y","width","height","label","sceneId"],
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "x",
+        "y",
+        "width",
+        "height",
+        "label",
+        "sceneId"
+      ],
       "properties": {
-        "id":{"$ref":"#/$defs/id"},"kind":{"enum":["inspect","collect","operate"]},
-        "x":{"$ref":"#/$defs/coordinate"},"y":{"$ref":"#/$defs/coordinate"},
-        "width":{"type":"integer","minimum":8,"maximum":480},"height":{"type":"integer","minimum":8,"maximum":480},
-        "label":{"type":"string","minLength":1,"maxLength":80,"pattern":"\\S"},"reach":{"type":"integer","minimum":16,"maximum":160,"default":80},
-        "sceneId":{"enum":["platform-ledger-card","platform-index-card","platform-shutter-card","platform-letter-card","platform-locked-card","transfer-record-card","route-key-card","letter-card","gate-card","locked-card","station-exchange","attendant-introduction","attendant-directions","attendant-record","attendant-farewell","platform-introduction","platform-directions","platform-record-reaction","platform-farewell"]},
-        "effectId":{"enum":["inspect-transfer-record","decode-route","collect-letter","open-gate","platform-inspect-ledger","platform-decode-route","platform-collect-letter","platform-open-shutter"]},
-        "conditionId":{"enum":["knows-registry","has-record","knows-destination","platform-has-registry","platform-has-record","platform-has-destination"]},"solid":{"type":"boolean"}
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "inspect",
+            "collect",
+            "operate"
+          ]
+        },
+        "x": {
+          "type": "integer",
+          "minimum": -32736,
+          "maximum": 32736
+        },
+        "y": {
+          "type": "integer",
+          "minimum": -16368,
+          "maximum": 16368
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 8,
+          "maximum": 480
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 8,
+          "maximum": 480
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "\\S"
+        },
+        "reach": {
+          "type": "integer",
+          "minimum": 16,
+          "maximum": 160,
+          "default": 80
+        },
+        "sceneId": {
+          "enum": [
+            "platform-ledger-card",
+            "platform-index-card",
+            "platform-shutter-card",
+            "platform-letter-card",
+            "platform-locked-card",
+            "transfer-record-card",
+            "route-key-card",
+            "letter-card",
+            "gate-card",
+            "locked-card",
+            "station-exchange",
+            "attendant-introduction",
+            "attendant-directions",
+            "attendant-record",
+            "attendant-farewell",
+            "platform-introduction",
+            "platform-directions",
+            "platform-record-reaction",
+            "platform-farewell"
+          ]
+        },
+        "effectId": {
+          "enum": [
+            "inspect-transfer-record",
+            "decode-route",
+            "collect-letter",
+            "open-gate",
+            "platform-inspect-ledger",
+            "platform-decode-route",
+            "platform-collect-letter",
+            "platform-open-shutter"
+          ]
+        },
+        "conditionId": {
+          "enum": [
+            "knows-registry",
+            "has-record",
+            "knows-destination",
+            "platform-has-registry",
+            "platform-has-record",
+            "platform-has-destination"
+          ]
+        },
+        "solid": {
+          "type": "boolean"
+        },
+        "mount": {
+          "$ref": "#/$defs/mount"
+        },
+        "visual": {
+          "$ref": "#/$defs/visual"
+        }
       }
     },
     "sign": {
-      "type": "object", "additionalProperties": false, "required": ["id", "x", "y", "title", "text"],
-      "properties": {"id": {"$ref": "#/$defs/id"}, "x": {"$ref": "#/$defs/coordinate"}, "y": {"$ref": "#/$defs/coordinate"}, "title": {"type": "string", "minLength": 1, "maxLength": 120, "pattern": "\\S"}, "text": {"type": "string", "minLength": 1, "maxLength": 300, "pattern": "\\S"}}
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "x",
+        "y",
+        "title",
+        "text"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "x": {
+          "$ref": "#/$defs/coordinate"
+        },
+        "y": {
+          "$ref": "#/$defs/coordinate"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "\\S"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "pattern": "\\S"
+        }
+      }
+    },
+    "legacyTerrain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "x": {
+          "type": "integer",
+          "minimum": 0,
+          "multipleOf": 48
+        },
+        "y": {
+          "type": "integer",
+          "minimum": 0,
+          "multipleOf": 48
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 48,
+          "multipleOf": 48
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 48,
+          "multipleOf": 48
+        }
+      }
+    },
+    "structure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "wall",
+            "platform",
+            "bridge",
+            "doorway",
+            "outfall",
+            "railing"
+          ]
+        },
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "material": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "thickness": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "depth": {
+          "type": "integer",
+          "minimum": -1024,
+          "maximum": 1024
+        },
+        "layer": {
+          "enum": [
+            "rear",
+            "foreground"
+          ]
+        },
+        "mount": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "parent",
+            "socket"
+          ],
+          "properties": {
+            "parent": {
+              "$ref": "#/$defs/id"
+            },
+            "socket": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80,
+              "pattern": "\\S"
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "not": {
+              "required": [
+                "mount"
+              ]
+            }
+          },
+          "then": {
+            "properties": {
+              "x": {
+                "minimum": 0
+              },
+              "y": {
+                "minimum": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "water": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "x",
+            "y",
+            "width",
+            "height"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "depth": {
+              "type": "integer",
+              "minimum": -1024,
+              "maximum": 1024
+            },
+            "kind": {
+              "enum": [
+                "river",
+                "canal",
+                "basin"
+              ]
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "mount": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "parent",
+                "socket"
+              ],
+              "properties": {
+                "parent": {
+                  "$ref": "#/$defs/id"
+                },
+                "socket": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80,
+                  "pattern": "\\S"
+                }
+              }
+            },
+            "current": {
+              "type": "integer",
+              "minimum": -100,
+              "maximum": 100
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "not": {
+                  "required": [
+                    "mount"
+                  ]
+                }
+              },
+              "then": {
+                "properties": {
+                  "x": {
+                    "minimum": 0
+                  },
+                  "y": {
+                    "minimum": 0
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "x",
+            "y",
+            "width",
+            "height"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "depth": {
+              "type": "integer",
+              "minimum": -1024,
+              "maximum": 1024
+            },
+            "kind": {
+              "const": "drain"
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "mount": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "parent",
+                "socket"
+              ],
+              "properties": {
+                "parent": {
+                  "$ref": "#/$defs/id"
+                },
+                "socket": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80,
+                  "pattern": "\\S"
+                }
+              }
+            },
+            "profile": {
+              "enum": [
+                "gutter",
+                "collector"
+              ]
+            },
+            "outletX": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "not": {
+                  "required": [
+                    "mount"
+                  ]
+                }
+              },
+              "then": {
+                "properties": {
+                  "x": {
+                    "minimum": 0
+                  },
+                  "y": {
+                    "minimum": 0
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "width",
+            "from",
+            "to"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "depth": {
+              "type": "integer",
+              "minimum": -1024,
+              "maximum": 1024
+            },
+            "kind": {
+              "const": "waterfall"
+            },
+            "from": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "parent",
+                "socket"
+              ],
+              "properties": {
+                "parent": {
+                  "$ref": "#/$defs/id"
+                },
+                "socket": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80,
+                  "pattern": "\\S"
+                }
+              }
+            },
+            "to": {
+              "$ref": "#/$defs/id"
+            },
+            "overRim": {
+              "type": "boolean"
+            },
+            "behindTerrain": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    },
+    "mount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent",
+        "socket"
+      ],
+      "properties": {
+        "parent": {
+          "$ref": "#/$defs/id"
+        },
+        "socket": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        }
+      }
+    },
+    "visual": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset",
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "properties": {
+        "asset": {
+          "type": "string"
+        },
+        "openAsset": {
+          "type": "string"
+        },
+        "x": {
+          "type": "integer",
+          "minimum": -32736,
+          "maximum": 32736
+        },
+        "y": {
+          "type": "integer",
+          "minimum": -16368,
+          "maximum": 16368
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32736
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16368
+        }
+      }
+    },
+    "prop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "asset",
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "asset": {
+          "type": "string"
+        },
+        "x": {
+          "type": "integer",
+          "minimum": -32736,
+          "maximum": 32736
+        },
+        "y": {
+          "type": "integer",
+          "minimum": -16368,
+          "maximum": 16368
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32736
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16368
+        },
+        "mount": {
+          "$ref": "#/$defs/mount"
+        },
+        "layer": {
+          "enum": [
+            "rear",
+            "foreground"
+          ]
+        },
+        "depth": {
+          "type": "integer",
+          "minimum": -1024,
+          "maximum": 1024
+        },
+        "light": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "opacity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "flip": {
+          "type": "boolean"
+        },
+        "stretch": {
+          "type": "boolean"
+        }
+      }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schemaVersion": {
+            "const": 1
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "tileSize"
+        ],
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "gridSize"
+              ]
+            },
+            {
+              "required": [
+                "water"
+              ]
+            },
+            {
+              "required": [
+                "props"
+              ]
+            },
+            {
+              "required": [
+                "presentation"
+              ]
+            }
+          ]
+        },
+        "properties": {
+          "width": {
+            "multipleOf": 48
+          },
+          "height": {
+            "multipleOf": 48
+          },
+          "terrain": {
+            "items": {
+              "$ref": "#/$defs/legacyTerrain"
+            }
+          },
+          "decorations": {
+            "items": {
+              "$ref": "#/$defs/legacyTerrain"
+            }
+          },
+          "interactables": {
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/interactable"
+                },
+                {
+                  "not": {
+                    "anyOf": [
+                      {
+                        "required": [
+                          "mount"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "visual"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "else": {
+        "not": {
+          "required": [
+            "tileSize"
+          ]
+        },
+        "properties": {
+          "terrain": {
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/structure"
+                },
+                {
+                  "not": {
+                    "required": [
+                      "layer"
+                    ]
+                  }
+                },
+                {
+                  "not": {
+                    "properties": {
+                      "kind": {
+                        "const": "outfall"
+                      }
+                    },
+                    "required": [
+                      "kind"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "decorations": {
+            "items": {
+              "$ref": "#/$defs/structure"
+            }
+          }
+        }
+      }
+    }
+  ]
 }

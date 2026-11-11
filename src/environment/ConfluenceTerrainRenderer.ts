@@ -1,35 +1,30 @@
-import type { Wall } from '../components/Wall';
-import type { Map } from '../components/Map';
-import { ConfluenceAtlas } from './ConfluenceAtlas';
-import { confluenceMaterial } from './ConfluenceMaterials';
+import type {Rect} from '../interfaces/Geometry';
+import type {Map} from '../components/Map';
+import type {SurfaceDefinition} from '../world/surfaces/SurfaceDefinition';
+import {ConfluenceAtlas} from './ConfluenceAtlas';
+import {ConfluenceImageLighting} from './ConfluenceImageLighting';
 
+/** Texture cells repeat inside arbitrary visual surfaces; they never become physics tiles. */
 export class ConfluenceTerrainRenderer {
     private readonly atlas:ConfluenceAtlas;
-    private readonly occupancy=new WeakMap<Map,Set<string>>();
-    constructor(private readonly ctx:CanvasRenderingContext2D,image:HTMLImageElement,private readonly baselines:readonly number[]=[]){this.atlas=new ConfluenceAtlas(ctx,image,4,4);}
-    private key(x:number,y:number){return `${x},${y}`;}
-    private cells(map:Map){
-        let cells=this.occupancy.get(map);
-        if(!cells){cells=new Set(map.solids.filter(w=>w.width===48 && w.height===48).map(w=>this.key(w.x,w.y)));this.occupancy.set(map,cells);}
-        return cells;
+    private readonly rearAtlas:ConfluenceAtlas;
+    constructor(private readonly ctx:CanvasRenderingContext2D,image:HTMLImageElement,private readonly baselines:readonly number[]=[]){this.atlas=new ConfluenceAtlas(ctx,image,4,4);this.rearAtlas=new ConfluenceAtlas(ctx,new ConfluenceImageLighting(image).at(.4),4,4);}
+    draw(wall:Rect & Partial<SurfaceDefinition>,map:Map,view?:Rect){
+        const c=this.ctx,material=wall.material??0;
+        const layer=wall.layer??'terrain';
+        const occupied=(x:number,y:number)=>map.surfaces.some(s=>s.layer===layer&&s.appearance==='terrain'&&x>=s.x&&x<s.x+s.width&&y>=s.y&&y<s.y+s.height);
+        c.save();c.beginPath();c.rect(wall.x,wall.y-24,wall.width,wall.height+24);c.clip();
+        const startX=wall.x+Math.max(0,Math.floor(((view?.x??wall.x)-wall.x)/48))*48;
+        const startY=wall.y+Math.max(0,Math.floor(((view?.y??wall.y)-wall.y-24)/48))*48;
+        const endX=Math.min(wall.x+wall.width,view?view.x+view.width+48:Infinity),endY=Math.min(wall.y+wall.height,view?view.y+view.height+48:Infinity);
+        for(let y=startY;y<endY;y+=48)for(let x=startX;x<endX;x+=48){
+            const top=y===wall.y&&!occupied(x+Math.min(24,wall.width/2),y-1);
+            const left=x===wall.x&&!occupied(x-1,y+1),right=x+48>=wall.x+wall.width&&!occupied(wall.x+wall.width,y+1);
+            const index=material*4+(top?(left?0:right?2:1):3);
+            const drawX=right&&wall.width>=48?wall.x+wall.width-48:x;
+            (layer==='rear'?this.rearAtlas:this.atlas).surface(index,drawX,y,48,48,top?this.baselines[index]??0:0);
+        }
+        c.fillStyle='#070d13';c.fillRect(wall.x,wall.y+wall.height-2,wall.width,2);c.restore();
     }
-    private material(x:number,y:number){
-        return confluenceMaterial(x,y);
-    }
-    draw(wall:Wall,map:Map){
-        // Solid interactive objects paint their own sprite over the same collision bounds.
-        if(wall.width!==48 || wall.height!==48)return;
-        const cells=this.cells(map),top=!cells.has(this.key(wall.x,wall.y-48));
-        const left=!cells.has(this.key(wall.x-48,wall.y)),right=!cells.has(this.key(wall.x+48,wall.y));
-        const column=top?(left?0:right?2:1):3;
-        const material=map.id==='last-platform-rebuild'?(wall.x>=7248?3:wall.x>=5808?2:wall.x>=2208?1:0):this.material(wall.x,wall.y);
-        const index=material*4+column;
-        this.atlas.surface(index,wall.x,wall.y,wall.width,wall.height,top?this.baselines[index]??0:0);
-        if(!cells.has(this.key(wall.x,wall.y+48))){this.ctx.fillStyle='#070d13';this.ctx.fillRect(wall.x,wall.y+46,48,2);}
-    }
-    decoration(wall:Wall){
-        this.ctx.save();this.ctx.globalAlpha=.32;
-        for(let x=wall.x;x<wall.x2;x+=48)for(let y=wall.y;y<wall.y2;y+=48)this.atlas.draw(this.material(x,y)*4+1,x,y,48,48);
-        this.ctx.restore();
-    }
+    decoration(wall:Rect,map:Map,view?:Rect){this.draw(wall,map,view);}
 }

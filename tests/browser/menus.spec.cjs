@@ -90,7 +90,7 @@ test('pause, options and the main menu freeze a run; Continue resumes and New ga
     await page.getByRole('button', {name: 'New game', exact: true}).click();
     await expect(page.locator('#overlay')).toBeHidden();
     await expect(page.locator('#health')).toHaveText('5 / 5');
-    await expect(page.locator('#count')).toHaveText('0 / 8');
+    await expect(page.locator('#count')).toHaveText('0 / 2');
     await expect(page.locator('#progress')).toHaveAttribute('style', initial);
 });
 

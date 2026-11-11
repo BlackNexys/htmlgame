@@ -26,19 +26,19 @@ test('visual authoring, property editing, history and portable JSON round trip',
     await page.getByRole('button', {name: 'Apply properties', exact: true}).click();
     await expect.poll(async () => (await snapshot(page)).terrain[1].width).toBe(96);
     await page.getByRole('button', {name: 'Undo', exact: true}).click();
-    await expect.poll(async () => (await snapshot(page)).terrain[1].width).toBe(48);
+    await expect.poll(async () => (await snapshot(page)).terrain[1].width).toBe(8);
     await page.getByRole('button', {name: 'Redo', exact: true}).click();
     await expect.poll(async () => (await snapshot(page)).terrain[1].width).toBe(96);
 
     await page.getByRole('button', {name: 'Select / move', exact: true}).click();
     const canvas = await page.locator('#level-canvas').boundingBox();
-    await page.mouse.move(canvas.x + 276, canvas.y + 276); await page.mouse.down();
-    await page.mouse.move(canvas.x + 300, canvas.y + 276); await page.mouse.up();
+    await page.mouse.move(canvas.x + 276, canvas.y + 266); await page.mouse.down();
+    await page.mouse.move(canvas.x + 300, canvas.y + 266); await page.mouse.up();
     await expect.poll(async () => (await snapshot(page)).terrain[1].x).toBe(576);
 
     const json = await snapshot(page);
     const download = page.waitForEvent('download');
-    await page.getByRole('button', {name: 'Export JSON', exact: true}).click();
+    await page.getByRole('button', {name: 'Export JSON snapshot', exact: true}).click();
     const exported = await download;
     expect(exported.suggestedFilename()).toBe('untitled-level.json');
     expect(await downloadedJson(exported)).toEqual(json);
@@ -105,19 +105,19 @@ test('playtesting uses an independent game snapshot and restart retains the chos
     expect(await page.locator('#game').count()).toBe(0);
 });
 
-test('the runtime fetches only its requested JSON and explains invalid or missing levels', async ({page}) => {
+test('explicit snapshot URLs fetch only their requested JSON and explains invalid or missing levels', async ({page}) => {
     const level = {...createBlankLevel(), id: 'test-level'};
-    const requests = []; page.on('request', request => { if (request.url().includes('/levels/')) requests.push(request.url()); });
-    await page.route('**/levels/test-level.json', route => route.fulfill({json: level}));
-    await page.goto('/?level=test-level');
+    const requests = []; page.on('request', request => { if (new URL(request.url()).pathname.startsWith('/levels/')) requests.push(request.url()); });
+    await page.route(url=>url.pathname==='/levels/test-level.json', route => route.fulfill({json: level}));
+    await page.goto('/?levelUrl=/levels/test-level.json');
     await expect(page.getByRole('button', {name: 'Play', exact: true})).toBeEnabled();
     expect(requests).toHaveLength(1); expect(requests[0]).toContain('/levels/test-level.json');
     expect(await page.evaluate(() => window.levelEditor)).toBeUndefined();
-    await page.route('**/levels/broken-level.json', route => route.fulfill({json: {...level, id: 'broken-level', schemaVersion: 99}}));
-    await page.goto('/?level=broken-level');
+    await page.route(url=>url.pathname==='/levels/broken-level.json', route => route.fulfill({json: {...level, id: 'broken-level', schemaVersion: 99}}));
+    await page.goto('/?levelUrl=/levels/broken-level.json');
     await expect(page.locator('#panel-title')).toHaveText('The passage could not load');
     await expect(page.locator('#panel-message')).toContainText('schemaVersion');
-    await page.route('**/levels/missing-level.json', route => route.fulfill({status: 404, body: 'Missing'}));
-    await page.goto('/?level=missing-level');
+    await page.route(url=>url.pathname==='/levels/missing-level.json', route => route.fulfill({status: 404, body: 'Missing'}));
+    await page.goto('/?levelUrl=/levels/missing-level.json');
     await expect(page.locator('#panel-message')).toContainText('HTTP 404');
 });

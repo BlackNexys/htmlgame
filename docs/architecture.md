@@ -7,6 +7,7 @@ The project uses a class for each entity or system with a distinct responsibilit
 | Folder | Responsibility |
 | --- | --- |
 | `src/components` | Game entities and their behavior |
+| `src/world` | Concrete structure classes, socket resolution, registered collision geometry and independent surfaces |
 | `src/game` | Session and loop control, loading, input, factories, and tuning |
 | `src/game/systems` | Combat, collision queries, corpses, effects, ectoplasm and interaction target selection |
 | `src/game/movement` | Player locomotion, aim, and stateless physics |
@@ -17,10 +18,11 @@ The project uses a class for each entity or system with a distinct responsibilit
 | `src/dialogue` | Browser-free dialogue/scene controllers, authored scene data, modal UI and browser session lifetime |
 | `src/narrative` | Campaign knowledge, conditional scene selection, typed completion effects, current lead, saving and separate narrative UI |
 | `src/interfaces` | Shared contracts with no runtime behavior |
-| `src/maps` | Synchronous level fixture for tests and the original map reference |
-| `src/levels` | Shared JSON authoring contract, validation, compilation, loading, and revision-checked changes |
+| `src/content/levels` | Importable TypeScript level sources; currently empty after the reset |
+| `src/levels/source` | Parameterized scene assemblies, source layouts, scoped overrides, validated builds and source/layout export |
+| `src/levels` | Compiled scene contract, validation, module/snapshot loading, compilation and revision-checked draft changes |
 | `src/editor` | Independent authoring application, canvas, inspector, history, file handling, and snapshot preview |
-| `public/levels` | Individual level JSON files and the published JSON Schema |
+| `public/levels` | Published JSON Schema for compiled interchange snapshots |
 
 Entities depend on capability contracts in `src/interfaces/Simulation.ts`, rather than on the concrete `World`. `EnemyContext` exposes target/terrain queries and corpse/projectile services; `CharacterContext`, `WeaponContext`, and `ProjectileContext` expose the capabilities needed for movement and attacks. Readonly properties prevent consumers from replacing world-owned collections, while shot/event queues remain appendable. Service capabilities expose selected methods, not their internal bookkeeping. `World` implements these contracts structurally, without adapters or a second simulation model. These are compile-time boundaries, not immutable runtime snapshots.
 
@@ -30,7 +32,7 @@ Each runtime class has its own file. Small stateless geometry operations remain 
 
 ## Session and timing
 
-`app.ts` chooses the JSON level source and starts `Game`. `Game` coordinates loading, the current `World`, input, sound, screen presentation, and menu transitions. `GameMenu` presents pause/outcome menus and the toolbar; `MainMenu` owns title navigation and options/control dialogs. `MenuNavigation` supplements native keyboard interaction with arrows, Home, and End. `GamePreferences` persists sound and hint preferences. `Hud` owns the readouts and encounter hint.
+`app.ts` chooses a TypeScript module, explicit JSON snapshot URL, or ephemeral empty workspace and starts `Game`. `Game` coordinates loading, the current `World`, input, sound, screen presentation, and menu transitions. `GameMenu` presents pause/outcome menus and the toolbar; `MainMenu` owns title navigation and options/control dialogs. `MenuNavigation` supplements native keyboard interaction with arrows, Home, and End. `GamePreferences` persists sound and hint preferences. `Hud` owns the readouts and encounter hint.
 
 The title layout fits a centered scene frame to the viewport height on wide windows. Navigation scales against that frame rather than the full viewport width; artwork layers keep a common aspect ratio. Portrait windows crop the decorative scene, and a flowing footer reserves room for wrapped text and the extra Continue action. Very short landscape windows use a two-column title layout.
 
@@ -62,7 +64,7 @@ Explicit older `menuScene` query IDs still load the earlier `TitleArt` v1 contra
 
 `Map` creates `Wall`, `Sign`, and `Exit` instances from level definitions. `Exit` tests whether the player has reached it. `Camera` follows an actor and clamps its view to the map.
 
-The runtime takes an explicit `Level`; it does not choose or author one. `LevelLoader` fetches a selected JSON document, validates it, and compiles it before `Game` constructs `World`. Restarting reuses the loaded definition with fresh entities. `LevelCompiler` converts bottom-center actor anchors and compact terrain rectangles into the runtime's existing coordinates and tiles. Decoration is drawn separately and never enters the collision set.
+The runtime takes an explicit `Level`; it does not choose or author one. `LevelLoader` imports a selected repository-owned TypeScript source module, builds and validates its document, and compiles it before `Game` constructs `World`. Explicit `levelUrl` requests still load JSON data. See [source-first authoring](level-source-authoring.md) for the composition boundary. Restarting reuses the loaded definition with fresh entities. `LevelCompiler` converts bottom-center actor anchors and structure definitions into independent runtime collision parts and surfaces. Decoration is drawn separately and never enters the collision set.
 
 `editor.html` and `src/editor/app.ts` form a separate application entry point. Editor history and gestures operate on JSON documents, not `World` instances. A playtest launches the normal game in a separate browsing context from a frozen JSON Blob URL. Only the shared level contract and validation cross that boundary. See [level authoring](level-authoring.md) for human and agent workflows.
 
@@ -78,13 +80,13 @@ The runtime takes an explicit `Level`; it does not choose or author one. `LevelL
 
 `CollisionSystem` owns line-of-sight queries and earliest projectile impacts, with terrain winning equal-time impacts. `Combat` owns damage feedback, defeat credit, and handing defeated actors to `Graveyard`. `Graveyard` owns corpse lookup, claim release, and reactivation membership. The necromancer still owns its channel decision and finite budget. `ParticleSystem` spawns and expires particles.
 
-Movement grants no damage immunity; enemy contact and projectile hits use the normal damage and recovery rules. Camera following uses fixed-step exponential damping, horizontal velocity look-ahead, a vertical dead zone, and level bounds. The movement course uses the same JSON contract and runtime as other levels, with no editor dependency.
+Movement grants no damage immunity; enemy contact and projectile hits use the normal damage and recovery rules. Camera following uses fixed-step exponential damping, horizontal velocity look-ahead, a vertical dead zone, and level bounds. The old movement course was removed with the level reset; movement tests use isolated geometry without an editor dependency.
 
 These systems are fresh for every new world. Reactivation preserves the original concrete enemy instance and its methods, without duplicating its defeat credit or active membership.
 
 ## Presentation
 
-`src/environment` owns the Confluence art kit, independently of collision and narrative. `EnvironmentLoader` optionally loads validated images/frames for The Last Platform. `ConfluenceEnvironment` composes background, terrain, scenery, architecture, object and exit renderers. `ConfluenceScene.ts` holds props/facades/landmarks, `ConfluenceArchitecture.ts` holds architectural modules, and `ConfluenceMaterials.ts` defines material regions. The distant city uses X/Y parallax, and local sprites follow world coordinates. Each decorative atlas can fail independently. `MapRenderer` culls tiles in both axes. The runtime JSON remains the collision authority, including for the revision-5 cyberundead district. `ConfluenceWaterRenderer` adds cosmetic spectral waterways, using simulation elapsed time so they freeze with gameplay. See the [current v3 asset notes](../public/assets/environment/confluence/v3/README.md) for sources, exact prompts and reproducible packing.
+`src/environment` owns the Confluence art kit, independently of collision and narrative. `EnvironmentLoader` loads explicit environment and catalog asset requirements rather than recognizing level IDs. `ConfluenceEnvironment` composes background, terrain, optional structure-derived assemblies and exit art. Placed furniture, building shells, architectural modules and landmarks belong to the level's `props` collection; `SceneryProp` and `PropRenderer` keep placement and drawing separate from collision. The distant city uses X/Y parallax. Image tinting preserves alpha and each pack can fail independently. Historical placement tables are reference/import data, not normal runtime drawing rules. `Map.water` owns an authored `WaterNetwork`; `GameScreen` composes its independent simulation-time pass. See [authored scene art](authored-scene-art.md) and [water elements](water-elements.md).
 
 `NarrativeSession` coordinates a separate fact-driven layer. `CampaignStages.ts` declares entry/completion effects, exit conditions, required objects, destinations and optional completion copy; `StoryCatalog.ts` groups each story's discoveries and journal visibility. `InteractionSystem` selects NPCs or physical `Interactable` entities; the session resolves scenes/cards, commits complete effect batches, and reconciles permanent discoveries with a fresh world. `World` owns geometry and enabled exits, without story-specific conditions. `EffectApplier` validates a batch before mutation; `SaveStore` writes important discoveries immediately. Temporary gate state and NPC counts reset with each world. Workshop previews never read or write the campaign. See [narrative systems](narrative-system.md) for ownership, evidence provenance and save failure policy.
 
@@ -94,7 +96,9 @@ These systems are fresh for every new world. Reactivation preserves the original
 
 ## Extending the game
 
-The Confluence visual layer additionally separates facade tinting (`ConfluenceFacadeRenderer`), cap alignment (`TerrainManifest` and `ConfluenceAtlas.surface`), rear structural supports (`ConfluenceStructuresRenderer` / `ConfluenceStructures`), and cosmetic water placement (`ConfluenceWaterways`). Tinting occurs in an isolated atlas so transparent margins remain transparent. Supports follow the actual exposed terrain runs but never alter collision. Water uses optional scrolling bitmap materials. The [v4 polish notes](../public/assets/environment/confluence/v4/README.md) document white-background verification, bearing checks and reproducible packing alongside the retained v3 architecture/city.
+The [world structure system](world-structures.md) uses schema v2, concrete construction classes, arbitrary rectangle dimensions, independent render surfaces and socket mounts. `CollisionWorld` owns registered handles and the common queries used by all actors and projectiles. The [research proposal](flexible-world-geometry.md) records the design and later shape/behavior stages.
+
+The Confluence visual layer additionally separates facade tinting (`ConfluenceFacadeRenderer`), cap alignment (`TerrainManifest` and `ConfluenceAtlas.surface`), rear structural supports (`ConfluenceStructuresRenderer` / `ConfluenceStructures`), and authored water connections (`WaterNetwork`). Tinting occurs in an isolated atlas so transparent margins remain transparent. Supports follow the actual exposed terrain runs but never alter collision. Water uses optional scrolling bitmap materials. The [v4 polish notes](../public/assets/environment/confluence/v4/README.md) document white-background verification, bearing checks and reproducible packing alongside the retained v3 architecture/city.
 
 For a new enemy, add its class under `components`, add tuning and its level identifier, register the constructor in `EnemyFactory`, and supply its sprite sheet. Keep decisions in the new class and expose any needed presentation state for the renderer.
 
@@ -126,4 +130,6 @@ The v5 background kit separates continuous wall material from selected fa?ade ba
 
 The v6 canopy uses a complete front elevation. Windows are inset details on the v5 building shells, with duplicate full-frontage layers removed. Arrival windows sit between the roof-stair piers; the Registry arcade and archive furniture use distinct bays. Clock brackets mount on building corners, and tight landmark bounds exclude neighboring atlas fragments.
 
-`ConfluenceImageLighting` shades source RGB while retaining alpha. Architecture, rear supports, trims, props and near landmarks draw at full opacity. `ConfluenceLandmarksRenderer` separates distant spectral scenery (before walls) from mounted or grounded landmarks. The v6 packing script preserves generated sources and emits validated frame metadata; the high-resolution canopy remains a separate optional image. Terrain, interactions and save data are unchanged. The screenshot utility captures eleven district details alongside the full-level image.
+`ConfluenceImageLighting` shades source RGB while retaining alpha. Architecture, rear supports, trims, props and near landmarks draw at full opacity. Authored depth and opacity distinguish distant spectral props from mounted or grounded landmarks. The v6 packing script preserves generated sources and emits validated frame metadata; the high-resolution canopy remains a separate optional image. Terrain, interactions and save data are unchanged. The screenshot utility captures eleven district details alongside the full-level image.
+
+Source-bound workshop sessions retain a `LevelSource` plus a `LevelLayout` across history and draft restoration. The game, CLI and editor all compile that pair through the same source build. Assembly movement/parameters operate on instances; generated-child edits become local property deltas. See [the shared authoring contract](source-editor-workflow.md).

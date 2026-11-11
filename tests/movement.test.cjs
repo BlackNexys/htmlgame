@@ -13,21 +13,6 @@ const level = (extra = {}) => ({width: 5000, height: 2400, solids: [{x: 0, y: 12
 function run(world, seconds, controls = idle) { for (let i = 0; i < Math.round(seconds / T.step); i++) world.update(T.step, controls); }
 function until(world, condition, seconds = 3, controls = idle) { for (let i = 0; i < seconds / T.step && !condition(); i++) world.update(T.step, controls); assert.ok(condition(), 'condition was not reached'); }
 
-test('the authored movement course can be completed through its walls and landings', () => {
-    const world = new World(compileLevel(require('../public/levels/movement-course.json')));
-    let nextJump = 0, wallJumps = 0;
-    for (let step = 0; step < 120 * 30 && world.state === 'playing'; step++) {
-        const player = world.player;
-        const obstacle = world.level.solids.some(rect => rect.y < player.y2 && rect.y + rect.height > player.y && rect.x >= player.x2 && rect.x < player.x2 + 65);
-        const gap = player.x > 1310 && player.x < 1460;
-        const wallJump = player.movement.wallSide === 1 && player.vy >= 0;
-        const jump = step >= nextJump && ((player.grounded && (obstacle || gap)) || wallJump);
-        if (jump) { nextJump = step + 20; if (wallJump && !player.grounded) wallJumps++; }
-        world.update(T.step, {...idle, right: true, sprint: true, fire: true, jump, jumpHeld: jump || (!player.grounded && player.vy < 0)});
-    }
-    assert.equal(world.state, 'won'); assert.ok(world.player.health > 0); assert.ok(wallJumps >= 3);
-});
-
 test('sprint has equivalent travel at 30, 60 and 144 rendered frames per second', () => {
     const samples = [30, 60, 144].map(fps => {
         const world = new World(level()), clock = new FixedClock(); let steps = 0;
@@ -159,12 +144,4 @@ test('camera look-ahead eases through reversals, follows vertical travel and cla
     assert.ok(camera.y < 10);
     subject.x = 10000; subject.y = 10000; camera.follow(subject, bounds);
     assert.equal(camera.x, bounds.width - camera.width); assert.equal(camera.y, bounds.height - camera.height);
-});
-
-test('the movement course is valid, has a recovery floor, and keeps the regression level separate', () => {
-    const course = require('../public/levels/movement-course.json');
-    const compiled = compileLevel(course);
-    assert.equal(compiled.height, 1152); assert.equal(compiled.enemies.length, 2);
-    assert.ok(course.terrain.some(block => block.id === 'gap-recovery'));
-    assert.equal(require('../public/levels/lower-passage.json').revision, 1);
 });

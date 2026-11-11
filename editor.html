@@ -14,7 +14,8 @@
       <a href="./index.html" target="_blank" rel="noopener">Open game ↗</a>
       <bl-button id="new-level">New level</bl-button>
       <bl-button id="open-level">Open JSON</bl-button>
-      <bl-button id="export-level">Export JSON</bl-button>
+      <bl-button id="export-level">Export JSON snapshot</bl-button>
+      <bl-button id="export-source">Export TypeScript</bl-button>
       <bl-button id="playtest" variant="primary">Playtest</bl-button>
     </nav>
   </header>
@@ -25,15 +26,24 @@
         <form id="level-properties">
           <label>Level ID<input name="id" required pattern="[a-z][a-z0-9-]{0,79}" maxlength="80"></label>
           <label>Name<input name="name" required maxlength="120"></label>
-          <div class="editor-field-row"><label>Width<input name="width" type="number" min="960" max="32736" step="48" required></label><label>Height<input name="height" type="number" min="576" max="16368" step="48" required></label></div>
+          <label>Environment<select name="presentation"><option value="">Simple mechanics backdrop</option><option value="assemblies">Confluence buildings</option><option value="construction">Confluence construction only</option><option value="authored">Confluence authored scenery</option></select></label>
+          <div class="editor-field-row"><label>Width<input name="width" type="number" min="960" max="32736" step="1" required></label><label>Height<input name="height" type="number" min="576" max="16368" step="1" required></label></div>
           <bl-button type="submit">Apply level properties</bl-button>
         </form>
         <bl-button id="reset-properties" variant="quiet">Reset property edits</bl-button>
-        <p class="editor-help">World pixels · 48 px grid. The draft is saved in this browser. Export a JSON file to share or commit it.</p>
-        <bl-button id="load-example" variant="quiet">Load example</bl-button>
+        <p class="editor-help">World pixels with optional snapping. The draft is saved in this browser. Export a JSON file to share or commit it.</p>
+        <label>TypeScript source<select id="source-level"></select></label>
+        <bl-button id="load-source" variant="quiet">Open level source</bl-button>
+        <p class="editor-help">Source functions define assemblies. Visual edits are saved as a layout companion, shared by the game and workshop.</p>
+      </section>
+      <section class="editor-section">
+        <h2>Assemblies</h2>
+        <label>Assembly instance<select id="assembly-list"></select></label>
+        <form id="assembly-properties"></form>
       </section>
       <section class="editor-section">
         <h2>Objects</h2>
+        <label>Filter objects<input id="object-filter" type="search" placeholder="ID or assembly instance"></label>
         <label class="editor-sr" for="object-list">Level objects</label>
         <select id="object-list" size="9"></select>
         <bl-button id="delete-object" variant="danger" disabled>Delete selected</bl-button>
@@ -42,14 +52,24 @@
     <section class="editor-workspace" aria-label="Map workspace">
       <div class="editor-tools" role="group" aria-label="Map tools">
         <bl-button data-tool="select" aria-pressed="true">Select / move</bl-button>
+        <bl-button data-tool="assembly" aria-pressed="false">Move assembly</bl-button>
         <bl-button data-tool="terrain" aria-pressed="false">Terrain</bl-button>
         <bl-button data-tool="decorations" aria-pressed="false">Decoration</bl-button>
+        <bl-button data-tool="water" aria-pressed="false">Water</bl-button>
+        <bl-button data-tool="props" aria-pressed="false">Prop</bl-button>
         <bl-button data-tool="spawn" aria-pressed="false">Player</bl-button>
         <bl-button data-tool="exit" aria-pressed="false">Exit</bl-button>
         <bl-button data-tool="enemy" aria-pressed="false">Enemy</bl-button>
         <bl-button data-tool="npc" aria-pressed="false">NPC</bl-button>
         <bl-button data-tool="interactable" aria-pressed="false">Object</bl-button>
         <bl-button data-tool="sign" aria-pressed="false">Sign</bl-button>
+        <label>Structure<select id="structure-kind"><option value="wall">wall</option></select></label>
+        <label>Prop asset<select id="prop-asset"></select></label>
+        <label>Water element<select id="water-kind"><option value="canal">Canal</option><option value="river">River</option><option value="basin">Catch basin</option><option value="drain">Drain</option></select></label>
+        <label>Flow source<select id="water-source"><option value="">(choose)</option></select></label>
+        <label>Receiving water<select id="water-target"><option value="">(choose)</option></select></label>
+        <bl-button id="connect-water">Connect water</bl-button>
+        <label>Snap<select id="grid-size"><option value="1">Free (1 px)</option><option value="4">4 px</option><option value="8" selected>8 px</option><option value="16">16 px</option><option value="48">48 px</option></select></label>
         <label>Enemy type<select id="enemy-kind"><option>zombie</option><option>skeleton</option><option>ghoul</option><option>ghost</option><option>wight</option><option>necromancer</option></select></label>
         <label>NPC type<select id="npc-kind"><option value="rail-attendant">Rail attendant</option></select></label>
         <label>NPC scene<select id="npc-scene"><option value="station-exchange">station-exchange</option></select></label>
@@ -57,9 +77,9 @@
       </div>
       <div class="editor-view-tools">
         <div><bl-button id="undo" disabled>Undo</bl-button><bl-button id="redo" disabled>Redo</bl-button></div>
-        <div><label>Zoom<select id="zoom"><option value=".25">25%</option><option value=".5" selected>50%</option><option value="1">100%</option><option value="2">200%</option></select></label><bl-button id="fit-map">Fit map</bl-button></div>
+        <div><label>Zoom<select id="zoom"><option value=".25">25%</option><option value=".5" selected>50%</option><option value="1">100%</option><option value="2">200%</option></select></label><bl-button id="fit-map">Fit map</bl-button><bl-button id="focus-selection">Focus selection</bl-button></div>
       </div>
-      <p id="tool-help" class="editor-help">Click an object to select it. Drag to move in 48-pixel steps; use the inspector for exact positions.</p>
+      <p id="tool-help" class="editor-help">Click an object to select it. Drag with the selected snap; use the inspector for exact dimensions.</p>
       <div class="editor-stage"><canvas id="level-canvas" tabindex="0" aria-label="Level editing canvas. Use the object list and inspector to edit with a keyboard." aria-describedby="tool-help"></canvas></div>
       <div class="editor-legend"><span class="legend-player">◆ Player / exit</span><span class="legend-enemy">◆ Enemies / patrols</span><span>■ Solid terrain</span><span id="revision">Loading</span></div>
       <p id="editor-status" role="status" aria-live="polite">Opening the workshop…</p>

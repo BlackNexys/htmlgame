@@ -1,55 +1,53 @@
-# The Last Platform: rebuilt preview
+> Historical record: all authored levels were removed on 10 November 2026. Play URLs and old test totals below describe the retired layouts. See the [reset decisions](level-authoring-reset.md) and [current source workflow](level-source-authoring.md).
 
-8 November 2026. Play **`/?level=last-platform-rebuild`**. The previous district remains at `/?level=last-platform-demo` for comparison.
+# The Last Platform: river crossing
 
-This is a new playable layout built from the [research blueprint](level-design-research.md), using the approved cyberundead assets. It includes the complete existing evidence-to-departure sequence. It is a first construction and traversal pass, not final pacing or final environment art.
+Rebuilt from an empty layout on 9 November 2026. Play **`/?level=last-platform-rebuild`**. The older district remains at `/?level=last-platform-demo` for comparison. The [authoring friction log](level-authoring-friction.md) records concrete obstacles encountered during this rebuild, workarounds and candidate improvements.
 
-## Route
+This is a fresh layout using the current structure and water architecture and the approved cyberundead kit. It retains the existing evidence-to-departure story and isolated preview behavior. No new movement powers or water mechanics are required.
 
-The level is 10,560 × 1,920 pixels, on the existing 48-pixel grid.
+## Route and composition
 
-| Beat | Purpose |
+The world is 11,872 by 2,112 pixels, with 8-pixel editor snapping. Its 29 structures use explicit materials, 24-40 pixel physical decks and mostly 80-pixel rises; bridge envelopes are separate from their decks. The route occupies several connected height bands rather than inheriting the old terrain coordinates.
+
+| Beat | Layout and purpose |
 | --- | --- |
-| Arrivals | Safe orientation, attendant, grounded station shelter |
-| Concourse | Broad movement space, small rises, first zombie |
-| River viaduct | Separated bridge sections, skeleton then ghoul |
-| Freight | Landing and fighting room, climb toward the Registry |
-| Registry | Quiet reading gallery and transfer ledger |
-| Archive | Descent, zombie/necromancer encounter, route index at the east end |
-| Departure | Wight on a broad floor, physical shutter release, exit |
+| Arrivals | Broad safe platform at Y=1248, complete station shelter, booth, timetable and neutral attendant |
+| Concourse | Two broad 80-pixel rises, room to run and the first zombie; visible roof/viaduct split |
+| River viaduct | Three supported bridge decks, 104-pixel gaps and one 40-pixel rise; skeleton and ghoul in separate lanes |
+| Freight exchange | A visible 240-pixel descent into the approach, joined by the lower recovery route; two short climbs into a broad work yard |
+| Registry | Purposeful climb to Y=928, quiet gallery, benches and the physical transfer ledger |
+| Archive | Two descending terraces into Y=1168; zombie/necromancer setup, then a separate east reading desk for the route index |
+| Departure | Descending terraces to Y=1488, broad wight encounter, physical shutter and outbound lead |
 
-The roof branch climbs from the concourse, contains the existing unfinished letter, and reconnects at freight. Missing a viaduct jump lands on the canal maintenance route, which proceeds east to freight. Neither branch bypasses the required evidence. The camera follows both horizontal and vertical travel.
+The optional roof route branches from the concourse, rises to Y=768, contains the unfinished letter and rejoins the eastern viaduct before freight. The lower towpath at Y=1488 catches missed bridge jumps and climbs forward into freight. Neither branch skips required evidence. Both axes and the existing vertical camera are exercised.
 
-Controls and powers are unchanged. F interacts, K opens Journey. Mandatory rises are at most 96 pixels. The new routes are tested without sprinting. The prototype is compact: the automated pilot traverses the main route in roughly 35 seconds excluding reading and deliberation. That is a reachability measurement, **not** evidence that the original 8–12 minute first-visit target has been met.
+The complete main pilot takes about 37 seconds before the final exit approach, excluding reading, inspection and deliberation. It uses ordinary running, jumping and firing, with normal health; sprint is not required. This is a reachability measurement, not a first-time-player pacing or difficulty claim. The roof and recovery routes also pass with normal combat enabled.
 
-## Construction
+## Buildings and water
 
-`RebuiltConfluenceAssemblies` extracts exposed floor runs from compiled collision tiles. Each support terminates on the first floor under its own footprint, or at the world foundation. `RebuiltConfluenceScenery` owns the decorative wall fields, inset windows, support shafts, lamps, shelter and textured canal. Physics remains in the level data and simulation.
+Scenery assemblies now follow the owning structure's type, material and actual deck thickness. A bridge stays a bridge when moved; its piers terminate at the next floor beneath their footprint or at the world foundation. Masonry galleries and their inset windows remain rear art, independent of colliders. Floor-attached furniture is now authored in the level's `props` collection, separate from wall/support composition. Story objects also have explicit visual bounds and mounts; see [authored scene art](authored-scene-art.md).
 
-This replaces the old layout's unrelated placement lists for the preview. Windows are quiet insets; the arrival canopy retains its complete front-facing silhouette. Wall shading preserves opacity. The letter, ledger, index and shutter use their relocated interaction anchors.
+The station's two mounted gutters feed a contained canal beneath the arrival platforms. Its eastern spill empties into the soul-river at Y=1760. The freight floor carries an outfall, collector, receiving basin and rim overflow; all five falling connections end in authored receiving water and avoid playable floors. The eleven water elements use the shared network and renderers. The river spans the full world width.
 
-Support caps, feet and wall bands use the building kit's textured trims instead of flat gray rectangles. The animated soul-river spans the full level below the routes, drawn in front of deep foundations so it stays visible.
+The materials remain dark blue masonry and signal glass, cyan water/electronics, magenta accents and warm amber lamps. Water is cosmetic and freezes with simulation time. Missing optional art preserves gameplay. The current kit is reused; no generated concept image is substituted for runtime geometry.
 
-The approved [water concept](Worldbuilding/water-concepts/water-studies-v1.png) is implemented as two station gutter/downpipe connections feeding a quiet elevated canal, a canal-end spill into the river, and one freight collector/sluice with a receiving basin and a separate overflow. This replaces automatic waterfalls under bridge spans. The [v7 drainage kit](../public/assets/environment/confluence/v7/README.md) provides visible mouths and basin geometry. Surface water is dark, with subdued texture, slow horizontal currents and broken reflections; brighter foam and spray stay local to impacts. All water is cosmetic and pauses with simulation time. Routes and collision remain unchanged.
-
-`RebuiltConfluenceWaterways` owns the connections, `ConfluenceDrainageRenderer` draws dry infrastructure, and `RebuiltSoulRiverRenderer` handles surfaces and impacts using the shared downward waterfall renderer. `node scripts/check-water-motion.mjs` compares rendered pixels across time: the material moves down ten pixels over a quarter second and remains identical at frozen time. It writes a four-frame motion strip to `artifacts/water-motion.png`.
-
-The initial pass reuses v4 terrain/props/water, v5 walls, v6 insets/canopy and the v3 city. The approved water pass adds generated v7 drainage modules; it establishes no new story canon. The [kit specification](confluence-kit-spec.md) still tracks missing authored junctions, richer building silhouettes, regional landmarks and final material topology. The simple support assemblies are an initial implementation, not the complete production kit.
-
-## Preview and saves
-
-This layout always runs with isolated preview progress, including when the URL omits `preview=1`. It neither loads nor writes the existing campaign save. Discoveries remain for stage restarts within the current session; reloading starts a fresh preview. Journey reset stays in this rebuilt level. The regular demo retains its immediate permanent discoveries and Keepsakes.
-
-The same existing story effects and gate conditions are used. Learning the destination alone cannot finish the level: the player must physically operate the shutter. S-17 remains an onward lead, not a playable next chapter.
-
-## Verification and review
-
-Simulation tests cover the main route with ordinary combat, roof letter/rejoin, a real fall into the recovery route, construction support endpoints and save isolation. Browser tests use keyboard controls to read the ledger, decode the index, operate the shutter and finish in Chromium and Firefox. A fractional tile-seam collision discovered during this playthrough also has a regression test.
-
-The [whole-level render](../public/docs/last-platform-overview-rebuild.png) uses the actual game renderers. Regenerate with the dev server running:
+The actual [whole-level render](../public/docs/last-platform-overview-rebuild.png) is reviewable at full resolution. Its city backdrop is uniformly fitted and repeated for the overview; normal gameplay uses the existing parallax camera. Regenerate it and room crops from structural/water IDs:
 
 ```sh
 node scripts/capture-confluence-overview.mjs http://127.0.0.1:3012 rebuild
 ```
 
-Next human playtest questions: does the roof split read clearly; can the lower route be recognized while falling; does combat have enough breathing room; and are the long Registry/departure floors satisfying? Tune those before spending time on dense final dressing. No claim of perfect difficulty, timing or visual polish yet.
+## Story and saves
+
+F interacts; K opens Journey. The optional letter, ledger, index and shutter retain their stable IDs and existing effects. Knowledge alone cannot complete the stage: the player must physically release the shutter. S-17 remains an onward lead, not a built next chapter.
+
+The rebuild always runs in an isolated preview session, even without `preview=1`. It neither loads nor writes campaign progress. Session discoveries survive stage restart; a page reload starts a fresh preview. Journey reset stays in this level.
+
+## Verification and remaining questions
+
+The real simulation verifies main-route combat, physical evidence access, shutter release and completion, plus the roof Keepsake and a missed-jump recovery with ordinary combat. Support endpoints and coordinate-independent bridge dressing have regression checks. Browser tests use named route beats and actual keyboard/card controls; inventory checks verify runtime JSON, restart and workshop round trips.
+
+Run `npm run level:audit`, `npm run check` and the relevant browser tests after edits. See the [friction log](level-authoring-friction.md) for the final verification record and limitations discovered during construction.
+
+Human playtest questions remain: does the roof split read at speed; is the towpath visible before a missed jump; does the freight drop feel deliberate; is the quiet Registry a satisfying pause; and does the descent to departure provide enough variety? The prototype establishes connected spaces, not final balance or finished pacing.

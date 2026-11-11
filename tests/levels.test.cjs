@@ -12,39 +12,23 @@ const {formatDocument} = require('../src/levels/LevelDocument.ts');
 const {EditorSession} = require('../src/editor/EditorSession.ts');
 const {createBlankLevel} = require('../src/editor/createBlankLevel.ts');
 const {World} = require('../src/game/World.ts');
-const original = require('../public/levels/lower-passage.json');
 const patch = (document, operations) => ({levelId: document.id, baseRevision: document.revision, operations});
 
-test('the shipped JSON preserves terrain, actor anchors, enemy roster and fresh runtime state', () => {
-    const document = parseLevelDocument(original), level = compileLevel(document);
-    assert.equal(level.solids.length, 254);
-    assert.deepEqual(level.spawn, {x: 144, y: 524});
-    assert.deepEqual(level.exit, {x: 5184, y: 468, width: 64, height: 108});
-    const world = new World(level);
-    assert.equal(world.enemies.length, 8);
-    assert.deepEqual(world.enemies.map(enemy => enemy.x), [480, 1152, 1824, 2496, 3168, 3648, 3792, 3984]);
-    assert.equal(world.enemies.find(enemy => enemy.kind === 'ghost').y2, 518);
-    assert.ok(world.enemies.filter(enemy => enemy.kind !== 'ghost').every(enemy => enemy.y2 === 576));
-    level.solids[0].x = 900;
-    assert.equal(compileLevel(document).solids[0].x, 0);
-    assert.equal(parseLevelJson(formatDocument(document)).name, document.name);
-});
-
-test('decoration renders as separate tiles without becoming solid collision', () => {
+test('decoration renders as a separate surface without becoming solid collision', () => {
     const document = createBlankLevel();
     document.decorations.push({id: 'wall-in-background', x: 144, y: 480, width: 48, height: 96});
     const level = compileLevel(document);
-    assert.equal(level.decorations.length, 2);
+    assert.equal(level.decorations.length, 1);
     assert.ok(level.solids.every(wall => wall.y >= 576));
-    assert.equal(new World(level).level.decorations.length, 2);
+    assert.equal(new World(level).level.decorations.length, 1);
 });
 
 test('invalid documents are rejected with field paths before constructing a world', () => {
     const cases = [
-        [document => document.schemaVersion = 2, /schemaVersion/],
+        [document => document.schemaVersion = 99, /schemaVersion/],
         [document => document.spawn.y = 600, /spawn: actor overlaps/],
         [document => document.exit.y = 576, /exit:.*outside|exit: overlaps/],
-        [document => document.terrain[0].width = 50, /terrain\[0\].*48-pixel/],
+        [document => document.terrain[0].width = 0, /terrain\[0\].width/],
         [document => document.decorations.push({...document.terrain[0]}), /must be unique/],
         [document => document.terrain.push({...document.terrain[0], id: 'duplicate-floor'}), /overlaps floor/],
         [document => document.enemies.push({id: 'bad-enemy', kind: 'dragon', x: 600, y: 576, patrol: {left: 500, right: 700}}), /unknown enemy kind/],

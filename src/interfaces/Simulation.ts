@@ -30,12 +30,12 @@ export interface WeaponContext extends ProjectileContext {
 }
 
 export interface CharacterContext extends WeaponContext {
-    readonly level: Pick<Map, 'width' | 'height' | 'spawn' | 'solids'>;
+    readonly level: Pick<Map, 'width' | 'height' | 'spawn' | 'collision'>;
 }
 
 /** Enemy decisions see terrain, their target and explicit corpse/projectile services. */
 export interface EnemyContext {
-    readonly level: Pick<Map, 'width' | 'height' | 'solids'>;
+    readonly level: Pick<Map, 'width' | 'height' | 'collision'>;
     readonly player: Character;
     readonly collisions: Pick<CollisionSystem, 'canSee'>;
     readonly graveyard: Pick<Graveyard, 'find' | 'reactivate' | 'releaseClaims'>;

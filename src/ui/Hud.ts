@@ -19,7 +19,7 @@ export class Hud {
         const channeling = world.enemies.find(enemy => enemy.isChanneling && Math.abs(enemy.x - world.player.x) < 720);
         const nearest = channeling || [...world.enemies].sort((a, b) => Math.abs(a.x - world.player.x) - Math.abs(b.x - world.player.x))[0];
         const hint = nearest && (channeling || Math.abs(nearest.x - world.player.x) < 620)
-            ? `${nearest.displayName}: ${nearest.hint}` : 'Keep heading east. Flicker is always free; cyan bolts belong to the locals.';
+            ? `${nearest.displayName}: ${nearest.hint}` : 'Follow the signs. Flicker is always free; cyan bolts belong to the locals.';
         if (this.encounter.textContent !== hint) this.encounter.textContent = hint;
     }
 }

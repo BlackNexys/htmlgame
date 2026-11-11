@@ -21,7 +21,7 @@ export function sweptImpact(a: Rect, dx: number, dy: number, b: Rect): SweptImpa
 export function impactTime(a: Rect, dx: number, dy: number, b: Rect) { return sweptImpact(a, dx, dy, b)?.time; }
 
 export interface BodyContacts { ground: boolean; ceiling: boolean; left: boolean; right: boolean; }
-export function bodyContacts(body: Rect, solids: Rect[]): BodyContacts {
+export function bodyContacts(body: Rect, solids: readonly Rect[]): BodyContacts {
     const result = {ground: false, ceiling: false, left: false, right: false};
     const epsilon = .001;
     for (const wall of solids) {
@@ -36,7 +36,7 @@ export function bodyContacts(body: Rect, solids: Rect[]): BodyContacts {
 }
 
 /** Continuous player motion, including diagonal corner impacts and sliding. */
-export function sweepBody(body: Body, solids: Rect[], dt: number) {
+export function sweepBody(body: Body, solids: readonly Rect[], dt: number) {
     let remaining = dt;
     let blockedX = false, blockedY = false;
     for (let iteration = 0; iteration < 3 && remaining > 1e-9; iteration++) {
@@ -83,7 +83,7 @@ export function sweepBody(body: Body, solids: Rect[], dt: number) {
 }
 
 // Resolve crossings against the whole axis travel, including fast movement.
-export function moveBody(body: Body, solids: Rect[], dt: number) {
+export function moveBody(body: Body, solids: readonly Rect[], dt: number) {
     const oldX = body.x;
     let x = oldX + body.vx * dt;
     for (const wall of solids) {

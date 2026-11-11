@@ -79,7 +79,7 @@ export class GameMenu {
         this.mute.textContent = muted ? 'Sound off' : 'Sound on'; this.mute.setAttribute('aria-pressed', String(muted));
     }
     error(error: unknown) {
-        this.show('error', 'The passage could not load', `${error instanceof Error ? error.message : 'Unexpected loading error'}. Check the level JSON and local assets, then reload.`, 'Reload');
+        this.show('error', 'The passage could not load', `${error instanceof Error ? error.message : 'Unexpected loading error'}. Check the level source and local assets, then reload.`, 'Reload');
         this.primary.onclick = () => location.reload(); this.status.textContent = 'Loading failed';
     }
     dispose() {

@@ -1,6 +1,6 @@
 import { Enemy, type EnemyProps } from './Enemy';
 import { tuning as T } from '../game/config';
-import { clamp, overlaps } from '../game/movement/physics';
+import { clamp } from '../game/movement/physics';
 
 export class Ghost extends Enemy {
     readonly displayName = 'Ghost';
@@ -26,7 +26,7 @@ export class Ghost extends Enemy {
             this.x += clamp(goalX - this.x, -this.stats.walk * dt, this.stats.walk * dt);
             this.y += clamp(goalY - this.y, -this.stats.walk * dt, this.stats.walk * dt);
             // A phased spirit may cross stone, but must become solid in free space.
-            if (this.timer <= 0 && !this.gameArea.level.solids.some(wall => overlaps(this, wall)) && this.gameArea.collisions.canSee(this, p)) this.prepareAttack();
+            if (this.timer <= 0 && !this.gameArea.level.collision.overlaps(this) && this.gameArea.collisions.canSee(this, p)) this.prepareAttack();
         } else if (this.timer <= 0) {
             if (this.state === 'windup') {
                 this.fireAt(this.targetX, this.targetY);
