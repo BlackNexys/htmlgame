@@ -1,5 +1,5 @@
 import type { Projectile } from '../components/Projectile';
-import type { FlickerEffect } from '../interfaces/Weapon';
+import type { FlickerEffect, FlickerSpark } from '../interfaces/Weapon';
 import { flickerVisuals as V, flickerDirection } from '../game/animation/FlickerVisuals';
 
 /** Cosmetic only: flame animation never alters velocity, collision, or cadence. */
@@ -16,12 +16,23 @@ export class FlickerRenderer {
             c.rotate(row * Math.PI / 4);
             this.fallback(column);
         }
-        // Two dim embers trail the core, with no simulation particles per shot.
-        c.shadowBlur = 0;
-        if (this.image) c.rotate(row * Math.PI / 4);
-        c.fillStyle = '#B51B78'; c.globalAlpha = .55;
-        c.fillRect(-14 - column % 2, -3, 2, 1); c.fillStyle = '#52204D';
-        c.fillRect(-19, 2, 1, 1);
+        c.restore();
+    }
+    sparks(sparks: readonly FlickerSpark[]) {
+        const c=this.ctx;c.save();
+        for(const spark of sparks) {
+            const fade=1-spark.age/spark.life;
+            c.globalAlpha=Math.min(1,fade*1.3);
+            c.fillStyle=spark.age<.035&&spark.kind!=='terrain'?'#fff0f8':spark.color;
+            const x=Math.round(spark.x),y=Math.round(spark.y);
+            c.fillRect(x,y,spark.size,spark.size);
+            if (spark.kind!=='trail' && fade>.4) {
+                // Short stepped streaks keep diagonal sparks on the pixel grid.
+                const speed=Math.hypot(spark.vx,spark.vy)||1;
+                c.globalAlpha*=.45;c.fillStyle=spark.color;
+                for(let n=1;n<=3;n++)c.fillRect(Math.round(x-spark.vx/speed*n),Math.round(y-spark.vy/speed*n),1,1);
+            }
+        }
         c.restore();
     }
     effects(effects: readonly FlickerEffect[]) {
@@ -34,6 +45,10 @@ export class FlickerRenderer {
                 c.fillStyle = effect.kind === 'blocked' ? '#b4edf0' : effect.kind === 'terrain' ? '#B51B78' : '#FFABDC';
                 const radius = effect.kind === 'terrain' ? 2 : 4;
                 c.fillRect(-radius, -1, radius * 2, 2); c.fillRect(-1, -radius, 2, radius * 2);
+            }
+            if (effect.age<.035 && (effect.kind==='ignition'||effect.kind==='enemy')) {
+                c.globalCompositeOperation='lighter';c.fillStyle='#fff0f8';
+                c.fillRect(-3,-1,6,2);c.fillRect(-1,-3,2,6);
             }
             c.restore();
         }

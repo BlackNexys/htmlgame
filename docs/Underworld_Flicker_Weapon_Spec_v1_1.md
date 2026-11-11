@@ -110,6 +110,8 @@ Flicker is a **small, irregular tongue of living magenta flame**, torn from the 
 
 At the existing 48-pixel tile scale, the visible projectile should read as approximately **12–18 pixels long**, though the transparent animation cell may be larger. Keep glow tight: the weapon is fired approximately five times per second and must not create a wall of pink light. The protagonist’s hand/forearm may flash subtly, and their main soul-flame may briefly contract, but **it must never appear depleted by sustained firing**.
 
+Cole throws Flicker with effort: an immediate directional release, short follow-through, elbow recovery, and a gathered pose before the next throw. Do not keep his hand extended between shots. His attached head flame and cloak continue animating through the gesture. Standing, running, sprinting and crouching use their own recovery drawings, while the moving legs retain their stride. The release pose remains aligned with the weapon's palm socket; animation adds no wind-up delay or gameplay cost. The [v4 hero kit](../public/assets/hero/canon-v4/README.md) documents the current drawings and shared material palette.
+
 ### Sprite deliverables (prototype v1.1)
 
 The playable companion sprite pack in `public/assets/weapons/flicker/` contains transparent **32 x 32 RGBA** cells, a six-frame projectile loop with eight pre-rotated directions, ignition, enemy, terrain and armored impacts, and fading embers. The [interactive preview](../public/docs/flicker.html) shows these sequences and lets you audition the sound variations. See `flicker_atlas.json` in the pack for exact rows and timing. These are art/animation prototypes; gameplay hitboxes and attack timing stay authoritative and independent of the visible silhouette.
@@ -172,6 +174,8 @@ Recommended responsibilities:
 - **Arsenal:** modifier choice changes only between levels, never interrupts live gameplay.
 
 The concrete `Flicker` weapon definition/controller and `FlickerProjectile` replace the earlier unnamed test attack. `Projectile` and `CollisionSystem` retain straight swept collision. Structured weapon events carry ignition and impact positions into presentation; audio consumes separate fire, hit, terrain, block, defeat and ectoplasm cues. Modifiers remain unequipped and no other weapons or switching controls are exposed yet.
+
+The presentation pass now emits a short directional fan at the reviewed palm, tiny drifting motes spaced along actual projectile travel, and distinct impact scatters: brighter magenta for enemies, a weaker stone sputter, and cyan-white resistance sparks for armor. These are cosmetic world-space particles, capped at 192 and driven by the simulation clock. Ignition and enemy contact get a brief tight white core flash. This adds visual snap while preserving the small flame silhouette and existing combat values.
 
 **Playable implementation:** `src/weapons/Flicker.ts` owns the weapon tuning and zero cost; `WeaponController` owns cadence. `Combat` awards +1 ectoplasm on the first original defeat, capped at 12; a new run starts at 6. Resurrections preserve the original reward flag. Neither firing nor nonlethal hits grant ectoplasm. Harvesting, caches, other weapons, switching and modifiers remain future work. Dash has been removed from the movement design.
 

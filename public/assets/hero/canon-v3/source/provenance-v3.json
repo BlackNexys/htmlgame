@@ -1,0 +1,17 @@
+{
+  "mode": "built-in imagegen",
+  "original": "C:\\Users\\almn\\.codex\\generated_images\\01a1aac1-6847-7b10-8b0d-cbab3363fd6c\\exec-e27cad6b-6f54-4f7c-8dcd-9c9ffc8aa146.png",
+  "saved": "crouch-v3.png",
+  "prompt": "crouch-v3.prompt.txt",
+  "references": [
+    {
+      "path": "public/assets/hero/canon-v2/gameplay-v2.png",
+      "role": "exact identity and pixel-art style"
+    },
+    {
+      "path": "public/assets/hero/canon-v2/review/held-v2.png",
+      "role": "held firing poses and direction reference"
+    }
+  ],
+  "exporter": "scripts/pack-hero-consistency.mjs"
+}

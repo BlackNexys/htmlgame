@@ -1,0 +1,1408 @@
+{
+  "reference": "canon-v2 gameplay idle; face excluding flame, scarf and hands",
+  "targetFaceHeight": 33,
+  "frames": [
+    {
+      "sheet": "gameplay",
+      "row": 0,
+      "column": 0,
+      "face": [
+        110,
+        91,
+        37,
+        32
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 0,
+      "column": 1,
+      "face": [
+        112,
+        90,
+        36,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 0,
+      "column": 2,
+      "face": [
+        110,
+        90,
+        36,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 0,
+      "column": 3,
+      "face": [
+        109,
+        90,
+        35,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 0,
+      "column": 4,
+      "face": [
+        108,
+        90,
+        34,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 0,
+      "column": 5,
+      "face": [
+        107,
+        91,
+        35,
+        32
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 1,
+      "column": 0,
+      "face": [
+        127,
+        95,
+        36,
+        31
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 1,
+      "column": 1,
+      "face": [
+        134,
+        99,
+        30,
+        31
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 1,
+      "column": 2,
+      "face": [
+        137,
+        95,
+        31,
+        32
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 1,
+      "column": 3,
+      "face": [
+        136,
+        97,
+        31,
+        31
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 1,
+      "column": 4,
+      "face": [
+        134,
+        96,
+        36,
+        31
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 1,
+      "column": 5,
+      "face": [
+        139,
+        99,
+        32,
+        32
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 1,
+      "column": 6,
+      "face": [
+        140,
+        90,
+        32,
+        31
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 1,
+      "column": 7,
+      "face": [
+        137,
+        96,
+        32,
+        31
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 2,
+      "column": 0,
+      "face": [
+        149,
+        163,
+        32,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 2,
+      "column": 1,
+      "face": [
+        143,
+        111,
+        28,
+        30
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 2,
+      "column": 2,
+      "face": [
+        138,
+        115,
+        27,
+        28
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 2,
+      "column": 3,
+      "face": [
+        128,
+        104,
+        27,
+        32
+      ],
+      "measurement": "reviewed landmark"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 2,
+      "column": 4,
+      "face": [
+        143,
+        113,
+        26,
+        31
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 2,
+      "column": 5,
+      "face": [
+        133,
+        170,
+        31,
+        29
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 3,
+      "column": 0,
+      "face": [
+        119,
+        94,
+        31,
+        34
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 3,
+      "column": 1,
+      "face": [
+        116,
+        95,
+        39,
+        35
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 3,
+      "column": 2,
+      "face": [
+        124,
+        96,
+        40,
+        34
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 3,
+      "column": 3,
+      "face": [
+        114,
+        99,
+        43,
+        34
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 3,
+      "column": 4,
+      "face": [
+        110,
+        100,
+        43,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 3,
+      "column": 5,
+      "face": [
+        112,
+        95,
+        38,
+        34
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 4,
+      "column": 0,
+      "face": [
+        134,
+        91,
+        35,
+        36
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 4,
+      "column": 1,
+      "face": [
+        95,
+        67,
+        31,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 4,
+      "column": 2,
+      "face": [
+        142,
+        135,
+        37,
+        35
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 4,
+      "column": 3,
+      "face": [
+        137,
+        112,
+        39,
+        35
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 4,
+      "column": 4,
+      "face": [
+        121,
+        84,
+        37,
+        37
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 4,
+      "column": 5,
+      "face": [
+        106,
+        76,
+        40,
+        34
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 5,
+      "column": 0,
+      "face": [
+        158,
+        106,
+        34,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 5,
+      "column": 1,
+      "face": [
+        155,
+        130,
+        30,
+        35
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 5,
+      "column": 2,
+      "face": [
+        162,
+        159,
+        36,
+        32
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 5,
+      "column": 3,
+      "face": [
+        175,
+        177,
+        35,
+        37
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 5,
+      "column": 4,
+      "face": [
+        194,
+        199,
+        29,
+        31
+      ],
+      "measurement": "reviewed landmark"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 5,
+      "column": 5,
+      "face": [
+        188,
+        201,
+        29,
+        31
+      ],
+      "measurement": "reviewed landmark"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 6,
+      "column": 0,
+      "face": [
+        146,
+        104,
+        38,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 6,
+      "column": 1,
+      "face": [
+        152,
+        108,
+        34,
+        34
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 6,
+      "column": 2,
+      "face": [
+        157,
+        112,
+        32,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 6,
+      "column": 3,
+      "face": [
+        150,
+        107,
+        34,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 6,
+      "column": 4,
+      "face": [
+        154,
+        108,
+        33,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 6,
+      "column": 5,
+      "face": [
+        153,
+        115,
+        39,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 6,
+      "column": 6,
+      "face": [
+        156,
+        109,
+        32,
+        31
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "gameplay",
+      "row": 6,
+      "column": 7,
+      "face": [
+        154,
+        110,
+        33,
+        32
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 0,
+      "column": 0,
+      "face": [
+        129,
+        112,
+        46,
+        43
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 0,
+      "column": 1,
+      "face": [
+        129,
+        113,
+        48,
+        43
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 0,
+      "column": 2,
+      "face": [
+        131,
+        112,
+        50,
+        43
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 0,
+      "column": 3,
+      "face": [
+        139,
+        113,
+        40,
+        42
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 0,
+      "column": 4,
+      "face": [
+        130,
+        113,
+        50,
+        44
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 0,
+      "column": 5,
+      "face": [
+        132,
+        114,
+        47,
+        43
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 1,
+      "column": 0,
+      "face": [
+        130,
+        121,
+        49,
+        43
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 1,
+      "column": 1,
+      "face": [
+        128,
+        121,
+        50,
+        43
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 1,
+      "column": 2,
+      "face": [
+        129,
+        122,
+        50,
+        43
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 1,
+      "column": 3,
+      "face": [
+        139,
+        122,
+        40,
+        43
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 1,
+      "column": 4,
+      "face": [
+        134,
+        122,
+        46,
+        43
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 1,
+      "column": 5,
+      "face": [
+        127,
+        122,
+        50,
+        42
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 2,
+      "column": 0,
+      "face": [
+        113,
+        88,
+        38,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 2,
+      "column": 1,
+      "face": [
+        111,
+        86,
+        36,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 2,
+      "column": 2,
+      "face": [
+        104,
+        82,
+        32,
+        30
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 2,
+      "column": 3,
+      "face": [
+        101,
+        83,
+        34,
+        31
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 2,
+      "column": 4,
+      "face": [
+        107,
+        85,
+        29,
+        31
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 2,
+      "column": 5,
+      "face": [
+        108,
+        88,
+        36,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 3,
+      "column": 0,
+      "face": [
+        114,
+        87,
+        36,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 3,
+      "column": 1,
+      "face": [
+        112,
+        86,
+        34,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 3,
+      "column": 2,
+      "face": [
+        108,
+        83,
+        32,
+        30
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 3,
+      "column": 3,
+      "face": [
+        107,
+        85,
+        35,
+        32
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 3,
+      "column": 4,
+      "face": [
+        105,
+        88,
+        36,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 3,
+      "column": 5,
+      "face": [
+        108,
+        88,
+        38,
+        32
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 4,
+      "column": 0,
+      "face": [
+        148,
+        103,
+        32,
+        38
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 4,
+      "column": 1,
+      "face": [
+        138,
+        110,
+        41,
+        36
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 4,
+      "column": 2,
+      "face": [
+        153,
+        117,
+        35,
+        36
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 4,
+      "column": 3,
+      "face": [
+        156,
+        116,
+        32,
+        35
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 4,
+      "column": 4,
+      "face": [
+        139,
+        110,
+        43,
+        36
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 4,
+      "column": 5,
+      "face": [
+        134,
+        107,
+        46,
+        36
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 5,
+      "column": 0,
+      "face": [
+        139,
+        111,
+        40,
+        35
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 5,
+      "column": 1,
+      "face": [
+        147,
+        113,
+        37,
+        37
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 5,
+      "column": 2,
+      "face": [
+        134,
+        121,
+        50,
+        36
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 5,
+      "column": 3,
+      "face": [
+        150,
+        119,
+        34,
+        36
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 5,
+      "column": 4,
+      "face": [
+        143,
+        116,
+        37,
+        38
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 5,
+      "column": 5,
+      "face": [
+        137,
+        111,
+        47,
+        37
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 6,
+      "column": 0,
+      "face": [
+        123,
+        95,
+        28,
+        30
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 6,
+      "column": 1,
+      "face": [
+        123,
+        95,
+        28,
+        30
+      ],
+      "measurement": "reviewed landmark"
+    },
+    {
+      "sheet": "aiming",
+      "row": 6,
+      "column": 2,
+      "face": [
+        123,
+        95,
+        28,
+        30
+      ],
+      "measurement": "reviewed landmark"
+    },
+    {
+      "sheet": "aiming",
+      "row": 6,
+      "column": 3,
+      "face": [
+        123,
+        95,
+        28,
+        29
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 6,
+      "column": 4,
+      "face": [
+        125,
+        96,
+        29,
+        30
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 7,
+      "column": 0,
+      "face": [
+        136,
+        101,
+        28,
+        30
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 7,
+      "column": 1,
+      "face": [
+        136,
+        101,
+        28,
+        30
+      ],
+      "measurement": "reviewed landmark"
+    },
+    {
+      "sheet": "aiming",
+      "row": 7,
+      "column": 2,
+      "face": [
+        139,
+        101,
+        28,
+        30
+      ],
+      "measurement": "reviewed landmark"
+    },
+    {
+      "sheet": "aiming",
+      "row": 7,
+      "column": 3,
+      "face": [
+        137,
+        102,
+        28,
+        29
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 7,
+      "column": 4,
+      "face": [
+        133,
+        98,
+        31,
+        32
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 8,
+      "column": 0,
+      "face": [
+        149,
+        104,
+        29,
+        33
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 8,
+      "column": 1,
+      "face": [
+        149,
+        105,
+        29,
+        32
+      ],
+      "measurement": "reviewed landmark"
+    },
+    {
+      "sheet": "aiming",
+      "row": 8,
+      "column": 2,
+      "face": [
+        149,
+        107,
+        29,
+        32
+      ],
+      "measurement": "reviewed landmark"
+    },
+    {
+      "sheet": "aiming",
+      "row": 8,
+      "column": 3,
+      "face": [
+        150,
+        107,
+        28,
+        32
+      ],
+      "measurement": "dark-face contour, visually reviewed"
+    },
+    {
+      "sheet": "aiming",
+      "row": 8,
+      "column": 4,
+      "face": [
+        149,
+        104,
+        29,
+        33
+      ],
+      "measurement": "reviewed whole face; shaded cheek excluded from automatic dark component"
+    },
+    {
+      "sheet": "crouch",
+      "row": 0,
+      "column": 0,
+      "face": [
+        150,
+        108,
+        35,
+        36
+      ],
+      "measurement": "reviewed landmark in 256 px source cell"
+    },
+    {
+      "sheet": "crouch",
+      "row": 0,
+      "column": 1,
+      "face": [
+        149,
+        100,
+        36,
+        34
+      ],
+      "measurement": "reviewed landmark in 256 px source cell"
+    },
+    {
+      "sheet": "crouch",
+      "row": 0,
+      "column": 2,
+      "face": [
+        150,
+        93,
+        35,
+        35
+      ],
+      "measurement": "reviewed landmark in 256 px source cell"
+    },
+    {
+      "sheet": "crouch",
+      "row": 0,
+      "column": 3,
+      "face": [
+        150,
+        103,
+        34,
+        35
+      ],
+      "measurement": "reviewed landmark in 256 px source cell"
+    },
+    {
+      "sheet": "crouch",
+      "row": 0,
+      "column": 4,
+      "face": [
+        150,
+        112,
+        34,
+        34
+      ],
+      "measurement": "reviewed landmark in 256 px source cell"
+    },
+    {
+      "sheet": "crouch",
+      "row": 0,
+      "column": 5,
+      "face": [
+        149,
+        110,
+        35,
+        36
+      ],
+      "measurement": "reviewed landmark in 256 px source cell"
+    },
+    {
+      "sheet": "crouch",
+      "row": 1,
+      "column": 0,
+      "face": [
+        150,
+        107,
+        35,
+        35
+      ],
+      "measurement": "reviewed landmark in 256 px source cell"
+    },
+    {
+      "sheet": "crouch",
+      "row": 1,
+      "column": 1,
+      "face": [
+        148,
+        101,
+        35,
+        35
+      ],
+      "measurement": "reviewed landmark in 256 px source cell"
+    },
+    {
+      "sheet": "crouch",
+      "row": 1,
+      "column": 2,
+      "face": [
+        150,
+        105,
+        35,
+        35
+      ],
+      "measurement": "reviewed landmark in 256 px source cell"
+    },
+    {
+      "sheet": "crouch",
+      "row": 1,
+      "column": 3,
+      "face": [
+        148,
+        106,
+        36,
+        35
+      ],
+      "measurement": "reviewed landmark in 256 px source cell"
+    },
+    {
+      "sheet": "crouch",
+      "row": 1,
+      "column": 4,
+      "face": [
+        149,
+        109,
+        34,
+        36
+      ],
+      "measurement": "reviewed landmark in 256 px source cell"
+    },
+    {
+      "sheet": "crouch",
+      "row": 1,
+      "column": 5,
+      "face": [
+        149,
+        105,
+        35,
+        37
+      ],
+      "measurement": "reviewed landmark in 256 px source cell"
+    }
+  ],
+  "palms": {
+    "6": [
+      [
+        188,
+        135
+      ],
+      [
+        159,
+        83
+      ],
+      [
+        176,
+        99
+      ],
+      [
+        176,
+        163
+      ],
+      [
+        163,
+        186
+      ]
+    ],
+    "7": [
+      [
+        195,
+        141
+      ],
+      [
+        166,
+        80
+      ],
+      [
+        188,
+        101
+      ],
+      [
+        186,
+        173
+      ],
+      [
+        169,
+        190
+      ]
+    ],
+    "8": [
+      [
+        204,
+        139
+      ],
+      [
+        179,
+        82
+      ],
+      [
+        201,
+        111
+      ],
+      [
+        195,
+        174
+      ],
+      [
+        175,
+        194
+      ]
+    ],
+    "crouch": [
+      [
+        218,
+        145
+      ],
+      [
+        185,
+        76
+      ],
+      [
+        211,
+        115
+      ],
+      [
+        213,
+        181
+      ],
+      [
+        186,
+        208
+      ],
+      [
+        218,
+        145
+      ]
+    ]
+  }
+}

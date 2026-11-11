@@ -1,0 +1,8 @@
+Use case: identity-preserve.
+Asset: production pixel art animation and held-aim sprite sheet, true transparent background.
+Inputs: Image 1 is Cole's current gameplay sprites: exact character identity, materials and pixel scale reference. Image 2 is his aiming-pose reference. Preserve this character, no redesign.
+Create twelve COMPLETE crouching characters in a strict six-column two-row grid, each identical cell with generous transparent padding. All face right. Frame scale stays identical across the entire sheet. Cole's head has the SAME anatomical size as standing; lower height comes only from bent knees, lowered hips and a forward torso. Never enlarge his head, hands or boots to fill the cell.
+Row 1: six restrained crouched idle/breathing poses, palms relaxed, boots planted, coherent short cloak folds, stable face and pelvis, no big hand gestures.
+Row 2: five held firing poses, already extended, in this order: horizontal RIGHT, straight UP, diagonal UP-RIGHT, diagonal DOWN-RIGHT, straight DOWN. Sixth is horizontal-right hold again. Keep the bent-leg crouch and head/body size consistent; only aiming arm and shoulder change. Open palm fingertips are clear and unobstructed. No attack flame or projectile.
+Identity: rounded black face TWO magenta eyes, ivory cheek/jaw, attached engulfing magenta flame mane, burgundy scarf and tattered cloak, fitted studded dark leather jacket with ribs, slim strapped trousers, brown buckled boots, cyan vial on hip.
+Crisp detailed pixel art matching current sprites, controlled flame motion. No floor shadows, text, grids, watermark, blur, oversized chibi proportions, separated head or disconnected flames.

@@ -80,6 +80,7 @@ export class World implements CharacterContext, EnemyContext {
         if (this.state === 'playing' && this.level.exit.enabled && this.level.exit.reachedBy(this.player)) { this.state = 'won'; this.events.push('win'); }
         this.effects.update(dt);
         this.effects.consume(this.weaponEvents);
+        this.effects.trail(this.projectiles, dt);
         this.camera.follow(this.player, this.level, dt);
     }
 }

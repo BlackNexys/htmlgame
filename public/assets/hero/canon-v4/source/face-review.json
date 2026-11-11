@@ -1,0 +1,9 @@
+{
+  "notes": "Full void-face landmarks reviewed on the enlarged gridded source. Automatic dark components sometimes merge with the scarf or omit the red-lit forehead; these boxes keep that shading from changing anatomical scale.",
+  "faces": [
+    [[137,74,40,40],[139,74,40,40],[138,74,40,40],[139,74,40,40],[137,74,43,40],[140,74,42,40]],
+    [[150,83,38,40],[153,84,38,40],[154,84,38,40],[154,84,38,40],[154,84,39,40],[155,84,39,40]],
+    [[175,98,38,40],[171,99,38,40],[168,100,39,40],[167,101,39,40],[165,101,41,40],[166,101,40,40]],
+    [[152,108,40,41],[153,109,40,41],[152,110,40,41],[151,107,40,41],[150,107,40,41],[150,111,41,41]]
+  ]
+}

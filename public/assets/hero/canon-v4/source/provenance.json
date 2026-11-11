@@ -1,0 +1,10 @@
+{
+  "mode": "built-in imagegen",
+  "original": "C:/Users/almn/.codex/generated_images/01a1aac1-6847-7b10-8b0d-cbab3363fd6c/exec-089918c0-0642-4b41-a202-a637e2bee30f.png",
+  "source": "throw-recovery.png",
+  "prompt": "throw-recovery.prompt.txt",
+  "reference": "stance-reference.png",
+  "referenceOrigin": "canon-v3/aiming-v3.png, column 0 of rows 6, 7, 8 and 1",
+  "export": "scripts/pack-hero-throws.mjs",
+  "processing": "Hard alpha cleanup, uniform nearest-neighbour scale per stance, and translation using reviewed face landmarks. Original generated pixels preserved in source."
+}

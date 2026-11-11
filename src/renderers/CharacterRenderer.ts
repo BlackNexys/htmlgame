@@ -5,11 +5,17 @@ import { characterAtlas } from '../game/animation/CharacterAtlas';
 import { characterAimAtlas } from '../game/animation/CharacterAimAtlas';
 import { BootFlameRenderer } from './BootFlameRenderer';
 import { heroAimPose } from '../game/animation/HeroPose';
+import { heroPaletteImage } from './HeroPalette';
 
 export class CharacterRenderer {
     private animation = new CharacterAnimation();
     private readonly boots: BootFlameRenderer;
-    constructor(private readonly ctx: CanvasRenderingContext2D, private readonly image: HTMLImageElement, private readonly aimImage: HTMLImageElement, bootFire?: HTMLImageElement) { this.boots = new BootFlameRenderer(bootFire); }
+    private readonly image: HTMLCanvasElement | HTMLImageElement;
+    private readonly aimImage: HTMLCanvasElement | HTMLImageElement;
+    constructor(private readonly ctx: CanvasRenderingContext2D, image: HTMLImageElement, aimImage: HTMLImageElement, bootFire?: HTMLImageElement, refinedPalette = true) {
+        this.image=refinedPalette?heroPaletteImage(image):image;this.aimImage=refinedPalette?heroPaletteImage(aimImage):aimImage;
+        this.boots = new BootFlameRenderer(bootFire);
+    }
     reset() { this.animation = new CharacterAnimation(); this.boots.reset(); }
     update(character: Character, dt: number, events: GameEvent[], dead: boolean) { this.animation.update(character, dt, events, dead); this.boots.update(character, dt, dead, this.animation.sample(character).base); }
 
@@ -22,10 +28,14 @@ export class CharacterRenderer {
         const pose = this.animation.sample(player);
         this.boots.draw(c, pose.base);
         if (pose.upper) {
-            const hip = characterAtlas.hip + (player.crouched ? 12 : 0);
+            // Standing arms hang below the belt. Move that pose's seam beneath
+            // the old hand so it cannot remain as an extra arm during firing.
+            const standing = !pose.base.sheet && pose.base.row === 0;
+            const hip = player.crouched ? -16 : characterAtlas.hip + (standing ? 8 : 0);
             c.save(); c.beginPath();
             // Keep the belt, legs and lower cloak, excluding the locomotion forearm.
-            c.rect(-80, hip + 8, 160, 92); c.rect(-80, hip, 92, 8);
+            if (standing || player.crouched) c.rect(-80, hip, 160, 100);
+            else { c.rect(-80, hip + 8, 160, 92); c.rect(-80, hip, 92, 8); }
             c.clip(); this.frame(pose.base); c.restore();
             c.save(); c.beginPath(); c.rect(-80, -100, 160, 100 + hip);
             // Downward hands extend below the belt, outside the leg silhouette.

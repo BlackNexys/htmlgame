@@ -60,7 +60,7 @@ export class GameScreen {
         world.corpses.forEach(corpse => { if (world.camera.canSee(corpse.enemy)) this.corpses.draw(corpse); });
         world.enemies.forEach(enemy => { if (world.camera.canSee(enemy)) this.enemies.draw(enemy, world.elapsed, world.corpses); });
         this.character.draw(world.player, world.elapsed);
-        this.projectiles.draw(world.projectiles, world.effects.flicker);
+        this.projectiles.draw(world.projectiles, world.effects.flicker, world.effects.flickerSparks);
         this.particles.draw(world.particles);
         if (this.debug) this.diagnostics.bounds(world);
         this.ctx.restore();

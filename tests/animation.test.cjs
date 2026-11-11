@@ -38,15 +38,33 @@ test('stride follows travelled distance, holds at rest and preserves phase throu
     p.x -= 18; a.update(p,.01); assert.equal(a.sample(p).base.column,5);
 });
 
-test('held fire is fully aimed immediately and never drops the torso between shots', () => {
+test('held fire releases immediately, recovers and gathers without dropping moving legs', () => {
     const world = new World(createActionLevel()), a = new CharacterAnimation(), p = world.player;
     p.firing = true; p.motion = 'sprinting';
+    const phases=new Set(),frames=new Set();
     for(let n=0;n<120;n++){
         a.update(p,1/120,n%24===0?['fire']:[]);
-        const pose=a.sample(p);assert.equal(pose.upper.row,8);assert.equal(pose.upper.column,0);
-        if(n%24===0)assert.equal(pose.upper.offsetX,0);
+        const pose=a.sample(p);assert.equal(pose.base.row,6);assert.ok(pose.upper);
+        phases.add(pose.upper.throwPhase);frames.add(`${pose.upper.row}:${pose.upper.column}`);
+        if(n%24===0){assert.equal(pose.upper.row,8);assert.equal(pose.upper.column,0);assert.equal(pose.upper.offsetX,0);}
     }
+    assert.deepEqual([...phases],['release','follow-through','recover','gather','ready']);
+    assert.ok(frames.size>=4,'the arm and head flame must not freeze in one held frame');
     p.firing=false;a.update(p,.3);assert.equal(a.sample(p).upper,undefined);
+});
+
+test('every stance recovers with its own authored torso and reset clears the throw',()=>{
+    for(const [motion,row]of [['idle',9],['running',10],['sprinting',11],['crouching',12],['airborne',10]]){
+        const world=new World(createActionLevel()),p=world.player,a=new CharacterAnimation();
+        p.motion=motion;p.grounded=motion!=='airborne';p.height=motion==='crouching'?32:52;p.firing=true;
+        for(const aim of [{x:1,y:0},{x:-1,y:-1},{x:0,y:1}]){
+            p.aim=aim;a.update(p,0,['fire']);a.update(p,.09);
+            const pose=a.sample(p);assert.equal(pose.upper.row,row);assert.equal(pose.upper.throwPhase,'recover');
+            assert.equal(pose.upper.mirror,aim.x!==0&&aim.x!==p.facing);
+        }
+        p.firing=false;p.aim={x:p.facing,y:0};a.update(p,.3);assert.equal(a.sample(p).upper,undefined);
+        assert.equal(new CharacterAnimation().sample(p).upper,undefined);
+    }
 });
 
 test('taking damage does not disconnect a shot from its held firing pose', () => {

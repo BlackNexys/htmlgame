@@ -93,8 +93,8 @@ test('crouch and aimed attacks use dedicated poses; clearing actions removes hel
     step(world,{down:true}); let pose=animation.sample(world.player);
     assert.equal(pose.base.sheet,'aim'); assert.equal(pose.base.row,0);
     step(world,{down:true,fire:true}); animation.update(world.player,T.step,world.events);
-    assert.equal(animation.sample(world.player).base.row,0);
-    assert.equal(animation.sample(world.player).upper.row,7);
+    assert.equal(animation.sample(world.player).base.row,1);
+    assert.equal(animation.sample(world.player).upper,undefined);
     step(world,{up:true,right:true}); pose=animation.sample(world.player);
     assert.equal(pose.upper.column,2); assert.equal(pose.upper.sheet,'aim');
     world.player.clearActions(); assert.deepEqual(world.player.aim,{x:world.player.facing,y:0});

@@ -1,0 +1,530 @@
+[
+  {
+    "sheet": "aiming",
+    "row": 9,
+    "column": 0,
+    "sourceFace": [
+      137,
+      74,
+      40,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      122,
+      87,
+      33,
+      33
+    ],
+    "translation": [
+      9,
+      26
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 9,
+    "column": 1,
+    "sourceFace": [
+      139,
+      74,
+      40,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      122,
+      87,
+      33,
+      33
+    ],
+    "translation": [
+      7,
+      26
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 9,
+    "column": 2,
+    "sourceFace": [
+      138,
+      74,
+      40,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      122,
+      87,
+      33,
+      33
+    ],
+    "translation": [
+      8,
+      26
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 9,
+    "column": 3,
+    "sourceFace": [
+      139,
+      74,
+      40,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      122,
+      87,
+      33,
+      33
+    ],
+    "translation": [
+      7,
+      26
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 9,
+    "column": 4,
+    "sourceFace": [
+      137,
+      74,
+      43,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      121,
+      87,
+      35,
+      33
+    ],
+    "translation": [
+      8,
+      26
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 9,
+    "column": 5,
+    "sourceFace": [
+      140,
+      74,
+      42,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      121,
+      87,
+      35,
+      33
+    ],
+    "translation": [
+      6,
+      26
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 10,
+    "column": 0,
+    "sourceFace": [
+      150,
+      83,
+      38,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      137,
+      94,
+      31,
+      33
+    ],
+    "translation": [
+      13,
+      26
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 10,
+    "column": 1,
+    "sourceFace": [
+      153,
+      84,
+      38,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      137,
+      94,
+      31,
+      33
+    ],
+    "translation": [
+      11,
+      25
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 10,
+    "column": 2,
+    "sourceFace": [
+      154,
+      84,
+      38,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      137,
+      94,
+      31,
+      33
+    ],
+    "translation": [
+      10,
+      25
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 10,
+    "column": 3,
+    "sourceFace": [
+      154,
+      84,
+      38,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      137,
+      94,
+      31,
+      33
+    ],
+    "translation": [
+      10,
+      25
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 10,
+    "column": 4,
+    "sourceFace": [
+      154,
+      84,
+      39,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      136,
+      94,
+      32,
+      33
+    ],
+    "translation": [
+      9,
+      25
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 10,
+    "column": 5,
+    "sourceFace": [
+      155,
+      84,
+      39,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      136,
+      94,
+      32,
+      33
+    ],
+    "translation": [
+      9,
+      25
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 11,
+    "column": 0,
+    "sourceFace": [
+      175,
+      98,
+      38,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      148,
+      104,
+      31,
+      33
+    ],
+    "translation": [
+      3,
+      23
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 11,
+    "column": 1,
+    "sourceFace": [
+      171,
+      99,
+      38,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      148,
+      104,
+      31,
+      33
+    ],
+    "translation": [
+      7,
+      22
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 11,
+    "column": 2,
+    "sourceFace": [
+      168,
+      100,
+      39,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      147,
+      104,
+      32,
+      33
+    ],
+    "translation": [
+      9,
+      22
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 11,
+    "column": 3,
+    "sourceFace": [
+      167,
+      101,
+      39,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      147,
+      104,
+      32,
+      33
+    ],
+    "translation": [
+      10,
+      21
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 11,
+    "column": 4,
+    "sourceFace": [
+      165,
+      101,
+      41,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      147,
+      104,
+      34,
+      33
+    ],
+    "translation": [
+      10,
+      21
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 11,
+    "column": 5,
+    "sourceFace": [
+      166,
+      101,
+      40,
+      40
+    ],
+    "scale": 0.825,
+    "face": [
+      147,
+      104,
+      33,
+      33
+    ],
+    "translation": [
+      10,
+      21
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 12,
+    "column": 0,
+    "sourceFace": [
+      152,
+      108,
+      40,
+      41
+    ],
+    "scale": 0.8048780487804879,
+    "face": [
+      157,
+      131,
+      32,
+      33
+    ],
+    "translation": [
+      35,
+      44
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 12,
+    "column": 1,
+    "sourceFace": [
+      153,
+      109,
+      40,
+      41
+    ],
+    "scale": 0.8048780487804879,
+    "face": [
+      157,
+      131,
+      32,
+      33
+    ],
+    "translation": [
+      34,
+      43
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 12,
+    "column": 2,
+    "sourceFace": [
+      152,
+      110,
+      40,
+      41
+    ],
+    "scale": 0.8048780487804879,
+    "face": [
+      157,
+      131,
+      32,
+      33
+    ],
+    "translation": [
+      35,
+      42
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 12,
+    "column": 3,
+    "sourceFace": [
+      151,
+      107,
+      40,
+      41
+    ],
+    "scale": 0.8048780487804879,
+    "face": [
+      157,
+      131,
+      32,
+      33
+    ],
+    "translation": [
+      36,
+      45
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 12,
+    "column": 4,
+    "sourceFace": [
+      150,
+      107,
+      40,
+      41
+    ],
+    "scale": 0.8048780487804879,
+    "face": [
+      157,
+      131,
+      32,
+      33
+    ],
+    "translation": [
+      37,
+      45
+    ]
+  },
+  {
+    "sheet": "aiming",
+    "row": 12,
+    "column": 5,
+    "sourceFace": [
+      150,
+      111,
+      41,
+      41
+    ],
+    "scale": 0.8048780487804879,
+    "face": [
+      157,
+      131,
+      33,
+      33
+    ],
+    "translation": [
+      36,
+      42
+    ]
+  }
+]
