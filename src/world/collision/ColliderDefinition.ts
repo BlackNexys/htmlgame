@@ -5,4 +5,5 @@ export interface ColliderDefinition extends Rect {
     id:string;
     owner:string;
     shape:'rectangle';
+    collision?:'solid'|'one-way';
 }

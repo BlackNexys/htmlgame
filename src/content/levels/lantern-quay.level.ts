@@ -22,7 +22,7 @@ export default defineLevel({id: 'lantern-quay', name: 'A Light Left On', revisio
     scene.place('courtyard', {x: 3744, y: 928}, lamplightCourt);
     scene.place('departure', {x: 4416, y: 1024}, quayTerrace, {width: 384, foundation: riverY - 1024});
     scene.add('water', {id: 'soul-river', kind: 'river', x: 0, y: riverY, width: 4800, height: 344, current: 12},
-        {id: 'collector-return', kind: 'waterfall', x: 0, y: 0, width: 28, from: {parent: crossing.child('collector'), socket: 'spill'}, to: 'soul-river', overRim: true});
+        {id: 'collector-return', kind: 'waterfall', x: 0, y: 0, width: 14, from: {parent: crossing.child('collector'), socket: 'spill'}, to: 'soul-river', overRim: true});
     scene.add('props',
         {id: 'arrival-canopy', asset: 'confluence-architecture-stationCanopy', x: 64, y: -198, width: 480, height: 198, mount: {parent: 'arrival--floor', socket: 'topLeft'}},
         {id: 'arrival-bench', asset: 'confluence-bench', x: 232, y: -104, width: 176, height: 104, mount: {parent: 'arrival--floor', socket: 'topLeft'}},

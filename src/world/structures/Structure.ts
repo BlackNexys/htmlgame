@@ -20,11 +20,13 @@ export abstract class Structure extends GameElement {
         if(!this.solid)return [];
         return this.parts().map((part,index)=>({
             id:`${this.id}/collider-${index}`,owner:this.id,shape:'rectangle',
+            collision:this.definition.collision,
             x:this.x+part.x,y:this.y+part.y,width:part.width,height:part.height,
         }));
     }
 
     surfaces():SurfaceDefinition[]{
+        if(this.definition.appearance==='none')return [];
         return this.parts().map((part,index)=>({
             id:`${this.id}/surface-${index}`,owner:this.id,
             x:this.x+part.x,y:this.y+part.y,width:part.width,height:part.height,

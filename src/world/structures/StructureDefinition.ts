@@ -5,6 +5,8 @@ export interface StructureDefinition extends Rect {
     id:string;kind?:StructureKind;material?:number;
     mount?:{parent:string;socket:string};
     thickness?:number;
+    collision?:'solid'|'one-way';
+    appearance?:'terrain'|'none';
     layer?:'rear'|'foreground';
     depth?:number;
 }

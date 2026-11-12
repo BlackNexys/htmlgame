@@ -1,6 +1,8 @@
 import type {Body,Rect} from '../../interfaces/Geometry';
 import type {BodyContacts} from '../../game/movement/physics';
 export interface CollisionQueries {
+    dropThrough(body:Body):boolean;
+    hasSupport(probe:Rect):boolean;
     contacts(body:Rect):BodyContacts;
     sweep(body:Body,dt:number):BodyContacts & {blockedX:boolean;blockedY:boolean};
     move(body:Body,dt:number):void;

@@ -21,13 +21,15 @@ export function sweptImpact(a: Rect, dx: number, dy: number, b: Rect): SweptImpa
 export function impactTime(a: Rect, dx: number, dy: number, b: Rect) { return sweptImpact(a, dx, dy, b)?.time; }
 
 export interface BodyContacts { ground: boolean; ceiling: boolean; left: boolean; right: boolean; }
-export function bodyContacts(body: Rect, solids: readonly Rect[]): BodyContacts {
+type CollisionRect = Rect & {collision?:'solid'|'one-way'};
+export function bodyContacts(body: Rect, solids: readonly CollisionRect[]): BodyContacts {
     const result = {ground: false, ceiling: false, left: false, right: false};
     const epsilon = .001;
     for (const wall of solids) {
         const horizontal = body.x < wall.x + wall.width - epsilon && body.x + body.width > wall.x + epsilon;
         const vertical = body.y < wall.y + wall.height - epsilon && body.y + body.height > wall.y + epsilon;
         if (horizontal && Math.abs(body.y + body.height - wall.y) <= epsilon) result.ground = true;
+        if(wall.collision==='one-way')continue;
         if (horizontal && Math.abs(body.y - wall.y - wall.height) <= epsilon) result.ceiling = true;
         if (vertical && Math.abs(body.x - wall.x - wall.width) <= epsilon) result.left = true;
         if (vertical && Math.abs(body.x + body.width - wall.x) <= epsilon) result.right = true;
@@ -36,7 +38,7 @@ export function bodyContacts(body: Rect, solids: readonly Rect[]): BodyContacts 
 }
 
 /** Continuous player motion, including diagonal corner impacts and sliding. */
-export function sweepBody(body: Body, solids: readonly Rect[], dt: number) {
+export function sweepBody(body: Body, solids: readonly CollisionRect[], dt: number) {
     let remaining = dt;
     let blockedX = false, blockedY = false;
     for (let iteration = 0; iteration < 3 && remaining > 1e-9; iteration++) {
@@ -45,7 +47,7 @@ export function sweepBody(body: Body, solids: readonly Rect[], dt: number) {
         let closest: SweptImpact | undefined;
         let touching: BodyContacts | undefined;
         for (const wall of solids) {
-            const hit = sweptImpact(body, dx, dy, wall);
+            const hit = wall.collision==='one-way'?oneWayImpact(body,dx,dy,wall):sweptImpact(body, dx, dy, wall);
             if (!hit || (hit.normalX === 0 && hit.normalY === 0)) continue;
             // Floating-point travel can stop a fraction before a seam. Its tiny
             // positive X impact must not become a wall while sliding on the floor.
@@ -83,10 +85,11 @@ export function sweepBody(body: Body, solids: readonly Rect[], dt: number) {
 }
 
 // Resolve crossings against the whole axis travel, including fast movement.
-export function moveBody(body: Body, solids: readonly Rect[], dt: number) {
+export function moveBody(body: Body, solids: readonly CollisionRect[], dt: number) {
     const oldX = body.x;
     let x = oldX + body.vx * dt;
     for (const wall of solids) {
+        if(wall.collision==='one-way')continue;
         if (body.y >= wall.y + wall.height || body.y + body.height <= wall.y) continue;
         if (body.vx > 0 && oldX + body.width <= wall.x && x + body.width >= wall.x) x = Math.min(x, wall.x - body.width);
         if (body.vx < 0 && oldX >= wall.x + wall.width && x <= wall.x + wall.width) x = Math.max(x, wall.x + wall.width);
@@ -102,8 +105,17 @@ export function moveBody(body: Body, solids: readonly Rect[], dt: number) {
             y = Math.min(y, wall.y - body.height);
             body.grounded = true;
         }
-        if (body.vy < 0 && oldY >= wall.y + wall.height && y <= wall.y + wall.height) y = Math.max(y, wall.y + wall.height);
+        if (wall.collision!=='one-way' && body.vy < 0 && oldY >= wall.y + wall.height && y <= wall.y + wall.height) y = Math.max(y, wall.y + wall.height);
     }
     if (body.grounded || y !== oldY + body.vy * dt) body.vy = 0;
     body.y = y;
+}
+
+/** Only a downward crossing of the top face can hit a one-way platform. */
+function oneWayImpact(body:Rect,dx:number,dy:number,wall:Rect):SweptImpact|undefined{
+    const feet=body.y+body.height;
+    if(dy<=0||feet>wall.y+.001)return;
+    const time=Math.max(0,(wall.y-feet)/dy),x=body.x+dx*time;
+    if(time>1||x>=wall.x+wall.width||x+body.width<=wall.x)return;
+    return {time,normalX:0,normalY:-1};
 }

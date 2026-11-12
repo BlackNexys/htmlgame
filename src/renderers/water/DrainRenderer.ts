@@ -2,6 +2,7 @@ import type {Camera} from '../../components/Camera';
 import type {EnvironmentImages} from '../../interfaces/Environment';
 import type {Drain} from '../../world/water/Drain';
 import {ConfluenceSprites} from '../../environment/ConfluenceSprites';
+import {outletArtwork} from '../../world/water/WaterHardwareGeometry';
 
 /** Drainage hardware reads placed Drain instances; it contains no level-specific coordinates. */
 export class DrainRenderer {
@@ -24,7 +25,8 @@ export class DrainRenderer {
             for(let x=drain.x+12;x<drain.x2;x+=48){c.fillStyle='#142735';c.fillRect(x,drain.y+8,4,8);}
             const end=mouth.y-42;
             for(let y=drain.y+8;y<end;y+=160){const h=Math.min(168,end-y+8);this.sprites?.draw('pipeShaft',mouth.x-18,y+h,24,h,true,.7);}
-            this.sprites?.draw('outlet',mouth.x-8,mouth.y,56,64,true,.8);
+            const r=outletArtwork(mouth);
+            this.sprites?.draw('outlet',r.x+r.width/2,r.y+r.height,r.width,r.height,true,.8);
         }
         c.restore();
     }

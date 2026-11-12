@@ -73,6 +73,14 @@ export class EditorInspector {
             this.field('material','Material (0 station, 1 steel, 2 Registry, 3 archive)',item.material??0);
             this.field('depth','Depth within draw layer',item.depth??0);
             this.field('thickness','Deck / frame thickness (optional)',item.thickness??'');
+            {
+                const label=window.document.createElement('label');label.textContent='Surface art';const select=window.document.createElement('select');select.name='appearance';
+                select.replaceChildren(new Option('Terrain material','terrain'),new Option('None (separate artwork)','none'));select.value=item.appearance??'terrain';label.append(select);this.form.append(label);
+            }
+            if(selection.collection==='terrain'){
+                const label=window.document.createElement('label');label.textContent='Collision';const select=window.document.createElement('select');select.name='collision';
+                select.replaceChildren(new Option('Solid','solid'),new Option('One-way (platform / bridge)','one-way'));select.value=item.collision??'solid';label.append(select);this.form.append(label);
+            }
             this.field('parent','Mount parent ID (optional)',item.mount?.parent??'');
             this.field('socket','Mount socket',item.mount?.socket??'bottomLeft');
             for(const name of ['thickness','parent'])this.form.querySelector<HTMLInputElement>(`[name="${name}"]`)!.required=false;
@@ -148,6 +156,12 @@ export class EditorInspector {
             if (item.depth === undefined && value.depth === 0) delete value.depth;
             const thickness=String(data.get('thickness')),parent=String(data.get('parent')).trim();
             if(thickness)value.thickness=Number(thickness);else delete value.thickness;
+            value.appearance=String(data.get('appearance')) as 'terrain'|'none';
+            if(item.appearance===undefined&&value.appearance==='terrain')delete value.appearance;
+            if(this.selection.collection==='terrain'){
+                value.collision=String(data.get('collision')) as 'solid'|'one-way';
+                if(item.collision===undefined&&value.collision==='solid')delete value.collision;
+            }
             if(parent)value.mount={parent,socket:String(data.get('socket'))};else delete value.mount;
             if(this.selection.collection==='decorations') { value.layer=String(data.get('layer')) as 'rear'|'foreground'; if (item.layer === undefined && value.layer === 'rear') delete value.layer; }
         }

@@ -21,6 +21,7 @@ export class PlayerMovement {
     private wallLock = 0;
     private wallPush = 0;
     private sprintDirection = 0;
+    private downHeld = false;
     private contacts: BodyContacts;
 
     constructor(private readonly body: PlayerBody, private readonly collision:CollisionQueries, private readonly levelWidth: number) {
@@ -33,9 +34,12 @@ export class PlayerMovement {
         this.jumpBuffer = Math.max(0, this.jumpBuffer - dt);
         this.wallLock = Math.max(0, this.wallLock - dt);
         this.refreshContacts();
+        const drop=!!input.down&&!input.up&&!this.downHeld&&this.body.grounded&&this.collision.dropThrough(this.body);
+        this.downHeld=!!input.down;
+        if(drop){this.jumpBuffer=this.coyote=0;this.body.vy=Math.max(0,this.body.vy);this.refreshContacts();}
         if (this.body.grounded) this.coyote = T.coyoteTime;
         else this.coyote = Math.max(0, this.coyote - dt);
-        if (input.jump) this.jumpBuffer = T.jumpBuffer;
+        if (input.jump&&!drop) this.jumpBuffer = T.jumpBuffer;
         const direction = Number(input.right) - Number(input.left);
         this.updateStance(input);
         this.updateSprint(dt, input, direction);

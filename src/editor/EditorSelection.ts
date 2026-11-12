@@ -17,7 +17,7 @@ export interface SelectedObject extends LevelPoint {
     id?: string; width?: number; height?: number;
     kind?: LevelEnemy['kind'] | LevelNPC['kind'] | InteractionKind | StructureKind | WaterKind; patrol?: LevelEnemy['patrol']; title?: string; text?: string; scene?: string;
     from?:WaterEndpoint;to?:string;current?:number;outletX?:number;profile?:'gutter'|'collector';overRim?:boolean;behindTerrain?:boolean;
-    material?:number;thickness?:number;mount?:StructureDefinition['mount'];layer?:StructureDefinition['layer'];depth?:number;
+    material?:number;thickness?:number;mount?:StructureDefinition['mount'];layer?:StructureDefinition['layer'];depth?:number;collision?:StructureDefinition['collision'];appearance?:StructureDefinition['appearance'];
     label?:string;reach?:number;sceneId?:string;effectId?:string;conditionId?:string;solid?:boolean;
     asset?:string;visual?:VisualDefinition;
 }

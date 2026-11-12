@@ -40,7 +40,7 @@ export class Map {
         this.surfaces=this.structures.flatMap(s=>s.surfaces()).sort((a,b)=>(a.depth??0)-(b.depth??0));
         this.props=resolveProps(level.props??[],this.structures,this);
         this.decorations=this.surfaces.filter(s=>s.layer==='rear');
-        level.solids.forEach((r,i)=>this.collision.register(r.id??`terrain-${i}`,r.owner??`terrain-${i}`,r));
+        level.solids.forEach((r,i)=>this.collision.register(r.id??`terrain-${i}`,r.owner??`terrain-${i}`,r,r.collision));
         this.water=new WaterNetwork(level.water??[],this.structures,this,this.solids);
         this.spawn = {...level.spawn};
         this.enemies = level.enemies.map(spawn => ({...spawn}));

@@ -6,6 +6,9 @@ export const lamplightCourt = defineAssembly({name: 'Lamplight court', parameter
     building: {type: 'number', default: 384, min: 224, max: 480, step: 8},
 }}, (scene, p) => {
     const quay = scene.place('quay', {x: 0, y: 0}, quayTerrace, {width: 672, foundation: 528, building: p.building});
+    scene.add('terrain', {id: 'shelter-roof', kind: 'platform', collision: 'one-way', appearance: 'none',
+        x: 104, y: -190, width: 464, height: 8, material: 1,
+        mount: {parent: quay.child('floor'), socket: 'topLeft'}});
     scene.add('props',
         {id: 'canopy', asset: 'confluence-architecture-stationCanopy', x: 96, y: -198, width: 480, height: 198, mount: {parent: quay.child('floor'), socket: 'topLeft'}},
         {id: 'bench', asset: 'confluence-bench', x: 128, y: -104, width: 176, height: 104, mount: {parent: quay.child('floor'), socket: 'topLeft'}},

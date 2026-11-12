@@ -85,7 +85,7 @@ export function parseLevelDocument(value: unknown): LevelDocument {
     };
     let tiles = 0;
     const terrain = (input: unknown, path: string):StructureDefinition => {
-        const p = object(input, path, ['id', 'x', 'y', 'width', 'height',...(!legacy?['kind','material','thickness','mount','layer','depth']:[])]);
+        const p = object(input, path, ['id', 'x', 'y', 'width', 'height',...(!legacy?['kind','material','thickness','mount','layer','depth','collision','appearance']:[])]);
         const mount=p.mount===undefined?undefined:object(p.mount,`${path}.mount`,['parent','socket']);
         const bounds={x:number(p.x,`${path}.x`,mount?-width:0,width),y:number(p.y,`${path}.y`,mount?-height:0,height),width:number(p.width,`${path}.width`,1,width),height:number(p.height,`${path}.height`,1,height)};
         if(!mount&&(bounds.x+bounds.width>width||bounds.y+bounds.height>height))fail(path,'rectangle extends outside the level');
@@ -94,6 +94,12 @@ export function parseLevelDocument(value: unknown): LevelDocument {
         const result:StructureDefinition={id:objectId(p.id,path),...bounds};
         if(p.kind!==undefined){if(!structureKinds.includes(p.kind as typeof structureKinds[number]))fail(`${path}.kind`,'unknown structure kind');else result.kind=p.kind as typeof result.kind;}
         result.material=number(p.material??0,`${path}.material`,0,3);
+        if(p.appearance!==undefined){if(!['terrain','none'].includes(String(p.appearance)))fail(`${path}.appearance`,'must be terrain or none');else result.appearance=p.appearance as 'terrain'|'none';}
+        if(p.collision!==undefined){
+            if(!['solid','one-way'].includes(String(p.collision))||!path.startsWith('terrain'))fail(`${path}.collision`,'terrain collision must be solid or one-way');
+            else result.collision=p.collision as 'solid'|'one-way';
+            if(p.collision==='one-way'&&!['platform','bridge'].includes(result.kind??'wall'))fail(`${path}.collision`,'one-way collision requires a platform or bridge');
+        }
         if(p.depth!==undefined)result.depth=number(p.depth,`${path}.depth`,-1024,1024);
         if(p.layer!==undefined){if(!['rear','foreground'].includes(String(p.layer))||path.startsWith('terrain'))fail(`${path}.layer`,'only decorations can select rear or foreground');else result.layer=p.layer as 'rear'|'foreground';}
         if(p.thickness!==undefined){

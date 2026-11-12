@@ -511,6 +511,14 @@
           "type": "integer",
           "minimum": 1
         },
+        "collision": {
+          "enum": ["solid", "one-way"],
+          "description": "Terrain platforms and bridges can use one-way top-face collision."
+        },
+        "appearance": {
+          "enum": ["terrain", "none"],
+          "description": "Use none when separate props supply the structure artwork."
+        },
         "depth": {
           "type": "integer",
           "minimum": -1024,

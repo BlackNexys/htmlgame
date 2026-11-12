@@ -22,7 +22,7 @@ export const canalCrossing = defineAssembly({name: 'Canal crossing and recovery'
     scene.add('water',
         {id: 'gutter', kind: 'drain', x: 56, y: 8, width: 144, height: 32, mount: {parent: 'deck-west', socket: 'bottomLeft'}},
         {id: 'collector', kind: 'basin', x: 120, y: 192, width: 192, height: 40},
-        {id: 'gutter-fall', kind: 'waterfall', x: 0, y: 0, width: 24, from: {parent: 'gutter', socket: 'mouth'}, to: 'collector'});
+        {id: 'gutter-fall', kind: 'waterfall', x: 0, y: 0, width: 18, from: {parent: 'gutter', socket: 'mouth'}, to: 'collector'});
     scene.add('props', {id: 'collector-bearing', asset: 'confluence-steel-beam', x: 120, y: 232, width: 192, height: 24, light: 50});
     scene.add('props', {id: 'collector-hanger', asset: 'confluence-steel-beam', x: 296, y: 24, width: 16, height: 208, light: 50});
     scene.add('signs', {id: 'recovery-sign', x: 16, y: 520, title: 'LOW WALK / EAST', text: 'The stairs return to the upper quay.'});

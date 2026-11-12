@@ -38,7 +38,7 @@ export abstract class GroundEnemy extends Enemy {
         // Walking is ledge-safe; committed attacks retain their direction.
         if (this.state === 'idle' && this.grounded && this.vx !== 0) {
             const foot = {x: this.vx > 0 ? this.x2 + 3 : this.x - 5, y: this.y2, width: 2, height: 8};
-            if (!this.gameArea.level.collision.overlaps(foot)) { this.vx = 0; this.facing *= -1; }
+            if (!this.gameArea.level.collision.hasSupport(foot)) { this.vx = 0; this.facing *= -1; }
         }
         this.applyGravity(dt);
         const wantedVX = this.vx;

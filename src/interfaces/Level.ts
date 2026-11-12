@@ -15,7 +15,7 @@ export interface Level {
     props?:PropDefinition[];
     width: number;
     height: number;
-    solids: (Rect & {id?:string;owner?:string})[];
+    solids: (Rect & {id?:string;owner?:string;collision?:'solid'|'one-way'})[];
     structureDefinitions?:{terrain:StructureDefinition[];decorations:StructureDefinition[]};
     water?:WaterDefinition[];
     decorations?: Rect[];

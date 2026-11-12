@@ -32,7 +32,10 @@ export class WaterRenderer {
         drawFall(false);
         for(const body of network.bodies){
             if(!camera.canSee(body,80))continue;
-            if(body instanceof CatchBasin)this.sprites?.draw('basin',body.x+body.width/2,body.y2,body.width,body.height*166/112,true,.75);
+            if(body instanceof CatchBasin){
+                const r=body.hardware.artwork;
+                this.sprites?.draw('basin',r.x+r.width/2,r.y+r.height,r.width,r.height,true,.75);
+            }
             if(body instanceof Canal){
                 const c=this.ctx;c.save();c.fillStyle='#132632';c.fillRect(body.x,body.y2-10,body.width,10);
                 for(let x=body.x;x<body.x2;x+=48){c.fillStyle='#294352';c.fillRect(x,body.y2-10,Math.min(46,body.x2-x),2);}c.restore();

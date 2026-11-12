@@ -40,6 +40,16 @@ Action: require the real-keyboard pilot to face the surviving opponent and finis
 
 ## What became easier
 
+### LQ08 — Collision queries assumed every surface blocked everything
+
+Adding a landable shelter roof exposed two couplings: enemy footing reused a solid-overlap query, and a terrain collider always generated terrain art even when a prop already supplied the roof. One-way platforms now have explicit top-face behavior, a separate support query for enemy ledge sensing, and an optional `appearance: 'none'` for structures dressed by separate artwork. Drop-through state belongs to the individual actor and supporting collider identities; it does not temporarily disable the platform for everyone. See `one-way-platforms.md` for the authoring and input contract.
+
+### LQ07 — Valid water connections can still miss the artwork
+
+The pipe mouth used a renderer offset while the basin spill used a percentage unrelated to its visible notch. Basin art and water were scaled independently. Clear downward paths did not establish visual alignment.
+
+Fixed with measured drainage-v7 landmarks in `WaterHardwareGeometry`: the outlet is positioned from its mouth, and the basin housing, surface and spill share one transform. Authored basin y remains the waterline and y2 the housing bottom. The slice's streams now fit the visible apertures. Regression checks cover translated and resized hardware and atlas dimensions; actual renderer captures verify the joins. New artwork needs measured landmarks, not guessed sprite-center offsets.
+
 The scene is authored directly in TypeScript, with small reusable factories and no expanded JSON source file. A cohesive courtyard is one instance rather than unrelated edits. Waterfall heights follow receivers. Existing bounds, collision, dialogue and campaign-isolation checks still apply. The whole scene uses 73 props, rather than hundreds of copied placements, because wall textures repeat inside authored bounds.
 
 ## Next questions from play
