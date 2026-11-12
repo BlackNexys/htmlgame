@@ -18,3 +18,7 @@ export interface Weapon {
 export type FlickerEffectKind = 'ignition' | 'enemy' | 'terrain' | 'blocked';
 export interface FlickerEvent { kind: FlickerEffectKind; x: number; y: number; angle: number; }
 export interface FlickerEffect extends FlickerEvent { age: number; }
+export interface FlickerSpark {
+    x: number; y: number; vx: number; vy: number; age: number; life: number;
+    size: number; color: string; gravity: number; kind: FlickerEffectKind | 'trail';
+}

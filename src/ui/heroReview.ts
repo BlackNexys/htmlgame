@@ -21,26 +21,29 @@ async function start() {
     let time=0, paused=false, facing=1;
     function reset() {
         world=new World({width:100000,height:1000,spawn:{x:1000,y:248},solids:[{x:0,y:300,width:100000,height:100}],enemies:[],exit:{x:99900,y:192,width:64,height:108}});
-        renderer=new CharacterRenderer(c,base,aim,fire); animation=new CharacterAnimation(); time=0;
+        renderer=new CharacterRenderer(c,base,aim,fire,checked('palette')); animation=new CharacterAnimation(); time=0;
     }
     reset();
     function step(dt: number) {
         time+=dt;
         const p=world.player, sequence: PlayerMotion[]=['idle','running','sprinting','running','crouching','airborne','running','idle'];
-        p.motion=select('motion')==='sequence'?sequence[Math.floor(time/1.5)%sequence.length]:select('motion') as PlayerMotion;
+        const mode=select('motion');
+        p.motion=mode==='sequence'?sequence[Math.floor(time/1.5)%sequence.length]:mode==='hurt'||mode==='defeat'?'idle':mode as PlayerMotion;
         p.height=p.motion==='crouching'?32:52;
-        p.grounded=!['airborne','wall-slide'].includes(p.motion); p.y=(p.grounded?300:250)-p.height;
+        p.grounded=!['airborne','wall-slide','wall-jump'].includes(p.motion); p.y=(p.grounded?300:250)-p.height;
         // Exercise the complete rise/apex/fall range, including the initial jump poses.
         p.vy=p.grounded?0:p.motion==='wall-slide'?160:-700+(time%1.2)/1.2*1550;
         p.movement.sprintCharge=p.motion==='sprinting'?Math.min(1,(select('motion')==='sequence'?time%1.5:time)/.6):0;
         p.vx=(p.motion==='sprinting'?330+150*p.sprintCharge:p.motion==='running'?330:0)*facing;
         p.x+=p.vx*dt; p.facing=facing;
-        const [x,y]=select('aim').split(',').map(Number);p.aim={x,y};p.firing=checked('fire');
+        const [x,y]=select('aim').split(',').map(Number);p.aim={x,y};p.firing=checked('fire')&&mode!=='defeat';
         world.events=[];world.weaponEvents=[];
+        if(mode==='hurt'&&(time<=dt||Math.floor((time-dt)/1.5)!==Math.floor(time/1.5)))world.events.push('hurt');
         p.weapons.update(dt,p.firing,world,p);
         world.projectiles=world.projectiles.filter(shot=>shot.update(world,dt));
         world.effects.update(dt);world.effects.consume(world.weaponEvents);
-        renderer.update(p,dt,world.events,false);animation.update(p,dt,world.events,false);
+        world.effects.trail(world.projectiles,dt);
+        renderer.update(p,dt,world.events,mode==='defeat');animation.update(p,dt,world.events,mode==='defeat');
     }
     function draw() {
         const p=world.player,zoom=Number(select('zoom')),camera=p.x+p.width/2-250/zoom;
@@ -48,7 +51,7 @@ async function start() {
         c.save();c.translate(0,canvas.height-80);c.scale(zoom,zoom);c.translate(-camera,-300);
         c.fillStyle='#435165';c.fillRect(camera,300,canvas.width/zoom,2);
         for(let x=Math.floor(camera/48)*48;x<camera+canvas.width/zoom;x+=48){c.fillStyle='#2b3b50';c.fillRect(x,302,1,10);}
-        renderer.draw(p,time);projectiles.draw(world.projectiles,world.effects.flicker);
+        renderer.draw(p,time);projectiles.draw(world.projectiles,world.effects.flicker,world.effects.flickerSparks);
         if(checked('guides')) {
             c.strokeStyle='#6be0ef';c.lineWidth=1/zoom;c.strokeRect(p.x,p.y,p.width,p.height);
             const palm=heroMuzzle(p),length=Math.hypot(p.aim.x,p.aim.y);
@@ -57,14 +60,18 @@ async function start() {
         }
         c.restore();
         const pose=animation.sample(p);
-        status.textContent=`${p.motion} · ${Math.abs(p.vx).toFixed(0)} px/s · charge ${p.sprintCharge.toFixed(2)} · frame ${pose.base.column+1} · ${world.projectiles.length} shots\nWhite marker: palm. Cyan: collider and firing direction. Time ${time.toFixed(3)} s.`;
+        const phase=(pose.upper??pose.base).throwPhase??'relaxed';
+        status.textContent=`${select('motion')==='hurt'||select('motion')==='defeat'?select('motion'):p.motion} · ${Math.abs(p.vx).toFixed(0)} px/s · charge ${p.sprintCharge.toFixed(2)} · ${phase} · frame ${pose.base.column+1} · ${world.projectiles.length} shots · ${world.effects.flickerSparks.length} motes\nWhite marker: release socket (hand returns here on the next throw). Cyan: collider and firing direction. Time ${time.toFixed(3)} s.`;
         canvas.dataset.ready='true';canvas.dataset.frame=String(pose.base.column);canvas.dataset.time=String(time);
+        canvas.dataset.sparks=String(world.effects.flickerSparks.length);
+        canvas.dataset.phase=phase;canvas.dataset.palette=String(checked('palette'));
     }
     element('pause').onclick=()=>{paused=!paused;element('pause').textContent=paused?'Play':'Pause';};
     element('step').onclick=()=>{paused=true;element('pause').textContent='Play';step(1/120);step(1/120);draw();};
     element('reset').onclick=()=>{reset();draw();};
     element('facing').onclick=()=>{facing*=-1;element('facing').textContent=facing===1?'Face left':'Face right';};
     element('motion').onchange=()=>{reset();step(1/120);draw();};
+    element('palette').onchange=()=>{reset();step(1/120);draw();};
     let last=performance.now(),accumulator=0;
     function tick(now:number){const dt=Math.min(.05,(now-last)/1000);last=now;if(!paused){accumulator+=dt*Number(select('speed'));while(accumulator>=1/120){step(1/120);accumulator-=1/120;}}draw();requestAnimationFrame(tick);}
     requestAnimationFrame(tick);

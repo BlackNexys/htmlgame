@@ -68,7 +68,7 @@ export class GameScreen {
         world.corpses.forEach(corpse => { if (world.camera.canSee(corpse.enemy)) this.corpses.draw(corpse); });
         world.enemies.forEach(enemy => { if (world.camera.canSee(enemy)) this.enemies.draw(enemy, world.elapsed, world.corpses); });
         this.character.draw(world.player, world.elapsed);
-        this.projectiles.draw(world.projectiles, world.effects.flicker);
+        this.projectiles.draw(world.projectiles, world.effects.flicker, world.effects.flickerSparks);
         this.particles.draw(world.particles);
         this.map.drawForeground(world.level,world.camera);
         for(const prop of world.level.props)if(prop.definition.layer==='foreground'&&world.camera.canSee(prop))this.props.draw(prop.definition.asset,prop,prop.definition,world.camera);
